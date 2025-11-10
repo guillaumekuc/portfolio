@@ -577,6 +577,16 @@ Gallery / Slick Carousel Styles
   height: 80vh !important;
   max-height: calc(100vh - 4 * var(--safeMargin)) !important;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anim folio gallery - 60vh height */
+#animFolio1 .gallery .slick-slide,
+#modeFolio1 .gallery .slick-slide {
+  height: 60vh !important;
+  max-height: calc(100vh - 4 * var(--safeMargin)) !important;
 }
 
 .gallery .slick-slide img {
@@ -604,6 +614,7 @@ Gallery / Slick Carousel Styles
   object-fit: cover;
   display: block;
   border-radius: 15px;
+  margin: auto;
 }
 
 .gallery .slick-current video {
