@@ -46,12 +46,9 @@ export class Navigation {
 		for (const folio of allFolios) {
 			// Check if this folio comes after the current screen in the DOM
 			if (currentElement.compareDocumentPosition(folio) & Node.DOCUMENT_POSITION_FOLLOWING) {
-				// Verify it's actually visible (not hidden and display is not none)
-				const isHidden = folio.classList.contains('hidden');
+				// Verify it's actually visible using computed style
 				const style = window.getComputedStyle(folio);
-				const isDisplayNone = style.display === 'none';
-				
-				if (!isHidden && !isDisplayNone) {
+				if (style.display !== 'none' && style.visibility !== 'hidden') {
 					nextVisibleFolio = folio;
 					break;
 				}
@@ -69,10 +66,10 @@ export class Navigation {
 	 * @param {string} rubricClass - Class name of folios to show
 	 */
 	static hideIrrelevantFolios(rubricClass) {
-		// Hide all folios first - use both class and inline style to ensure they're hidden
+		// Hide all folios - use both CSS class and inline style for immediate, reliable hiding
+		// Inline style ensures IntersectionObserver can't detect elements during async callbacks
 		document.querySelectorAll('.folio').forEach(folio => {
 			folio.classList.add('hidden');
-			// Force hide immediately with inline style to prevent IntersectionObserver from seeing it
 			folio.style.setProperty('display', 'none', 'important');
 		});
 		
@@ -80,7 +77,6 @@ export class Navigation {
 		const visibleFolios = document.querySelectorAll('.' + rubricClass);
 		visibleFolios.forEach(folio => {
 			folio.classList.remove('hidden');
-			// Remove inline style to allow CSS to control display normally
 			folio.style.removeProperty('display');
 		});
 		
@@ -136,14 +132,10 @@ export class Navigation {
 			const elementObserver = new IntersectionObserver((entries) => {
 				const entry = entries[0];
 				if (entry.isIntersecting === true && entry.intersectionRatio >= 0.5) {
-					// Check computed style first - this is the most reliable way to detect hidden elements
+					// Check computed style - the most reliable way to detect if element is actually visible
+					// This catches elements hidden via CSS class, inline styles, or any other method
 					const style = window.getComputedStyle(element);
 					if (style.display === 'none' || style.visibility === 'hidden') {
-						return;
-					}
-					
-					// Also check for hidden class (for folios specifically)
-					if (element.classList.contains('hidden')) {
 						return;
 					}
 					

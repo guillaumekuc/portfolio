@@ -8,23 +8,17 @@ export class DOM {
 	 * @returns {HTMLElement|null} Next visible sibling or null
 	 */
 	static nextVisibleSibling(element) {
-		let nextVisibleElement = null;
 		let nextElement = element.nextElementSibling;
 		
 		while (nextElement) {
-			// Check both class and computed style to ensure element is actually visible
-			const isHidden = nextElement.classList.contains('hidden');
 			const style = window.getComputedStyle(nextElement);
-			const isDisplayNone = style.display === 'none';
-			
-			if (!isHidden && !isDisplayNone) {
-				nextVisibleElement = nextElement;
-				break;
+			if (style.display !== 'none' && style.visibility !== 'hidden') {
+				return nextElement;
 			}
 			nextElement = nextElement.nextElementSibling;
 		}
 		
-		return nextVisibleElement;
+		return null;
 	}
 
 	/**
@@ -33,23 +27,17 @@ export class DOM {
 	 * @returns {HTMLElement|null} Previous visible sibling or null
 	 */
 	static previousVisibleSibling(element) {
-		let previousVisibleElement = null;
 		let previousElement = element.previousElementSibling;
 		
 		while (previousElement) {
-			// Check both class and computed style to ensure element is actually visible
-			const isHidden = previousElement.classList.contains('hidden');
 			const style = window.getComputedStyle(previousElement);
-			const isDisplayNone = style.display === 'none';
-			
-			if (!isHidden && !isDisplayNone) {
-				previousVisibleElement = previousElement;
-				break;
+			if (style.display !== 'none' && style.visibility !== 'hidden') {
+				return previousElement;
 			}
 			previousElement = previousElement.previousElementSibling;
 		}
 		
-		return previousVisibleElement;
+		return null;
 	}
 
 	/**
