@@ -1,6 +1,7 @@
 import { DOM } from './dom.js';
 import { Animation } from './animation.js';
 import { stores } from '../stores.js';
+import { get } from 'svelte/store';
 
 /**
  * Navigation controller class
@@ -80,14 +81,10 @@ export class Navigation {
 		this.musicPlayer = musicPlayer;
 		this.websitesArray = websitesArray;
 		
-		// State
+		// State - only keep non-store properties
 		this.allRubrics = [];
-		this.currentScreen = 'startScreen';
-		this.rubricFocused = 3;
-		this.menuSelected = 1;
-		this.websitesCurrentIndex = 0;
 		
-		// Initialize stores to match instance state
+		// Initialize stores
 		stores.navigation.currentScreen.set('startScreen');
 		stores.navigation.rubricFocused.set(3);
 		stores.navigation.menuSelected.set(1);
@@ -115,8 +112,7 @@ export class Navigation {
 		function updateHashWhenVisible(element) {
 			const elementObserver = new IntersectionObserver((entries) => {
 				if (entries[0].isIntersecting === true) {
-					self.currentScreen = element.id;
-					// Update the store so Svelte components can react to changes
+					// Update the store - single source of truth
 					stores.navigation.currentScreen.set(element.id);
 					
 					// Refresh slick position when screen becomes visible
@@ -124,34 +120,34 @@ export class Navigation {
 						window.$('.gallery').slick('setPosition');
 					}
 					
-					const gallery = document.querySelector('#' + self.currentScreen + ' .gallery');
+					const currentScreen = element.id;
+					const gallery = document.querySelector('#' + currentScreen + ' .gallery');
 					if (gallery) {
 						gallery.firstChild.focus();
 						const video = document.querySelector('.slick-current video');
 						if (video) video.play();
 					}
 					
-					if (self.currentScreen === 'splashscreen' || self.currentScreen === 'startScreen') {
+					if (currentScreen === 'splashscreen' || currentScreen === 'startScreen') {
 						const topArrow = document.querySelector('#topArrow');
 						const bottomArrow = document.querySelector('#bottomArrow');
 						if (topArrow) topArrow.classList.add('hidden');
 						if (bottomArrow) bottomArrow.classList.add('hidden');
 					}
 					
-					if (self.currentScreen === 'about') {
+					if (currentScreen === 'about') {
 						const bottomArrow = document.querySelector('#bottomArrow');
 						if (bottomArrow) bottomArrow.classList.add('hidden');
 					}
 
-					if (self.currentScreen === 'websitesFolio') {
+					if (currentScreen === 'websitesFolio') {
 						document.querySelectorAll('.websiteLink').forEach((link) => {
 							link.classList.remove('focus');
 						});
-						if (self.websitesArray[self.websitesCurrentIndex]) {
-							self.websitesArray[self.websitesCurrentIndex].classList.add('focus');
+						const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+						if (self.websitesArray[websitesCurrentIndex]) {
+							self.websitesArray[websitesCurrentIndex].classList.add('focus');
 						}
-						// Update the store
-						stores.navigation.websitesCurrentIndex.set(self.websitesCurrentIndex);
 					}
 				}
 			}, { threshold: [0.5] });
@@ -167,9 +163,10 @@ export class Navigation {
 					const playBtn = video.parentElement.querySelector('.videoPlayBtn');
 					if (playBtn) playBtn.classList.remove('hidden');
 					
-					if (self.musicPlayer && self.musicPlayer.unpauseWhenDone === true) {
-						self.musicPlayer.play();
-					}
+				const unpauseWhenDone = get(stores.music.unpauseWhenDone);
+				if (self.musicPlayer && unpauseWhenDone === true) {
+					self.musicPlayer.play();
+				}
 				}
 			}, { threshold: 1 });
 			observer.observe(video.parentElement);
@@ -178,7 +175,8 @@ export class Navigation {
 		function revealFoliosWhenRubricsVisible() {
 			const elementObserver = new IntersectionObserver((entries) => {
 				if (entries[0].isIntersecting === true) {
-					const rubricClass = Navigation.getRubricClass(self.rubricFocused);
+					const rubricFocused = get(stores.navigation.rubricFocused);
+					const rubricClass = Navigation.getRubricClass(rubricFocused);
 					setTimeout(() => {
 						document.querySelectorAll('.' + rubricClass).forEach((folio) => {
 							folio.classList.remove('hidden');
@@ -236,7 +234,8 @@ export class Navigation {
 		}
 
 		// Screen-specific navigation
-		if (this.currentScreen === 'startScreen') {
+		const currentScreen = get(stores.navigation.currentScreen);
+		if (currentScreen === 'startScreen') {
 			if (event.key === 'Enter') {
 				const enterBtn = document.querySelector('#enterBtn');
 				if (enterBtn) {
@@ -247,12 +246,12 @@ export class Navigation {
 			return;
 		}
 
-		if (this.currentScreen === 'splashscreen') {
+		if (currentScreen === 'splashscreen') {
 			this.handleSplashscreenNavigation(event);
 			return;
 		}
 
-		if (this.currentScreen === 'rubrics') {
+		if (currentScreen === 'rubrics') {
 			this.handleRubricsNavigation(event);
 			return;
 		}
@@ -266,7 +265,6 @@ export class Navigation {
 			document.querySelectorAll('.splashNav a').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			this.menuSelected = 1;
 			stores.navigation.menuSelected.set(1);
 			Animation.fakeHoverEvent(document.querySelector('#worksBtn'));
 			document.querySelector('#rubrics')?.scrollIntoView();
@@ -274,33 +272,38 @@ export class Navigation {
 		}
 
 		if (event.key === 'ArrowLeft') {
-			if (this.menuSelected === 1) {
-				this.menuSelected = 0;
-			} else if (this.menuSelected === 0) {
-				this.menuSelected = 2;
-			} else if (this.menuSelected === 2) {
-				this.menuSelected = 1;
+			const menuSelected = get(stores.navigation.menuSelected);
+			let newMenuSelected;
+			if (menuSelected === 1) {
+				newMenuSelected = 0;
+			} else if (menuSelected === 0) {
+				newMenuSelected = 2;
+			} else {
+				newMenuSelected = 1;
 			}
-			stores.navigation.menuSelected.set(this.menuSelected);
+			stores.navigation.menuSelected.set(newMenuSelected);
 			this.updateSplashNavFocus();
 			return;
 		}
 
 		if (event.key === 'ArrowRight') {
-			if (this.menuSelected === 2) {
-				this.menuSelected = 0;
-			} else if (this.menuSelected === 1) {
-				this.menuSelected = 2;
-			} else if (this.menuSelected === 0) {
-				this.menuSelected = 1;
+			const menuSelected = get(stores.navigation.menuSelected);
+			let newMenuSelected;
+			if (menuSelected === 2) {
+				newMenuSelected = 0;
+			} else if (menuSelected === 1) {
+				newMenuSelected = 2;
+			} else {
+				newMenuSelected = 1;
 			}
-			stores.navigation.menuSelected.set(this.menuSelected);
+			stores.navigation.menuSelected.set(newMenuSelected);
 			this.updateSplashNavFocus();
 			return;
 		}
 
 		if (event.key === 'Enter') {
-			if (this.menuSelected === 0) {
+			const menuSelected = get(stores.navigation.menuSelected);
+			if (menuSelected === 0) {
 				const blogBtn = document.querySelector('#blogBtn');
 				if (blogBtn) {
 					window.open(blogBtn.getAttribute('href')).focus();
@@ -308,21 +311,18 @@ export class Navigation {
 				document.querySelectorAll('.splashNav a').forEach((link) => {
 					link.classList.remove('focus');
 				});
-				this.menuSelected = 1;
 				stores.navigation.menuSelected.set(1);
-			} else if (this.menuSelected === 1) {
+			} else if (menuSelected === 1) {
 				document.querySelector('#rubrics')?.scrollIntoView();
 				document.querySelectorAll('.splashNav a').forEach((link) => {
 					link.classList.remove('focus');
 				});
-				this.menuSelected = 1;
 				stores.navigation.menuSelected.set(1);
-			} else if (this.menuSelected === 2) {
+			} else if (menuSelected === 2) {
 				window.open('mailto:guillaume@guillaumekuc.com', 'mail');
 				document.querySelectorAll('.splashNav a').forEach((link) => {
 					link.classList.remove('focus');
 				});
-				this.menuSelected = 1;
 				stores.navigation.menuSelected.set(1);
 			}
 		}
@@ -332,13 +332,14 @@ export class Navigation {
 		document.querySelectorAll('.splashNav a').forEach((link) => {
 			link.classList.remove('focus');
 		});
-		if (this.menuSelected === 0) {
+		const menuSelected = get(stores.navigation.menuSelected);
+		if (menuSelected === 0) {
 			const blogBtn = document.querySelector('#blogBtn');
 			if (blogBtn) blogBtn.classList.add('focus');
-		} else if (this.menuSelected === 1) {
+		} else if (menuSelected === 1) {
 			const worksBtn = document.querySelector('#worksBtn');
 			if (worksBtn) worksBtn.classList.add('focus');
-		} else if (this.menuSelected === 2) {
+		} else if (menuSelected === 2) {
 			const contactBtn = document.querySelector('#contactBtn');
 			if (contactBtn) contactBtn.classList.add('focus');
 		}
@@ -346,21 +347,17 @@ export class Navigation {
 
 	handleRubricsNavigation(event) {
 		if (event.key === 'ArrowRight') {
-			if (this.rubricFocused === 5) {
-				this.rubricFocused = 1;
-			} else {
-				this.rubricFocused = parseInt(this.rubricFocused) + 1;
-			}
+			const rubricFocused = get(stores.navigation.rubricFocused);
+			const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
+			stores.navigation.rubricFocused.set(newRubricFocused);
 			this.updateRubricFocus();
 			return;
 		}
 
 		if (event.key === 'ArrowLeft') {
-			if (this.rubricFocused === 1) {
-				this.rubricFocused = 5;
-			} else {
-				this.rubricFocused = parseInt(this.rubricFocused) - 1;
-			}
+			const rubricFocused = get(stores.navigation.rubricFocused);
+			const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
+			stores.navigation.rubricFocused.set(newRubricFocused);
 			this.updateRubricFocus();
 			return;
 		}
@@ -383,44 +380,45 @@ export class Navigation {
 		}
 
 		if (event.key === 'Enter' || event.key === 'ArrowDown') {
-			Navigation.goToFolios(this.currentScreen);
+			const currentScreen = get(stores.navigation.currentScreen);
+			Navigation.goToFolios(currentScreen);
 		}
 	}
 
 	updateRubricFocus() {
-		const idToFocus = '#rBtn' + this.rubricFocused;
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const idToFocus = '#rBtn' + rubricFocused;
 		this.allRubrics.forEach((rubric) => rubric.classList.remove('focus'));
 		const rubricElement = document.querySelector(idToFocus);
 		if (rubricElement) rubricElement.classList.add('focus');
 		
-		const target = '#hnBtn' + this.rubricFocused;
+		const target = '#hnBtn' + rubricFocused;
 		document.querySelectorAll('.headerNav a').forEach((link) => {
 			link.classList.remove('focus');
 		});
 		const headerNavLink = document.querySelector(target);
 		if (headerNavLink) headerNavLink.classList.add('focus');
 		
-		const rubricClass = Navigation.getRubricClass(this.rubricFocused);
+		const rubricClass = Navigation.getRubricClass(rubricFocused);
 		Navigation.hideIrrelevantFolios(rubricClass);
-		
-		// Update the store
-		stores.navigation.rubricFocused.set(this.rubricFocused);
 	}
 
 	handleOtherScreensNavigation(event) {
+		const currentScreen = get(stores.navigation.currentScreen);
+		
 		if (event.key === 'ArrowUp') {
-			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + this.currentScreen));
+			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + currentScreen));
 			if (prevSibling) prevSibling.scrollIntoView();
 			return;
 		}
 
 		if (event.key === 'ArrowDown') {
-			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + this.currentScreen));
+			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));
 			if (nextSibling) nextSibling.scrollIntoView();
 			return;
 		}
 
-		const scrollThis = document.querySelector('#' + this.currentScreen + ' .scrollThis');
+		const scrollThis = document.querySelector('#' + currentScreen + ' .scrollThis');
 		if (scrollThis) {
 			if (event.key === 'ArrowLeft') {
 				scrollThis.scrollTop -= 30;
@@ -433,19 +431,19 @@ export class Navigation {
 		}
 
 		// Music playlist folio navigation
-		if (this.currentScreen === 'musicPlaylistFolio') {
+		if (currentScreen === 'musicPlaylistFolio') {
 			this.handleMusicPlaylistNavigation(event);
 			return;
 		}
 
 		// Websites folio navigation
-		if (this.currentScreen === 'websitesFolio') {
+		if (currentScreen === 'websitesFolio') {
 			this.handleWebsitesNavigation(event);
 			return;
 		}
 
 		// Video gallery navigation
-		const galleryVideo = document.querySelector('#' + this.currentScreen + ' .gallery video');
+		const galleryVideo = document.querySelector('#' + currentScreen + ' .gallery video');
 		if (galleryVideo) {
 			if (['ArrowLeft', 'ArrowRight', 'Enter'].includes(event.key)) {
 				const currentVideo = document.querySelector('.slick-current video');
@@ -455,31 +453,34 @@ export class Navigation {
 		}
 
 		// Large video navigation
-		const largeVideo = document.querySelector('#' + this.currentScreen + ' .largeVideo');
+		const largeVideo = document.querySelector('#' + currentScreen + ' .largeVideo');
 		if (largeVideo && event.key === 'Enter') {
 			if (largeVideo.currentTime > 0 && !largeVideo.paused && !largeVideo.ended && largeVideo.readyState > 2) {
 				largeVideo.pause();
 				const playBtn = largeVideo.parentElement.querySelector('.videoPlayBtn');
 				if (playBtn) playBtn.classList.remove('hidden');
-				if (this.musicPlayer && this.musicPlayer.isPlaying === false && this.musicPlayer.unpauseWhenDone === true) {
+				const isPlaying = get(stores.music.isPlaying);
+				const unpauseWhenDone = get(stores.music.unpauseWhenDone);
+				if (this.musicPlayer && !isPlaying && unpauseWhenDone === true) {
 					this.musicPlayer.play();
 				}
 			} else {
 				largeVideo.play();
 				const playBtn = largeVideo.parentElement.querySelector('.videoPlayBtn');
 				if (playBtn) playBtn.classList.add('hidden');
-				if (this.musicPlayer && this.musicPlayer.isPlaying === true && !largeVideo.muted) {
+				const isPlaying = get(stores.music.isPlaying);
+				if (this.musicPlayer && isPlaying === true && !largeVideo.muted) {
 					this.musicPlayer.pause();
-					this.musicPlayer.unpauseWhenDone = true;
+					stores.music.unpauseWhenDone.set(true);
 				} else {
-					this.musicPlayer.unpauseWhenDone = false;
+					stores.music.unpauseWhenDone.set(false);
 				}
 			}
 			return;
 		}
 
 		// About screen navigation
-		if (this.currentScreen === 'about' && event.key === 'Enter') {
+		if (currentScreen === 'about' && event.key === 'Enter') {
 			Animation.fakeHoverEvent(document.querySelector('#backToTop'));
 			document.querySelector('#splashscreen')?.scrollIntoView();
 		}
@@ -497,21 +498,21 @@ export class Navigation {
 		}
 
 		if (event.key === 'ArrowRight') {
-			const currentIndex = this.musicPlayer.currentIndex;
 			this.musicPlayer.nextTrackHandler();
 			// Scroll to the new track after it's been set
 			setTimeout(() => {
-				const track = document.querySelectorAll('.musicPlaylist li')[this.musicPlayer.currentIndex];
+				const currentIndex = get(stores.music.currentIndex);
+				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
 				if (track) scrollIfNeeded(track);
 			}, 10);
 		}
 
 		if (event.key === 'ArrowLeft') {
-			const currentIndex = this.musicPlayer.currentIndex;
 			this.musicPlayer.previousTrackHandler();
 			// Scroll to the new track after it's been set
 			setTimeout(() => {
-				const track = document.querySelectorAll('.musicPlaylist li')[this.musicPlayer.currentIndex];
+				const currentIndex = get(stores.music.currentIndex);
+				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
 				if (track) scrollIfNeeded(track);
 			}, 10);
 		}
@@ -519,38 +520,33 @@ export class Navigation {
 
 	handleWebsitesNavigation(event) {
 		if (event.key === 'ArrowRight') {
-			if (this.websitesCurrentIndex < 1) {
-				this.websitesCurrentIndex = this.websitesCurrentIndex + 1;
-			} else if (this.websitesCurrentIndex === 1) {
-				this.websitesCurrentIndex = 0;
-			}
-			stores.navigation.websitesCurrentIndex.set(this.websitesCurrentIndex);
+			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+			const newIndex = websitesCurrentIndex < 1 ? websitesCurrentIndex + 1 : 0;
+			stores.navigation.websitesCurrentIndex.set(newIndex);
 			document.querySelectorAll('.websiteLink').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			if (this.websitesArray[this.websitesCurrentIndex]) {
-				this.websitesArray[this.websitesCurrentIndex].classList.add('focus');
+			if (this.websitesArray[newIndex]) {
+				this.websitesArray[newIndex].classList.add('focus');
 			}
 		}
 
 		if (event.key === 'ArrowLeft') {
-			if (this.websitesCurrentIndex > 0) {
-				this.websitesCurrentIndex = this.websitesCurrentIndex - 1;
-			} else if (this.websitesCurrentIndex === 0) {
-				this.websitesCurrentIndex = 1;
-			}
-			stores.navigation.websitesCurrentIndex.set(this.websitesCurrentIndex);
+			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+			const newIndex = websitesCurrentIndex > 0 ? websitesCurrentIndex - 1 : 1;
+			stores.navigation.websitesCurrentIndex.set(newIndex);
 			document.querySelectorAll('.websiteLink').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			if (this.websitesArray[this.websitesCurrentIndex]) {
-				this.websitesArray[this.websitesCurrentIndex].classList.add('focus');
+			if (this.websitesArray[newIndex]) {
+				this.websitesArray[newIndex].classList.add('focus');
 			}
 		}
 
 		if (event.key === 'Enter') {
-			if (this.websitesArray[this.websitesCurrentIndex]) {
-				window.open(this.websitesArray[this.websitesCurrentIndex].getAttribute('href'));
+			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+			if (this.websitesArray[websitesCurrentIndex]) {
+				window.open(this.websitesArray[websitesCurrentIndex].getAttribute('href'));
 			}
 		}
 	}
@@ -582,7 +578,7 @@ export class Navigation {
 
 	// Getters
 	get currentScreenId() {
-		return this.currentScreen;
+		return get(stores.navigation.currentScreen);
 	}
 }
 

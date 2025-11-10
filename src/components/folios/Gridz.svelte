@@ -16,23 +16,21 @@
 			videoElement.pause();
 			showPlayBtn = true;
 			
-			const { bgMusicElement, footerPlayBtn } = getMusicElements();
+			const { bgMusicElement } = getMusicElements();
 			const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 			if (bgMusicElement && bgMusicElement.paused && unpauseWhenDone) {
 				bgMusicElement.play();
 				stores.music.isPlaying.set(true);
-				if (footerPlayBtn) footerPlayBtn.classList.add('isPlaying');
 			}
 		} else {
 			videoElement.play();
 			showPlayBtn = false;
 			
-			const { bgMusicElement, footerPlayBtn } = getMusicElements();
+			const { bgMusicElement } = getMusicElements();
 			const isPlaying = get(stores.music.isPlaying);
 			if (isPlaying && !videoElement.muted && bgMusicElement) {
 				bgMusicElement.pause();
 				stores.music.isPlaying.set(false);
-				if (footerPlayBtn) footerPlayBtn.classList.remove('isPlaying');
 				stores.music.unpauseWhenDone.set(true);
 			} else {
 				stores.music.unpauseWhenDone.set(false);
@@ -49,12 +47,11 @@
 					videoElement.pause();
 					showPlayBtn = true;
 					
-					const { bgMusicElement, footerPlayBtn } = getMusicElements();
+					const { bgMusicElement } = getMusicElements();
 					const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 					if (unpauseWhenDone && bgMusicElement) {
 						bgMusicElement.play();
 						stores.music.isPlaying.set(true);
-						if (footerPlayBtn) footerPlayBtn.classList.add('isPlaying');
 					}
 				}
 			}, { threshold: 1 });

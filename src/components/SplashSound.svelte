@@ -1,3 +1,38 @@
+<script>
+	import { onMount } from 'svelte';
+	import { stores } from '../stores.js';
+	
+	const volumeStore = stores.music.volume;
+	$: volume = $volumeStore;
+	
+	const isMutedStore = stores.music.isMuted;
+	$: isMuted = $isMutedStore;
+	
+	let splashscreenVolumeSlider;
+	let musicPlayer;
+	
+	function handleVolumeInput(e) {
+		if (musicPlayer) {
+			musicPlayer.volumeHandler(e.target);
+		}
+	}
+	
+	function handleMuteClick() {
+		if (musicPlayer) {
+			musicPlayer.muteHandler();
+		}
+	}
+	
+	onMount(() => {
+		musicPlayer = window.musicPlayer;
+		
+		// Sync volume slider with store
+		if (splashscreenVolumeSlider) {
+			splashscreenVolumeSlider.value = volume;
+		}
+	});
+</script>
+
 <style>
 	.splashSound {
 		z-index: 95;
@@ -32,7 +67,7 @@
 </style>
 
 <div id="splashSound" class="splashSound">
-	<input id="bgVolume" value="0" type="range" />
-	<button id="muteBgMusic" class="muteBgMusic"></button>
+	<input bind:this={splashscreenVolumeSlider} id="bgVolume" type="range" value={volume} on:input={handleVolumeInput} />
+	<button id="muteBgMusic" class="muteBgMusic" class:isMuted={isMuted} on:click={handleMuteClick}></button>
 </div>
 

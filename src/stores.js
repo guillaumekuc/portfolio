@@ -13,7 +13,12 @@ export const stores = {
 		isMuted: writable(false),
 		volume: writable(0),
 		currentIndex: writable(0),
-		unpauseWhenDone: writable(false)
+		unpauseWhenDone: writable(false),
+		currentTime: writable(0),
+		duration: writable(0),
+		playlistLength: writable(0),
+		trackImage: writable('/img/bgMusic.jpg'),
+		tracks: writable([])
 	},
 
 	/**

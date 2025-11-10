@@ -18,7 +18,6 @@ export function initScripts() {
 	// Initialize music player
 	musicPlayer = new Music();
 	musicPlayer.init(elements);
-	musicPlayer.setupEventListeners();
 	
 	// Initialize navigation controller
 	navigationController = new Navigation(musicPlayer, elements.websitesArray);
