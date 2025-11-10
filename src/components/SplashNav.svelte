@@ -93,7 +93,7 @@
 		opacity : 100%;
 		cursor: pointer ;
 	}
-	.splashNav > a.fakeHoverEvent {
+	:global(.splashNav > a.fakeHoverEvent) {
 		opacity : 100% !important;
 		transition : none !important;
 	}
@@ -123,7 +123,7 @@
 		border : calc(4vh / 10) solid var(--shadePop);
 	}
 
-	#contactBtn .tooltipText {
+	:global(#contactBtn .tooltipText) {
 		top : -25%;
 		left : 50%;
 		transform : translateX(-50%) translateY(-100%);

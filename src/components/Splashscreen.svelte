@@ -17,19 +17,6 @@
 		z-index: 90;
 	}
 
-	.splashscreen button {
-		width : calc(4 / 5 * var(--safeMargin));
-		height : calc(4 / 5 * var(--safeMargin));
-		padding : calc(0.1 * var(--safeMargin));
-		border-radius : 5px;
-		border : 0px ;
-		background-color: transparent;
-	}
-
-	.splashscreen button:hover {
-		background-color: var(--shadePop);
-	}
-
 	.splashArtArea {
 		position : relative;
 		height : 100vh;
@@ -116,7 +103,7 @@
 		margin-bottom: 0;
 	}
 
-	#splashscreen .splashLinks .mailTooltip .tooltipText {
+	:global(#splashscreen .splashLinks .mailTooltip .tooltipText) {
 		top : 125%;
 		left : 0;
 	}

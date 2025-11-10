@@ -65,7 +65,7 @@
 		background:url(img/icons/preloader.svg) no-repeat center center rgba(0,0,0,1)
 	}
 
-	#load.active {
+	:global(#load.active) {
 		opacity:0;
 		transition: opacity 0.5s ease-in-out;
 	}
@@ -109,7 +109,7 @@
 		background-color: var(--shadePop);
 	}
 
-	.startScreen button.fakeHoverEvent {
+	:global(.startScreen button.fakeHoverEvent) {
 		border : 3px solid var(--shadePop);
 		background-color: var(--shadePop);
 	}

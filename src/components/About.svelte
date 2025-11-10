@@ -106,9 +106,6 @@
 		background-color: var(--shadePop);
 	}
 
-	.sCaps {
-		font-variant: small-caps;
-	}
 
 	.myMail {
 		position: relative;
@@ -126,7 +123,7 @@
 		color : var(--shade3);
 	}
 
-	.myMail .tooltipText {
+	:global(.myMail .tooltipText) {
 		top : 125%;
 		left : 50%;
 		transform : translateX(-50%);
@@ -157,7 +154,7 @@
 		background-color : var(--shadeWhite);
 	}
 
-	#backToTop.fakeHoverEvent {
+	:global(#backToTop.fakeHoverEvent) {
 		background-color : var(--shadeWhite);
 	}
 </style>
