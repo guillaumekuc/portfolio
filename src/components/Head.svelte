@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { currentScreen } from '../stores.js';
+	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
 	import { Navigation } from '../utils/navigation.js';
 	import { Loading } from '../utils/loading.js';
@@ -35,7 +35,7 @@
 		document.body.style.overflow = 'auto';
 		
 		// Update current screen
-		currentScreen.set('splashscreen');
+		stores.navigation.currentScreen.set('splashscreen');
 		
 		// Trigger music launch (will be handled by Splashscreen component)
 		const event = new CustomEvent('enterPressed');

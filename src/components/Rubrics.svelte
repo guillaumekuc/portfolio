@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { rubricFocused } from '../stores.js';
+	import { stores } from '../stores.js';
 	import { Navigation } from '../utils/navigation.js';
 
 	let allRubrics = [];
@@ -9,7 +9,7 @@
 		allRubrics.forEach(rubric => rubric.classList.remove('focus'));
 		this.classList.add('focus');
 		const focused = parseInt(this.id.charAt(this.id.length - 1));
-		rubricFocused.set(focused);
+		stores.navigation.rubricFocused.set(focused);
 		
 		const target = '#hnBtn' + focused;
 		document.querySelectorAll(".headerNav a").forEach(link => link.classList.remove('focus'));

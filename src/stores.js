@@ -1,18 +1,31 @@
 import { writable } from 'svelte/store';
 
-// Music state
-export const bgMusicIsPlaying = writable(false);
-export const bgMusicIsLooping = writable(false);
-export const bgMusicIsMuted = writable(false);
-export const bgVolume = writable(0);
-export const musicCurrentIndex = writable(0);
-export const unpauseMusicWhenDone = writable(false);
+/**
+ * Organized store namespaces
+ */
+export const stores = {
+	/**
+	 * Music-related state
+	 */
+	music: {
+		isPlaying: writable(false),
+		isLooping: writable(false),
+		isMuted: writable(false),
+		volume: writable(0),
+		currentIndex: writable(0),
+		unpauseWhenDone: writable(false)
+	},
 
-// Navigation state
-export const currentScreen = writable('startScreen');
-export const rubricFocused = writable(3);
-export const menuSelected = writable(1);
-export const websitesCurrentIndex = writable(0);
+	/**
+	 * Navigation-related state
+	 */
+	navigation: {
+		currentScreen: writable('startScreen'),
+		rubricFocused: writable(3),
+		menuSelected: writable(1),
+		websitesCurrentIndex: writable(0)
+	}
+};
 
 // Helper function to get DOM elements (for compatibility with existing code)
 export function getMusicElements() {
@@ -32,4 +45,3 @@ export function getMusicElements() {
 		websitesArray: Array.from(document.querySelectorAll('.websiteLink') || [])
 	};
 }
-

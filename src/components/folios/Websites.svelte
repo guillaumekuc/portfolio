@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { websitesCurrentIndex } from '../../stores.js';
+	import { stores } from '../../stores.js';
 
 	let websiteLinks = [];
 
@@ -12,7 +12,7 @@
 			link.addEventListener('mousemove', () => {
 				websiteLinks.forEach(l => l.classList.remove('focus'));
 				link.classList.add('focus');
-				websitesCurrentIndex.set(websiteLinks.indexOf(link));
+				stores.navigation.websitesCurrentIndex.set(websiteLinks.indexOf(link));
 			});
 			
 			link.addEventListener('mouseout', () => {

@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import HeaderLinks from './HeaderLinks.svelte';
-	import { rubricFocused } from '../stores.js';
+	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
 
@@ -19,7 +19,7 @@
 		if (target === "folioMusic") focused = 4;
 		if (target === "folioWeb") focused = 5;
 		
-		rubricFocused.set(focused);
+		stores.navigation.rubricFocused.set(focused);
 		const idToFocus = '#rBtn' + focused;
 		document.querySelectorAll('.rubric').forEach(rubric => rubric.classList.remove('focus'));
 		const rubricElement = document.querySelector(idToFocus);

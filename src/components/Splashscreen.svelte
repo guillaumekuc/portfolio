@@ -1,26 +1,7 @@
 <script>
-	import { onMount } from 'svelte';
 	import SplashLinks from './SplashLinks.svelte';
-
-	let contactBtn;
-
-	function handleMailTooltip(event) {
-		const toolTip = document.createElement("span");
-		toolTip.innerHTML = "<span class='tooltipText'>Mail copied to clipboard !</span>";
-		event.currentTarget.appendChild(toolTip);
-		setTimeout(() => {
-			if (event.currentTarget.contains(toolTip)) {
-				event.currentTarget.removeChild(toolTip);
-			}
-		}, 3000);
-	}
-
-	onMount(() => {
-		contactBtn = document.querySelector('#contactBtn');
-		if (contactBtn) {
-			contactBtn.addEventListener('click', handleMailTooltip);
-		}
-	});
+	import SplashSound from './SplashSound.svelte';
+	import SplashNav from './SplashNav.svelte';
 </script>
 
 <style>
@@ -77,23 +58,6 @@
 	}
 
 
-	.splashSound {
-		z-index: 95;
-		position : absolute;
-		display : flex;
-		align-items: center;
-		justify-content: right;
-		padding-right: var(--safeMargin);
-		height : var(--safeMargin);
-		right : 0 ;
-	}
-
-	.splashSound input[type="range"] {
-		width : calc(1920px / 6 - 2 * var(--safeMargin));
-		max-width : calc(100vw / 4 - 2 * var(--safeMargin));
-		height : 2px;
-		background: rgba(255, 255, 255, 0.5);
-	}
 
 	.splashBranding {
 		position : absolute ;
@@ -152,148 +116,15 @@
 		margin-bottom: 0;
 	}
 
-	#splashNavPositioner {
-		position : absolute;
-		display : block;  
-		width : 100%;
-		top : 0;
-		left : 0;
-		height : 100%;
-	}
-
-	#splashNavEmptySpace {
-		display : block;
-		position : relative;
-		visibility: hidden;
-		z-index : -100;
-		height : 90%;
-		max-height: calc(100% - 2 * var(--safeMargin));
-	}
-
-	.splashNavArea {
-		display : flex;
-		align-items: center;
-		justify-content: center;
-		position : relative;
-		height : 10vh;
-		width : 100%;
-		min-height: calc(2 * var(--safeMargin));
-		background-color: rgba(09, 09, 09, 0.90);
-	}
-
-	.splashNav {
-		display : flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-		width : calc(100vw / 3);  
-		min-width : 384px;
-		height : 80%;
-		z-index : 200;
-	}
-
-	@media (max-width : 768px){
-		.splashNav {
-			width : calc(100vw / 2);
-			min-width: calc(100vw / 2)  ;
-		}
-	}
-	.splashNav > a, .splashNav > span {
-		position : relative;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-between;
-		color : var(--shadeWhite);
-		font-variant: small-caps;
-		font-size: calc(var(--safeMargin)/2);
-		opacity : 20%;
-		pointer-events: none;
-		user-select: none;  
-	}
-
-	#blogBtn { transition : opacity 1.5s ease-out 3.25s ; }
-	#worksBtn { transition : opacity 1.5s ease-out 3s ; }
-	#contactBtn { transition : opacity 1.5s ease-out 3.5s ; }
-
-	.splashNav img {
-		width : calc(1.2 * var(--safeMargin));
-		height : calc(1.2 * var(--safeMargin));
-	}
-
-	@media (max-height : 432px)
-	{
-		.splashNav img {
-			width : calc(0.9 * var(--safeMargin));
-			height : calc(0.9 * var(--safeMargin));
-		}
-	}
-
-	@media (max-height : 864px)
-	{
-		.splashNav img {
-			width : calc(1.05 * var(--safeMargin));
-			height : calc(1.05 * var(--safeMargin));
-		}
-	}
-
-	.splashNav > a:hover {
-		transition : none !important;
-		opacity : 100%;
-		cursor: pointer ;
-	}
-	.splashNav > a.fakeHoverEvent {
-		opacity : 100% !important;
-		transition : none !important;
-	}
-
-	.splashNav > a:hover img {
-		background-color: var(--shadePop);
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
-	}
-
-	.splashNav > a.focus img {
-		background-color: var(--shadePop)!important;
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
-		transition :0s linear;  
-	}
-
-	.splashNav > a.fakeHoverEvent img {
-		background-color: var(--shadePop); 
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
-	}
-
 	#splashscreen .splashLinks .mailTooltip .tooltipText {
 		top : 125%;
 		left : 0;
-	}
-
-	#contactBtn .tooltipText {
-		top : -25%;
-		left : 50%;
-		transform : translateX(-50%) translateY(-100%);
-		font-variant: normal;
-		font-family: var(--ff1);
-		font-size : 90%;
 	}
 </style>
 
 <div id="splashscreen" class="splashscreen fullPage snap">
 	<SplashLinks />
-
-	<div id="splashSound" class="splashSound">
-		<input id="bgVolume" value="0" type="range" />
-		<button id="muteBgMusic" class="muteBgMusic"></button>
-	</div><!--splashSound-->
+	<SplashSound />
 
 	<div id="splashBranding" class="splashBranding">
 		<h1 id="splashTitle" class="splashTitle">
@@ -311,45 +142,13 @@
 	</div><!--#splashBranding-->
 
 <div id="splashArtArea" class="splashArtArea">
-	
-
 	<div id="splashArt" class="splashArt zoomIn">
 		<audio id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"></audio>
 
 		<div id="splashArtShader" class="splashArtShader">
 		</div><!--#splashArtShader-->
 	</div><!--#splashArt-->
-
 </div><!--splashArtArea-->
 
-<div id="splashNavPositioner">
-
-	<div id="splashNavEmptySpace"></div>
-	<div id="splashNavArea" class="splashNavArea">
-		<div id="splashNav" class="splashNav">
-			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
-			<img src="/img/icons/blog.svg" alt="Blog" />
-			<span class="navLabel">Blog</span>
-			</a>
-
-			<span>·</span>
-
-			<a id="worksBtn" on:click={() => document.querySelector('#rubrics')?.scrollIntoView()}>
-			<img src="/img/icons/keydown2_w.svg" alt="Works" />
-			<span class="navLabel">Works</span>
-			</a>
-
-			<span>·</span>
-
-			<a id="contactBtn" class="mailTooltip" 
-			target="_blank" 
-			on:click|preventDefault={() => window.open('mailto:guillaume@guillaumekuc.com', 'mail')} 
-			href="mailto:guillaume@guillaumekuc.com">
-			<img src="/img/icons/contact_w.svg" alt="Contact" />
-			<span class="navLabel">Contact</span>
-			</a>
-
-		</div><!--#splashNav-->
-	</div><!--#splashNavArea-->
-</div>
+<SplashNav />
 </div><!--#splashscreen-->

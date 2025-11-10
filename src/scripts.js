@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'slick-carousel';
 import { Music } from './utils/music.js';
-import { NavigationController } from './utils/navigation-controller.js';
+import { Navigation } from './utils/navigation.js';
 import { Init } from './utils/init.js';
 
 // Make jQuery available globally for slick-carousel
@@ -21,7 +21,7 @@ export function initScripts() {
 	musicPlayer.setupEventListeners();
 	
 	// Initialize navigation controller
-	navigationController = new NavigationController(musicPlayer, elements.websitesArray);
+	navigationController = new Navigation(musicPlayer, elements.websitesArray);
 	navigationController.init();
 	
 	return {

@@ -8,7 +8,7 @@
 	import Folios from './components/Folios.svelte';
 	import About from './components/About.svelte';
 	import Footer from './components/Footer.svelte';
-	import Foot from './components/Foot.svelte';
+	import RotateDevice from './components/RotateDevice.svelte';
 	
 	// Import styles
 	import './styles.css';
@@ -35,5 +35,5 @@
 	<Folios />
 	<About />
 	<Footer />
-	<Foot />
+	<RotateDevice />
 </div>

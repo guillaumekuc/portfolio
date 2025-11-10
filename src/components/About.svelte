@@ -1,23 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
+	import { Tooltip } from '../utils/tooltip.js';
 
 	let myMailElement;
-
-	function handleMailTooltip(event) {
-		const toolTip = document.createElement("span");
-		toolTip.innerHTML = "<span class='tooltipText'>Mail copied to clipboard !</span>";
-		event.currentTarget.appendChild(toolTip);
-		setTimeout(() => {
-			if (event.currentTarget.contains(toolTip)) {
-				event.currentTarget.removeChild(toolTip);
-			}
-		}, 3000);
-	}
 
 	onMount(() => {
 		myMailElement = document.querySelector('.myMail');
 		if (myMailElement) {
-			myMailElement.addEventListener('click', handleMailTooltip);
+			myMailElement.addEventListener('click', Tooltip.handleMailTooltip);
 		}
 	});
 </script>

@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { currentScreen } from '../stores.js';
+	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 
 	let topArrow;
@@ -8,7 +8,7 @@
 
 	function clickTopArrow() {
 		let currentScreenValue;
-		currentScreen.subscribe(value => currentScreenValue = value)();
+		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
 		
 		if (currentScreenValue === 'rubrics') {
 			document.querySelector('#splashscreen')?.scrollIntoView();
@@ -23,7 +23,7 @@
 
 	function clickBottomArrow() {
 		let currentScreenValue;
-		currentScreen.subscribe(value => currentScreenValue = value)();
+		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
 		
 		const currentElement = document.querySelector('#' + currentScreenValue);
 		if (currentElement) {
@@ -34,7 +34,7 @@
 
 	function displayBorderArrows(event) {
 		let currentScreenValue;
-		currentScreen.subscribe(value => currentScreenValue = value)();
+		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
 		
 		const topArea = 3.5 * 38.4;
 		const bottomArea = window.innerHeight - 3.5 * 38.4;

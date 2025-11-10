@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { bgMusicIsPlaying, unpauseMusicWhenDone } from '../../stores.js';
+	import { stores } from '../../stores.js';
 	import { getMusicElements } from '../../stores.js';
 
 	let videoElement;
@@ -14,9 +14,11 @@
 			if (playBtn) playBtn.classList.remove('hidden');
 			
 			const { bgMusicElement, footerPlayBtn } = getMusicElements();
-			if (bgMusicElement && bgMusicElement.paused && unpauseMusicWhenDone) {
+			let unpauseWhenDone;
+			stores.music.unpauseWhenDone.subscribe(value => unpauseWhenDone = value)();
+			if (bgMusicElement && bgMusicElement.paused && unpauseWhenDone) {
 				bgMusicElement.play();
-				bgMusicIsPlaying.set(true);
+				stores.music.isPlaying.set(true);
 				if (footerPlayBtn) footerPlayBtn.classList.add('isPlaying');
 			}
 		} else {
@@ -24,13 +26,15 @@
 			if (playBtn) playBtn.classList.add('hidden');
 			
 			const { bgMusicElement, footerPlayBtn } = getMusicElements();
-			if (bgMusicIsPlaying && !videoElement.muted && bgMusicElement) {
+			let isPlaying;
+			stores.music.isPlaying.subscribe(value => isPlaying = value)();
+			if (isPlaying && !videoElement.muted && bgMusicElement) {
 				bgMusicElement.pause();
-				bgMusicIsPlaying.set(false);
+				stores.music.isPlaying.set(false);
 				if (footerPlayBtn) footerPlayBtn.classList.remove('isPlaying');
-				unpauseMusicWhenDone.set(true);
+				stores.music.unpauseWhenDone.set(true);
 			} else {
-				unpauseMusicWhenDone.set(false);
+				stores.music.unpauseWhenDone.set(false);
 			}
 		}
 	}
@@ -50,9 +54,11 @@
 					if (playBtn) playBtn.classList.remove('hidden');
 					
 					const { bgMusicElement, footerPlayBtn } = getMusicElements();
-					if (unpauseMusicWhenDone && bgMusicElement) {
+					let unpauseWhenDone;
+					stores.music.unpauseWhenDone.subscribe(value => unpauseWhenDone = value)();
+					if (unpauseWhenDone && bgMusicElement) {
 						bgMusicElement.play();
-						bgMusicIsPlaying.set(true);
+						stores.music.isPlaying.set(true);
 						if (footerPlayBtn) footerPlayBtn.classList.add('isPlaying');
 					}
 				}
