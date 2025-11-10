@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 export default defineConfig({
   root: '.',
   publicDir: 'public',
+  plugins: [svelte()],
   build: {
     outDir: 'dist',
     rollupOptions: {
