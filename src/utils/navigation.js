@@ -1,5 +1,6 @@
 import { DOM } from './dom.js';
 import { Animation } from './animation.js';
+import { stores } from '../stores.js';
 
 /**
  * Navigation controller class
@@ -85,6 +86,12 @@ export class Navigation {
 		this.rubricFocused = 3;
 		this.menuSelected = 1;
 		this.websitesCurrentIndex = 0;
+		
+		// Initialize stores to match instance state
+		stores.navigation.currentScreen.set('startScreen');
+		stores.navigation.rubricFocused.set(3);
+		stores.navigation.menuSelected.set(1);
+		stores.navigation.websitesCurrentIndex.set(0);
 	}
 
 	/**
@@ -109,6 +116,8 @@ export class Navigation {
 			const elementObserver = new IntersectionObserver((entries) => {
 				if (entries[0].isIntersecting === true) {
 					self.currentScreen = element.id;
+					// Update the store so Svelte components can react to changes
+					stores.navigation.currentScreen.set(element.id);
 					
 					// Refresh slick position when screen becomes visible
 					if (typeof window.$ !== 'undefined' && window.$.fn.slick) {
@@ -141,6 +150,8 @@ export class Navigation {
 						if (self.websitesArray[self.websitesCurrentIndex]) {
 							self.websitesArray[self.websitesCurrentIndex].classList.add('focus');
 						}
+						// Update the store
+						stores.navigation.websitesCurrentIndex.set(self.websitesCurrentIndex);
 					}
 				}
 			}, { threshold: [0.5] });
@@ -256,6 +267,7 @@ export class Navigation {
 				link.classList.remove('focus');
 			});
 			this.menuSelected = 1;
+			stores.navigation.menuSelected.set(1);
 			Animation.fakeHoverEvent(document.querySelector('#worksBtn'));
 			document.querySelector('#rubrics')?.scrollIntoView();
 			return;
@@ -269,6 +281,7 @@ export class Navigation {
 			} else if (this.menuSelected === 2) {
 				this.menuSelected = 1;
 			}
+			stores.navigation.menuSelected.set(this.menuSelected);
 			this.updateSplashNavFocus();
 			return;
 		}
@@ -281,6 +294,7 @@ export class Navigation {
 			} else if (this.menuSelected === 0) {
 				this.menuSelected = 1;
 			}
+			stores.navigation.menuSelected.set(this.menuSelected);
 			this.updateSplashNavFocus();
 			return;
 		}
@@ -295,18 +309,21 @@ export class Navigation {
 					link.classList.remove('focus');
 				});
 				this.menuSelected = 1;
+				stores.navigation.menuSelected.set(1);
 			} else if (this.menuSelected === 1) {
 				document.querySelector('#rubrics')?.scrollIntoView();
 				document.querySelectorAll('.splashNav a').forEach((link) => {
 					link.classList.remove('focus');
 				});
 				this.menuSelected = 1;
+				stores.navigation.menuSelected.set(1);
 			} else if (this.menuSelected === 2) {
 				window.open('mailto:guillaume@guillaumekuc.com', 'mail');
 				document.querySelectorAll('.splashNav a').forEach((link) => {
 					link.classList.remove('focus');
 				});
 				this.menuSelected = 1;
+				stores.navigation.menuSelected.set(1);
 			}
 		}
 	}
@@ -385,6 +402,9 @@ export class Navigation {
 		
 		const rubricClass = Navigation.getRubricClass(this.rubricFocused);
 		Navigation.hideIrrelevantFolios(rubricClass);
+		
+		// Update the store
+		stores.navigation.rubricFocused.set(this.rubricFocused);
 	}
 
 	handleOtherScreensNavigation(event) {
@@ -504,6 +524,7 @@ export class Navigation {
 			} else if (this.websitesCurrentIndex === 1) {
 				this.websitesCurrentIndex = 0;
 			}
+			stores.navigation.websitesCurrentIndex.set(this.websitesCurrentIndex);
 			document.querySelectorAll('.websiteLink').forEach((link) => {
 				link.classList.remove('focus');
 			});
@@ -518,6 +539,7 @@ export class Navigation {
 			} else if (this.websitesCurrentIndex === 0) {
 				this.websitesCurrentIndex = 1;
 			}
+			stores.navigation.websitesCurrentIndex.set(this.websitesCurrentIndex);
 			document.querySelectorAll('.websiteLink').forEach((link) => {
 				link.classList.remove('focus');
 			});

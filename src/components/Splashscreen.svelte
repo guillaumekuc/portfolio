@@ -123,7 +123,9 @@
 </style>
 
 <div id="splashscreen" class="splashscreen fullPage snap">
-	<SplashLinks />
+	<div class="splashLinks">
+		<SplashLinks />
+	</div>
 	<SplashSound />
 
 	<div id="splashBranding" class="splashBranding">
@@ -150,5 +152,7 @@
 	</div><!--#splashArt-->
 </div><!--splashArtArea-->
 
-<SplashNav />
+<div id="splashNavPositioner">
+	<SplashNav />
+</div>
 </div><!--#splashscreen-->

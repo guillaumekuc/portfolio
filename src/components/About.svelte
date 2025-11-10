@@ -8,7 +8,7 @@
 
 	function handleBackToTop() {
 		const splashscreen = document.querySelector('#splashscreen');
-		if (splashscreen) splashscreen.scrollIntoView();
+		if (splashscreen) splashscreen.scrollIntoView({ behavior: 'smooth' });
 	}
 </script>
 

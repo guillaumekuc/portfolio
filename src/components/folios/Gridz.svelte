@@ -1,21 +1,23 @@
 <script>
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
 	import { getMusicElements } from '../../stores.js';
 
 	let videoElement;
 	let playBtn;
+	let videoContainer;
+	let showPlayBtn = true;
 
 	function handleVideoClick() {
 		if (!videoElement) return;
 		
 		if (videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended && videoElement.readyState > 2) {
 			videoElement.pause();
-			if (playBtn) playBtn.classList.remove('hidden');
+			showPlayBtn = true;
 			
 			const { bgMusicElement, footerPlayBtn } = getMusicElements();
-			let unpauseWhenDone;
-			stores.music.unpauseWhenDone.subscribe(value => unpauseWhenDone = value)();
+			const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 			if (bgMusicElement && bgMusicElement.paused && unpauseWhenDone) {
 				bgMusicElement.play();
 				stores.music.isPlaying.set(true);
@@ -23,11 +25,10 @@
 			}
 		} else {
 			videoElement.play();
-			if (playBtn) playBtn.classList.add('hidden');
+			showPlayBtn = false;
 			
 			const { bgMusicElement, footerPlayBtn } = getMusicElements();
-			let isPlaying;
-			stores.music.isPlaying.subscribe(value => isPlaying = value)();
+			const isPlaying = get(stores.music.isPlaying);
 			if (isPlaying && !videoElement.muted && bgMusicElement) {
 				bgMusicElement.pause();
 				stores.music.isPlaying.set(false);
@@ -40,22 +41,16 @@
 	}
 
 	onMount(() => {
-		videoElement = document.querySelector('#gridzFolio .largeVideo');
-		playBtn = document.querySelector('#gridzFolio .videoPlayBtn');
-		
-		if (videoElement) {
-			videoElement.addEventListener('click', handleVideoClick);
-			
-			// Video observer
+		if (videoElement && videoContainer) {
+			// Video observer for intersection
 			const videoObserver = new IntersectionObserver((entries) => {
 				const entry = entries[0];
 				if (entry.intersectionRatio !== 1 && !videoElement.paused) {
 					videoElement.pause();
-					if (playBtn) playBtn.classList.remove('hidden');
+					showPlayBtn = true;
 					
 					const { bgMusicElement, footerPlayBtn } = getMusicElements();
-					let unpauseWhenDone;
-					stores.music.unpauseWhenDone.subscribe(value => unpauseWhenDone = value)();
+					const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 					if (unpauseWhenDone && bgMusicElement) {
 						bgMusicElement.play();
 						stores.music.isPlaying.set(true);
@@ -64,9 +59,7 @@
 				}
 			}, { threshold: 1 });
 			
-			if (videoElement.parentElement) {
-				videoObserver.observe(videoElement.parentElement);
-			}
+			videoObserver.observe(videoContainer);
 		}
 	});
 </script>
@@ -79,10 +72,10 @@
 			</blockquote>
 			<a class="focus extLinkBtn" href=""><img src="/img/icons/gotoURL.png" alt="Go to URL" /><span>Check on gumroad</span></a>
 	</div>
-	<div class="wideRightThirds">
-		<video class="largeVideo" preload="none" muted loop poster="/vid/gridzDemoCover.jpg">
+	<div bind:this={videoContainer} class="wideRightThirds">
+		<video bind:this={videoElement} class="largeVideo" preload="none" muted loop poster="/vid/gridzDemoCover.jpg" on:click={handleVideoClick}>
 			<source src="/vid/gridzDemo.mp4" type="video/mp4">
 		</video>
-	 	<a class="videoPlayBtn"></a>
+		<a bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn}></a>
 	</div>
 </div>

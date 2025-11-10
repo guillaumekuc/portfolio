@@ -144,10 +144,13 @@
 
 			<span>·</span>
 
-			<a id="worksBtn" on:click={() => document.querySelector('#rubrics')?.scrollIntoView()}>
+			<a id="worksBtn" on:click={() => {
+				const rubrics = document.querySelector('#rubrics');
+				if (rubrics) rubrics.scrollIntoView();
+			}}>
 			<img src="/img/icons/keydown2_w.svg" alt="Works" />
 			<span class="navLabel">Works</span>
-			</a>
+            </a>
 
 			<span>·</span>
 

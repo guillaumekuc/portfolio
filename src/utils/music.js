@@ -1,4 +1,5 @@
 import { Time } from './time.js';
+import { stores } from '../stores.js';
 
 /**
  * Music player controller class
@@ -97,6 +98,7 @@ export class Music {
 		this.bgMusicElement.pause();
 		this.bgMusicElement.currentTime = 0;
 		this.bgMusicIsPlaying = false;
+		stores.music.isPlaying.set(false);
 		if (this.splashscreenMuteBtn) {
 			this.splashscreenMuteBtn.classList.remove('isPlaying');
 			this.splashscreenMuteBtn.classList.add('isNotPlaying');
@@ -107,6 +109,7 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.play();
 		this.bgMusicIsPlaying = true;
+		stores.music.isPlaying.set(true);
 		if (this.footerPlayBtn) {
 			this.footerPlayBtn.classList.add('isPlaying');
 		}
@@ -116,6 +119,7 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.pause();
 		this.bgMusicIsPlaying = false;
+		stores.music.isPlaying.set(false);
 		if (this.footerPlayBtn) {
 			this.footerPlayBtn.classList.remove('isPlaying');
 		}
@@ -147,6 +151,8 @@ export class Music {
 		if (this.splashscreenVolumeSlider) this.splashscreenVolumeSlider.value = 0;
 		if (this.footerVolumeSlider) this.footerVolumeSlider.value = 0;
 		this.bgMusicIsMuted = true;
+		stores.music.isMuted.set(true);
+		stores.music.volume.set(this.bgVolume);
 		if (this.splashscreenMuteBtn) this.splashscreenMuteBtn.classList.add('isMuted');
 		if (this.footerMuteBtn) this.footerMuteBtn.classList.add('isMuted');
 	}
@@ -248,12 +254,14 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		if (this.bgMusicElement.loop == true) {
 			this.bgMusicElement.loop = false;
-			if (this.footerLoopBtn) this.footerLoopBtn.classList.remove('isLooping');
 			this.bgMusicIsLooping = false;
+			stores.music.isLooping.set(false);
+			if (this.footerLoopBtn) this.footerLoopBtn.classList.remove('isLooping');
 		} else if (this.bgMusicElement.loop == false) {
 			this.bgMusicElement.loop = true;
-			if (this.footerLoopBtn) this.footerLoopBtn.classList.add('isLooping');
 			this.bgMusicIsLooping = true;
+			stores.music.isLooping.set(true);
+			if (this.footerLoopBtn) this.footerLoopBtn.classList.add('isLooping');
 		}
 	}
 

@@ -33,7 +33,7 @@
 
 	function handleTitleClick() {
 		const splashscreen = document.querySelector('#splashscreen');
-		if (splashscreen) splashscreen.scrollIntoView();
+		if (splashscreen) splashscreen.scrollIntoView({ behavior: 'smooth' });
 	}
 </script>
 
@@ -65,8 +65,8 @@
 	}
 
 	.headerTitle {
-		font-variant: small-caps;
 		color : var(--shadeWhite);
+		font-size: 1em;
 	}
 
 	.headerTitle:hover{
@@ -82,7 +82,7 @@
 		padding-left: var(--safeMargin);
 		padding-right : var(--safeMargin);
 		display : flex;
-		align-items: top;
+		align-items: center;
 		justify-content: left;
 		color : var(--shade3);
 		line-height: auto;

@@ -1,35 +1,41 @@
 <script>
-	import { onMount } from 'svelte';
 	import { stores } from '../../stores.js';
 
-	let websiteLinks = [];
+	// Website data
+	const websites = [
+		{
+			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
+			screenshot: '/img/gkartscreenshot.png',
+			screenshotAlt: 'GK Art Screenshot',
+			label: 'Guillaume Kuc',
+			suffix: '.art'
+		},
+		{
+			href: 'http://localhost/guillaumekuc/guillaumekuc.blog',
+			screenshot: '/img/gkblogscreenshot.png',
+			screenshotAlt: 'GK Blog Screenshot',
+			label: 'Guillaume Kuc',
+			suffix: '.blog'
+		}
+	];
 
-	onMount(() => {
-		websiteLinks = Array.from(document.querySelectorAll('.websiteLink'));
-		
-		// Handle hover
-		websiteLinks.forEach(link => {
-			link.addEventListener('mousemove', () => {
-				websiteLinks.forEach(l => l.classList.remove('focus'));
-				link.classList.add('focus');
-				stores.navigation.websitesCurrentIndex.set(websiteLinks.indexOf(link));
-			});
-			
-			link.addEventListener('mouseout', () => {
-				websiteLinks.forEach(l => l.classList.remove('focus'));
-			});
-		});
-	});
+	// Extract store for reactive access
+	const websitesCurrentIndexStore = stores.navigation.websitesCurrentIndex;
+	$: websitesCurrentIndex = $websitesCurrentIndexStore;
+
+	function handleMouseMove(index) {
+		stores.navigation.websitesCurrentIndex.set(index);
+	}
 </script>
 
 <style>
-	.folioWeb .siteLabel {
+	.siteLabel {
 		background-color: var(--shade2);
 		border-radius: 5px;
 		vertical-align: middle;
 	}
 
-	.folioWeb .websiteLink {
+	.websiteLink {
 		display : inline-block;
 		width : 90%;
 		text-align: center;
@@ -37,16 +43,16 @@
 		color : var(--shadeWhite);
 	}
 
-	.folioWeb .websiteLink.focus {
+ 	.websiteLink.focus {
 		transform : scale(1.05);
 	}
 
-	.folioWeb .websiteLink .screenshot{
+	.websiteLink .screenshot{
 		border: 1px solid var(--shade2);
 		border-radius: 15px;
 	}
 
-	.folioWeb .websiteLink.focus .screenshot{
+	 .websiteLink.focus .screenshot{
 		border: 2px solid var(--shadeWhite);
 	}
 
@@ -62,15 +68,29 @@
 
 <div class="twoPanes">
 	<div class="siteLeft">
-		<a class="websiteLink" href="http://localhost/guillaumekuc/guillaumekuc.art" target="_blank">
-			<img class="screenshot" src="/img/gkartscreenshot.png" alt="GK Art Screenshot" />
+		<a 
+			class="websiteLink" 
+			class:focus={websitesCurrentIndex === 0}
+			href={websites[0].href} 
+			target="_blank"
+			on:mousemove={() => handleMouseMove(0)}
+		>
+			<img class="screenshot" src={websites[0].screenshot} alt={websites[0].screenshotAlt} />
 			<img src="/img/icons/gotoURL.png" class="redirection" alt="Go to URL" />
-			<span style="font-variant : small-caps;">Guillaume Kuc</span><span> .art</span>
+			<span style="font-variant : small-caps;">{websites[0].label}</span><span> {websites[0].suffix}</span>
 		</a>
-		
 	</div>
 	<div class="siteRight rightPane">
-		<a class="websiteLink" href="http://localhost/guillaumekuc/guillaumekuc.blog" target="_blank"><img class="screenshot" src="/img/gkblogscreenshot.png" alt="GK Blog Screenshot" />
-		<img src="/img/icons/gotoURL.png" class="redirection" alt="Go to URL" /><span style="font-variant : small-caps;">Guillaume Kuc</span><span> .blog</span></a>
+		<a 
+			class="websiteLink" 
+			class:focus={websitesCurrentIndex === 1}
+			href={websites[1].href} 
+			target="_blank"
+			on:mousemove={() => handleMouseMove(1)}
+		>
+			<img class="screenshot" src={websites[1].screenshot} alt={websites[1].screenshotAlt} />
+			<img src="/img/icons/gotoURL.png" class="redirection" alt="Go to URL" />
+			<span style="font-variant : small-caps;">{websites[1].label}</span><span> {websites[1].suffix}</span>
+		</a>
 	</div>
 </div>

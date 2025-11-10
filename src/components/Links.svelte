@@ -11,7 +11,7 @@
 	<img src="/img/icons/blog.svg" alt="Blog" />
 </a>
 
-<a style="pointer-events: none;"> · </a>
+<span style="pointer-events: none;"> · </span>
 
 <a class="L2" title="artstation" href="https://www.artstation.com/guillaumekuc">
 	<img src="/img/icons/artstation.svg" alt="Artstation" />

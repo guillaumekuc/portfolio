@@ -13,12 +13,12 @@
 		// Initialize scroll
 		Navigation.initializeScroll();
 		
-		// Hide all folios
-		document.querySelectorAll('.folio').forEach(function(folio) { 
-			folio.classList.add('hidden');
-		});
+		// Hide all folios (cross-component, so querySelector is acceptable)
+		const folios = document.querySelectorAll('.folio');
+		folios.forEach(folio => folio.classList.add('hidden'));
 		
-		// Animate opening
+		// Get animation elements (cross-component access - acceptable for sibling components)
+		// Using querySelector is fine here since Head and Splashscreen are siblings
 		Animation.animateOpening({
 			startScreen: startScreenElement,
 			art: document.querySelector('#splashArt'),
