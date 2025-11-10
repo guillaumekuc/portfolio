@@ -6,17 +6,19 @@ The shortcut system allows components to register keyboard shortcuts with scope 
 
 ## Architecture
 
-### ShortcutRegistry (`src/utils/shortcuts.js`)
+### Shortcuts (`src/utils/shortcuts.js`)
 
-A singleton registry that manages two types of shortcuts:
+A singleton registry that manages three types of shortcuts:
 
-1. **Global shortcuts** - Always active (e.g., music controls)
+1. **Modal shortcuts** - Highest priority, active when a modal is open (e.g., startScreen)
 2. **Screen-specific shortcuts** - Active only when a full-page section is visible
+3. **Global shortcuts** - Always active (e.g., music controls)
 
 ### Priority Order
 
-1. Global shortcuts (highest priority)
+1. Modal shortcuts (highest priority - when active, all other shortcuts are blocked)
 2. Screen-specific shortcuts
+3. Global shortcuts
 
 ## Usage Examples
 
@@ -26,24 +28,23 @@ Components register shortcuts for their full-page section in `onMount` and clean
 
 ```javascript
 import { onMount, onDestroy } from 'svelte';
-import { shortcutRegistry } from '../utils/shortcuts.js';
+import { shortcuts } from '../utils/shortcuts.js';
 
 onMount(() => {
   // Register shortcuts for this component's screen
-  shortcutRegistry.registerScreen(
+  shortcuts.addScreenShortcut(
     'splashscreen',           // screenId (matches the full-page section ID)
     'ArrowDown',              // key
     (event) => {              // handler
       document.querySelector('#rubrics')?.scrollIntoView();
     },
-    'splashscreen-down',      // unique id
     true                      // preventDefault (optional, default: true)
   );
 });
 
 onDestroy(() => {
   // Cleanup when component unmounts
-  shortcutRegistry.unregisterScreen('splashscreen', 'splashscreen-down');
+  shortcuts.removeScreenShortcuts('splashscreen');
 });
 ```
 
@@ -52,29 +53,54 @@ onDestroy(() => {
 Global shortcuts are registered once (typically in initialization code):
 
 ```javascript
-import { shortcutRegistry } from '../utils/shortcuts.js';
+import { shortcuts } from '../utils/shortcuts.js';
 
 // Register music shortcuts globally
-shortcutRegistry.registerGlobal(
+shortcuts.addGlobalShortcut(
   'q',                                    // key
-  () => window.musicPlayer?.previousTrackHandler(),  // handler
-  'music-prev-track',                     // unique id
+  () => window.musicPlayer?.handleKeyboardShortcut('q'),  // handler
+  'music-prev',                           // unique id
   true                                    // preventDefault (optional)
 );
 ```
 
-## Migration Plan
+### Registering a Modal Shortcut
 
-Move section-specific shortcuts from `navigation.js` to their respective components:
+Modal shortcuts have the highest priority and block all other shortcuts when active:
 
-1. `handleSplashscreenNavigation` → `SplashNav.svelte` (screen: 'splashscreen')
-2. `handleRubricsNavigation` → `Rubrics.svelte` (screen: 'rubrics')
-3. `handleMusicPlaylistNavigation` → `MusicPlaylistFolio.svelte` (screen: 'musicPlaylistFolio')
-4. `handleWebsitesNavigation` → `Websites.svelte` (screen: 'websitesFolio')
-5. `startScreen` Enter handler → `Head.svelte` (screen: 'startScreen')
-6. `about` Enter handler → `About.svelte` (screen: 'about')
+```javascript
+import { onMount, onDestroy } from 'svelte';
+import { shortcuts } from '../utils/shortcuts.js';
 
-Global shortcuts (music controls, arrow navigation) remain in `navigation.js` or can be moved to `music.js`.
+onMount(() => {
+  shortcuts.addModalShortcut(
+    'startScreen',            // modalId
+    'Enter',                  // key
+    () => {                   // handler
+      // Handle Enter key
+    },
+    true                      // preventDefault (optional)
+  );
+});
+
+onDestroy(() => {
+  shortcuts.removeModalShortcuts('startScreen');
+});
+```
+
+## Migration Status
+
+✅ **Migration Complete** - All section-specific shortcuts have been moved to their respective components:
+
+1. ✅ `SplashNav.svelte` - Registers shortcuts for 'splashscreen' screen
+2. ✅ `Rubrics.svelte` - Registers shortcuts for 'rubrics' screen
+3. ✅ `MusicPlaylistFolio.svelte` - Registers shortcuts for 'musicPlaylistFolio' screen
+4. ✅ `Websites.svelte` - Registers shortcuts for 'websitesFolio' screen
+5. ✅ `Head.svelte` - Registers modal shortcuts for 'startScreen'
+6. ✅ `About.svelte` - Registers shortcuts for 'about' screen
+7. ✅ Additional folio components (AnimFolio1, MusicFolio1, P4bookFolio, Gridz) also register their own shortcuts
+
+Global shortcuts (music controls, arrow navigation) remain in `navigation.js` as they should be available globally.
 
 ## Benefits
 
