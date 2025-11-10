@@ -1,3 +1,110 @@
+<script>
+	import { onMount } from 'svelte';
+	import { currentScreen } from '../stores.js';
+
+	let topArrow;
+	let bottomArrow;
+
+	function nextVisibleSibling(element) {
+		let nextVisibleElement;
+		let nextElement = element.nextElementSibling;
+		while (nextElement) {
+			if (nextElement.classList.contains('hidden') === false) {
+				nextVisibleElement = nextElement;
+				break;
+			}
+			nextElement = nextElement.nextElementSibling;
+		}
+		return nextVisibleElement;
+	}
+
+	function previousVisibleSibling(element) {
+		let previousVisibleElement;
+		let previousElement = element.previousElementSibling;
+		while (previousElement) {
+			if (previousElement.classList.contains('hidden') === false) {
+				previousVisibleElement = previousElement;
+				break;
+			}
+			previousElement = previousElement.previousElementSibling;
+		}
+		return previousVisibleElement;
+	}
+
+	function clickTopArrow() {
+		let currentScreenValue;
+		currentScreen.subscribe(value => currentScreenValue = value)();
+		
+		if (currentScreenValue === 'rubrics') {
+			document.querySelector('#splashscreen')?.scrollIntoView();
+		} else {
+			const currentElement = document.querySelector('#' + currentScreenValue);
+			if (currentElement) {
+				const prev = previousVisibleSibling(currentElement);
+				if (prev) prev.scrollIntoView();
+			}
+		}
+	}
+
+	function clickBottomArrow() {
+		let currentScreenValue;
+		currentScreen.subscribe(value => currentScreenValue = value)();
+		
+		const currentElement = document.querySelector('#' + currentScreenValue);
+		if (currentElement) {
+			const next = nextVisibleSibling(currentElement);
+			if (next) next.scrollIntoView();
+		}
+	}
+
+	function displayBorderArrows(event) {
+		let currentScreenValue;
+		currentScreen.subscribe(value => currentScreenValue = value)();
+		
+		const topArea = 3.5 * 38.4;
+		const bottomArea = window.innerHeight - 3.5 * 38.4;
+		
+		if (currentScreenValue !== 'splashscreen' && 
+			currentScreenValue !== 'startScreen' &&
+			event.clientY > bottomArea && 
+			event.clientY < window.innerHeight - 1.5 * 38.4 &&
+			event.clientX > 0.4 * window.innerWidth &&
+			event.clientX < 0.6 * window.innerWidth) {
+			if (bottomArrow) bottomArrow.classList.remove('hidden');
+		} else if (currentScreenValue !== 'splashscreen' && 
+			currentScreenValue !== 'startScreen' &&
+			event.clientY < topArea && 
+			event.clientY > 1.5 * 38.4 && 
+			event.clientX > 0.4 * window.innerWidth &&
+			event.clientX < 0.6 * window.innerWidth) {
+			if (topArrow) topArrow.classList.remove('hidden');
+		} else {
+			if (topArrow) topArrow.classList.add('hidden');
+			if (bottomArrow) bottomArrow.classList.add('hidden');
+		}
+	}
+
+	onMount(() => {
+		topArrow = document.querySelector('#topArrow');
+		bottomArrow = document.querySelector('#bottomArrow');
+		
+		if (topArrow) {
+			topArrow.addEventListener('click', clickTopArrow);
+		}
+		if (bottomArrow) {
+			bottomArrow.addEventListener('click', clickBottomArrow);
+		}
+		
+		window.addEventListener('mousemove', displayBorderArrows);
+		
+		return () => {
+			if (topArrow) topArrow.removeEventListener('click', clickTopArrow);
+			if (bottomArrow) bottomArrow.removeEventListener('click', clickBottomArrow);
+			window.removeEventListener('mousemove', displayBorderArrows);
+		};
+	});
+</script>
+
 <style>
 	.topArrow {
 		position : fixed;
@@ -49,4 +156,3 @@
 
 <div id="topArrow" class="topArrow hidden"><img src="/img/icons/upArrow.png" alt="Up arrow" /></div>
 <div id="bottomArrow" class="bottomArrow hidden"><img src="/img/icons/downArrow.png" alt="Down arrow" /></div>
-

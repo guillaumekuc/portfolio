@@ -44,56 +44,9 @@ export function initScripts() {
   websitesArray = Array.prototype.slice.call(document.querySelectorAll('.websiteLink'));
 }
 
-// Loading screen handled in main.js
-function initLoadingScreen() {
-  document.onreadystatechange = function()
-  {
-    var state = document.readyState;
-    if (state == 'interactive') 
-    {
-    	// do nothing
-    } 
-    else if (state == 'complete') 
-    {
-  		document.getElementById('load').classList.toggle('active');
-      document.getElementById('load').style.opacity= 0;
+// Loading screen now handled in Head.svelte component
 
-      setTimeout(function(){document.getElementById('load').style.visibility="hidden";
-      }, 1000);
-    }
-  }
-}
-
-function slickCarousel() {
-	// Initialize slick on all galleries
-	// Use setTimeout to ensure DOM is fully rendered and jQuery is available
-	setTimeout(function() {
-		const galleries = document.querySelectorAll('.gallery');
-		if (galleries.length > 0 && typeof $ !== 'undefined' && $.fn.slick) {
-			$('.gallery').each(function() {
-				// Only initialize if not already initialized
-				if (!$(this).hasClass('slick-initialized')) {
-					$(this).slick({
-						dots: false,
-						infinite: true,
-						speed: 300,
-						slidesToShow: 1,
-						centerMode: true,
-						variableWidth: true,
-						arrows: true,
-						focusOnSelect: true,
-						autoplay: false,
-						centerPadding: '0px',
-						draggable: true,
-						touchThreshold: 100,
-					});
-				}
-			});
-		} else {
-			console.warn('Slick carousel not available or galleries not found');
-		}
-	}, 200);
-}
+// Slick carousel initialization now handled in Folios.svelte component
 
 function bgMusicControls() {
 
@@ -317,7 +270,8 @@ function bgMusicControls() {
 } // musicPlayer()
 
 function navigation() {
-	var enterBtn = document.querySelector('#enterBtn');
+	// enterBtn now handled in Head.svelte
+	// allRubrics now handled in Rubrics.svelte (but still needed here for keyboard nav)
 	var allRubrics = document.querySelectorAll('.rubric');
 	var currentScreen = 'startScreen';
 	var rubricFocused = 3;
@@ -434,112 +388,40 @@ function navigation() {
 		document.querySelectorAll(".largeVideo").forEach(function(video){videoObserver(video);});
 	} //cartography()
 
-	function getIn(){
-		function launchbgMusicElement() {
-			bgMusicElement.play();
-			bgMusicIsPlaying = true;
-			splashscreenMuteBtn.classList.remove('isMuted');
-			footerMuteBtn.classList.remove('isMuted');
-			footerPlayBtn.classList.add('isPlaying');
-			if (bgVolume == undefined || bgVolume == 0)
-			{
-				bgMusicElement.volume = 1;
-				bgVolume = 100;
-				splashscreenVolumeSlider.value = bgVolume;
-				footerVolumeSlider.value = bgVolume;
-			} else {
-				bgMusicElement.volume = bgVolume/100;
-				splashscreenVolumeSlider.value = bgVolume;
-				footerVolumeSlider.value = bgVolume;
-			} // if else
-			
-			if (bgMusicElement.loop==true){
-				footerLoopBtn.classList.add('isLooping');
-			} else if (bgMusicElement.loop==false){
-				footerLoopBtn.classList.remove('isLooping');
-			}
+	// getIn() function now handled in Head.svelte component
 
-			document.querySelector('#musicPlaylistCover').style.background= "no-repeat center / cover url("+musicArray[0].getAttribute('data-image')+")";
-		} //launchbgMusicElement()
-
-		function animateOpening() {
-			var startScreen = document.querySelector('#startScreen');
-			var art = document.querySelector('#splashArt');
-			var title = document.querySelector('#splashTitle');
-			var subtitle = document.querySelector('#splashSubTitle');
-			var oneLiner = document.querySelector('#splashDescription');
-			var domains = document.querySelector('#splashDomains');
-			var splashNav = document.querySelector('#splashNav');
-			var splashLinks = document.querySelectorAll('.splashLinks a');
-			var splashNavLinks = document.querySelectorAll('.splashNav a');
-			startScreen.classList.add('fadeOut');
-			art.style.transform="scale(1)";
-			title.style.opacity = "100%";
-			subtitle.style.opacity="100%";
-			oneLiner.style.opacity="100%";
-			domains.style.opacity="100%";
-			splashNav.style.opacity="100%";
-			var n = 0;
-			var animStartTime=3;
-			while (n < splashLinks.length) {
-				splashLinks[n].style.transition = "opacity 1s ease-out "+animStartTime+"s";
-				n = n+1;
-				animStartTime=animStartTime+0.25;
-			}
-			splashLinks.forEach(link => {link.style.opacity="100%";} 	);
-			splashNavLinks.forEach(link => {link.style.opacity="100%"; setTimeout(()=> {link.style.pointerEvents="auto"; }, 4000); } );
-		} //animateOpening
-
-		function displayScrollBar(){
-
-			document.body.style.overflow = 'auto';
-		} //displayScrollBar
-
-		function hideAllFolios(){
-
-			document.querySelectorAll('.folio').forEach(function(folio){ folio.classList.add('hidden');});
-		}
-		
-		initializeScroll();
-		hideAllFolios();
-		cartography();
-		animateOpening();
-		displayScrollBar();
-		launchbgMusicElement();
-	} // getIn()
-
+	// Helper functions for keyboard navigation (also exist in components but needed here)
 	function goToFolios() {
 		var nextVisibleFolio;
 		var nextFolio=document.querySelector('#'+currentScreen).nextElementSibling;
 		while (nextFolio) {
-				if (nextFolio.classList.contains('hidden')==false) {
-			nextVisibleFolio = nextFolio;
-			break;
-				}//if
-				nextFolio = nextFolio.nextElementSibling;
-			}//while
+			if (nextFolio.classList.contains('hidden')==false) {
+				nextVisibleFolio = nextFolio;
+				break;
+			}
+			nextFolio = nextFolio.nextElementSibling;
+		}
 		if (nextVisibleFolio){
 			nextVisibleFolio.scrollIntoView();
-		}//if
+		}
 	}
 
 	function hideIrrelevantFolios() {
 		updateRubricClass();
-			
-	    document.querySelectorAll('.folio').forEach(function(folio) {folio.classList.add('hidden');});
-	    document.querySelectorAll('.'+ rubricClass.toString()).forEach(function(folio) {folio.classList.remove('hidden');});
+		document.querySelectorAll('.folio').forEach(function(folio) {folio.classList.add('hidden');});
+		document.querySelectorAll('.'+ rubricClass.toString()).forEach(function(folio) {folio.classList.remove('hidden');});
 	}
 
 	function nextVisibleSibling(element) {
 		var nextVisibleElement;
 		var nextElement=element.nextElementSibling;
 		while (nextElement) {
-				if (nextElement.classList.contains('hidden')==false) {
-			nextVisibleElement = nextElement;
-			break;
-				}//if
-				nextElement = nextElement.nextElementSibling;
-			}//while
+			if (nextElement.classList.contains('hidden')==false) {
+				nextVisibleElement = nextElement;
+				break;
+			}
+			nextElement = nextElement.nextElementSibling;
+		}
 		return nextVisibleElement;
 	}
 
@@ -547,12 +429,12 @@ function navigation() {
 		var previousVisibleElement;
 		var previousElement=element.previousElementSibling;
 		while (previousElement) {
-				if (previousElement.classList.contains('hidden')==false) {
-			previousVisibleElement = previousElement;
-			break;
-				}//if
-				previousElement = previousElement.previousElementSibling;
-			}//while
+			if (previousElement.classList.contains('hidden')==false) {
+				previousVisibleElement = previousElement;
+				break;
+			}
+			previousElement = previousElement.previousElementSibling;
+		}
 		return previousVisibleElement;
 	}
 
@@ -663,8 +545,11 @@ function navigation() {
 		if (currentScreen=="startScreen"){
 			switch (event.key) {
 				case "Enter": 
-					fakeHoverEvent(document.querySelector('#enterBtn'));
-					getIn(); 
+					const enterBtn = document.querySelector('#enterBtn');
+					if (enterBtn) {
+						fakeHoverEvent(enterBtn);
+						enterBtn.click(); // This will trigger handleEnter in Head.svelte
+					}
 					break;
 			}
 		}// startscreen
@@ -997,160 +882,37 @@ function navigation() {
   			return check;
 		};
 
-		function rubricsHovers() {
-			var allRubrics = document.querySelectorAll('.rubric');
-			
-			function rubricOverHandler(){
-				allRubrics.forEach(link => link.classList.remove('focus'));
-				this.classList.add('focus');
-				rubricFocused = this.id.charAt(this.id.length - 1);
-				var target ='#hnBtn' + rubricFocused;
-				document.querySelectorAll(".headerNav a").forEach(link => link.classList.remove('focus'));
-				document.querySelector(target).classList.add('focus');
-				hideIrrelevantFolios();
-			}
-
-			function rubricClickHandler(){
-
-				goToFolios();
-			}
-
-			if (!window.mobileAndTabletCheck())
-			{
-				allRubrics.forEach(rubric => rubric.addEventListener('mousemove', rubricOverHandler));
-				allRubrics.forEach(rubric => rubric.addEventListener('click', rubricClickHandler));		
-			} else if (window.mobileAndTabletCheck()) {
-				allRubrics.forEach(rubric => rubric.addEventListener('click', rubricOverHandler));
-				allRubrics.forEach(rubric => rubric.addEventListener('dblclick', rubricClickHandler));						
-			}
-		}
+	// rubricsHovers now handled in Rubrics.svelte component
 
 		function splashscreenNavHoverHandler() {
 			document.querySelectorAll('.splashNav a').forEach(function(link){link.classList.remove('focus');});
 		}
 
-		function websiteLinksHoverHandler() {
-			document.querySelectorAll('.websiteLink').forEach(function(link){link.classList.remove('focus');});
-			this.classList.add('focus');
-			websitesCurrentIndex = websitesArray.indexOf(this);
-		}
+		// Website links hover now handled in Websites.svelte
+		// Border arrows now handled in VerticalClickNav.svelte
+		// Large video handlers now handled in individual folio components
+		// Header nav handler now handled in Header.svelte
+		// Rubrics hover now handled in Rubrics.svelte
 
-		function websiteLinksMouseoutHandler() {
-			document.querySelectorAll('.websiteLink').forEach(function(link){link.classList.remove('focus');});
-		}
-
-		function displayBorderArrows(event) {
-			var topArea= 3.5 * 38.4;
-			var bottomArea= window.innerHeight - 3.5 * 38.4;
-				if ( currentScreen!=='splashscreen' 
-				& currentScreen!=='startScreen'
-
-				& event.clientY > bottomArea 
-				& event.clientY < window.innerHeight - 1.5 * 38.4
-				& event.clientX > 0.4 * window.innerWidth
-				& event.clientX < 0.6 * window.innerWidth) {
-					document.querySelector('#bottomArrow').classList.remove('hidden');
-				} else if ( currentScreen!=='splashscreen' 
-				& currentScreen!=='startScreen'
-				& event.clientY < topArea 
-				& event.clientY > 1.5 * 38.4 
-				& event.clientX > 0.4 * window.innerWidth
-				& event.clientX < 0.6 * window.innerWidth) {
-					document.querySelector('#topArrow').classList.remove('hidden');
-				} else {
-					document.querySelector('#topArrow').classList.add('hidden');
-					document.querySelector('#bottomArrow').classList.add('hidden');
-				}	
-		}
-
-		function clickTopArrow() {
-			if(currentScreen=='rubrics'){
-				document.querySelector('#splashscreen').scrollIntoView();
-			} else {
-				previousVisibleSibling(document.querySelector('#'+currentScreen)).scrollIntoView();
-			}
-		}
-		function clickBottomArrow() {
-			nextVisibleSibling(document.querySelector('#'+currentScreen)).scrollIntoView();
-		}
-
-		function largeVideoClickHandler() {
-			thisVideo=this;
-			if(thisVideo.currentTime > 0 && !thisVideo.paused && !thisVideo.ended && thisVideo.readyState > 2){
-					thisVideo.pause(); 
-					thisVideo.parentElement.querySelector('.videoPlayBtn').classList.remove('hidden');
-					if (bgMusicElement.paused && unpauseMusicWhenDone==true)
-					{
-						bgMusicElement.play();
-						bgMusicIsPlaying = true;
-						footerPlayBtn.classList.add('isPlaying');
-					}
-				} else {
-					thisVideo.play();
-					thisVideo.parentElement.querySelector('.videoPlayBtn').classList.add('hidden');
-					if (bgMusicIsPlaying==true && !thisVideo.muted){
-						bgMusicElement.pause();
-						bgMusicIsPlaying = false;
-						footerPlayBtn.classList.remove('isPlaying');
-						unpauseMusicWhenDone = true;
-					} else {
-						unpauseMusicWhenDone = false;
-					}
-				}		
-		}
-
-		function headerNavHandler() {
-			function sortHeaderNav() {
-				var target=this.getAttribute('data-target');
-				document.querySelectorAll('.folio:not(.'+target+')').forEach(function(folio){folio.classList.add('hidden');});
-				document.querySelectorAll('.'+target).forEach(function(folio){folio.classList.remove('hidden');});
-				document.querySelectorAll(".headerNav a").forEach(link => link.classList.remove('focus'));
-				this.classList.add('focus');
-				if (target== "folio3D"){ rubricFocused=1; }
-				if (target== "folio2D"){ rubricFocused=2; }
-				if (target== "folioAll"){ rubricFocused=3; }
-				if (target== "folioMusic"){ rubricFocused=4; }
-				if (target== "folioWeb"){ rubricFocused=5; }
-				var idToFocus= '#rBtn' + rubricFocused;
-				allRubrics.forEach(rubric => rubric.classList.remove('focus'));
-				document.querySelector(idToFocus).classList.add('focus');
-				nextVisibleSibling(document.querySelector('#rubrics')).scrollIntoView();
-			}
-			document.querySelectorAll('#headerNav a').forEach(function(link){
-				link.addEventListener('click', sortHeaderNav);
-			});
-
-		}
-
-		rubricsHovers();
-		document.querySelectorAll('.splashNav a').forEach(function(link) {link.addEventListener('mousemove', splashscreenNavHoverHandler);});
-		window.onmousemove = displayBorderArrows;
-		document.querySelector('#topArrow').addEventListener('click', clickTopArrow);
-		document.querySelector('#bottomArrow').addEventListener('click', clickBottomArrow);
-		document.querySelectorAll('.websiteLink').forEach(function(link) {link.addEventListener('mousemove', websiteLinksHoverHandler);});
-		document.querySelectorAll('.websiteLink').forEach(function(link) {link.addEventListener('mouseout', websiteLinksMouseoutHandler);});
-		document.querySelectorAll('.largeVideo').forEach(function(video) {video.addEventListener('click', largeVideoClickHandler);});
-		headerNavHandler();
+		// Splashscreen nav hover handler
+		document.querySelectorAll('.splashNav a').forEach(function(link) {
+			link.addEventListener('mousemove', splashscreenNavHoverHandler);
+		});
 	}// mousenavigation
 
 	window.addEventListener('resize', reSnap);
-	enterBtn.addEventListener('click', getIn);
+	// enterBtn click handler now in Head.svelte
+	// getIn() function now in Head.svelte
 	document.addEventListener('keydown', keyNavigation);
 	mouseNavigation();
 
 } // keynavigation()
 
-function toolTips() {
-	function mailCopiedToClipBoard(){
-		var toolTip = document.createElement("span");
-		toolTip.innerHTML="<span class='tooltipText'>Mail copied to clipboard !</span>";
-		this.appendChild(toolTip);
-		setTimeout(()=>{this.removeChild(toolTip);},3000);
-	}
-	document.querySelectorAll('.mailTooltip').forEach(function(mail) {mail.addEventListener('click', mailCopiedToClipBoard);});
-}
+// Tooltips now handled in individual components (Splashscreen.svelte, About.svelte)
 
 
 
-// Functions are now exported and called from main.js
-export { bgMusicControls, navigation, slickCarousel, toolTips, initLoadingScreen };
+// Functions exported for global coordination
+// Note: Loading screen, slick carousel, and tooltips are now handled in components
+// initScripts is already exported inline above
+export { bgMusicControls, navigation };

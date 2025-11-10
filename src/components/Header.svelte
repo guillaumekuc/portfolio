@@ -1,5 +1,51 @@
 <script>
-	import Links from './Links.svelte';
+	import { onMount } from 'svelte';
+	import HeaderLinks from './HeaderLinks.svelte';
+	import { rubricFocused } from '../stores.js';
+
+	function nextVisibleSibling(element) {
+		let nextVisibleElement;
+		let nextElement = element.nextElementSibling;
+		while (nextElement) {
+			if (nextElement.classList.contains('hidden') === false) {
+				nextVisibleElement = nextElement;
+				break;
+			}
+			nextElement = nextElement.nextElementSibling;
+		}
+		return nextVisibleElement;
+	}
+
+	function sortHeaderNav(event) {
+		const target = event.currentTarget.getAttribute('data-target');
+		document.querySelectorAll('.folio:not(.' + target + ')').forEach(folio => folio.classList.add('hidden'));
+		document.querySelectorAll('.' + target).forEach(folio => folio.classList.remove('hidden'));
+		document.querySelectorAll(".headerNav a").forEach(link => link.classList.remove('focus'));
+		event.currentTarget.classList.add('focus');
+		
+		let focused = 3;
+		if (target === "folio3D") focused = 1;
+		if (target === "folio2D") focused = 2;
+		if (target === "folioAll") focused = 3;
+		if (target === "folioMusic") focused = 4;
+		if (target === "folioWeb") focused = 5;
+		
+		rubricFocused.set(focused);
+		const idToFocus = '#rBtn' + focused;
+		document.querySelectorAll('.rubric').forEach(rubric => rubric.classList.remove('focus'));
+		const rubricElement = document.querySelector(idToFocus);
+		if (rubricElement) rubricElement.classList.add('focus');
+		
+		const next = nextVisibleSibling(document.querySelector('#rubrics'));
+		if (next) next.scrollIntoView();
+	}
+
+	onMount(() => {
+		const headerNavLinks = document.querySelectorAll('#headerNav a');
+		headerNavLinks.forEach(link => {
+			link.addEventListener('click', sortHeaderNav);
+		});
+	});
 </script>
 
 <style>
@@ -18,29 +64,6 @@
 		z-index: 85;
 	}
 
-	.headerLinks {
-		position : absolute;
-		top : 0;
-		height : var(--safeMargin);
-		width: 100%;
-		display : flex;
-		align-items: center;
-		justify-content: right;
-		padding-right: var(--safeMargin);
-	}
-	.headerLinks a {
-		height : calc( 4 * var(--safeMargin) / 5);
-		width : calc( 4 * var(--safeMargin) / 5); 
-		padding : calc(0.1 * var(--safeMargin));
-		border-radius: 5px;
-		opacity: 100;
-		display : flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.headerLinks a:hover {
-		background-color : var(--shadePop);
-	}
 
 	.headerBranding {
 		position: absolute;
@@ -98,9 +121,7 @@
 
 <div id="header" class="header">
 	<div id="stickyHeader" class="stickyHeader">
-		<div id="headerLinks" class="headerLinks">
-			<Links />
-		</div>
+		<HeaderLinks />
 		<div id="headerBranding" class="headerBranding">
 			<a class="headerTitle" on:click={() => document.querySelector('#splashscreen')?.scrollIntoView()}>Guillaume Kuc</a>
 			<span>&nbsp;—&nbsp;</span>

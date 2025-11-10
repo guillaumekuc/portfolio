@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import MusicPlaylistFolio from './folios/MusicPlaylistFolio.svelte';
 	import IllustrationFolio1 from './folios/IllustrationFolio1.svelte';
 	import IllustrationFolio2 from './folios/IllustrationFolio2.svelte';
@@ -10,6 +11,34 @@
 	import AnimFolio1 from './folios/AnimFolio1.svelte';
 	import P4bookFolio from './folios/P4bookFolio.svelte';
 	import Websites from './folios/Websites.svelte';
+
+	onMount(() => {
+		// Initialize slick carousel on galleries
+		// jQuery is already available globally from scripts.js
+		setTimeout(() => {
+			const galleries = document.querySelectorAll('.gallery');
+			if (galleries.length > 0 && typeof window.$ !== 'undefined' && window.$.fn.slick) {
+				window.$('.gallery').each(function() {
+					if (!window.$(this).hasClass('slick-initialized')) {
+						window.$(this).slick({
+							dots: false,
+							infinite: true,
+							speed: 300,
+							slidesToShow: 1,
+							centerMode: true,
+							variableWidth: true,
+							arrows: true,
+							focusOnSelect: true,
+							autoplay: false,
+							centerPadding: '0px',
+							draggable: true,
+							touchThreshold: 100,
+						});
+					}
+				});
+			}
+		}, 300);
+	});
 </script>
 
 <div id="musicPlaylistFolio" class="fullPage folio folioMusic folioAll">
@@ -55,4 +84,3 @@
 <div id="websitesFolio" class="fullPage folio folioWeb folioAll">
 	<Websites />
 </div>
-

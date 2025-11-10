@@ -1,3 +1,27 @@
+<script>
+	import { onMount } from 'svelte';
+	import { websitesCurrentIndex } from '../../stores.js';
+
+	let websiteLinks = [];
+
+	onMount(() => {
+		websiteLinks = Array.from(document.querySelectorAll('.websiteLink'));
+		
+		// Handle hover
+		websiteLinks.forEach(link => {
+			link.addEventListener('mousemove', () => {
+				websiteLinks.forEach(l => l.classList.remove('focus'));
+				link.classList.add('focus');
+				websitesCurrentIndex.set(websiteLinks.indexOf(link));
+			});
+			
+			link.addEventListener('mouseout', () => {
+				websiteLinks.forEach(l => l.classList.remove('focus'));
+			});
+		});
+	});
+</script>
+
 <style>
 	.folioWeb .siteLabel {
 		background-color: var(--shade2);

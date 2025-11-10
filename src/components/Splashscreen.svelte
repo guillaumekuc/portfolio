@@ -1,5 +1,26 @@
 <script>
-	import Links from './Links.svelte';
+	import { onMount } from 'svelte';
+	import SplashLinks from './SplashLinks.svelte';
+
+	let contactBtn;
+
+	function handleMailTooltip(event) {
+		const toolTip = document.createElement("span");
+		toolTip.innerHTML = "<span class='tooltipText'>Mail copied to clipboard !</span>";
+		event.currentTarget.appendChild(toolTip);
+		setTimeout(() => {
+			if (event.currentTarget.contains(toolTip)) {
+				event.currentTarget.removeChild(toolTip);
+			}
+		}, 3000);
+	}
+
+	onMount(() => {
+		contactBtn = document.querySelector('#contactBtn');
+		if (contactBtn) {
+			contactBtn.addEventListener('click', handleMailTooltip);
+		}
+	});
 </script>
 
 <style>
@@ -55,30 +76,6 @@
 		opacity : 0;
 	}
 
-	.splashLinks {
-		z-index: 95; 
-		position : absolute;
-		display : flex;
-		align-items: center;
-		justify-content: left;
-		padding-left: var(--safeMargin);
-		height : var(--safeMargin);
-	}
-
-	.splashLinks a {
-		height : calc( 4 * var(--safeMargin) / 5);
-		width : calc( 4 * var(--safeMargin) / 5); 
-		padding : calc(0.1 * var(--safeMargin));
-		border-radius: 5px;
-		opacity: 0;
-		display : flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.splashLinks a:hover {
-		background-color : var(--shadePop);
-	}
 
 	.splashSound {
 		z-index: 95;
@@ -291,9 +288,7 @@
 </style>
 
 <div id="splashscreen" class="splashscreen fullPage snap">
-	<div id="splashLinks" class="splashLinks">
-		<Links />
-	</div><!--splashLinks-->
+	<SplashLinks />
 
 	<div id="splashSound" class="splashSound">
 		<input id="bgVolume" value="0" type="range" />
@@ -301,7 +296,6 @@
 	</div><!--splashSound-->
 
 	<div id="splashBranding" class="splashBranding">
-		<img class="splashLogo" alt="Logo" />
 		<h1 id="splashTitle" class="splashTitle">
 		Guillaume Kuc
 		</h1>

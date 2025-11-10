@@ -16,25 +16,19 @@
 	import 'slick-carousel/slick/slick.css';
 	import 'slick-carousel/slick/slick-theme.css';
 	
-	// Import scripts
-	import { bgMusicControls, navigation, slickCarousel, toolTips, initScripts, initLoadingScreen } from './scripts.js';
+	// Import scripts - only what's still needed globally
+	import { bgMusicControls, navigation, initScripts } from './scripts.js';
 	
 	onMount(() => {
-		// Initialize scripts after DOM is ready
+		// Initialize script variables after DOM is ready
 		initScripts();
-		initLoadingScreen();
 		
-		// Initialize scripts - slick needs a bit more time for DOM to be fully ready
+		// Initialize scripts - slick is now handled in Folios.svelte
+		// Music controls and navigation still need global coordination
 		setTimeout(() => {
 			bgMusicControls();
 			navigation();
-			toolTips();
 		}, 50);
-		
-		// Initialize slick after galleries are fully in DOM
-		setTimeout(() => {
-			slickCarousel();
-		}, 300);
 	});
 </script>
 
@@ -49,4 +43,3 @@
 	<Footer />
 	<Foot />
 </div>
-

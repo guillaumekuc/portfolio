@@ -27,4 +27,3 @@
 <a class="L5" title="amazon kindle" href='https://www.amazon.fr/s?i=digital-text&rh=p_27%3AGuillaume+Kuc&s=relevancerank&text=Guillaume+Kuc&ref=dp_byline_sr_ebooks_1'>
 	<img src="/img/icons/amazon.svg" alt="Amazon" />
 </a>
-
