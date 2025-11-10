@@ -4,6 +4,7 @@
 	import { stores } from '../stores.js';
 	import { Navigation } from '../utils/navigation.js';
 	import { shortcuts } from '../utils/shortcuts.js';
+	import { debugLog } from '../utils/debuglog.js';
 
 	// Extract the store for reactive access
 	const rubricFocusedStore = stores.navigation.rubricFocused;
@@ -33,6 +34,7 @@
 		const rubricFocused = get(stores.navigation.rubricFocused);
 		const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
 		stores.navigation.rubricFocused.set(newRubricFocused);
+		debugLog('Rubric changed:', newRubricFocused);
 		updateRubricFocus();
 	}
 
@@ -40,6 +42,7 @@
 		const rubricFocused = get(stores.navigation.rubricFocused);
 		const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
 		stores.navigation.rubricFocused.set(newRubricFocused);
+		debugLog('Rubric changed:', newRubricFocused);
 		updateRubricFocus();
 	}
 

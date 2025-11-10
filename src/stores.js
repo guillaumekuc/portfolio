@@ -30,6 +30,13 @@ export const stores = {
 		rubricFocused: writable(3),
 		menuSelected: writable(1),
 		websitesCurrentIndex: writable(0)
+	},
+
+	/**
+	 * Configuration settings
+	 */
+	config: {
+		debug: writable(true)
 	}
 };
 

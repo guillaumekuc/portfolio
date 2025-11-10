@@ -3,6 +3,7 @@
 	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
+	import { debugLog } from '../utils/debuglog.js';
 
 	let topArrow;
 	let bottomArrow;
@@ -17,40 +18,33 @@
 	}
 
 	function clickTopArrow() {
-		console.log('[VerticalClickNav] Top arrow clicked');
+		debugLog('Top arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
-		console.log('[VerticalClickNav] Current screen:', currentScreenValue);
 		
 		if (currentScreenValue === 'rubrics') {
-			console.log('[VerticalClickNav] Scrolling to splashscreen');
 			scrollToElement('splashscreen');
 		} else {
 			const currentElement = document.querySelector(`#${currentScreenValue}`);
 			if (currentElement) {
 				const prev = DOM.previousVisibleSibling(currentElement);
 				if (prev) {
-					console.log('[VerticalClickNav] Scrolling to previous element:', prev.id);
+					debugLog('Scroll to previous:', prev.id);
 					prev.scrollIntoView({ behavior: 'smooth' });
-				} else {
-					console.log('[VerticalClickNav] No previous element found');
 				}
 			}
 		}
 	}
 
 	function clickBottomArrow() {
-		console.log('[VerticalClickNav] Bottom arrow clicked');
+		debugLog('Bottom arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
-		console.log('[VerticalClickNav] Current screen:', currentScreenValue);
 		
 		const currentElement = document.querySelector(`#${currentScreenValue}`);
 		if (currentElement) {
 			const next = DOM.nextVisibleSibling(currentElement);
 			if (next) {
-				console.log('[VerticalClickNav] Scrolling to next element:', next.id);
+				debugLog('Scroll to next:', next.id);
 				next.scrollIntoView({ behavior: 'smooth' });
-			} else {
-				console.log('[VerticalClickNav] No next element found');
 			}
 		}
 	}

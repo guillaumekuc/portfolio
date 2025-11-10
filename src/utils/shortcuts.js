@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { stores } from '../stores.js';
+import { debugLog } from './debuglog.js';
 
 /**
  * Keyboard shortcuts
@@ -24,6 +25,7 @@ class Shortcuts {
 		this.handler = (e) => this.onKey(e);
 		document.addEventListener('keydown', this.handler);
 		this.ready = true;
+		debugLog('Shortcuts initialized');
 	}
 	
 	destroy() {
@@ -39,6 +41,7 @@ class Shortcuts {
 	 */
 	addGlobalShortcut(key, handler, id, prevent = true) {
 		this.global.set(id, { key, handler, prevent });
+		debugLog('Global shortcut added:', key, id);
 	}
 	
 	/**
@@ -101,6 +104,7 @@ class Shortcuts {
 				const shortcut = map.get(e.key);
 				if (shortcut) {
 					if (shortcut.prevent) e.preventDefault();
+					debugLog('Modal shortcut:', e.key, currentModal);
 					shortcut.handler(e);
 					return;
 				}
@@ -116,6 +120,7 @@ class Shortcuts {
 			const shortcut = map.get(e.key);
 			if (shortcut) {
 				if (shortcut.prevent) e.preventDefault();
+				debugLog('Screen shortcut:', e.key, currentScreen);
 				shortcut.handler(e);
 				return;
 			}
@@ -125,6 +130,7 @@ class Shortcuts {
 		for (const [id, s] of this.global) {
 			if (e.key === s.key) {
 				if (s.prevent) e.preventDefault();
+				debugLog('Global shortcut:', e.key, id);
 				s.handler(e);
 				return;
 			}

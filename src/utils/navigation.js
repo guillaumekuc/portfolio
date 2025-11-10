@@ -3,6 +3,7 @@ import { Animation } from './animation.js';
 import { stores } from '../stores.js';
 import { get } from 'svelte/store';
 import { shortcuts } from './shortcuts.js';
+import { debugLog } from './debuglog.js';
 
 /**
  * Navigation controller class
@@ -97,6 +98,7 @@ export class Navigation {
 	 */
 	init() {
 		this.allRubrics = document.querySelectorAll('.rubric');
+		debugLog('Navigation initialized');
 		this.setupCartography();
 		this.setupKeyboardNavigation();
 		this.setupMouseNavigation();
@@ -111,11 +113,12 @@ export class Navigation {
 		const allFullPages = document.querySelectorAll('.fullPage');
 		const self = this;
 
-		function updateHashWhenVisible(element) {
+			function updateHashWhenVisible(element) {
 			const elementObserver = new IntersectionObserver((entries) => {
 				if (entries[0].isIntersecting === true) {
 					// Update the store - single source of truth
 					stores.navigation.currentScreen.set(element.id);
+					debugLog('Screen changed:', element.id);
 					
 					// Refresh slick position when screen becomes visible
 					if (typeof window.$ !== 'undefined' && window.$.fn.slick) {
@@ -272,7 +275,10 @@ export class Navigation {
 				return;
 			}
 			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + currentScreen));
-			if (prevSibling) prevSibling.scrollIntoView();
+			if (prevSibling) {
+				debugLog('Navigate up');
+				prevSibling.scrollIntoView();
+			}
 		}
 
 		function handleNavDown() {
@@ -282,7 +288,10 @@ export class Navigation {
 				return;
 			}
 			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));
-			if (nextSibling) nextSibling.scrollIntoView();
+			if (nextSibling) {
+				debugLog('Navigate down');
+				nextSibling.scrollIntoView();
+			}
 		}
 
 		// Music shortcuts (always active)

@@ -1,6 +1,7 @@
 import { Time } from './time.js';
 import { stores } from '../stores.js';
 import { get } from 'svelte/store';
+import { debugLog } from './debuglog.js';
 
 /**
  * Music player controller class
@@ -27,6 +28,7 @@ export class Music {
 	 */
 	init(elements) {
 		this.bgMusicElement = elements.bgMusicElement;
+		debugLog('Music player initialized');
 		
 		// Setup time update listener to update stores
 		if (this.bgMusicElement) {
@@ -70,12 +72,14 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.play();
 		stores.music.isPlaying.set(true);
+		debugLog('Music playing');
 	}
 
 	pause() {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.pause();
 		stores.music.isPlaying.set(false);
+		debugLog('Music paused');
 	}
 
 	playHandler() {
@@ -108,6 +112,7 @@ export class Music {
 			video.volume = 0;
 		});
 		stores.music.isMuted.set(true);
+		debugLog('Music muted');
 	}
 
 	unmute() {
@@ -126,11 +131,13 @@ export class Music {
 			});
 		}
 		stores.music.isMuted.set(false);
+		debugLog('Music unmuted');
 	}
 
 	volumeHandler(slider) {
 		const newVolume = parseInt(slider.value);
 		stores.music.volume.set(newVolume);
+		debugLog('Volume changed:', newVolume);
 		
 		if (this.bgMusicElement) {
 			this.bgMusicElement.volume = newVolume / 100;
@@ -173,6 +180,7 @@ export class Music {
 				this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
 				stores.music.trackImage.set(tracks[newIndex].image);
 			}
+			debugLog('Next track:', newIndex);
 			this.play();
 		}
 	}
@@ -187,6 +195,7 @@ export class Music {
 				this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
 				stores.music.trackImage.set(tracks[newIndex].image);
 			}
+			debugLog('Previous track:', newIndex);
 			this.play();
 		}
 	}
@@ -225,6 +234,7 @@ export class Music {
 
 	// Keyboard shortcuts for music control
 	handleKeyboardShortcut(key) {
+		debugLog('Music shortcut:', key);
 		if (key === 'q') {
 			// Previous track
 			this.previousTrackHandler();

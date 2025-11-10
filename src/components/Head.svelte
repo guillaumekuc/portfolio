@@ -5,12 +5,14 @@
 	import { Navigation } from '../utils/navigation.js';
 	import { Loading } from '../utils/loading.js';
 	import { shortcuts } from '../utils/shortcuts.js';
+	import { debugLog } from '../utils/debuglog.js';
 
 	let loadElement;
 	let startScreenElement;
 	let enterBtn;
 
 	function handleEnter() {
+		debugLog('Enter pressed');
 		// Clear modal flag and remove shortcuts immediately when Enter is pressed
 		stores.navigation.currentModal.set(null);
 		shortcuts.removeModalShortcuts('startScreen');

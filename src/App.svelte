@@ -18,10 +18,12 @@
 	
 	// Import scripts - initialization now handles everything
 	import { initScripts } from './scripts.js';
+	import { debugLog } from './utils/debuglog.js';
 	
 	onMount(() => {
 		// Initialize all scripts (music player, navigation, etc.)
 		// This now handles everything that was previously in bgMusicControls() and navigation()
+		debugLog('App mounted');
 		initScripts();
 	});
 </script>

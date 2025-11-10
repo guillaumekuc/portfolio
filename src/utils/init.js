@@ -1,3 +1,5 @@
+import { debugLog } from './debuglog.js';
+
 /**
  * Initialization utilities
  */
@@ -7,6 +9,7 @@ export class Init {
 	 * @returns {Object} Object containing all initialized DOM elements and arrays
 	 */
 	static initScripts() {
+		debugLog('Initializing DOM elements');
 		return {
 			bgMusicElement: document.querySelector('#bgMusic'),
 			splashscreenVolumeSlider: document.querySelector('#bgVolume'),

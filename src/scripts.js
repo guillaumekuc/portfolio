@@ -3,6 +3,7 @@ import 'slick-carousel';
 import { Music } from './utils/music.js';
 import { Navigation } from './utils/navigation.js';
 import { Init } from './utils/init.js';
+import { debugLog } from './utils/debuglog.js';
 
 // Make jQuery available globally for slick-carousel
 window.$ = window.jQuery = $;
@@ -13,6 +14,7 @@ let navigationController;
 
 // Initialize script variables after DOM is ready
 export function initScripts() {
+	debugLog('Initializing scripts');
 	const elements = Init.initScripts();
 	
 	// Initialize music player
@@ -26,6 +28,7 @@ export function initScripts() {
 	// Make music player globally accessible for event listeners
 	window.musicPlayer = musicPlayer;
 	
+	debugLog('Scripts initialized');
 	return {
 		musicPlayer,
 		navigationController
