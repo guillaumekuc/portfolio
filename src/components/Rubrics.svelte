@@ -63,6 +63,11 @@
 	}
 
 	function goToFolios() {
+		// Ensure filtering is applied based on current rubric focus before navigation
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const rubricClass = Navigation.getRubricClass(rubricFocused);
+		Navigation.hideIrrelevantFolios(rubricClass);
+		
 		const currentScreen = get(stores.navigation.currentScreen);
 		Navigation.goToFolios(currentScreen);
 	}
@@ -153,9 +158,15 @@
 		stores.navigation.rubricFocused.set(focused);
 		const rubricClass = Navigation.getRubricClass(focused);
 		Navigation.hideIrrelevantFolios(rubricClass);
+		debugLog('Rubric hover:', focused, 'class:', rubricClass);
 	}
 
 	function handleRubricClick() {
+		// Ensure filtering is applied based on current rubric focus
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const rubricClass = Navigation.getRubricClass(rubricFocused);
+		Navigation.hideIrrelevantFolios(rubricClass);
+		debugLog('Rubric click - filtering for:', rubricClass, 'rubric:', rubricFocused);
 		Navigation.goToFolios('rubrics');
 	}
 </script>

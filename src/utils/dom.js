@@ -12,7 +12,12 @@ export class DOM {
 		let nextElement = element.nextElementSibling;
 		
 		while (nextElement) {
-			if (!nextElement.classList.contains('hidden')) {
+			// Check both class and computed style to ensure element is actually visible
+			const isHidden = nextElement.classList.contains('hidden');
+			const style = window.getComputedStyle(nextElement);
+			const isDisplayNone = style.display === 'none';
+			
+			if (!isHidden && !isDisplayNone) {
 				nextVisibleElement = nextElement;
 				break;
 			}
@@ -32,7 +37,12 @@ export class DOM {
 		let previousElement = element.previousElementSibling;
 		
 		while (previousElement) {
-			if (!previousElement.classList.contains('hidden')) {
+			// Check both class and computed style to ensure element is actually visible
+			const isHidden = previousElement.classList.contains('hidden');
+			const style = window.getComputedStyle(previousElement);
+			const isDisplayNone = style.display === 'none';
+			
+			if (!isHidden && !isDisplayNone) {
 				previousVisibleElement = previousElement;
 				break;
 			}

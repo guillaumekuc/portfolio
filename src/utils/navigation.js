@@ -39,19 +39,28 @@ export class Navigation {
 		const currentElement = document.querySelector('#' + currentScreenId);
 		if (!currentElement) return;
 
+		// Find the first visible .folio element (not just any next sibling)
+		const allFolios = document.querySelectorAll('.folio');
 		let nextVisibleFolio = null;
-		let nextFolio = currentElement.nextElementSibling;
 		
-		while (nextFolio) {
-			if (!nextFolio.classList.contains('hidden')) {
-				nextVisibleFolio = nextFolio;
-				break;
+		for (const folio of allFolios) {
+			// Check if this folio comes after the current screen in the DOM
+			if (currentElement.compareDocumentPosition(folio) & Node.DOCUMENT_POSITION_FOLLOWING) {
+				// Verify it's actually visible (not hidden and display is not none)
+				const isHidden = folio.classList.contains('hidden');
+				const style = window.getComputedStyle(folio);
+				const isDisplayNone = style.display === 'none';
+				
+				if (!isHidden && !isDisplayNone) {
+					nextVisibleFolio = folio;
+					break;
+				}
 			}
-			nextFolio = nextFolio.nextElementSibling;
 		}
 		
 		if (nextVisibleFolio) {
-			nextVisibleFolio.scrollIntoView();
+			debugLog('Navigating to folio:', nextVisibleFolio.id);
+			nextVisibleFolio.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		}
 	}
 
@@ -60,12 +69,22 @@ export class Navigation {
 	 * @param {string} rubricClass - Class name of folios to show
 	 */
 	static hideIrrelevantFolios(rubricClass) {
+		// Hide all folios first - use both class and inline style to ensure they're hidden
 		document.querySelectorAll('.folio').forEach(folio => {
 			folio.classList.add('hidden');
+			// Force hide immediately with inline style to prevent IntersectionObserver from seeing it
+			folio.style.setProperty('display', 'none', 'important');
 		});
-		document.querySelectorAll('.' + rubricClass).forEach(folio => {
+		
+		// Show only folios matching the rubric class
+		const visibleFolios = document.querySelectorAll('.' + rubricClass);
+		visibleFolios.forEach(folio => {
 			folio.classList.remove('hidden');
+			// Remove inline style to allow CSS to control display normally
+			folio.style.removeProperty('display');
 		});
+		
+		debugLog('Filtered folios - showing:', rubricClass, 'count:', visibleFolios.length);
 	}
 
 	/**
@@ -115,7 +134,19 @@ export class Navigation {
 
 			function updateHashWhenVisible(element) {
 			const elementObserver = new IntersectionObserver((entries) => {
-				if (entries[0].isIntersecting === true) {
+				const entry = entries[0];
+				if (entry.isIntersecting === true && entry.intersectionRatio >= 0.5) {
+					// Check computed style first - this is the most reliable way to detect hidden elements
+					const style = window.getComputedStyle(element);
+					if (style.display === 'none' || style.visibility === 'hidden') {
+						return;
+					}
+					
+					// Also check for hidden class (for folios specifically)
+					if (element.classList.contains('hidden')) {
+						return;
+					}
+					
 					// Update the store - single source of truth
 					stores.navigation.currentScreen.set(element.id);
 					debugLog('Screen changed:', element.id);
