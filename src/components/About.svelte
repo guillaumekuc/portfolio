@@ -1,15 +1,15 @@
 <script>
-	import { onMount } from 'svelte';
 	import { Tooltip } from '../utils/tooltip.js';
 
-	let myMailElement;
+	function handleMailClick(event) {
+		Tooltip.handleMailTooltip(event);
+		window.open('mailto:guillaume@guillaumekuc.com', 'mail');
+	}
 
-	onMount(() => {
-		myMailElement = document.querySelector('.myMail');
-		if (myMailElement) {
-			myMailElement.addEventListener('click', Tooltip.handleMailTooltip);
-		}
-	});
+	function handleBackToTop() {
+		const splashscreen = document.querySelector('#splashscreen');
+		if (splashscreen) splashscreen.scrollIntoView();
+	}
 </script>
 
 <style>
@@ -183,10 +183,10 @@
 
 				<span>À la revoyure !</span>
 			</div><!--#description-->
-			<a class="myMail" target="_blank" on:click|preventDefault={() => window.open('mailto:guillaume@guillaumekuc.com', 'mail')} href="mailto:guillaume@guillaumekuc.com">guillaume[at]guillaumekuc.com</a>
+			<a class="myMail" target="_blank" on:click|preventDefault={handleMailClick} href="mailto:guillaume@guillaumekuc.com">guillaume[at]guillaumekuc.com</a>
 		</div>
 		<div id="aboutBottom">	
-			<a id="backToTop" on:click={() => document.querySelector('#splashscreen')?.scrollIntoView()}>
+			<a id="backToTop" on:click={handleBackToTop}>
 				<img src="/img/icons/backToTop2.png" alt="Back to top" />
 			</a>
 			<div id="copyright"><span style="font-variant : small-caps;">Guillaume Kuc</span> .art — ©2022 Guillaume Kuc</div>

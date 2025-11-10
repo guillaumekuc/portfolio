@@ -43,16 +43,10 @@
 	}
 
 	onMount(() => {
-		loadElement = document.getElementById('load');
-		startScreenElement = document.getElementById('startScreen');
-		enterBtn = document.getElementById('enterBtn');
-		
-		if (enterBtn) {
-			enterBtn.addEventListener('click', handleEnter);
-		}
-		
 		// Initialize loading screen
-		Loading.initLoadingScreen(loadElement);
+		if (loadElement) {
+			Loading.initLoadingScreen(loadElement);
+		}
 	});
 </script>
 
@@ -113,12 +107,24 @@
 		border : 3px solid var(--shadePop);
 		background-color: var(--shadePop);
 	}
+
+	.nameBadge {
+		padding: 2px 10px;
+		background-color: var(--shade2);
+		border-radius: 5px;
+		font-variant: small-caps;
+	}
+
+	.suffix {
+		font-variant: normal;
+	}
 </style>
 
-<div id="load"></div>
+<div bind:this={loadElement} id="load"></div>
 
-<div id="startScreen" class="startScreen">
+<div bind:this={startScreenElement} id="startScreen" class="startScreen">
 	<h1>🙂</h1>
-	<h1><span style="padding : 2px 10px; background-color : var(--shade2); border-radius : 5px ; font-variant:small-caps;">Guillaume Kuc <span style="font-variant : normal	;">.art</span></span> is all set.</h1>
-	<button id="enterBtn">Enter</button>
+	
+	<h1><span class="nameBadge">Guillaume Kuc <span class="suffix">.art</span></span> is all set.</h1>
+	<button bind:this={enterBtn} id="enterBtn" on:click={handleEnter}>Enter</button>
 </div><!--#startScreen-->

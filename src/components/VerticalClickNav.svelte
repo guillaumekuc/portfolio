@@ -1,17 +1,20 @@
 <script>
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 
 	let topArrow;
 	let bottomArrow;
+	let showTopArrow = false;
+	let showBottomArrow = false;
 
 	function clickTopArrow() {
-		let currentScreenValue;
-		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
+		const currentScreenValue = get(stores.navigation.currentScreen);
 		
 		if (currentScreenValue === 'rubrics') {
-			document.querySelector('#splashscreen')?.scrollIntoView();
+			const splashscreen = document.querySelector('#splashscreen');
+			if (splashscreen) splashscreen.scrollIntoView();
 		} else {
 			const currentElement = document.querySelector('#' + currentScreenValue);
 			if (currentElement) {
@@ -22,8 +25,7 @@
 	}
 
 	function clickBottomArrow() {
-		let currentScreenValue;
-		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
+		const currentScreenValue = get(stores.navigation.currentScreen);
 		
 		const currentElement = document.querySelector('#' + currentScreenValue);
 		if (currentElement) {
@@ -33,8 +35,7 @@
 	}
 
 	function displayBorderArrows(event) {
-		let currentScreenValue;
-		stores.navigation.currentScreen.subscribe(value => currentScreenValue = value)();
+		const currentScreenValue = get(stores.navigation.currentScreen);
 		
 		const topArea = 3.5 * 38.4;
 		const bottomArea = window.innerHeight - 3.5 * 38.4;
@@ -45,36 +46,26 @@
 			event.clientY < window.innerHeight - 1.5 * 38.4 &&
 			event.clientX > 0.4 * window.innerWidth &&
 			event.clientX < 0.6 * window.innerWidth) {
-			if (bottomArrow) bottomArrow.classList.remove('hidden');
+			showBottomArrow = true;
+			showTopArrow = false;
 		} else if (currentScreenValue !== 'splashscreen' && 
 			currentScreenValue !== 'startScreen' &&
 			event.clientY < topArea && 
 			event.clientY > 1.5 * 38.4 && 
 			event.clientX > 0.4 * window.innerWidth &&
 			event.clientX < 0.6 * window.innerWidth) {
-			if (topArrow) topArrow.classList.remove('hidden');
+			showTopArrow = true;
+			showBottomArrow = false;
 		} else {
-			if (topArrow) topArrow.classList.add('hidden');
-			if (bottomArrow) bottomArrow.classList.add('hidden');
+			showTopArrow = false;
+			showBottomArrow = false;
 		}
 	}
 
 	onMount(() => {
-		topArrow = document.querySelector('#topArrow');
-		bottomArrow = document.querySelector('#bottomArrow');
-		
-		if (topArrow) {
-			topArrow.addEventListener('click', clickTopArrow);
-		}
-		if (bottomArrow) {
-			bottomArrow.addEventListener('click', clickBottomArrow);
-		}
-		
 		window.addEventListener('mousemove', displayBorderArrows);
 		
 		return () => {
-			if (topArrow) topArrow.removeEventListener('click', clickTopArrow);
-			if (bottomArrow) bottomArrow.removeEventListener('click', clickBottomArrow);
 			window.removeEventListener('mousemove', displayBorderArrows);
 		};
 	});
@@ -129,5 +120,9 @@
 	}
 </style>
 
-<div id="topArrow" class="topArrow hidden"><img src="/img/icons/upArrow.png" alt="Up arrow" /></div>
-<div id="bottomArrow" class="bottomArrow hidden"><img src="/img/icons/downArrow.png" alt="Down arrow" /></div>
+<div bind:this={topArrow} class="topArrow" class:hidden={!showTopArrow} on:click={clickTopArrow}>
+	<img src="/img/icons/upArrow.png" alt="Up arrow" />
+</div>
+<div bind:this={bottomArrow} class="bottomArrow" class:hidden={!showBottomArrow} on:click={clickBottomArrow}>
+	<img src="/img/icons/downArrow.png" alt="Down arrow" />
+</div>

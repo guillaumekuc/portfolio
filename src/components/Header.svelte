@@ -1,44 +1,40 @@
 <script>
-	import { onMount } from 'svelte';
 	import HeaderLinks from './HeaderLinks.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
 
-	function sortHeaderNav(event) {
-		const target = event.currentTarget.getAttribute('data-target');
-		document.querySelectorAll('.folio:not(.' + target + ')').forEach(folio => folio.classList.add('hidden'));
-		document.querySelectorAll('.' + target).forEach(folio => folio.classList.remove('hidden'));
-		document.querySelectorAll(".headerNav a").forEach(link => link.classList.remove('focus'));
-		event.currentTarget.classList.add('focus');
-		
-		let focused = 3;
-		if (target === "folio3D") focused = 1;
-		if (target === "folio2D") focused = 2;
-		if (target === "folioAll") focused = 3;
-		if (target === "folioMusic") focused = 4;
-		if (target === "folioWeb") focused = 5;
-		
+	const headerNavItems = [
+		{ id: 'hnBtn3', target: 'folioAll', label: 'All', focused: 3 },
+		{ id: 'hnBtn2', target: 'folio2D', label: 'Illustration', focused: 2 },
+		{ id: 'hnBtn4', target: 'folioMusic', label: 'Music', focused: 4 },
+		{ id: 'hnBtn1', target: 'folio3D', label: '3D', focused: 1 },
+		{ id: 'hnBtn5', target: 'folioWeb', label: 'Web', focused: 5 }
+	];
+
+	// Extract the store for reactive access
+	const rubricFocusedStore = stores.navigation.rubricFocused;
+	$: rubricFocused = $rubricFocusedStore;
+
+	function handleHeaderNavClick(target, focused) {
 		stores.navigation.rubricFocused.set(focused);
-		const idToFocus = '#rBtn' + focused;
-		document.querySelectorAll('.rubric').forEach(rubric => rubric.classList.remove('focus'));
-		const rubricElement = document.querySelector(idToFocus);
-		if (rubricElement) rubricElement.classList.add('focus');
 		
 		// Hide irrelevant folios
 		const rubricClass = Navigation.getRubricClass(focused);
 		Navigation.hideIrrelevantFolios(rubricClass);
 		
-		const next = DOM.nextVisibleSibling(document.querySelector('#rubrics'));
-		if (next) next.scrollIntoView();
+		// Scroll to next visible folio
+		const rubricsElement = document.querySelector('#rubrics');
+		if (rubricsElement) {
+			const next = DOM.nextVisibleSibling(rubricsElement);
+			if (next) next.scrollIntoView();
+		}
 	}
 
-	onMount(() => {
-		const headerNavLinks = document.querySelectorAll('#headerNav a');
-		headerNavLinks.forEach(link => {
-			link.addEventListener('click', sortHeaderNav);
-		});
-	});
+	function handleTitleClick() {
+		const splashscreen = document.querySelector('#splashscreen');
+		if (splashscreen) splashscreen.scrollIntoView();
+	}
 </script>
 
 <style>
@@ -93,15 +89,20 @@
 		user-select: none;
 	}
 
-	.headerNav a {
+	.headerNav button {
 		color : var(--shade3);
 		height: content;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		font: inherit;
 	}
 
-	.headerNav a:hover {
+	.headerNav button:hover {
 		color : var(--shade4);
 	}
-	.headerNav a.focus {
+	.headerNav button.focus {
 		color : var(--shadeWhite);
 	}
 
@@ -116,21 +117,25 @@
 	<div id="stickyHeader" class="stickyHeader">
 		<HeaderLinks />
 		<div id="headerBranding" class="headerBranding">
-			<a class="headerTitle" on:click={() => document.querySelector('#splashscreen')?.scrollIntoView()}>Guillaume Kuc</a>
+			<button type="button" class="headerTitle" on:click={handleTitleClick}>Guillaume Kuc</button>
 			<span>&nbsp;—&nbsp;</span>
 			<span class="headerSubTitle">Protean artist</span>
 		</div>
 		<div id="headerNav" class="headerNav">
-			<a id="hnBtn3" class="hnBtn3" data-target="folioAll">All</a>
-			<span>&nbsp;·&nbsp;</span>
-			<a id="hnBtn2" class="hnBtn2" data-target="folio2D">Illustration</a>
-			<span>&nbsp;·&nbsp;</span>
-			<a id="hnBtn4" class="hnBtn4" data-target="folioMusic">Music</a>
-			<span>&nbsp;·&nbsp;</span>
-			<a id="hnBtn1" class="hnBtn1" data-target="folio3D">3D</a>
-			<span>&nbsp;·&nbsp;</span>
-			<a id="hnBtn5" class="hnBtn5" data-target="folioWeb">Web</a>
-
+			{#each headerNavItems as item, index}
+				<button 
+					type="button"
+					id={item.id} 
+					class={item.id}
+					class:focus={rubricFocused === item.focused}
+					on:click={() => handleHeaderNavClick(item.target, item.focused)}
+				>
+					{item.label}
+				</button>
+				{#if index < headerNavItems.length - 1}
+					<span>&nbsp;·&nbsp;</span>
+				{/if}
+			{/each}
 		</div>
 	</div><!--#stickyHeader-->
 </div><!--#header-->

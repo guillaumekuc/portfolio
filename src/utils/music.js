@@ -107,10 +107,6 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.play();
 		this.bgMusicIsPlaying = true;
-		// Try to get the button if it wasn't found during init
-		if (!this.footerPlayBtn) {
-			this.footerPlayBtn = document.querySelector('#footerPlayBtn');
-		}
 		if (this.footerPlayBtn) {
 			this.footerPlayBtn.classList.add('isPlaying');
 		}
@@ -120,10 +116,6 @@ export class Music {
 		if (!this.bgMusicElement) return;
 		this.bgMusicElement.pause();
 		this.bgMusicIsPlaying = false;
-		// Try to get the button if it wasn't found during init
-		if (!this.footerPlayBtn) {
-			this.footerPlayBtn = document.querySelector('#footerPlayBtn');
-		}
 		if (this.footerPlayBtn) {
 			this.footerPlayBtn.classList.remove('isPlaying');
 		}
