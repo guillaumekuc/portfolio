@@ -1,15 +1,20 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
 	import { Navigation } from '../utils/navigation.js';
 	import { Loading } from '../utils/loading.js';
+	import { shortcuts } from '../utils/shortcuts.js';
 
 	let loadElement;
 	let startScreenElement;
 	let enterBtn;
 
 	function handleEnter() {
+		// Clear modal flag and remove shortcuts immediately when Enter is pressed
+		stores.navigation.currentModal.set(null);
+		shortcuts.removeModalShortcuts('startScreen');
+		
 		// Initialize scroll
 		Navigation.initializeScroll();
 		
@@ -42,11 +47,30 @@
 		window.dispatchEvent(event);
 	}
 
+	function triggerEnterButton() {
+		if (enterBtn) {
+			Animation.fakeHoverEvent(enterBtn);
+			enterBtn.click();
+		}
+	}
+
 	onMount(() => {
 		// Initialize loading screen
 		if (loadElement) {
 			Loading.initLoadingScreen(loadElement);
 		}
+
+		// Set startScreen as the current modal
+		stores.navigation.currentModal.set('startScreen');
+
+		// Register Enter as modal shortcut
+		shortcuts.addModalShortcut('startScreen', 'Enter', triggerEnterButton);
+	});
+
+	onDestroy(() => {
+		// Clear modal and remove shortcuts
+		stores.navigation.currentModal.set(null);
+		shortcuts.removeModalShortcuts('startScreen');
 	});
 </script>
 
@@ -122,7 +146,7 @@
 
 <div bind:this={loadElement} id="load"></div>
 
-<div bind:this={startScreenElement} id="startScreen" class="startScreen">
+	<div bind:this={startScreenElement} id="startScreen" class="startScreen">
 	<h1>🙂</h1>
 	
 	<h1><span class="nameBadge">Guillaume Kuc <span class="suffix">.art</span></span> is all set.</h1>

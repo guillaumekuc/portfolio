@@ -1,6 +1,8 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
+	import { shortcuts } from '../../utils/shortcuts.js';
 	
 	const currentIndexStore = stores.music.currentIndex;
 	$: currentIndex = $currentIndexStore;
@@ -37,15 +39,49 @@
 	stores.music.tracks.set(tracks);
 	
 	function handleTrackClick(index) {
-		if (musicPlayer && bgMusicElement) {
+		const player = window.musicPlayer;
+		const bgMusic = document.querySelector('#bgMusic');
+		if (player && bgMusic) {
 			const track = tracks[index];
-			bgMusicElement.setAttribute('src', track.sound);
+			bgMusic.setAttribute('src', track.sound);
 			stores.music.currentIndex.set(index);
 			stores.music.trackImage.set(track.image);
-			musicPlayer.play();
+			player.play();
 		}
 	}
 	
+	function scrollToTrack(element) {
+		element.scrollIntoView({
+			behavior: 'smooth',
+			block: 'nearest',
+			inline: 'start'
+		});
+	}
+
+	function playNextTrack() {
+		const player = window.musicPlayer;
+		if (player) {
+			player.nextTrackHandler();
+			setTimeout(() => {
+				const currentIndex = get(stores.music.currentIndex);
+				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
+				if (track) scrollToTrack(track);
+			}, 10);
+		}
+	}
+
+	function playPreviousTrack() {
+		const player = window.musicPlayer;
+		if (player) {
+			player.previousTrackHandler();
+			setTimeout(() => {
+				const currentIndex = get(stores.music.currentIndex);
+				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
+				if (track) scrollToTrack(track);
+			}, 10);
+		}
+	}
+
 	onMount(() => {
 		bgMusicElement = document.querySelector('#bgMusic');
 		musicPlayer = window.musicPlayer;
@@ -55,6 +91,13 @@
 		if (tracks[currentIndex]) {
 			stores.music.trackImage.set(tracks[currentIndex].image);
 		}
+
+		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowRight', playNextTrack);
+		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowLeft', playPreviousTrack);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('musicPlaylistFolio');
 	});
 	
 	$: coverStyle = `background: no-repeat center / cover url(${trackImage})`;

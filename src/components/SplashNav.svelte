@@ -1,5 +1,101 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { Tooltip } from '../utils/tooltip.js';
+	import { shortcuts } from '../utils/shortcuts.js';
+	import { stores } from '../stores.js';
+	import { Animation } from '../utils/animation.js';
+
+	function updateSplashNavFocus() {
+		document.querySelectorAll('.splashNav a').forEach((link) => {
+			link.classList.remove('focus');
+		});
+		const menuSelected = get(stores.navigation.menuSelected);
+		if (menuSelected === 0) {
+			const blogBtn = document.querySelector('#blogBtn');
+			if (blogBtn) blogBtn.classList.add('focus');
+		} else if (menuSelected === 1) {
+			const worksBtn = document.querySelector('#worksBtn');
+			if (worksBtn) worksBtn.classList.add('focus');
+		} else if (menuSelected === 2) {
+			const contactBtn = document.querySelector('#contactBtn');
+			if (contactBtn) contactBtn.classList.add('focus');
+		}
+	}
+
+	function goToRubrics() {
+		document.querySelectorAll('.splashNav a').forEach((link) => {
+			link.classList.remove('focus');
+		});
+		stores.navigation.menuSelected.set(1);
+		Animation.fakeHoverEvent(document.querySelector('#worksBtn'));
+		document.querySelector('#rubrics')?.scrollIntoView();
+	}
+
+	function selectPreviousMenuItem() {
+		const menuSelected = get(stores.navigation.menuSelected);
+		let newMenuSelected;
+		if (menuSelected === 1) {
+			newMenuSelected = 0;
+		} else if (menuSelected === 0) {
+			newMenuSelected = 2;
+		} else {
+			newMenuSelected = 1;
+		}
+		stores.navigation.menuSelected.set(newMenuSelected);
+		updateSplashNavFocus();
+	}
+
+	function selectNextMenuItem() {
+		const menuSelected = get(stores.navigation.menuSelected);
+		let newMenuSelected;
+		if (menuSelected === 2) {
+			newMenuSelected = 0;
+		} else if (menuSelected === 1) {
+			newMenuSelected = 2;
+		} else {
+			newMenuSelected = 1;
+		}
+		stores.navigation.menuSelected.set(newMenuSelected);
+		updateSplashNavFocus();
+	}
+
+	function triggerSelectedMenuItem() {
+		const menuSelected = get(stores.navigation.menuSelected);
+		if (menuSelected === 0) {
+			const blogBtn = document.querySelector('#blogBtn');
+			if (blogBtn) {
+				window.open(blogBtn.getAttribute('href')).focus();
+			}
+			document.querySelectorAll('.splashNav a').forEach((link) => {
+				link.classList.remove('focus');
+			});
+			stores.navigation.menuSelected.set(1);
+		} else if (menuSelected === 1) {
+			document.querySelector('#rubrics')?.scrollIntoView();
+			document.querySelectorAll('.splashNav a').forEach((link) => {
+				link.classList.remove('focus');
+			});
+			stores.navigation.menuSelected.set(1);
+		} else if (menuSelected === 2) {
+			window.open('mailto:guillaume@guillaumekuc.com', 'mail');
+			document.querySelectorAll('.splashNav a').forEach((link) => {
+				link.classList.remove('focus');
+			});
+			stores.navigation.menuSelected.set(1);
+		}
+	}
+
+	onMount(() => {
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', goToRubrics);
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowLeft', selectPreviousMenuItem);
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowRight', selectNextMenuItem);
+		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerSelectedMenuItem);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('splashscreen');
+	});
 </script>
 
 <style>
@@ -148,8 +244,8 @@
 				const rubrics = document.querySelector('#rubrics');
 				if (rubrics) rubrics.scrollIntoView();
 			}}>
-			<img src="/img/icons/keydown2_w.svg" alt="Works" />
-			<span class="navLabel">Works</span>
+                <img src="/img/icons/keydown2_w.svg" alt="Works" />
+                <span class="navLabel">Works</span>
             </a>
 
 			<span>·</span>
@@ -161,8 +257,8 @@
 				window.open('mailto:guillaume@guillaumekuc.com', 'mail');
 			}}
 			href="mailto:guillaume@guillaumekuc.com">
-			<img src="/img/icons/contact_w.svg" alt="Contact" />
-			<span class="navLabel">Contact</span>
+                <img src="/img/icons/contact_w.svg" alt="Contact" />
+                <span class="navLabel">Contact</span>
 			</a>
 
 		</div><!--#splashNav-->

@@ -1,10 +1,82 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
 	import { Navigation } from '../utils/navigation.js';
+	import { shortcuts } from '../utils/shortcuts.js';
 
 	// Extract the store for reactive access
 	const rubricFocusedStore = stores.navigation.rubricFocused;
 	$: rubricFocused = $rubricFocusedStore;
+
+	let allRubrics = [];
+
+	function updateRubricFocus() {
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const idToFocus = '#rBtn' + rubricFocused;
+		allRubrics.forEach((rubric) => rubric.classList.remove('focus'));
+		const rubricElement = document.querySelector(idToFocus);
+		if (rubricElement) rubricElement.classList.add('focus');
+		
+		const target = '#hnBtn' + rubricFocused;
+		document.querySelectorAll('.headerNav a').forEach((link) => {
+			link.classList.remove('focus');
+		});
+		const headerNavLink = document.querySelector(target);
+		if (headerNavLink) headerNavLink.classList.add('focus');
+		
+		const rubricClass = Navigation.getRubricClass(rubricFocused);
+		Navigation.hideIrrelevantFolios(rubricClass);
+	}
+
+	function selectNextRubric() {
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
+		stores.navigation.rubricFocused.set(newRubricFocused);
+		updateRubricFocus();
+	}
+
+	function selectPreviousRubric() {
+		const rubricFocused = get(stores.navigation.rubricFocused);
+		const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
+		stores.navigation.rubricFocused.set(newRubricFocused);
+		updateRubricFocus();
+	}
+
+	function goToSplashscreen() {
+		const isChrome = Boolean(window.chrome);
+		if (isChrome) {
+			// Chrome workaround
+			document.querySelector('#header')?.classList.add('hidden');
+			document.querySelector('#footer')?.classList.add('hidden');
+			document.querySelector('#splashscreen')?.scrollIntoView();
+			setTimeout(() => {
+				document.querySelector('#header')?.classList.remove('hidden');
+				document.querySelector('#footer')?.classList.remove('hidden');
+			}, 500);
+		} else {
+			document.querySelector('#splashscreen')?.scrollIntoView();
+		}
+	}
+
+	function goToFolios() {
+		const currentScreen = get(stores.navigation.currentScreen);
+		Navigation.goToFolios(currentScreen);
+	}
+
+	onMount(() => {
+		allRubrics = document.querySelectorAll('.rubric');
+
+		shortcuts.addScreenShortcut('rubrics', 'ArrowRight', selectNextRubric);
+		shortcuts.addScreenShortcut('rubrics', 'ArrowLeft', selectPreviousRubric);
+		shortcuts.addScreenShortcut('rubrics', 'ArrowUp', goToSplashscreen);
+		shortcuts.addScreenShortcut('rubrics', 'Enter', goToFolios);
+		shortcuts.addScreenShortcut('rubrics', 'ArrowDown', goToFolios);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('rubrics');
+	});
 
 	const rubrics = [
 		{

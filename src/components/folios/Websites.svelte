@@ -1,5 +1,8 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
+	import { shortcuts } from '../../utils/shortcuts.js';
 
 	// Website data
 	const websites = [
@@ -26,6 +29,46 @@
 	function handleMouseMove(index) {
 		stores.navigation.websitesCurrentIndex.set(index);
 	}
+
+	function focusNextWebsite() {
+		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+		const newIndex = websitesCurrentIndex < 1 ? websitesCurrentIndex + 1 : 0;
+		stores.navigation.websitesCurrentIndex.set(newIndex);
+		document.querySelectorAll('.websiteLink').forEach((link) => {
+			link.classList.remove('focus');
+		});
+		const websiteLink = document.querySelectorAll('.websiteLink')[newIndex];
+		if (websiteLink) websiteLink.classList.add('focus');
+	}
+
+	function focusPreviousWebsite() {
+		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+		const newIndex = websitesCurrentIndex > 0 ? websitesCurrentIndex - 1 : 1;
+		stores.navigation.websitesCurrentIndex.set(newIndex);
+		document.querySelectorAll('.websiteLink').forEach((link) => {
+			link.classList.remove('focus');
+		});
+		const websiteLink = document.querySelectorAll('.websiteLink')[newIndex];
+		if (websiteLink) websiteLink.classList.add('focus');
+	}
+
+	function openSelectedWebsite() {
+		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
+		const websiteLink = document.querySelectorAll('.websiteLink')[websitesCurrentIndex];
+		if (websiteLink) {
+			window.open(websiteLink.getAttribute('href'));
+		}
+	}
+
+	onMount(() => {
+		shortcuts.addScreenShortcut('websitesFolio', 'ArrowRight', focusNextWebsite);
+		shortcuts.addScreenShortcut('websitesFolio', 'ArrowLeft', focusPreviousWebsite);
+		shortcuts.addScreenShortcut('websitesFolio', 'Enter', openSelectedWebsite);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('websitesFolio');
+	});
 </script>
 
 <style>

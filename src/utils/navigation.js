@@ -2,6 +2,7 @@ import { DOM } from './dom.js';
 import { Animation } from './animation.js';
 import { stores } from '../stores.js';
 import { get } from 'svelte/store';
+import { shortcuts } from './shortcuts.js';
 
 /**
  * Navigation controller class
@@ -100,6 +101,7 @@ export class Navigation {
 		this.setupKeyboardNavigation();
 		this.setupMouseNavigation();
 		window.addEventListener('resize', DOM.reSnap);
+		this.registerGlobalShortcuts();
 	}
 
 	/**
@@ -208,348 +210,97 @@ export class Navigation {
 
 	/**
 	 * Setup keyboard navigation event listener
+	 * Note: Most shortcuts are now handled by components via shortcuts system
 	 */
 	setupKeyboardNavigation() {
-		document.addEventListener('keydown', (event) => this.handleKeyNavigation(event));
+		// Keyboard navigation is now handled by the shortcuts system
+		// This method is kept for backward compatibility
 	}
 
 	/**
-	 * Handle keyboard navigation
+	 * Register global shortcuts (music controls and general navigation)
 	 */
-	handleKeyNavigation(event) {
-		// Prevent default for navigation keys
-		const preventDefaultKeys = [
-			'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
-			' ', 'l', 'm', 'z', 's', 'd', 'q', 'Enter'
-		];
-		if (preventDefaultKeys.includes(event.key)) {
-			event.preventDefault();
-		}
+	registerGlobalShortcuts() {
+		const self = this;
 
-		// Music shortcuts (q, d, z, s, space, m, l)
-		if (['q', 'd', 'z', 's', ' ', 'm', 'l'].includes(event.key)) {
-			if (this.musicPlayer) {
-				this.musicPlayer.handleKeyboardShortcut(event.key);
+		function handleMusicPrev() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('q');
 			}
 		}
 
-		// Screen-specific navigation
-		const currentScreen = get(stores.navigation.currentScreen);
-		if (currentScreen === 'startScreen') {
-			if (event.key === 'Enter') {
-				const enterBtn = document.querySelector('#enterBtn');
-				if (enterBtn) {
-					Animation.fakeHoverEvent(enterBtn);
-					enterBtn.click();
-				}
-			}
-			return;
-		}
-
-		if (currentScreen === 'splashscreen') {
-			this.handleSplashscreenNavigation(event);
-			return;
-		}
-
-		if (currentScreen === 'rubrics') {
-			this.handleRubricsNavigation(event);
-			return;
-		}
-
-		// Other screens navigation
-		this.handleOtherScreensNavigation(event);
-	}
-
-	handleSplashscreenNavigation(event) {
-		if (event.key === 'ArrowDown') {
-			document.querySelectorAll('.splashNav a').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			stores.navigation.menuSelected.set(1);
-			Animation.fakeHoverEvent(document.querySelector('#worksBtn'));
-			document.querySelector('#rubrics')?.scrollIntoView();
-			return;
-		}
-
-		if (event.key === 'ArrowLeft') {
-			const menuSelected = get(stores.navigation.menuSelected);
-			let newMenuSelected;
-			if (menuSelected === 1) {
-				newMenuSelected = 0;
-			} else if (menuSelected === 0) {
-				newMenuSelected = 2;
-			} else {
-				newMenuSelected = 1;
-			}
-			stores.navigation.menuSelected.set(newMenuSelected);
-			this.updateSplashNavFocus();
-			return;
-		}
-
-		if (event.key === 'ArrowRight') {
-			const menuSelected = get(stores.navigation.menuSelected);
-			let newMenuSelected;
-			if (menuSelected === 2) {
-				newMenuSelected = 0;
-			} else if (menuSelected === 1) {
-				newMenuSelected = 2;
-			} else {
-				newMenuSelected = 1;
-			}
-			stores.navigation.menuSelected.set(newMenuSelected);
-			this.updateSplashNavFocus();
-			return;
-		}
-
-		if (event.key === 'Enter') {
-			const menuSelected = get(stores.navigation.menuSelected);
-			if (menuSelected === 0) {
-				const blogBtn = document.querySelector('#blogBtn');
-				if (blogBtn) {
-					window.open(blogBtn.getAttribute('href')).focus();
-				}
-				document.querySelectorAll('.splashNav a').forEach((link) => {
-					link.classList.remove('focus');
-				});
-				stores.navigation.menuSelected.set(1);
-			} else if (menuSelected === 1) {
-				document.querySelector('#rubrics')?.scrollIntoView();
-				document.querySelectorAll('.splashNav a').forEach((link) => {
-					link.classList.remove('focus');
-				});
-				stores.navigation.menuSelected.set(1);
-			} else if (menuSelected === 2) {
-				window.open('mailto:guillaume@guillaumekuc.com', 'mail');
-				document.querySelectorAll('.splashNav a').forEach((link) => {
-					link.classList.remove('focus');
-				});
-				stores.navigation.menuSelected.set(1);
+		function handleMusicNext() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('d');
 			}
 		}
-	}
 
-	updateSplashNavFocus() {
-		document.querySelectorAll('.splashNav a').forEach((link) => {
-			link.classList.remove('focus');
-		});
-		const menuSelected = get(stores.navigation.menuSelected);
-		if (menuSelected === 0) {
-			const blogBtn = document.querySelector('#blogBtn');
-			if (blogBtn) blogBtn.classList.add('focus');
-		} else if (menuSelected === 1) {
-			const worksBtn = document.querySelector('#worksBtn');
-			if (worksBtn) worksBtn.classList.add('focus');
-		} else if (menuSelected === 2) {
-			const contactBtn = document.querySelector('#contactBtn');
-			if (contactBtn) contactBtn.classList.add('focus');
-		}
-	}
-
-	handleRubricsNavigation(event) {
-		if (event.key === 'ArrowRight') {
-			const rubricFocused = get(stores.navigation.rubricFocused);
-			const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
-			stores.navigation.rubricFocused.set(newRubricFocused);
-			this.updateRubricFocus();
-			return;
-		}
-
-		if (event.key === 'ArrowLeft') {
-			const rubricFocused = get(stores.navigation.rubricFocused);
-			const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
-			stores.navigation.rubricFocused.set(newRubricFocused);
-			this.updateRubricFocus();
-			return;
-		}
-
-		if (event.key === 'ArrowUp') {
-			const isChrome = Boolean(window.chrome);
-			if (isChrome) {
-				// Chrome workaround
-				document.querySelector('#header')?.classList.add('hidden');
-				document.querySelector('#footer')?.classList.add('hidden');
-				document.querySelector('#splashscreen')?.scrollIntoView();
-				setTimeout(() => {
-					document.querySelector('#header')?.classList.remove('hidden');
-					document.querySelector('#footer')?.classList.remove('hidden');
-				}, 500);
-			} else {
-				document.querySelector('#splashscreen')?.scrollIntoView();
+		function handleMusicVolUp() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('z');
 			}
-			return;
 		}
 
-		if (event.key === 'Enter' || event.key === 'ArrowDown') {
+		function handleMusicVolDown() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('s');
+			}
+		}
+
+		function handleMusicPlayPause() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut(' ');
+			}
+		}
+
+		function handleMusicMute() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('m');
+			}
+		}
+
+		function handleMusicLoop() {
+			if (self.musicPlayer) {
+				self.musicPlayer.handleKeyboardShortcut('l');
+			}
+		}
+
+		function handleNavUp() {
 			const currentScreen = get(stores.navigation.currentScreen);
-			Navigation.goToFolios(currentScreen);
-		}
-	}
-
-	updateRubricFocus() {
-		const rubricFocused = get(stores.navigation.rubricFocused);
-		const idToFocus = '#rBtn' + rubricFocused;
-		this.allRubrics.forEach((rubric) => rubric.classList.remove('focus'));
-		const rubricElement = document.querySelector(idToFocus);
-		if (rubricElement) rubricElement.classList.add('focus');
-		
-		const target = '#hnBtn' + rubricFocused;
-		document.querySelectorAll('.headerNav a').forEach((link) => {
-			link.classList.remove('focus');
-		});
-		const headerNavLink = document.querySelector(target);
-		if (headerNavLink) headerNavLink.classList.add('focus');
-		
-		const rubricClass = Navigation.getRubricClass(rubricFocused);
-		Navigation.hideIrrelevantFolios(rubricClass);
-	}
-
-	handleOtherScreensNavigation(event) {
-		const currentScreen = get(stores.navigation.currentScreen);
-		
-		if (event.key === 'ArrowUp') {
+			// Skip if screen has its own ArrowUp handler
+			if (['rubrics', 'splashscreen', 'startScreen'].includes(currentScreen)) {
+				return;
+			}
 			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + currentScreen));
 			if (prevSibling) prevSibling.scrollIntoView();
-			return;
 		}
 
-		if (event.key === 'ArrowDown') {
+		function handleNavDown() {
+			const currentScreen = get(stores.navigation.currentScreen);
+			// Skip if screen has its own ArrowDown handler
+			if (['splashscreen', 'rubrics'].includes(currentScreen)) {
+				return;
+			}
 			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));
 			if (nextSibling) nextSibling.scrollIntoView();
-			return;
 		}
 
-		const scrollThis = document.querySelector('#' + currentScreen + ' .scrollThis');
-		if (scrollThis) {
-			if (event.key === 'ArrowLeft') {
-				scrollThis.scrollTop -= 30;
-				return;
-			}
-			if (event.key === 'ArrowRight') {
-				scrollThis.scrollTop += 30;
-				return;
-			}
+		// Music shortcuts (always active)
+		if (this.musicPlayer) {
+			shortcuts.addGlobalShortcut('q', handleMusicPrev, 'music-prev');
+			shortcuts.addGlobalShortcut('d', handleMusicNext, 'music-next');
+			shortcuts.addGlobalShortcut('z', handleMusicVolUp, 'music-vol-up');
+			shortcuts.addGlobalShortcut('s', handleMusicVolDown, 'music-vol-down');
+			shortcuts.addGlobalShortcut(' ', handleMusicPlayPause, 'music-play-pause');
+			shortcuts.addGlobalShortcut('m', handleMusicMute, 'music-mute');
+			shortcuts.addGlobalShortcut('l', handleMusicLoop, 'music-loop');
 		}
 
-		// Music playlist folio navigation
-		if (currentScreen === 'musicPlaylistFolio') {
-			this.handleMusicPlaylistNavigation(event);
-			return;
-		}
-
-		// Websites folio navigation
-		if (currentScreen === 'websitesFolio') {
-			this.handleWebsitesNavigation(event);
-			return;
-		}
-
-		// Video gallery navigation
-		const galleryVideo = document.querySelector('#' + currentScreen + ' .gallery video');
-		if (galleryVideo) {
-			if (['ArrowLeft', 'ArrowRight', 'Enter'].includes(event.key)) {
-				const currentVideo = document.querySelector('.slick-current video');
-				if (currentVideo) currentVideo.play();
-			}
-			return;
-		}
-
-		// Large video navigation
-		const largeVideo = document.querySelector('#' + currentScreen + ' .largeVideo');
-		if (largeVideo && event.key === 'Enter') {
-			if (largeVideo.currentTime > 0 && !largeVideo.paused && !largeVideo.ended && largeVideo.readyState > 2) {
-				largeVideo.pause();
-				const playBtn = largeVideo.parentElement.querySelector('.videoPlayBtn');
-				if (playBtn) playBtn.classList.remove('hidden');
-				const isPlaying = get(stores.music.isPlaying);
-				const unpauseWhenDone = get(stores.music.unpauseWhenDone);
-				if (this.musicPlayer && !isPlaying && unpauseWhenDone === true) {
-					this.musicPlayer.play();
-				}
-			} else {
-				largeVideo.play();
-				const playBtn = largeVideo.parentElement.querySelector('.videoPlayBtn');
-				if (playBtn) playBtn.classList.add('hidden');
-				const isPlaying = get(stores.music.isPlaying);
-				if (this.musicPlayer && isPlaying === true && !largeVideo.muted) {
-					this.musicPlayer.pause();
-					stores.music.unpauseWhenDone.set(true);
-				} else {
-					stores.music.unpauseWhenDone.set(false);
-				}
-			}
-			return;
-		}
-
-		// About screen navigation
-		if (currentScreen === 'about' && event.key === 'Enter') {
-			Animation.fakeHoverEvent(document.querySelector('#backToTop'));
-			document.querySelector('#splashscreen')?.scrollIntoView();
-		}
+		// General page navigation (ArrowUp/Down for most screens)
+		shortcuts.addGlobalShortcut('ArrowUp', handleNavUp, 'nav-up');
+		shortcuts.addGlobalShortcut('ArrowDown', handleNavDown, 'nav-down');
 	}
 
-	handleMusicPlaylistNavigation(event) {
-		if (!this.musicPlayer) return;
-
-		function scrollIfNeeded(element) {
-			element.scrollIntoView({
-				behavior: 'smooth',
-				block: 'nearest',
-				inline: 'start'
-			});
-		}
-
-		if (event.key === 'ArrowRight') {
-			this.musicPlayer.nextTrackHandler();
-			// Scroll to the new track after it's been set
-			setTimeout(() => {
-				const currentIndex = get(stores.music.currentIndex);
-				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
-				if (track) scrollIfNeeded(track);
-			}, 10);
-		}
-
-		if (event.key === 'ArrowLeft') {
-			this.musicPlayer.previousTrackHandler();
-			// Scroll to the new track after it's been set
-			setTimeout(() => {
-				const currentIndex = get(stores.music.currentIndex);
-				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
-				if (track) scrollIfNeeded(track);
-			}, 10);
-		}
-	}
-
-	handleWebsitesNavigation(event) {
-		if (event.key === 'ArrowRight') {
-			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-			const newIndex = websitesCurrentIndex < 1 ? websitesCurrentIndex + 1 : 0;
-			stores.navigation.websitesCurrentIndex.set(newIndex);
-			document.querySelectorAll('.websiteLink').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			if (this.websitesArray[newIndex]) {
-				this.websitesArray[newIndex].classList.add('focus');
-			}
-		}
-
-		if (event.key === 'ArrowLeft') {
-			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-			const newIndex = websitesCurrentIndex > 0 ? websitesCurrentIndex - 1 : 1;
-			stores.navigation.websitesCurrentIndex.set(newIndex);
-			document.querySelectorAll('.websiteLink').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			if (this.websitesArray[newIndex]) {
-				this.websitesArray[newIndex].classList.add('focus');
-			}
-		}
-
-		if (event.key === 'Enter') {
-			const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-			if (this.websitesArray[websitesCurrentIndex]) {
-				window.open(this.websitesArray[websitesCurrentIndex].getAttribute('href'));
-			}
-		}
-	}
 
 	/**
 	 * Setup mouse navigation

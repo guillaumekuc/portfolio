@@ -1,3 +1,23 @@
+<script>
+	import { onMount, onDestroy } from 'svelte';
+	import { shortcuts } from '../../utils/shortcuts.js';
+
+	function openP4bookLink() {
+		const link = document.querySelector('#P4book .extLinkBtn');
+		if (link && link.href) {
+			window.open(link.href, '_blank');
+		}
+	}
+
+	onMount(() => {
+		shortcuts.addScreenShortcut('P4book', 'Enter', openP4bookLink);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('P4book');
+	});
+</script>
+
 <style>
 	.halfColumn {
 		width : 50%;

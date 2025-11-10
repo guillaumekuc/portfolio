@@ -26,6 +26,7 @@ export const stores = {
 	 */
 	navigation: {
 		currentScreen: writable('startScreen'),
+		currentModal: writable(null),
 		rubricFocused: writable(3),
 		menuSelected: writable(1),
 		websitesCurrentIndex: writable(0)

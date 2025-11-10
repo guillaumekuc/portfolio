@@ -1,5 +1,8 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import { Tooltip } from '../utils/tooltip.js';
+	import { shortcuts } from '../utils/shortcuts.js';
+	import { Animation } from '../utils/animation.js';
 
 	function handleMailClick(event) {
 		Tooltip.handleMailTooltip(event);
@@ -10,6 +13,31 @@
 		const splashscreen = document.querySelector('#splashscreen');
 		if (splashscreen) splashscreen.scrollIntoView({ behavior: 'smooth' });
 	}
+
+	function goBackToTop() {
+		Animation.fakeHoverEvent(document.querySelector('#backToTop'));
+		document.querySelector('#splashscreen')?.scrollIntoView();
+	}
+
+	function scrollContentUp() {
+		const scrollThis = document.querySelector('#about .scrollThis');
+		if (scrollThis) scrollThis.scrollTop -= 30;
+	}
+
+	function scrollContentDown() {
+		const scrollThis = document.querySelector('#about .scrollThis');
+		if (scrollThis) scrollThis.scrollTop += 30;
+	}
+
+	onMount(() => {
+		shortcuts.addScreenShortcut('about', 'Enter', goBackToTop);
+		shortcuts.addScreenShortcut('about', 'ArrowLeft', scrollContentUp);
+		shortcuts.addScreenShortcut('about', 'ArrowRight', scrollContentDown);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('about');
+	});
 </script>
 
 <style>

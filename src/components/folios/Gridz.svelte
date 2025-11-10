@@ -1,8 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
 	import { getMusicElements } from '../../stores.js';
+	import { shortcuts } from '../../utils/shortcuts.js';
 
 	let videoElement;
 	let playBtn;
@@ -38,6 +39,10 @@
 		}
 	}
 
+	function toggleVideoPlayPause() {
+		handleVideoClick();
+	}
+
 	onMount(() => {
 		if (videoElement && videoContainer) {
 			// Video observer for intersection
@@ -58,6 +63,12 @@
 			
 			videoObserver.observe(videoContainer);
 		}
+
+		shortcuts.addScreenShortcut('gridzFolio', 'Enter', toggleVideoPlayPause);
+	});
+
+	onDestroy(() => {
+		shortcuts.removeScreenShortcuts('gridzFolio');
 	});
 </script>
 
