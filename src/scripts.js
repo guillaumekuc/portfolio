@@ -24,6 +24,9 @@ export function initScripts() {
 	navigationController = new Navigation(musicPlayer, elements.websitesArray);
 	navigationController.init();
 	
+	// Make music player globally accessible for event listeners
+	window.musicPlayer = musicPlayer;
+	
 	return {
 		musicPlayer,
 		navigationController

@@ -1,7 +1,20 @@
 <script>
+	import { onMount } from 'svelte';
 	import SplashLinks from './SplashLinks.svelte';
 	import SplashSound from './SplashSound.svelte';
 	import SplashNav from './SplashNav.svelte';
+
+	onMount(() => {
+		// Listen for enter button press to start music
+		window.addEventListener('enterPressed', () => {
+			// Wait a bit for the animation to start
+			setTimeout(() => {
+				if (window.musicPlayer) {
+					window.musicPlayer.play();
+				}
+			}, 1000);
+		});
+	});
 </script>
 
 <style>

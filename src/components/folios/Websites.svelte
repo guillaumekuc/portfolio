@@ -8,11 +8,11 @@
 		websiteLinks = Array.from(document.querySelectorAll('.websiteLink'));
 		
 		// Handle hover
-		websiteLinks.forEach((link, index) => {
+		websiteLinks.forEach(link => {
 			link.addEventListener('mousemove', () => {
 				websiteLinks.forEach(l => l.classList.remove('focus'));
 				link.classList.add('focus');
-				stores.navigation.websitesCurrentIndex.set(index);
+				stores.navigation.websitesCurrentIndex.set(websiteLinks.indexOf(link));
 			});
 			
 			link.addEventListener('mouseout', () => {
@@ -23,25 +23,30 @@
 </script>
 
 <style>
-	.websiteLink {
+	.folioWeb .siteLabel {
+		background-color: var(--shade2);
+		border-radius: 5px;
+		vertical-align: middle;
+	}
+
+	.folioWeb .websiteLink {
 		display : inline-block;
 		width : 90%;
 		text-align: center;
-		transition: transform 0.25s ease-out, color 0.25s ease-out;
+		transition: 0.25s ease-out;
 		color : var(--shadeWhite);
 	}
 
-	.websiteLink:global(.focus) {
+	.folioWeb .websiteLink.focus {
 		transform : scale(1.05);
 	}
 
-	.websiteLink .screenshot{
+	.folioWeb .websiteLink .screenshot{
 		border: 1px solid var(--shade2);
 		border-radius: 15px;
-		transition: transform 0.25s ease-out, border 0.25s ease-out;
 	}
 
-	.websiteLink:global(.focus) .screenshot {
+	.folioWeb .websiteLink.focus .screenshot{
 		border: 2px solid var(--shadeWhite);
 	}
 
