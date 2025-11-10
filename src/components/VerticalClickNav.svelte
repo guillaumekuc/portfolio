@@ -1,35 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import { currentScreen } from '../stores.js';
+	import { DOM } from '../utils/dom.js';
 
 	let topArrow;
 	let bottomArrow;
-
-	function nextVisibleSibling(element) {
-		let nextVisibleElement;
-		let nextElement = element.nextElementSibling;
-		while (nextElement) {
-			if (nextElement.classList.contains('hidden') === false) {
-				nextVisibleElement = nextElement;
-				break;
-			}
-			nextElement = nextElement.nextElementSibling;
-		}
-		return nextVisibleElement;
-	}
-
-	function previousVisibleSibling(element) {
-		let previousVisibleElement;
-		let previousElement = element.previousElementSibling;
-		while (previousElement) {
-			if (previousElement.classList.contains('hidden') === false) {
-				previousVisibleElement = previousElement;
-				break;
-			}
-			previousElement = previousElement.previousElementSibling;
-		}
-		return previousVisibleElement;
-	}
 
 	function clickTopArrow() {
 		let currentScreenValue;
@@ -40,7 +15,7 @@
 		} else {
 			const currentElement = document.querySelector('#' + currentScreenValue);
 			if (currentElement) {
-				const prev = previousVisibleSibling(currentElement);
+				const prev = DOM.previousVisibleSibling(currentElement);
 				if (prev) prev.scrollIntoView();
 			}
 		}
@@ -52,7 +27,7 @@
 		
 		const currentElement = document.querySelector('#' + currentScreenValue);
 		if (currentElement) {
-			const next = nextVisibleSibling(currentElement);
+			const next = DOM.nextVisibleSibling(currentElement);
 			if (next) next.scrollIntoView();
 		}
 	}

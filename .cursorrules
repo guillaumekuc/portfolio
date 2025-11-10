@@ -1,0 +1,15 @@
+# Cursor Rules for Portfolio Project
+
+## Function Declarations
+- Always prefer `function functionName() {}` notation over `const functionName = () => {}` or `const functionName = function() {}`
+- Only use `const` for functions when:
+  - The function needs to be reassigned
+  - The function is part of an object literal or class method
+  - The function is passed as a callback and arrow function syntax is more appropriate for `this` binding
+- For standalone functions, always use `function` keyword declaration
+
+## Code Style
+- Use consistent formatting and naming conventions
+- Prefer explicit over implicit
+- Keep functions focused and single-purpose
+

@@ -1,42 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import { rubricFocused } from '../stores.js';
+	import { Navigation } from '../utils/navigation.js';
 
 	let allRubrics = [];
-
-	function updateRubricClass(focused) {
-		let rubricClass;
-		if (focused === 1) rubricClass = "folio3D";
-		if (focused === 2) rubricClass = "folio2D";
-		if (focused === 3) rubricClass = "folioAll";
-		if (focused === 4) rubricClass = "folioMusic";
-		if (focused === 5) rubricClass = "folioWeb";
-		return rubricClass;
-	}
-
-	function hideIrrelevantFolios(focused) {
-		const rubricClass = updateRubricClass(focused);
-		document.querySelectorAll('.folio').forEach(folio => folio.classList.add('hidden'));
-		document.querySelectorAll('.' + rubricClass).forEach(folio => folio.classList.remove('hidden'));
-	}
-
-	function goToFolios() {
-		const currentElement = document.querySelector('#rubrics');
-		if (!currentElement) return;
-		
-		let nextVisibleFolio;
-		let nextFolio = currentElement.nextElementSibling;
-		while (nextFolio) {
-			if (nextFolio.classList.contains('hidden') === false) {
-				nextVisibleFolio = nextFolio;
-				break;
-			}
-			nextFolio = nextFolio.nextElementSibling;
-		}
-		if (nextVisibleFolio) {
-			nextVisibleFolio.scrollIntoView();
-		}
-	}
 
 	function rubricOverHandler() {
 		allRubrics.forEach(rubric => rubric.classList.remove('focus'));
@@ -49,11 +16,12 @@
 		const headerNavLink = document.querySelector(target);
 		if (headerNavLink) headerNavLink.classList.add('focus');
 		
-		hideIrrelevantFolios(focused);
+		const rubricClass = Navigation.getRubricClass(focused);
+		Navigation.hideIrrelevantFolios(rubricClass);
 	}
 
 	function rubricClickHandler() {
-		goToFolios();
+		Navigation.goToFolios('rubrics');
 	}
 
 	onMount(() => {

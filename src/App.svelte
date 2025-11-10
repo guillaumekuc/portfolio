@@ -16,19 +16,13 @@
 	import 'slick-carousel/slick/slick.css';
 	import 'slick-carousel/slick/slick-theme.css';
 	
-	// Import scripts - only what's still needed globally
-	import { bgMusicControls, navigation, initScripts } from './scripts.js';
+	// Import scripts - initialization now handles everything
+	import { initScripts } from './scripts.js';
 	
 	onMount(() => {
-		// Initialize script variables after DOM is ready
+		// Initialize all scripts (music player, navigation, etc.)
+		// This now handles everything that was previously in bgMusicControls() and navigation()
 		initScripts();
-		
-		// Initialize scripts - slick is now handled in Folios.svelte
-		// Music controls and navigation still need global coordination
-		setTimeout(() => {
-			bgMusicControls();
-			navigation();
-		}, 50);
 	});
 </script>
 

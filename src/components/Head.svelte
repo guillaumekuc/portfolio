@@ -1,6 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import { currentScreen } from '../stores.js';
+	import { Animation } from '../utils/animation.js';
+	import { Navigation } from '../utils/navigation.js';
+	import { Loading } from '../utils/loading.js';
 
 	let loadElement;
 	let startScreenElement;
@@ -8,7 +11,7 @@
 
 	function handleEnter() {
 		// Initialize scroll
-		document.body.scroll(0, 0);
+		Navigation.initializeScroll();
 		
 		// Hide all folios
 		document.querySelectorAll('.folio').forEach(function(folio) { 
@@ -16,33 +19,16 @@
 		});
 		
 		// Animate opening
-		startScreenElement.classList.add('fadeOut');
-		const art = document.querySelector('#splashArt');
-		const title = document.querySelector('#splashTitle');
-		const subtitle = document.querySelector('#splashSubTitle');
-		const oneLiner = document.querySelector('#splashDescription');
-		const domains = document.querySelector('#splashDomains');
-		const splashNav = document.querySelector('#splashNav');
-		const splashLinks = document.querySelectorAll('.splashLinks a');
-		const splashNavLinks = document.querySelectorAll('.splashNav a');
-		
-		if (art) art.style.transform = "scale(1)";
-		if (title) title.style.opacity = "100%";
-		if (subtitle) subtitle.style.opacity = "100%";
-		if (oneLiner) oneLiner.style.opacity = "100%";
-		if (domains) domains.style.opacity = "100%";
-		if (splashNav) splashNav.style.opacity = "100%";
-		
-		let animStartTime = 3;
-		splashLinks.forEach((link, n) => {
-				link.style.transition = `opacity 1s ease-out ${animStartTime}s`;
-				link.style.opacity = "1";
-				animStartTime += 0.25;
-		});
-		
-		splashNavLinks.forEach(link => {
-			link.style.opacity = "100%";
-			setTimeout(() => { link.style.pointerEvents = "auto"; }, 4000);
+		Animation.animateOpening({
+			startScreen: startScreenElement,
+			art: document.querySelector('#splashArt'),
+			title: document.querySelector('#splashTitle'),
+			subtitle: document.querySelector('#splashSubTitle'),
+			oneLiner: document.querySelector('#splashDescription'),
+			domains: document.querySelector('#splashDomains'),
+			splashNav: document.querySelector('#splashNav'),
+			splashLinks: document.querySelectorAll('.splashLinks a'),
+			splashNavLinks: document.querySelectorAll('.splashNav a')
 		});
 		
 		// Display scrollbar
@@ -65,17 +51,8 @@
 			enterBtn.addEventListener('click', handleEnter);
 		}
 		
-		// Loading screen
-		document.onreadystatechange = function() {
-			const state = document.readyState;
-			if (state === 'complete' && loadElement) {
-				loadElement.classList.toggle('active');
-				loadElement.style.opacity = 0;
-				setTimeout(() => {
-					loadElement.style.visibility = "hidden";
-				}, 1000);
-			}
-		};
+		// Initialize loading screen
+		Loading.initLoadingScreen(loadElement);
 	});
 </script>
 

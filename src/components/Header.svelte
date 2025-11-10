@@ -2,19 +2,8 @@
 	import { onMount } from 'svelte';
 	import HeaderLinks from './HeaderLinks.svelte';
 	import { rubricFocused } from '../stores.js';
-
-	function nextVisibleSibling(element) {
-		let nextVisibleElement;
-		let nextElement = element.nextElementSibling;
-		while (nextElement) {
-			if (nextElement.classList.contains('hidden') === false) {
-				nextVisibleElement = nextElement;
-				break;
-			}
-			nextElement = nextElement.nextElementSibling;
-		}
-		return nextVisibleElement;
-	}
+	import { DOM } from '../utils/dom.js';
+	import { Navigation } from '../utils/navigation.js';
 
 	function sortHeaderNav(event) {
 		const target = event.currentTarget.getAttribute('data-target');
@@ -36,7 +25,11 @@
 		const rubricElement = document.querySelector(idToFocus);
 		if (rubricElement) rubricElement.classList.add('focus');
 		
-		const next = nextVisibleSibling(document.querySelector('#rubrics'));
+		// Hide irrelevant folios
+		const rubricClass = Navigation.getRubricClass(focused);
+		Navigation.hideIrrelevantFolios(rubricClass);
+		
+		const next = DOM.nextVisibleSibling(document.querySelector('#rubrics'));
 		if (next) next.scrollIntoView();
 	}
 
