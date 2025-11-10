@@ -1,5 +1,5 @@
 export function IllustrationFolio2() {
-  return `<div class="gallery">
+  return /* html */ `<div class="gallery">
 	<div><img src="/img/portfolio/pourManon_M.jpg"></div>
 
   	<div><img src="/img/portfolio/femmesabre_M.jpg"></div>

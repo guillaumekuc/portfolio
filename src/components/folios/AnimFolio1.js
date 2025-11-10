@@ -1,5 +1,5 @@
 export function AnimFolio1() {
-  return `<div class="folioWrapper">
+  return /* html */ `<div class="folioWrapper">
 	<div class="wideLeftThirds" style="position : relative;background-color : #5a5d5a; overflow:hidden; ">
 			    <video class="largeVideo" preload="none" loop poster="/vid/anim/animReelPoster.png">
 			      <source src="/vid/anim/animReel.mp4" type="video/mp4">

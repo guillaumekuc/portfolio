@@ -1,5 +1,5 @@
 export function Head() {
-  return `<div id="siteContainer" class="siteContainer">
+  return /* html */ `<div id="siteContainer" class="siteContainer">
 	
 	<div id="load"></div>
 	

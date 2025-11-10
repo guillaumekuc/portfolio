@@ -1,5 +1,5 @@
 export function ModeFolio1() {
-  return `<div class="gallery">
+  return /* html */ `<div class="gallery">
 
       <div>
         <video preload="none" loop muted onclick="this.play()" poster="/vid/anim/encyclo2cover.jpg">

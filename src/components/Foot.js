@@ -1,5 +1,5 @@
 export function Foot() {
-  return `</div><!--#siteContainer-->
+  return /* html */ `</div><!--#siteContainer-->
 
 <div id="rotatePlease" class="rotatePlease">
 

@@ -1,5 +1,5 @@
 export function P4bookFolio() {
-  return `<div class="folioWrapper">
+  return /* html */ `<div class="folioWrapper">
 	<div class="halfColumn">
 		<img src="/img/P4cover.jpg">
 		</img>

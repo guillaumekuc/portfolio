@@ -1,5 +1,5 @@
 export function MusicPlaylistFolio() {
-  return `<div class="musicPlaylistWrapper">
+  return /* html */ `<div class="musicPlaylistWrapper">
 	<div id="musicPlaylistCover" class="musicPlaylistCover" style="position : relative; text-align: left; ">
 		<div style="position : absolute; top : auto; left : var(--safeMargin); bottom : var(--safeMargin);">
 			<div><i class="musicIcon">SPACE</i> : play/pause</div>		

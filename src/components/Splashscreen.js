@@ -1,7 +1,7 @@
 import { Links } from './Links.js';
 
 export function Splashscreen() {
-  return `<div id="splashscreen" class="splashscreen fullPage snap">
+  return /* html */ `<div id="splashscreen" class="splashscreen fullPage snap">
 	<div id="splashLinks" class="splashLinks">
 		${Links()}
 	</div><!--splashLinks-->

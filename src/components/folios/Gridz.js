@@ -1,5 +1,5 @@
 export function Gridz() {
-  return `<div class="folioWrapper">
+  return /* html */ `<div class="folioWrapper">
 	<div class="shortLeftThirds scrollThis">
 			<span class="title">Gridz — <small>Perspective plugin for Photoshop</small></span>
 			<blockquote>

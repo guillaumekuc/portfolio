@@ -1,5 +1,5 @@
 export function Links() {
-  return `<a  class="L0"
+  return /* html */ `<a  class="L0"
 	title="guillaume@guillaumekuc.com" 
 	target="_blank" 
 	onClick="javascript:window.open('mailto:guillaume@guillaumekuc.com', 'mail'); event.preventDefault()" href="mailto:'guillaume@guillaumekuc.com'"

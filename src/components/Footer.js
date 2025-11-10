@@ -1,5 +1,5 @@
 export function Footer() {
-  return `<div id="footer" class="footer">
+  return /* html */ `<div id="footer" class="footer">
 	<div id="stickyFooter" class="stickyFooter">
 			<button id="footerPreviousBtn" class="footerPreviousBtn"><img src="/img/icons/previous2.png"></img></button>
 			<button id="footerPlayBtn" class="footerPlayBtn"></button>

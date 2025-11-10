@@ -1,7 +1,7 @@
 import { Links } from './Links.js';
 
 export function Header() {
-  return `<div id="header" class="header">
+  return /* html */ `<div id="header" class="header">
 	<div id="stickyHeader" class="stickyHeader">
 		<div id="headerLinks" class="headerLinks">
 			${Links()}

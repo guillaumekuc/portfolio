@@ -11,7 +11,7 @@ import { P4bookFolio } from './folios/P4bookFolio.js';
 import { Websites } from './folios/Websites.js';
 
 export function Folios() {
-  return `
+  return /* html */ `
 <div id="musicPlaylistFolio" class="fullPage folio folioMusic folioAll">
 	${MusicPlaylistFolio()}
 </div>

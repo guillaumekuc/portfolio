@@ -1,5 +1,5 @@
 export function About() {
-  return `<div id="about" class="fullPage aboutme">
+  return /* html */ `<div id="about" class="fullPage aboutme">
 	<div class="vertWrapper">
 		<div id="aboutTop" style="">
 			<div id="myPic"><img src="/img/profilePic.jpg"></div>

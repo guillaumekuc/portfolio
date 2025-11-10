@@ -1,5 +1,5 @@
 export function Websites() {
-  return `<div class="twoPanes">
+  return /* html */ `<div class="twoPanes">
 	<div class="siteLeft">
 		<a class="websiteLink" href="http://localhost/guillaumekuc/guillaumekuc.art" target="_blank">
 			<img class="screenshot" src="/img/gkartscreenshot.png"></img>

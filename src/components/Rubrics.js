@@ -1,5 +1,5 @@
 export function Rubrics() {
-  return `<div id="rubrics" class="rubrics fullPage">
+  return /* html */ `<div id="rubrics" class="rubrics fullPage">
 	<div id="rBtn1" class="rubric" 
 	style="background-image : url('/img/panorama1.jpg');">
 		<div class='softwareIcons'>
