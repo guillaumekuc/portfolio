@@ -1,8 +1,8 @@
 <div id="splashscreen-hero" class="splashscreen-hero">
 	<div bind:this={logoElement} class="splashscreen-logo">
 		
-		<svg class="splashscreen-hero-emblem" role="img" aria-label="Splashscreen Emblem">
-			<use href="/img/emblem.svg#root"></use>
+		<svg class="splashscreen-hero-emblem" viewBox="0 0 772 1144.34" role="img" aria-label="Splashscreen Emblem">
+			<use href="/img/emblem.svg#root" xlink:href="/img/emblem.svg#root"></use>
 		</svg>
 	</div>
 	<h1 bind:this={titleElement} id="splashscreen-hero-title" class="splashscreen-hero-title">{heroContent.name}</h1>
