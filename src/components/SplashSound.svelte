@@ -11,20 +11,36 @@
 	let splashscreenVolumeSlider;
 	let musicPlayer;
 	
+	// Reactively wait for musicPlayer to be available
+	$: {
+		if (window.musicPlayer && !musicPlayer) {
+			musicPlayer = window.musicPlayer;
+			// Sync volume slider with store once musicPlayer is available
+			if (splashscreenVolumeSlider) {
+				splashscreenVolumeSlider.value = volume;
+			}
+		}
+	}
+	
 	function handleVolumeInput(e) {
-		if (musicPlayer) {
-			musicPlayer.volumeHandler(e.target);
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.volumeHandler(e.target);
 		}
 	}
 	
 	function handleMuteClick() {
-		if (musicPlayer) {
-			musicPlayer.muteHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.muteHandler();
 		}
 	}
 	
 	onMount(() => {
-		musicPlayer = window.musicPlayer;
+		// Try to get musicPlayer immediately
+		if (window.musicPlayer) {
+			musicPlayer = window.musicPlayer;
+		}
 		
 		// Sync volume slider with store
 		if (splashscreenVolumeSlider) {

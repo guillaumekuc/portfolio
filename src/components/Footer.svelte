@@ -27,8 +27,10 @@
 	const playlistLengthStore = stores.music.playlistLength;
 	$: playlistLength = $playlistLengthStore;
 	
-	$: isFirstTrack = currentIndex === 0;
-	$: isLastTrack = currentIndex + 1 >= playlistLength;
+	// Only grey out previous button if we're at the first track AND playlist is initialized
+	$: isFirstTrack = playlistLength > 0 && currentIndex === 0;
+	// Only grey out next button if we're at the last track AND playlist is initialized
+	$: isLastTrack = playlistLength > 0 && currentIndex + 1 >= playlistLength;
 	
 	$: currentTimeFormatted = Time.formatTime(currentTime);
 	$: durationFormatted = Time.formatTime(duration);
@@ -39,52 +41,91 @@
 	let footerSleekSlider;
 	let bgMusicElement;
 	let musicPlayer;
+	let isSeeking = false;
+	let sliderValue = 0;
+	
+	// Update slider value only when not being dragged by user
+	$: {
+		if (!isSeeking) {
+			sliderValue = seekValue;
+		}
+	}
+	
+	// Reactively wait for musicPlayer to be available
+	$: {
+		if (window.musicPlayer && !musicPlayer) {
+			musicPlayer = window.musicPlayer;
+		}
+	}
 	
 	function handlePlayClick() {
-		if (musicPlayer) {
-			musicPlayer.playHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.playHandler();
 		}
 	}
 	
 	function handleMuteClick() {
-		if (musicPlayer) {
-			musicPlayer.muteHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.muteHandler();
 		}
 	}
 	
 	function handleLoopClick() {
-		if (musicPlayer) {
-			musicPlayer.loopHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.loopHandler();
 		}
 	}
 	
 	function handleNextClick() {
-		if (musicPlayer) {
-			musicPlayer.nextTrackHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.nextTrackHandler();
 		}
 	}
 	
 	function handlePreviousClick() {
-		if (musicPlayer) {
-			musicPlayer.previousTrackHandler();
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.previousTrackHandler();
 		}
 	}
 	
 	function handleVolumeInput(e) {
-		if (musicPlayer) {
-			musicPlayer.volumeHandler(e.target);
+		const player = musicPlayer || window.musicPlayer;
+		if (player) {
+			player.volumeHandler(e.target);
 		}
 	}
 	
+	function handleSeekStart() {
+		isSeeking = true;
+	}
+	
 	function handleSeekInput(e) {
-		if (musicPlayer && bgMusicElement && footerSleekSlider) {
-			bgMusicElement.currentTime = (footerSleekSlider.value / 100) * bgMusicElement.duration;
+		if (footerSleekSlider) {
+			sliderValue = parseFloat(footerSleekSlider.value);
+		}
+	}
+	
+	function handleSeekEnd() {
+		isSeeking = false;
+		const player = musicPlayer || window.musicPlayer;
+		if (player && bgMusicElement && footerSleekSlider) {
+			const newTime = (sliderValue / 100) * bgMusicElement.duration;
+			bgMusicElement.currentTime = newTime;
+			stores.music.currentTime.set(newTime);
 		}
 	}
 	
 	onMount(() => {
 		bgMusicElement = document.querySelector('#bgMusic');
-		musicPlayer = window.musicPlayer;
+		// Try to get musicPlayer immediately
+		if (window.musicPlayer) {
+			musicPlayer = window.musicPlayer;
+		}
 		
 		// Sync volume slider with store
 		if (footerVolumeSlider) {
@@ -218,7 +259,7 @@
 			<button id="footerPreviousBtn" class="footerPreviousBtn" class:firstTrack={isFirstTrack} on:click={handlePreviousClick}><img src="/img/icons/previous2.png" alt="Previous" /></button>
 			<button id="footerPlayBtn" class="footerPlayBtn" class:isPlaying={isPlaying} on:click={handlePlayClick}></button>
 			<button id="footerNextBtn" class="footerNextBtn rSpacer" class:lastTrack={isLastTrack} on:click={handleNextClick}><img src="/img/icons/next2.png" alt="Next" /></button>
-			<input bind:this={footerSleekSlider} id="footerSleekSlider" class="footerSleekSlider rSpacer" type="range" value={seekValue} on:input={handleSeekInput} />
+			<input bind:this={footerSleekSlider} bind:value={sliderValue} id="footerSleekSlider" class="footerSleekSlider rSpacer" type="range" min="0" max="100" step="0.1" on:mousedown={handleSeekStart} on:mouseup={handleSeekEnd} on:touchstart={handleSeekStart} on:touchend={handleSeekEnd} on:input={handleSeekInput} />
 			<span class="footerTime rSpacer"><span id="currentTime">{currentTimeFormatted}</span> / <span id="duration">{durationFormatted}</span> </span>
 			<button id="footerLoopBtn" class="footerLoopBtn rSpacer" class:isLooping={isLooping} on:click={handleLoopClick}></button>
 			<button id="footerMuteBtn" class="muteBgMusic" class:isMuted={isMuted} on:click={handleMuteClick}></button>
