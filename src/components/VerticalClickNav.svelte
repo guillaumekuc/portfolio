@@ -49,18 +49,7 @@
 		}
 	}
 
-	let lastLogTime = 0;
-	const LOG_THROTTLE = 500; // Log every 500ms to reduce spam
-
 	function displayBorderArrows(event) {
-		// Always log first call to confirm function is being called
-		if (lastLogTime === 0) {
-			console.log('[VerticalClickNav] displayBorderArrows called for first time');
-		}
-		
-		const now = Date.now();
-		const shouldLog = now - lastLogTime > LOG_THROTTLE;
-		
 		const currentScreenValue = get(stores.navigation.currentScreen);
 		
 		const topArea = 3.5 * 38.4;
@@ -69,24 +58,6 @@
 		const bottomAreaMax = window.innerHeight - 1.5 * 38.4;
 		const xMin = 0.4 * window.innerWidth;
 		const xMax = 0.6 * window.innerWidth;
-		
-		// Log first call and periodically to confirm function is running
-		if (shouldLog) {
-			console.log('[VerticalClickNav] mousemove event', {
-				mouseX: event.clientX,
-				mouseY: event.clientY,
-				currentScreen: currentScreenValue,
-				topArea,
-				bottomArea,
-				topAreaMin,
-				bottomAreaMax,
-				xMin,
-				xMax,
-				windowHeight: window.innerHeight,
-				windowWidth: window.innerWidth
-			});
-			lastLogTime = now;
-		}
 		
 		// Check individual conditions for debugging
 		const screenCheck = currentScreenValue !== 'splashscreen' && currentScreenValue !== 'startScreen';
@@ -101,64 +72,30 @@
 		// Check top arrow conditions
 		const isTopArea = screenCheck && topYCheck && topXCheck;
 		
-		// Log condition checks when in potential areas
-		if (shouldLog && (event.clientY < topArea + 100 || event.clientY > bottomArea - 100)) {
-			console.log('[VerticalClickNav] Condition checks', {
-				screenCheck,
-				currentScreen: `${currentScreenValue}`,
-				bottomYCheck: `${event.clientY} > ${bottomArea} && ${event.clientY} < ${bottomAreaMax}`,
-				bottomXCheck: `${event.clientX} > ${xMin} && ${event.clientX} < ${xMax}`,
-				topYCheck: `${event.clientY} < ${topArea} && ${event.clientY} > ${topAreaMin}`,
-				topXCheck: `${event.clientX} > ${xMin} && ${event.clientX} < ${xMax}`,
-				isBottomArea,
-				isTopArea
-			});
-		}
-		
 		if (isBottomArea) {
-			console.log('bottomArea');
 			if (!showBottomArrow) {
-				console.log('[VerticalClickNav] Showing bottom arrow', {
+				debugLog('[VerticalClickNav] Showing bottom arrow', {
 					currentScreen: currentScreenValue,
 					mouseX: event.clientX,
-					mouseY: event.clientY,
-					bottomArea,
-					bottomAreaMax,
-					xMin,
-					xMax,
-					windowHeight: window.innerHeight,
-					windowWidth: window.innerWidth
+					mouseY: event.clientY
 				});
 				showBottomArrow = true;
 				showTopArrow = false;
 			}
 		} else if (isTopArea) {
-			console.log('topArea');
 			if (!showTopArrow) {
-				console.log('[VerticalClickNav] Showing top arrow', {
+				debugLog('[VerticalClickNav] Showing top arrow', {
 					currentScreen: currentScreenValue,
 					mouseX: event.clientX,
-					mouseY: event.clientY,
-					topArea,
-					topAreaMin,
-					xMin,
-					xMax,
-					windowHeight: window.innerHeight,
-					windowWidth: window.innerWidth
+					mouseY: event.clientY
 				});
 				showTopArrow = true;
 				showBottomArrow = false;
 			}
 		} else {
 			if (showTopArrow || showBottomArrow) {
-				console.log('[VerticalClickNav] Hiding arrows', {
-					currentScreen: currentScreenValue,
-					mouseX: event.clientX,
-					mouseY: event.clientY,
-					wasShowingTop: showTopArrow,
-					wasShowingBottom: showBottomArrow,
-					isBottomArea,
-					isTopArea
+				debugLog('[VerticalClickNav] Hiding arrows', {
+					currentScreen: currentScreenValue
 				});
 				showTopArrow = false;
 				showBottomArrow = false;
@@ -167,18 +104,12 @@
 	}
 
 	onMount(() => {
-		console.log('[VerticalClickNav] Component mounted, adding mousemove listener');
-		console.log('[VerticalClickNav] Initial state:', {
-			showTopArrow,
-			showBottomArrow,
-			windowHeight: window.innerHeight,
-			windowWidth: window.innerWidth
-		});
+		debugLog('[VerticalClickNav] Component mounted, adding mousemove listener');
 		
 		window.addEventListener('mousemove', displayBorderArrows);
 		
 		return () => {
-			console.log('[VerticalClickNav] Component unmounting, removing mousemove listener');
+			debugLog('[VerticalClickNav] Component unmounting, removing mousemove listener');
 			window.removeEventListener('mousemove', displayBorderArrows);
 		};
 	});
