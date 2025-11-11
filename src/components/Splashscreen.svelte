@@ -1,3 +1,39 @@
+<div id="splashscreen" class="splashscreen fullPage snap">
+	<div class="splashLinks">
+		<SplashLinks />
+	</div>
+	<SplashSound />
+
+	<div id="splashBranding" class="splashBranding">
+		<h1 id="splashTitle" class="splashTitle">
+		Guillaume Kuc
+		</h1>
+		<h2 id="splashSubTitle" class="splashSubTitle">
+		— Protean artist —
+		</h2>
+		<h2 id="splashDescription" class="splashDescription">
+		<small><i>...because some people just can't choose</i> 😅</small>
+		</h2>
+		<h2 id="splashDomains" class="splashDomains">
+		Illustration · Music · 3D · Web
+		</h2>
+	</div><!--#splashBranding-->
+
+<div id="splashArtArea" class="splashArtArea">
+	<div id="splashArt" class="splashArt zoomIn">
+		<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"></audio>
+
+		<div id="splashArtShader" class="splashArtShader">
+		</div><!--#splashArtShader-->
+	</div><!--#splashArt-->
+</div><!--splashArtArea-->
+
+<div id="splashNavPositioner">
+	<SplashNav />
+</div>
+</div><!--#splashscreen-->
+
+
 <script>
 	import { onMount } from 'svelte';
 	import { initScripts } from '../scripts.js';
@@ -133,37 +169,4 @@
 	}
 </style>
 
-<div id="splashscreen" class="splashscreen fullPage snap">
-	<div class="splashLinks">
-		<SplashLinks />
-	</div>
-	<SplashSound />
 
-	<div id="splashBranding" class="splashBranding">
-		<h1 id="splashTitle" class="splashTitle">
-		Guillaume Kuc
-		</h1>
-		<h2 id="splashSubTitle" class="splashSubTitle">
-		— Protean artist —
-		</h2>
-		<h2 id="splashDescription" class="splashDescription">
-		<small><i>...because some people just can't choose</i> 😅</small>
-		</h2>
-		<h2 id="splashDomains" class="splashDomains">
-		Illustration · Music · 3D · Web
-		</h2>
-	</div><!--#splashBranding-->
-
-<div id="splashArtArea" class="splashArtArea">
-	<div id="splashArt" class="splashArt zoomIn">
-		<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"></audio>
-
-		<div id="splashArtShader" class="splashArtShader">
-		</div><!--#splashArtShader-->
-	</div><!--#splashArt-->
-</div><!--splashArtArea-->
-
-<div id="splashNavPositioner">
-	<SplashNav />
-</div>
-</div><!--#splashscreen-->

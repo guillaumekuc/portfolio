@@ -91,10 +91,7 @@ export class Navigation {
 	/**
 	 * Instance methods for navigation controller
 	 */
-	constructor(musicPlayer) {
-		// Dependencies
-		this.musicPlayer = musicPlayer;
-		
+	constructor() {
 		// State - only keep non-store properties
 		this.allRubrics = [];
 		
@@ -181,8 +178,9 @@ export class Navigation {
 					if (playBtn) playBtn.classList.remove('hidden');
 					
 				const unpauseWhenDone = get(stores.music.unpauseWhenDone);
-				if (self.musicPlayer && unpauseWhenDone === true) {
-					self.musicPlayer.play();
+				const musicPlayer = get(stores.music.musicPlayer);
+				if (musicPlayer && unpauseWhenDone === true) {
+					musicPlayer.play();
 				}
 				}
 			}, { threshold: 1 });
@@ -236,47 +234,53 @@ export class Navigation {
 	 * Register global shortcuts (music controls and general navigation)
 	 */
 	registerGlobalShortcuts() {
-		const self = this;
 
 		function handleMusicPrev() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('q');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('q');
 			}
 		}
 
 		function handleMusicNext() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('d');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('d');
 			}
 		}
 
 		function handleMusicVolUp() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('z');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('z');
 			}
 		}
 
 		function handleMusicVolDown() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('s');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('s');
 			}
 		}
 
 		function handleMusicPlayPause() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut(' ');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut(' ');
 			}
 		}
 
 		function handleMusicMute() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('m');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('m');
 			}
 		}
 
 		function handleMusicLoop() {
-			if (self.musicPlayer) {
-				self.musicPlayer.handleKeyboardShortcut('l');
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.handleKeyboardShortcut('l');
 			}
 		}
 
@@ -307,15 +311,14 @@ export class Navigation {
 		}
 
 		// Music shortcuts (always active)
-		if (this.musicPlayer) {
-			shortcuts.addGlobalShortcut('q', handleMusicPrev, 'music-prev');
-			shortcuts.addGlobalShortcut('d', handleMusicNext, 'music-next');
-			shortcuts.addGlobalShortcut('z', handleMusicVolUp, 'music-vol-up');
-			shortcuts.addGlobalShortcut('s', handleMusicVolDown, 'music-vol-down');
-			shortcuts.addGlobalShortcut(' ', handleMusicPlayPause, 'music-play-pause');
-			shortcuts.addGlobalShortcut('m', handleMusicMute, 'music-mute');
-			shortcuts.addGlobalShortcut('l', handleMusicLoop, 'music-loop');
-		}
+		// Music player is accessed from stores when needed in handlers
+		shortcuts.addGlobalShortcut('q', handleMusicPrev, 'music-prev');
+		shortcuts.addGlobalShortcut('d', handleMusicNext, 'music-next');
+		shortcuts.addGlobalShortcut('z', handleMusicVolUp, 'music-vol-up');
+		shortcuts.addGlobalShortcut('s', handleMusicVolDown, 'music-vol-down');
+		shortcuts.addGlobalShortcut(' ', handleMusicPlayPause, 'music-play-pause');
+		shortcuts.addGlobalShortcut('m', handleMusicMute, 'music-mute');
+		shortcuts.addGlobalShortcut('l', handleMusicLoop, 'music-loop');
 
 		// General page navigation (ArrowUp/Down for most screens)
 		shortcuts.addGlobalShortcut('ArrowUp', handleNavUp, 'nav-up');

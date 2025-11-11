@@ -10,11 +10,12 @@ import { appAPI } from './utils/api.js';
 window.$ = window.jQuery = $;
 
 /**
- * Initialize scripts with element references
+ * Initialize audio/music player
  * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
+ * @returns {Music|null} Music player instance or null if initialization failed
  */
-export function initScripts(audioElement) {
-	debugLog('Initializing scripts');
+export function initAudio(audioElement) {
+	debugLog('Initializing audio');
 	
 	if (!audioElement) {
 		debugLog('Warning: Audio element not provided');
@@ -25,18 +26,65 @@ export function initScripts(audioElement) {
 	const musicPlayer = new Music();
 	musicPlayer.init(audioElement);
 	
+	// Store instance in store for component access
+	stores.music.musicPlayer.set(musicPlayer);
+	
+	debugLog('Audio initialized');
+	return musicPlayer;
+}
+
+/**
+ * Initialize navigation controller
+ * @returns {Navigation|null} Navigation controller instance or null if initialization failed
+ */
+export function initNavigation() {
+	debugLog('Initializing navigation');
+	
+	// Music player is accessed from stores when needed
 	// Initialize navigation controller
-	const navigationController = new Navigation(musicPlayer);
+	const navigationController = new Navigation();
 	navigationController.init();
 	
-	// Store instances in stores for component access
-	stores.music.musicPlayer.set(musicPlayer);
+	// Store instance in store for component access
 	stores.navigation.controller.set(navigationController);
 	
-	// Expose to window.app for console debugging (external access only)
-	appAPI.musicPlayer = musicPlayer;
-	appAPI.navigation = navigationController;
+	debugLog('Navigation initialized');
+	return navigationController;
+}
+
+/**
+ * Initialize API exposure for console debugging and external access
+ */
+export function initAPI() {
+	debugLog('Initializing API');
+	
+	// Expose stores to window.app for console debugging (external access only)
+	// All instances are accessible through stores: stores.music.musicPlayer, stores.navigation.controller
 	appAPI.stores = stores;
+	
+	debugLog('API initialized');
+}
+
+/**
+ * Initialize all scripts with element references
+ * Convenience function that calls initAudio, initNavigation, and initAPI in order
+ * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
+ * @returns {Object|null} Object with musicPlayer and navigationController, or null if initialization failed
+ */
+export function initScripts(audioElement) {
+	debugLog('Initializing scripts');
+	
+	const musicPlayer = initAudio(audioElement);
+	if (!musicPlayer) {
+		return null;
+	}
+	
+	const navigationController = initNavigation();
+	if (!navigationController) {
+		return null;
+	}
+	
+	initAPI();
 	
 	debugLog('Scripts initialized');
 	return {
