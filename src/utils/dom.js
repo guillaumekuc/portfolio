@@ -9,7 +9,7 @@ export class DOM {
 	 */
 	static nextVisibleSibling(element) {
 		let nextElement = element.nextElementSibling;
-		
+
 		while (nextElement) {
 			const style = window.getComputedStyle(nextElement);
 			if (style.display !== 'none' && style.visibility !== 'hidden') {
@@ -17,7 +17,7 @@ export class DOM {
 			}
 			nextElement = nextElement.nextElementSibling;
 		}
-		
+
 		return null;
 	}
 
@@ -28,7 +28,7 @@ export class DOM {
 	 */
 	static previousVisibleSibling(element) {
 		let previousElement = element.previousElementSibling;
-		
+
 		while (previousElement) {
 			const style = window.getComputedStyle(previousElement);
 			if (style.display !== 'none' && style.visibility !== 'hidden') {
@@ -36,7 +36,7 @@ export class DOM {
 			}
 			previousElement = previousElement.previousElementSibling;
 		}
-		
+
 		return null;
 	}
 

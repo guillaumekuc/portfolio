@@ -11,7 +11,7 @@ export class Music {
 	constructor() {
 		// Only keep reference to audio element for playback control
 		this.bgMusicElement = null;
-		
+
 		// Initialize stores
 		stores.music.isPlaying.set(false);
 		stores.music.isLooping.set(false);
@@ -30,7 +30,7 @@ export class Music {
 	init(audioElement) {
 		this.bgMusicElement = audioElement;
 		debugLog('Music player initialized');
-		
+
 		// Setup time update listener to update stores
 		if (this.bgMusicElement) {
 			this.bgMusicElement.addEventListener('timeupdate', () => {
@@ -41,7 +41,7 @@ export class Music {
 					}
 				}
 			});
-			
+
 			// Handle track end
 			this.bgMusicElement.addEventListener('ended', () => {
 				const isLooping = get(stores.music.isLooping);
@@ -139,7 +139,7 @@ export class Music {
 		const newVolume = parseInt(slider.value);
 		stores.music.volume.set(newVolume);
 		debugLog('Volume changed:', newVolume);
-		
+
 		if (this.bgMusicElement) {
 			this.bgMusicElement.volume = newVolume / 100;
 		}
@@ -290,6 +290,4 @@ export class Music {
 	set unpauseWhenDone(value) {
 		stores.music.unpauseWhenDone.set(value);
 	}
-
 }
-

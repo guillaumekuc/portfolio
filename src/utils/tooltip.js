@@ -7,7 +7,7 @@ export class Tooltip {
 	 * @param {Event} event - Click event
 	 */
 	static handleMailTooltip(event) {
-		const toolTip = document.createElement("span");
+		const toolTip = document.createElement('span');
 		toolTip.innerHTML = "<span class='tooltipText'>Mail copied to clipboard !</span>";
 		event.currentTarget.appendChild(toolTip);
 		setTimeout(() => {
@@ -17,4 +17,3 @@ export class Tooltip {
 		}, 3000);
 	}
 }
-

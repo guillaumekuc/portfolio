@@ -4,7 +4,7 @@ import { debugLog } from './debuglog.js';
 
 /**
  * Keyboard shortcuts
- * 
+ *
  * Three types (priority order):
  * - Modal: Highest priority, active when a modal is open (e.g., startScreen)
  * - Screen: Active only when a full-page section is visible
@@ -18,16 +18,16 @@ class Shortcuts {
 		this.handler = null;
 		this.ready = false;
 	}
-	
+
 	init() {
 		if (this.ready) return;
-		
+
 		this.handler = (e) => this.onKey(e);
 		document.addEventListener('keydown', this.handler);
 		this.ready = true;
 		debugLog('Shortcuts initialized');
 	}
-	
+
 	destroy() {
 		if (this.handler) {
 			document.removeEventListener('keydown', this.handler);
@@ -35,7 +35,7 @@ class Shortcuts {
 		}
 		this.ready = false;
 	}
-	
+
 	/**
 	 * Add a global shortcut (always active)
 	 */
@@ -43,7 +43,7 @@ class Shortcuts {
 		this.global.set(id, { key, handler, prevent });
 		debugLog('Global shortcut added:', key, id);
 	}
-	
+
 	/**
 	 * Add a screen shortcut (active only when screen is visible)
 	 */
@@ -51,12 +51,12 @@ class Shortcuts {
 		if (!this.screens.has(screen)) {
 			this.screens.set(screen, new Map());
 		}
-		
+
 		const map = this.screens.get(screen);
 		// Use key as the map key since each screen has its own map
 		map.set(key, { key, handler, prevent });
 	}
-	
+
 	/**
 	 * Add a modal shortcut (highest priority, active when modal is open)
 	 */
@@ -64,32 +64,32 @@ class Shortcuts {
 		if (!this.modals.has(modal)) {
 			this.modals.set(modal, new Map());
 		}
-		
+
 		const map = this.modals.get(modal);
 		map.set(key, { key, handler, prevent });
 	}
-	
+
 	/**
 	 * Remove a global shortcut
 	 */
 	removeGlobalShortcut(id) {
 		this.global.delete(id);
 	}
-	
+
 	/**
 	 * Remove all shortcuts for a screen
 	 */
 	removeScreenShortcuts(screen) {
 		this.screens.delete(screen);
 	}
-	
+
 	/**
 	 * Remove all shortcuts for a modal
 	 */
 	removeModalShortcuts(modal) {
 		this.modals.delete(modal);
 	}
-	
+
 	/**
 	 * Handle keydown events
 	 * Priority: Modal → Screen → Global
@@ -112,7 +112,7 @@ class Shortcuts {
 			// Modal is active but no shortcut matched - block all other shortcuts
 			return;
 		}
-		
+
 		// Check screen shortcuts (they take precedence over global)
 		const currentScreen = get(stores.navigation.currentScreen);
 		const map = this.screens.get(currentScreen);
@@ -125,7 +125,7 @@ class Shortcuts {
 				return;
 			}
 		}
-		
+
 		// Check global shortcuts if no screen shortcut matched
 		for (const [id, s] of this.global) {
 			if (e.key === s.key) {
@@ -145,4 +145,3 @@ export const shortcuts = new Shortcuts();
 if (typeof document !== 'undefined') {
 	shortcuts.init();
 }
-

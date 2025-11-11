@@ -8,7 +8,7 @@ export class Animation {
 	 */
 	static fakeHoverEvent(target) {
 		if (!target) return;
-		
+
 		target.style.transition = 'none';
 		target.classList.add('fakeHoverEvent');
 		setTimeout(() => {
@@ -48,31 +48,31 @@ export class Animation {
 		}
 
 		// Animate splash art
-		if (art) art.style.transform = "scale(1)";
+		if (art) art.style.transform = 'scale(1)';
 
 		// Fade in text elements
-		if (title) title.style.opacity = "100%";
-		if (subtitle) subtitle.style.opacity = "100%";
-		if (oneLiner) oneLiner.style.opacity = "100%";
-		if (domains) domains.style.opacity = "100%";
-		if (splashNav) splashNav.style.opacity = "100%";
+		if (title) title.style.opacity = '100%';
+		if (subtitle) subtitle.style.opacity = '100%';
+		if (oneLiner) oneLiner.style.opacity = '100%';
+		if (domains) domains.style.opacity = '100%';
+		if (splashNav) splashNav.style.opacity = '100%';
 
 		// Animate splash links with staggered timing
 		let animStartTime = 3;
 		if (splashLinks) {
 			splashLinks.forEach((link) => {
-					link.style.transition = `opacity 1s ease-out ${animStartTime}s`;
-					link.style.opacity = "1";
-					animStartTime += 0.25;
+				link.style.transition = `opacity 1s ease-out ${animStartTime}s`;
+				link.style.opacity = '1';
+				animStartTime += 0.25;
 			});
 		}
 
 		// Animate navigation links
 		if (splashNavLinks) {
-			splashNavLinks.forEach(link => {
-				link.style.opacity = "100%";
+			splashNavLinks.forEach((link) => {
+				link.style.opacity = '100%';
 				setTimeout(() => {
-					link.style.pointerEvents = "auto";
+					link.style.pointerEvents = 'auto';
 				}, 4000);
 			});
 		}

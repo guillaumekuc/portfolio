@@ -1,3 +1,22 @@
+<button
+	type="button"
+	bind:this={topArrow}
+	class="topArrow"
+	class:hidden={!showTopArrow}
+	on:click={clickTopArrow}
+>
+	<img src="/img/icons/upArrow.png" alt="Up arrow" />
+</button>
+<button
+	type="button"
+	bind:this={bottomArrow}
+	class="bottomArrow"
+	class:hidden={!showBottomArrow}
+	on:click={clickBottomArrow}
+>
+	<img src="/img/icons/downArrow.png" alt="Down arrow" />
+</button>
+
 <script>
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
@@ -20,7 +39,7 @@
 	function clickTopArrow() {
 		debugLog('Top arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
-		
+
 		if (currentScreenValue === 'rubrics') {
 			scrollToElement('splashscreen');
 		} else {
@@ -38,7 +57,7 @@
 	function clickBottomArrow() {
 		debugLog('Bottom arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
-		
+
 		const currentElement = document.querySelector(`#${currentScreenValue}`);
 		if (currentElement) {
 			const next = DOM.nextVisibleSibling(currentElement);
@@ -51,27 +70,27 @@
 
 	function displayBorderArrows(event) {
 		const currentScreenValue = get(stores.navigation.currentScreen);
-		
+
 		const topArea = 3.5 * 38.4;
 		const bottomArea = window.innerHeight - 3.5 * 38.4;
 		const topAreaMin = 1.5 * 38.4;
 		const bottomAreaMax = window.innerHeight - 1.5 * 38.4;
 		const xMin = 0.4 * window.innerWidth;
 		const xMax = 0.6 * window.innerWidth;
-		
+
 		// Check individual conditions for debugging
 		const screenCheck = currentScreenValue !== 'splashscreen' && currentScreenValue !== 'startScreen';
 		const bottomYCheck = event.clientY > bottomArea && event.clientY < bottomAreaMax;
 		const bottomXCheck = event.clientX > xMin && event.clientX < xMax;
 		const topYCheck = event.clientY < topArea && event.clientY > topAreaMin;
 		const topXCheck = event.clientX > xMin && event.clientX < xMax;
-		
+
 		// Check bottom arrow conditions
 		const isBottomArea = screenCheck && bottomYCheck && bottomXCheck;
-		
+
 		// Check top arrow conditions
 		const isTopArea = screenCheck && topYCheck && topXCheck;
-		
+
 		if (isBottomArea) {
 			if (!showBottomArrow) {
 				debugLog('[VerticalClickNav] Showing bottom arrow', {
@@ -105,9 +124,9 @@
 
 	onMount(() => {
 		debugLog('[VerticalClickNav] Component mounted, adding mousemove listener');
-		
+
 		window.addEventListener('mousemove', displayBorderArrows);
-		
+
 		return () => {
 			debugLog('[VerticalClickNav] Component unmounting, removing mousemove listener');
 			window.removeEventListener('mousemove', displayBorderArrows);
@@ -117,37 +136,37 @@
 
 <style>
 	.topArrow {
-		position : fixed;
-		top : calc(2 * var(--safeMargin) + 2px);
-		left : calc((100% - 17px)/2);
+		position: fixed;
+		top: calc(2 * var(--safeMargin) + 2px);
+		left: calc((100% - 17px) / 2);
 		transform: translateX(-50%);
 		z-index: 100;
-		color:  var(--shadeWhite);
+		color: var(--shadeWhite);
 		background-color: var(--shade1);
-		width : 4vh;
-		min-width : 25px;
-		height : 4vh;
+		width: 4vh;
+		min-width: 25px;
+		height: 4vh;
 		min-height: 25px;
 		box-sizing: content-box;
-		border : 7.5px solid var(--shade1);
+		border: 7.5px solid var(--shade1);
 		border-radius: 7.5px;
 		pointer-events: auto;
 	}
 
 	.bottomArrow {
-		position : fixed;
-		bottom : calc(2 * var(--safeMargin) + 2px);
-		left : calc((100% - 17px) / 2);
+		position: fixed;
+		bottom: calc(2 * var(--safeMargin) + 2px);
+		left: calc((100% - 17px) / 2);
 		transform: translateX(-50%);
 		z-index: 100;
-		color:  var(--shadeWhite);
+		color: var(--shadeWhite);
 		background-color: var(--shade1);
-		width : 4vh;
-		min-width : 25px;
-		height : 4vh;
+		width: 4vh;
+		min-width: 25px;
+		height: 4vh;
 		min-height: 25px;
 		box-sizing: content-box;
-		border : 7.5px solid var(--shade1);
+		border: 7.5px solid var(--shade1);
 		border-radius: 7.5px;
 		margin-bottom: 2px;
 		pointer-events: auto;
@@ -156,13 +175,13 @@
 	.topArrow:hover {
 		cursor: pointer;
 		background-color: var(--shadePop);
-		border : 7.5px solid var(--shadePop);
+		border: 7.5px solid var(--shadePop);
 	}
 
-	.bottomArrow:hover{  
+	.bottomArrow:hover {
 		cursor: pointer;
 		background-color: var(--shadePop);
-		border : 7.5px solid var(--shadePop);
+		border: 7.5px solid var(--shadePop);
 	}
 
 	.topArrow.hidden,
@@ -170,10 +189,3 @@
 		display: none;
 	}
 </style>
-
-<button type="button" bind:this={topArrow} class="topArrow" class:hidden={!showTopArrow} on:click={clickTopArrow}>
-	<img src="/img/icons/upArrow.png" alt="Up arrow" />
-</button>
-<button type="button" bind:this={bottomArrow} class="bottomArrow" class:hidden={!showBottomArrow} on:click={clickBottomArrow}>
-	<img src="/img/icons/downArrow.png" alt="Down arrow" />
-</button>

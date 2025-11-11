@@ -1,7 +1,8 @@
-<a class="L0"
-	title="guillaume@guillaumekuc.com" 
-	target="_blank" 
-	on:click|preventDefault={() => window.open('mailto:guillaume@guillaumekuc.com', 'mail')} 
+<a
+	class="L0"
+	title="guillaume@guillaumekuc.com"
+	target="_blank"
+	on:click|preventDefault={() => window.open('mailto:guillaume@guillaumekuc.com', 'mail')}
 	href="mailto:guillaume@guillaumekuc.com"
 >
 	<img src="/img/icons/contact_w.svg" alt="Contact" />
@@ -24,6 +25,10 @@
 	<img src="/img/icons/gumroad.svg" alt="Gumroad" />
 </a>
 
-<a class="L5" title="amazon kindle" href='https://www.amazon.fr/s?i=digital-text&rh=p_27%3AGuillaume+Kuc&s=relevancerank&text=Guillaume+Kuc&ref=dp_byline_sr_ebooks_1'>
+<a
+	class="L5"
+	title="amazon kindle"
+	href="https://www.amazon.fr/s?i=digital-text&rh=p_27%3AGuillaume+Kuc&s=relevancerank&text=Guillaume+Kuc&ref=dp_byline_sr_ebooks_1"
+>
 	<img src="/img/icons/amazon.svg" alt="Amazon" />
 </a>

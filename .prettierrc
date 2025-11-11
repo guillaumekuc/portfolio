@@ -11,7 +11,7 @@
       "files": "*.svelte",
       "options": {
         "parser": "svelte",
-        "svelteSortOrder": "markup-scripts-styles"
+        "svelteSortOrder": "markup-scripts-options-styles"
       }
     }
   ]

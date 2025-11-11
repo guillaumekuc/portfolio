@@ -1,3 +1,37 @@
+<div class="folioWrapper">
+	<div
+		bind:this={videoContainer}
+		class="wideLeftThirds"
+		style="position : relative;background-color : #5a5d5a; overflow:hidden; "
+	>
+		<video
+			bind:this={videoElement}
+			class="largeVideo"
+			preload="none"
+			loop
+			poster="/vid/anim/animReelPoster.png"
+			on:click={handleVideoClick}
+		>
+			<source src="/vid/anim/animReel.mp4" type="video/mp4" />
+			<track kind="captions" />
+		</video>
+		<button
+			type="button"
+			bind:this={playBtn}
+			class="videoPlayBtn"
+			class:hidden={!showPlayBtn}
+			aria-label="Play video"
+		></button>
+	</div>
+	<div class="shortRightThirds">
+		<span class="title">Animation Demoreel<small></small></span>
+		<blockquote>
+			RIGS "Jin & Joe" courtesy of OnOne Animation School.<br />
+			RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
+		</blockquote>
+	</div>
+</div>
+
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
@@ -11,11 +45,16 @@
 
 	function handleVideoClick() {
 		if (!videoElement) return;
-		
-		if (videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended && videoElement.readyState > 2) {
+
+		if (
+			videoElement.currentTime > 0 &&
+			!videoElement.paused &&
+			!videoElement.ended &&
+			videoElement.readyState > 2
+		) {
 			videoElement.pause();
 			showPlayBtn = true;
-			
+
 			const musicPlayer = get(stores.music.musicPlayer);
 			const bgMusicElement = musicPlayer?.bgMusicElement;
 			const unpauseWhenDone = get(stores.music.unpauseWhenDone);
@@ -26,7 +65,7 @@
 		} else {
 			videoElement.play();
 			showPlayBtn = false;
-			
+
 			const musicPlayer = get(stores.music.musicPlayer);
 			const bgMusicElement = musicPlayer?.bgMusicElement;
 			const isPlaying = get(stores.music.isPlaying);
@@ -47,22 +86,25 @@
 	onMount(() => {
 		if (videoElement && videoContainer) {
 			// Video observer for intersection
-			const videoObserver = new IntersectionObserver((entries) => {
-				const entry = entries[0];
-				if (entry.intersectionRatio !== 1 && !videoElement.paused) {
-					videoElement.pause();
-					showPlayBtn = true;
-					
-					const musicPlayer = get(stores.music.musicPlayer);
-			const bgMusicElement = musicPlayer?.bgMusicElement;
-					const unpauseWhenDone = get(stores.music.unpauseWhenDone);
-					if (unpauseWhenDone && bgMusicElement) {
-						bgMusicElement.play();
-						stores.music.isPlaying.set(true);
+			const videoObserver = new IntersectionObserver(
+				(entries) => {
+					const entry = entries[0];
+					if (entry.intersectionRatio !== 1 && !videoElement.paused) {
+						videoElement.pause();
+						showPlayBtn = true;
+
+						const musicPlayer = get(stores.music.musicPlayer);
+						const bgMusicElement = musicPlayer?.bgMusicElement;
+						const unpauseWhenDone = get(stores.music.unpauseWhenDone);
+						if (unpauseWhenDone && bgMusicElement) {
+							bgMusicElement.play();
+							stores.music.isPlaying.set(true);
+						}
 					}
-				}
-			}, { threshold: 1 });
-			
+				},
+				{ threshold: 1 }
+			);
+
 			videoObserver.observe(videoContainer);
 		}
 
@@ -73,20 +115,3 @@
 		shortcuts.removeScreenShortcuts('animFolio1');
 	});
 </script>
-
-<div class="folioWrapper">
-	<div bind:this={videoContainer} class="wideLeftThirds" style="position : relative;background-color : #5a5d5a; overflow:hidden; ">
-		<video bind:this={videoElement} class="largeVideo" preload="none" loop poster="/vid/anim/animReelPoster.png" on:click={handleVideoClick}>
-			<source src="/vid/anim/animReel.mp4" type="video/mp4">
-			<track kind="captions" />
-		</video>
-		<button type="button" bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn} aria-label="Play video"></button>
-	</div>
-	<div class="shortRightThirds">
-		<span class="title">Animation Demoreel<small></small></span>
-			<blockquote>
-				RIGS "Jin & Joe" courtesy of OnOne Animation School.<br>
-				RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
-			</blockquote>
-	</div>
-</div>

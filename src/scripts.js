@@ -16,19 +16,19 @@ window.$ = window.jQuery = $;
  */
 export function initAudio(audioElement) {
 	debugLog('Initializing audio');
-	
+
 	if (!audioElement) {
 		debugLog('Warning: Audio element not provided');
 		return null;
 	}
-	
+
 	// Initialize music player with audio element
 	const musicPlayer = new Music();
 	musicPlayer.init(audioElement);
-	
+
 	// Store instance in store for component access
 	stores.music.musicPlayer.set(musicPlayer);
-	
+
 	debugLog('Audio initialized');
 	return musicPlayer;
 }
@@ -39,15 +39,15 @@ export function initAudio(audioElement) {
  */
 export function initNavigation() {
 	debugLog('Initializing navigation');
-	
+
 	// Music player is accessed from stores when needed
 	// Initialize navigation controller
 	const navigationController = new Navigation();
 	navigationController.init();
-	
+
 	// Store instance in store for component access
 	stores.navigation.controller.set(navigationController);
-	
+
 	debugLog('Navigation initialized');
 	return navigationController;
 }
@@ -57,11 +57,10 @@ export function initNavigation() {
  */
 export function initAPI() {
 	debugLog('Initializing API');
-	
+
 	// Expose stores to window.app for console debugging (external access only)
 	// All instances are accessible through stores: stores.music.musicPlayer, stores.navigation.controller
 	appAPI.stores = stores;
-	
+
 	debugLog('API initialized');
 }
-

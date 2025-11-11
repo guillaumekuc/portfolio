@@ -12,4 +12,3 @@ export const appAPI = {
 if (typeof window !== 'undefined') {
 	window.app = appAPI;
 }
-

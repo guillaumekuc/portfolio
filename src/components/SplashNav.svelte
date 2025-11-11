@@ -1,3 +1,55 @@
+<div id="splashNavPositioner">
+	<div id="splashNavEmptySpace"></div>
+	<div id="splashNavArea" class="splashNavArea">
+		<div id="splashNav" class="splashNav">
+			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
+				<img src="/img/icons/blog.svg" alt="Blog" />
+				<span class="navLabel">Blog</span>
+			</a>
+
+			<span>·</span>
+
+			<a
+				id="worksBtn"
+				role="button"
+				tabindex="0"
+				on:click={() => {
+					const rubrics = document.querySelector('#rubrics');
+					if (rubrics) rubrics.scrollIntoView();
+				}}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						const rubrics = document.querySelector('#rubrics');
+						if (rubrics) rubrics.scrollIntoView();
+					}
+				}}
+			>
+				<img src="/img/icons/keydown2_w.svg" alt="Works" />
+				<span class="navLabel">Works</span>
+			</a>
+
+			<span>·</span>
+
+			<a
+				id="contactBtn"
+				class="mailTooltip"
+				target="_blank"
+				on:click|preventDefault={(e) => {
+					Tooltip.handleMailTooltip(e);
+					window.open('mailto:guillaume@guillaumekuc.com', 'mail');
+				}}
+				href="mailto:guillaume@guillaumekuc.com"
+			>
+				<img src="/img/icons/contact_w.svg" alt="Contact" />
+				<span class="navLabel">Contact</span>
+			</a>
+		</div>
+		<!--#splashNav-->
+	</div>
+	<!--#splashNavArea-->
+</div>
+
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
@@ -100,174 +152,136 @@
 
 <style>
 	#splashNavPositioner {
-		position : absolute;
-		display : block;  
-		width : 100%;
-		top : 0;
-		left : 0;
-		height : 100%;
+		position: absolute;
+		display: block;
+		width: 100%;
+		top: 0;
+		left: 0;
+		height: 100%;
 	}
 
 	#splashNavEmptySpace {
-		display : block;
-		position : relative;
+		display: block;
+		position: relative;
 		visibility: hidden;
-		z-index : -100;
-		height : 90%;
+		z-index: -100;
+		height: 90%;
 		max-height: calc(100% - 2 * var(--safeMargin));
 	}
 
 	.splashNavArea {
-		display : flex;
+		display: flex;
 		align-items: center;
 		justify-content: center;
-		position : relative;
-		height : 10vh;
-		width : 100%;
+		position: relative;
+		height: 10vh;
+		width: 100%;
 		min-height: calc(2 * var(--safeMargin));
-		background-color: rgba(09, 09, 09, 0.90);
+		background-color: rgba(09, 09, 09, 0.9);
 	}
 
 	.splashNav {
-		display : flex;
+		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
-		width : calc(100vw / 3);  
-		min-width : 384px;
-		height : 80%;
-		z-index : 200;
+		width: calc(100vw / 3);
+		min-width: 384px;
+		height: 80%;
+		z-index: 200;
 	}
 
-	@media (max-width : 768px){
+	@media (max-width: 768px) {
 		.splashNav {
-			width : calc(100vw / 2);
-			min-width: calc(100vw / 2)  ;
+			width: calc(100vw / 2);
+			min-width: calc(100vw / 2);
 		}
 	}
-	.splashNav > a, .splashNav > span {
-		position : relative;
+	.splashNav > a,
+	.splashNav > span {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-between;
-		color : var(--shadeWhite);
+		color: var(--shadeWhite);
 		font-variant: small-caps;
-		font-size: calc(var(--safeMargin)/2);
-		opacity : 20%;
+		font-size: calc(var(--safeMargin) / 2);
+		opacity: 20%;
 		pointer-events: none;
-		user-select: none;  
+		user-select: none;
 	}
 
-	#blogBtn { transition : opacity 1.5s ease-out 3.25s ; }
-	#worksBtn { transition : opacity 1.5s ease-out 3s ; }
-	#contactBtn { transition : opacity 1.5s ease-out 3.5s ; }
+	#blogBtn {
+		transition: opacity 1.5s ease-out 3.25s;
+	}
+	#worksBtn {
+		transition: opacity 1.5s ease-out 3s;
+	}
+	#contactBtn {
+		transition: opacity 1.5s ease-out 3.5s;
+	}
 
 	.splashNav img {
-		width : calc(1.2 * var(--safeMargin));
-		height : calc(1.2 * var(--safeMargin));
+		width: calc(1.2 * var(--safeMargin));
+		height: calc(1.2 * var(--safeMargin));
 	}
 
-	@media (max-height : 432px)
-	{
+	@media (max-height: 432px) {
 		.splashNav img {
-			width : calc(0.9 * var(--safeMargin));
-			height : calc(0.9 * var(--safeMargin));
+			width: calc(0.9 * var(--safeMargin));
+			height: calc(0.9 * var(--safeMargin));
 		}
 	}
 
-	@media (max-height : 864px)
-	{
+	@media (max-height: 864px) {
 		.splashNav img {
-			width : calc(1.05 * var(--safeMargin));
-			height : calc(1.05 * var(--safeMargin));
+			width: calc(1.05 * var(--safeMargin));
+			height: calc(1.05 * var(--safeMargin));
 		}
 	}
 
 	.splashNav > a:hover {
-		transition : none !important;
-		opacity : 100%;
-		cursor: pointer ;
+		transition: none !important;
+		opacity: 100%;
+		cursor: pointer;
 	}
 	:global(.splashNav > a.fakeHoverEvent) {
-		opacity : 100% !important;
-		transition : none !important;
+		opacity: 100% !important;
+		transition: none !important;
 	}
 
 	.splashNav > a:hover img {
 		background-color: var(--shadePop);
 		border-radius: calc(4vh / 5);
 		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
+		transform: scale(1.2);
+		border: calc(4vh / 10) solid var(--shadePop);
 	}
 
 	.splashNav > a.focus img {
-		background-color: var(--shadePop)!important;
+		background-color: var(--shadePop) !important;
 		border-radius: calc(4vh / 5);
 		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
-		transition :0s linear;  
+		transform: scale(1.2);
+		border: calc(4vh / 10) solid var(--shadePop);
+		transition: 0s linear;
 	}
 
 	.splashNav > a.fakeHoverEvent img {
-		background-color: var(--shadePop); 
+		background-color: var(--shadePop);
 		border-radius: calc(4vh / 5);
 		box-sizing: border-box;
-		transform : scale(1.2);
-		border : calc(4vh / 10) solid var(--shadePop);
+		transform: scale(1.2);
+		border: calc(4vh / 10) solid var(--shadePop);
 	}
 
 	:global(#contactBtn .tooltipText) {
-		top : -25%;
-		left : 50%;
-		transform : translateX(-50%) translateY(-100%);
+		top: -25%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-100%);
 		font-variant: normal;
 		font-family: var(--ff1);
-		font-size : 90%;
+		font-size: 90%;
 	}
 </style>
-
-<div id="splashNavPositioner">
-	<div id="splashNavEmptySpace"></div>
-	<div id="splashNavArea" class="splashNavArea">
-		<div id="splashNav" class="splashNav">
-			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
-			<img src="/img/icons/blog.svg" alt="Blog" />
-			<span class="navLabel">Blog</span>
-			</a>
-
-			<span>·</span>
-
-			<a id="worksBtn" role="button" tabindex="0" on:click={() => {
-				const rubrics = document.querySelector('#rubrics');
-				if (rubrics) rubrics.scrollIntoView();
-			}} on:keydown={(e) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					const rubrics = document.querySelector('#rubrics');
-					if (rubrics) rubrics.scrollIntoView();
-				}
-			}}>
-                <img src="/img/icons/keydown2_w.svg" alt="Works" />
-                <span class="navLabel">Works</span>
-            </a>
-
-			<span>·</span>
-
-			<a id="contactBtn" class="mailTooltip" 
-			target="_blank" 
-			on:click|preventDefault={(e) => {
-				Tooltip.handleMailTooltip(e);
-				window.open('mailto:guillaume@guillaumekuc.com', 'mail');
-			}}
-			href="mailto:guillaume@guillaumekuc.com">
-                <img src="/img/icons/contact_w.svg" alt="Contact" />
-                <span class="navLabel">Contact</span>
-			</a>
-
-		</div><!--#splashNav-->
-	</div><!--#splashNavArea-->
-</div>
-

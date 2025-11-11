@@ -1,3 +1,42 @@
+<div id="rubrics" class="rubrics fullPage">
+	{#each rubrics as rubric}
+		<div
+			id={rubric.id}
+			class="rubric {rubric.extraClass}"
+			class:focus={rubricFocused === rubric.focused}
+			style="background-image : url('{rubric.backgroundImage}');"
+			role="button"
+			tabindex="0"
+			on:mousemove={() => handleRubricHover(rubric.focused)}
+			on:click={handleRubricClick}
+			on:keydown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					handleRubricClick();
+				}
+			}}
+		>
+			<div class="softwareIcons" class:navClues={rubric.showNavClues}>
+				{#if rubric.showNavClues}
+					<img src="/img/icons/leftArrow.png" alt="Left arrow" />
+					<span class="rubricEnter">Enter</span>
+					<img src="/img/icons/rightArrow.png" alt="Right arrow" />
+				{:else}
+					{#each rubric.softwareIcons as icon}
+						<img src={icon.src} alt={icon.alt} />
+					{/each}
+				{/if}
+			</div>
+			<div class="bigRubricLogo">
+				<img src={rubric.bigLogo.src} alt={rubric.bigLogo.alt} />
+			</div>
+			<span class="label">{rubric.label}</span>
+		</div>
+	{/each}
+
+	<div class="rubricsMask"></div>
+</div>
+
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
@@ -20,7 +59,7 @@
 		});
 		const headerNavLink = document.querySelector(target);
 		if (headerNavLink) headerNavLink.classList.add('focus');
-		
+
 		// Update folio visibility
 		const rubricClass = Navigation.getRubricClass(rubricFocused);
 		Navigation.hideIrrelevantFolios(rubricClass);
@@ -49,7 +88,7 @@
 		const rubricFocused = get(stores.navigation.rubricFocused);
 		const rubricClass = Navigation.getRubricClass(rubricFocused);
 		Navigation.hideIrrelevantFolios(rubricClass);
-		
+
 		const currentScreen = get(stores.navigation.currentScreen);
 		Navigation.goToFolios(currentScreen);
 	}
@@ -152,12 +191,18 @@
 </script>
 
 <style>
-	.rubrics {  font-size: var(--fs2o3); }
-	@media (max-height: 432px) { .rubrics { font-size: var(--fs1o2); } }
+	.rubrics {
+		font-size: var(--fs2o3);
+	}
+	@media (max-height: 432px) {
+		.rubrics {
+			font-size: var(--fs1o2);
+		}
+	}
 
 	.rubrics {
 		position: relative;
-		display : flex;
+		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
@@ -165,58 +210,58 @@
 
 	.rubric {
 		position: relative;
-		z-index : 70;
-		width : 20%;
-		height : 80%;
+		z-index: 70;
+		width: 20%;
+		height: 80%;
 		max-height: calc(100% - 4 * var(--safeMargin));
 		overflow: hidden;
-		background-position : center;
+		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
-		background-attachment: scroll; 
+		background-attachment: scroll;
 		border-radius: 15px;
-		margin : 4px;
+		margin: 4px;
 		user-select: none;
 	}
 
 	.bigRubricLogo {
-		position : absolute;
-		top : 50%;
-		left : 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
 		transform: translate(-50%, -50%);
-		display : block;
+		display: block;
 		opacity: 0%;
-		z-index : 101;
+		z-index: 101;
 		pointer-events: none;
 	}
 
 	.rubric.focus .bigRubricLogo {
-		display : block;
+		display: block;
 		opacity: 100%;
 	}
 
 	.rubric .label {
-		display : block;
+		display: block;
 		text-align: center;
-		height : 100%;
-		margin : auto;
-		padding-top : 60vh;
-		color : var(--shadeWhite);
+		height: 100%;
+		margin: auto;
+		padding-top: 60vh;
+		color: var(--shadeWhite);
 		font-size: 100%;
 		font-family: var(--ff2);
 		font-variant: small-caps;
-		transition : background-color 0.25s ease-in;
+		transition: background-color 0.25s ease-in;
 	}
 
 	.rubric:after {
 		content: '\A';
 		position: absolute;
-		width: 100%; 
-		height:100%;
-		top:0; 
-		left:0;
-		background:rgba(0,0,0,0.60);
-		z-index : -1;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.6);
+		z-index: -1;
 		opacity: 1;
 	}
 	.rubric.focus:after {
@@ -224,109 +269,66 @@
 	}
 
 	.rubric .label:hover {
-		cursor : pointer;
+		cursor: pointer;
 	}
 
 	.rubric.focus .label {
-		transition : none;
+		transition: none;
 	}
 
 	.rubric.focus .label::after {
-		content : " —";
+		content: ' —';
 	}
 	.rubric.focus .label::before {
-		content : "— ";
+		content: '— ';
 	}
 
 	.softwareIcons {
 		position: absolute;
-		display : none;
-		top : 0;
-		left : 0;
-		width : 100%;
-		display : visible;
-		margin-top : calc(var(--safeMargin) / 2);
-		margin-bottom : calc(var(--safeMargin) / 2);
+		display: none;
+		top: 0;
+		left: 0;
+		width: 100%;
+		display: visible;
+		margin-top: calc(var(--safeMargin) / 2);
+		margin-bottom: calc(var(--safeMargin) / 2);
 	}
 
 	.softwareIcons img {
 		-webkit-filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-					drop-shadow(-1px 1px 0 var(--iconBorderColor))
-					drop-shadow(1px -1px 0 var(--iconBorderColor))
-					drop-shadow(-1px -1px 0 var(--iconBorderColor));
+			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
+			drop-shadow(-1px -1px 0 var(--iconBorderColor));
 
 		filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-			drop-shadow(-1px 1px 0 var(--iconBorderColor))
-			drop-shadow(1px -1px 0 var(--iconBorderColor))
+			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
 			drop-shadow(-1px -1px 0 var(--iconBorderColor));
-		height : 1.5em;
-		width : 1.5em;
+		height: 1.5em;
+		width: 1.5em;
 		vertical-align: middle;
 	}
 
-	.rubric.focus .softwareIcons{
-		display : block;
+	.rubric.focus .softwareIcons {
+		display: block;
 		z-index: 101;
 	}
 
 	.rubricEnter {
-		display : inline-block;
-		height : 1.5em;
+		display: inline-block;
+		height: 1.5em;
 		font-size: 1em;
 		box-sizing: border-box;
 		padding-left: 0.4em;
 		padding-right: 0.4em;
-		border : 1px solid var(--shadeWhite);
+		border: 1px solid var(--shadeWhite);
 		border-radius: 5px;
-		font-family : var(--ff3);
+		font-family: var(--ff3);
 		text-transform: uppercase;
 		vertical-align: middle;
 		-webkit-filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-					drop-shadow(-1px 1px 0 var(--iconBorderColor))
-					drop-shadow(1px -1px 0 var(--iconBorderColor))
-					drop-shadow(-1px -1px 0 var(--iconBorderColor));
+			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
+			drop-shadow(-1px -1px 0 var(--iconBorderColor));
 		filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-			drop-shadow(-1px 1px 0 var(--iconBorderColor))
-			drop-shadow(1px -1px 0 var(--iconBorderColor))
+			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
 			drop-shadow(-1px -1px 0 var(--iconBorderColor));
 	}
 </style>
-
-<div id="rubrics" class="rubrics fullPage">
-	{#each rubrics as rubric}
-		<div 
-			id={rubric.id} 
-			class="rubric {rubric.extraClass}"
-			class:focus={rubricFocused === rubric.focused}
-			style="background-image : url('{rubric.backgroundImage}');"
-			role="button"
-			tabindex="0"
-			on:mousemove={() => handleRubricHover(rubric.focused)}
-			on:click={handleRubricClick}
-			on:keydown={(e) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					handleRubricClick();
-				}
-			}}
-		>
-			<div class="softwareIcons" class:navClues={rubric.showNavClues}>
-				{#if rubric.showNavClues}
-					<img src="/img/icons/leftArrow.png" alt="Left arrow" />
-					<span class='rubricEnter'>Enter</span>
-					<img src="/img/icons/rightArrow.png" alt="Right arrow" />
-				{:else}
-					{#each rubric.softwareIcons as icon}
-						<img src={icon.src} alt={icon.alt} />
-					{/each}
-				{/if}
-			</div>
-			<div class="bigRubricLogo">
-				<img src={rubric.bigLogo.src} alt={rubric.bigLogo.alt} />
-			</div>
-			<span class="label">{rubric.label}</span>
-		</div>
-	{/each}
-
-	<div class="rubricsMask"></div>
-</div>
