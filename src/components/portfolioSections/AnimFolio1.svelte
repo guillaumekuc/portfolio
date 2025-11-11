@@ -1,30 +1,19 @@
-<div class="folioWrapper">
-	<div class="shortLeftThirds scrollThis">
-		<span class="title">Gridz — <small>Perspective plugin for Photoshop</small></span>
-		<blockquote>
-			Drawing objects in perspective in any orientations is not an easy task. Static grids feel
-			restrictive. Objects typically aren't neatly aligned with an imaginary set of guide-lines.
-			Instead they face all sorts of directions all the time. This plugin will create a perspective
-			grid. But more importantly, it will then allow the user to rotate the grid as needed so that he
-			or she can draw all the objects they need in their proper orientations. There is no guess-work
-			involved. There is no need for a cumbersome 3D software either. Yet, the rotations will be as
-			mathematically accurate as can be.
-		</blockquote>
-		<a class="focus extLinkBtn" href="https://app.gumroad.com/guillaumekuc" target="_blank"
-			><img src="/img/icons/gotoURL.png" alt="Go to URL" /><span>Check on gumroad</span></a
-		>
-	</div>
-	<div bind:this={videoContainer} class="wideRightThirds">
+<div class="portfolioSectionWrapper">
+	<div
+		bind:this={videoContainer}
+		class="wideLeftThirds"
+		style="position : relative;background-color : #5a5d5a; overflow:hidden; "
+	>
 		<video
 			bind:this={videoElement}
 			class="largeVideo"
 			preload="none"
-			muted
 			loop
-			poster="/vid/gridzDemoCover.jpg"
+			poster="/vid/anim/animReelPoster.png"
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/gridzDemo.mp4" type="video/mp4" />
+			<source src="/vid/anim/animReel.mp4" type="video/mp4" />
+			<track kind="captions" />
 		</video>
 		<button
 			type="button"
@@ -33,6 +22,13 @@
 			class:hidden={!showPlayBtn}
 			aria-label="Play video"
 		></button>
+	</div>
+	<div class="shortRightThirds">
+		<span class="title">Animation Demoreel<small></small></span>
+		<blockquote>
+			RIGS "Jin & Joe" courtesy of OnOne Animation School.<br />
+			RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
+		</blockquote>
 	</div>
 </div>
 
@@ -112,10 +108,10 @@
 			videoObserver.observe(videoContainer);
 		}
 
-		shortcuts.addScreenShortcut('gridzFolio', 'Enter', toggleVideoPlayPause);
+		shortcuts.addScreenShortcut('animFolio1', 'Enter', toggleVideoPlayPause);
 	});
 
 	onDestroy(() => {
-		shortcuts.removeScreenShortcuts('gridzFolio');
+		shortcuts.removeScreenShortcuts('animFolio1');
 	});
 </script>

@@ -83,7 +83,7 @@ const player = musicPlayer || window.musicPlayer;
 **Files to Refactor:**
 - `src/components/Footer.svelte`
 - `src/components/SplashSound.svelte`
-- `src/components/folios/MusicPlaylistFolio.svelte`
+- `src/components/portfolioSections/MusicPlaylistFolio.svelte`
 - `src/scripts.js` (remove `window.musicPlayer` assignment)
 
 ---

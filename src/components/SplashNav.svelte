@@ -14,14 +14,14 @@
 				role="button"
 				tabindex="0"
 				on:click={() => {
-					const rubrics = document.querySelector('#rubrics');
-					if (rubrics) rubrics.scrollIntoView();
+					const categories = document.querySelector('#categories');
+					if (categories) categories.scrollIntoView();
 				}}
 				on:keydown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						const rubrics = document.querySelector('#rubrics');
-						if (rubrics) rubrics.scrollIntoView();
+						const categories = document.querySelector('#categories');
+						if (categories) categories.scrollIntoView();
 					}
 				}}
 			>
@@ -62,59 +62,59 @@
 		document.querySelectorAll('.splashNav a').forEach((link) => {
 			link.classList.remove('focus');
 		});
-		const menuSelected = get(stores.navigation.menuSelected);
-		if (menuSelected === 0) {
+		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
+		if (selectedMenuItem === 0) {
 			const blogBtn = document.querySelector('#blogBtn');
 			if (blogBtn) blogBtn.classList.add('focus');
-		} else if (menuSelected === 1) {
+		} else if (selectedMenuItem === 1) {
 			const worksBtn = document.querySelector('#worksBtn');
 			if (worksBtn) worksBtn.classList.add('focus');
-		} else if (menuSelected === 2) {
+		} else if (selectedMenuItem === 2) {
 			const contactBtn = document.querySelector('#contactBtn');
 			if (contactBtn) contactBtn.classList.add('focus');
 		}
 	}
 
-	function goToRubrics() {
+	function goToCategories() {
 		document.querySelectorAll('.splashNav a').forEach((link) => {
 			link.classList.remove('focus');
 		});
-		stores.navigation.menuSelected.set(1);
-		Animation.fakeHoverEvent(document.querySelector('#worksBtn'));
-		document.querySelector('#rubrics')?.scrollIntoView();
+		stores.navigation.selectedMenuItem.set(1);
+		Animation.programmaticHover(document.querySelector('#worksBtn'));
+		document.querySelector('#categories')?.scrollIntoView();
 	}
 
 	function selectPreviousMenuItem() {
-		const menuSelected = get(stores.navigation.menuSelected);
-		let newMenuSelected;
-		if (menuSelected === 1) {
-			newMenuSelected = 0;
-		} else if (menuSelected === 0) {
-			newMenuSelected = 2;
+		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
+		let newSelectedMenuItem;
+		if (selectedMenuItem === 1) {
+			newSelectedMenuItem = 0;
+		} else if (selectedMenuItem === 0) {
+			newSelectedMenuItem = 2;
 		} else {
-			newMenuSelected = 1;
+			newSelectedMenuItem = 1;
 		}
-		stores.navigation.menuSelected.set(newMenuSelected);
+		stores.navigation.selectedMenuItem.set(newSelectedMenuItem);
 		updateSplashNavFocus();
 	}
 
 	function selectNextMenuItem() {
-		const menuSelected = get(stores.navigation.menuSelected);
-		let newMenuSelected;
-		if (menuSelected === 2) {
-			newMenuSelected = 0;
-		} else if (menuSelected === 1) {
-			newMenuSelected = 2;
+		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
+		let newSelectedMenuItem;
+		if (selectedMenuItem === 2) {
+			newSelectedMenuItem = 0;
+		} else if (selectedMenuItem === 1) {
+			newSelectedMenuItem = 2;
 		} else {
-			newMenuSelected = 1;
+			newSelectedMenuItem = 1;
 		}
-		stores.navigation.menuSelected.set(newMenuSelected);
+		stores.navigation.selectedMenuItem.set(newSelectedMenuItem);
 		updateSplashNavFocus();
 	}
 
 	function triggerSelectedMenuItem() {
-		const menuSelected = get(stores.navigation.menuSelected);
-		if (menuSelected === 0) {
+		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
+		if (selectedMenuItem === 0) {
 			const blogBtn = document.querySelector('#blogBtn');
 			if (blogBtn) {
 				window.open(blogBtn.getAttribute('href')).focus();
@@ -122,24 +122,24 @@
 			document.querySelectorAll('.splashNav a').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			stores.navigation.menuSelected.set(1);
-		} else if (menuSelected === 1) {
-			document.querySelector('#rubrics')?.scrollIntoView();
+			stores.navigation.selectedMenuItem.set(1);
+		} else if (selectedMenuItem === 1) {
+			document.querySelector('#categories')?.scrollIntoView();
 			document.querySelectorAll('.splashNav a').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			stores.navigation.menuSelected.set(1);
-		} else if (menuSelected === 2) {
+			stores.navigation.selectedMenuItem.set(1);
+		} else if (selectedMenuItem === 2) {
 			window.open('mailto:guillaume@guillaumekuc.com', 'mail');
 			document.querySelectorAll('.splashNav a').forEach((link) => {
 				link.classList.remove('focus');
 			});
-			stores.navigation.menuSelected.set(1);
+			stores.navigation.selectedMenuItem.set(1);
 		}
 	}
 
 	onMount(() => {
-		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', goToRubrics);
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', goToCategories);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowLeft', selectPreviousMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowRight', selectNextMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerSelectedMenuItem);
@@ -246,7 +246,7 @@
 		opacity: 100%;
 		cursor: pointer;
 	}
-	:global(.splashNav > a.fakeHoverEvent) {
+	:global(.splashNav > a.programmaticHover) {
 		opacity: 100% !important;
 		transition: none !important;
 	}
@@ -268,7 +268,7 @@
 		transition: 0s linear;
 	}
 
-	.splashNav > a.fakeHoverEvent img {
+	.splashNav > a.programmaticHover img {
 		background-color: var(--shadePop);
 		border-radius: calc(4vh / 5);
 		box-sizing: border-box;

@@ -30,9 +30,9 @@
 		// Initialize scroll
 		Navigation.initializeScroll();
 
-		// Hide all folios (cross-component, so querySelector is acceptable)
-		const folios = document.querySelectorAll('.folio');
-		folios.forEach((folio) => folio.classList.add('hidden'));
+		// Hide all portfolio sections (cross-component, so querySelector is acceptable)
+		const portfolioSections = document.querySelectorAll('.portfolioSection');
+		portfolioSections.forEach((portfolioSection) => portfolioSection.classList.add('hidden'));
 
 		// Get animation elements (cross-component access - acceptable for sibling components)
 		// Using querySelector is fine here since Head and Splashscreen are siblings
@@ -41,7 +41,7 @@
 			art: document.querySelector('#splashArt'),
 			title: document.querySelector('#splashTitle'),
 			subtitle: document.querySelector('#splashSubTitle'),
-			oneLiner: document.querySelector('#splashDescription'),
+			tagline: document.querySelector('#splashDescription'),
 			domains: document.querySelector('#splashDomains'),
 			splashNav: document.querySelector('#splashNav'),
 			splashLinks: document.querySelectorAll('.splashLinks a'),
@@ -61,7 +61,7 @@
 
 	function triggerEnterButton() {
 		if (enterBtn) {
-			Animation.fakeHoverEvent(enterBtn);
+			Animation.programmaticHover(enterBtn);
 			enterBtn.click();
 		}
 	}
@@ -139,7 +139,7 @@
 		background-color: var(--shadePop);
 	}
 
-	:global(.startScreen button.fakeHoverEvent) {
+	:global(.startScreen button.programmaticHover) {
 		border: 3px solid var(--shadePop);
 		background-color: var(--shadePop);
 	}

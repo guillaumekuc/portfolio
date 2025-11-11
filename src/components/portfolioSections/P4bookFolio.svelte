@@ -1,8 +1,8 @@
-<div class="folioWrapper">
+<div class="portfolioSectionWrapper">
 	<div class="halfColumn">
 		<img src="/img/P4cover.jpg" alt="P4 Cover" />
 	</div>
-	<div class="halfColumn P4bookQuote scrollThis">
+	<div class="halfColumn P4bookQuote scrollable">
 		<span class="title">All fourths tuning — <small>Improvisation</small></span>
 		<blockquote>
 			All fourths tuning is in many ways more of a standard tuning than Standard tuning is. Getting rid

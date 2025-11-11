@@ -29,10 +29,10 @@ export const stores = {
 	navigation: {
 		currentScreen: writable('startScreen'),
 		currentModal: writable(null),
-		rubricFocused: writable(3),
-		menuSelected: writable(1),
-		// Map of folio ID to visibility boolean for reactive folio visibility
-		folioVisibility: writable(new Map()),
+		categoryFocused: writable(3),
+		selectedMenuItem: writable(1),
+		// Map of portfolio section ID to visibility boolean for reactive portfolio section visibility
+		portfolioSectionVisibility: writable(new Map()),
 		// Navigation controller instance
 		controller: writable(null)
 	},

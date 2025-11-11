@@ -1,7 +1,7 @@
 <div id="about" class="fullPage aboutme">
 	<div class="vertWrapper">
 		<div id="aboutTop" style="">
-			<div id="myPic"><img src="/img/profilePic.jpg" alt="Profile" /></div>
+			<div id="profilePicture"><img src="/img/profilePic.jpg" alt="Profile" /></div>
 			<div style="color : grey;">
 				Protean, <small>adjective</small> :
 				<li style="list-style: none;">
@@ -11,8 +11,8 @@
 				</li>
 			</div>
 
-			<div bind:this={scrollThisElement} id="myDescription" class="scrollThis">
-				<div id="myHello">Bonjour !</div>
+			<div bind:this={scrollableElement} id="aboutDescription" class="scrollable">
+				<div id="greeting">Bonjour !</div>
 				<span
 					>I am currently employed as a 2D/3D graphic designer <a href="https://visioglobe.com/"
 						>@visioglobe</a
@@ -55,7 +55,7 @@
 			</div>
 			<!--#description-->
 			<a
-				class="myMail"
+				class="emailLink"
 				target="_blank"
 				on:click|preventDefault={handleMailClick}
 				href="mailto:guillaume@guillaumekuc.com">guillaume[at]guillaumekuc.com</a
@@ -82,7 +82,7 @@
 		</div>
 		<!--aboutBottom-->
 	</div>
-	<!--foliowrap-->
+	<!--portfolioSectionWrap-->
 </div>
 
 <script>
@@ -102,18 +102,18 @@
 	}
 
 	function goBackToTop() {
-		Animation.fakeHoverEvent(document.querySelector('#backToTop'));
+		Animation.programmaticHover(document.querySelector('#backToTop'));
 		document.querySelector('#splashscreen')?.scrollIntoView();
 	}
 
-	let scrollThisElement;
+	let scrollableElement;
 
 	function scrollContentUp() {
-		if (scrollThisElement) scrollThisElement.scrollTop -= 30;
+		if (scrollableElement) scrollableElement.scrollTop -= 30;
 	}
 
 	function scrollContentDown() {
-		if (scrollThisElement) scrollThisElement.scrollTop += 30;
+		if (scrollableElement) scrollableElement.scrollTop += 30;
 	}
 
 	onMount(() => {
@@ -135,7 +135,7 @@
 		#about {
 			font-size: var(--fs1o2);
 		}
-		#myPic img {
+		#profilePicture img {
 			height: 3em !important;
 			width: 3em !important;
 		}
@@ -163,18 +163,18 @@
 		justify-content: center;
 		height: 100%;
 	}
-	#myPic img {
+	#profilePicture img {
 		height: 5em;
 		width: 5em;
 		border-radius: 50%;
 		margin-bottom: 0.25em;
 	}
-	#myHello {
+	#greeting {
 		font-size: 125%;
 		margin-bottom: 0.25em;
 	}
 
-	#myDescription {
+	#aboutDescription {
 		width: 40%;
 		height: 100%;
 		font-size: 100%;
@@ -184,44 +184,44 @@
 		padding-right: calc(var(--safeMargin) / 2);
 	}
 
-	#myDescription::-webkit-scrollbar {
+	#aboutDescription::-webkit-scrollbar {
 		width: 8px;
 	}
 
 	@media (max-width: 1152px) {
-		#myDescription {
+		#aboutDescription {
 			width: 60%;
 		}
 	}
 
-	#myDescription span {
+	#aboutDescription span {
 		display: block;
 		margin-bottom: 1em;
 	}
 
-	#myDescription strong {
+	#aboutDescription strong {
 		font-variant: small-caps;
 		background-color: var(--shade3);
 		padding: 2px 5px;
 		border-radius: 5px;
 	}
 
-	#myDescription i {
+	#aboutDescription i {
 		color: var(--shade4);
 	}
 
-	#myDescription a {
+	#aboutDescription a {
 		background-color: var(--shade3);
 		color: var(--shadeWhite);
 		padding: 2px 5px;
 		border-radius: 5px;
 	}
 
-	#myDescription a:hover {
+	#aboutDescription a:hover {
 		background-color: var(--shadePop);
 	}
 
-	.myMail {
+	.emailLink {
 		position: relative;
 		margin-top: calc(var(--safeMargin) / 3);
 		display: flex;
@@ -237,13 +237,13 @@
 		color: var(--shade3);
 	}
 
-	:global(.myMail .tooltipText) {
+	:global(.emailLink .tooltipText) {
 		top: 125%;
 		left: 50%;
 		transform: translateX(-50%);
 	}
 
-	.myMail:hover {
+	.emailLink:hover {
 		cursor: pointer;
 		color: var(--shadeWhite);
 		background-color: var(--shadePop);
@@ -268,7 +268,7 @@
 		background-color: var(--shadeWhite);
 	}
 
-	:global(#backToTop.fakeHoverEvent) {
+	:global(#backToTop.programmaticHover) {
 		background-color: var(--shadeWhite);
 	}
 </style>

@@ -7,7 +7,7 @@ import { debugLog } from './debuglog.js';
 
 /**
  * Navigation controller class
- * Handles keyboard navigation, mouse navigation, and scroll tracking (cartography)
+ * Handles keyboard navigation, mouse navigation, and scroll tracking
  * Also provides static utility methods for navigation operations
  */
 export class Navigation {
@@ -16,71 +16,71 @@ export class Navigation {
 	 */
 
 	/**
-	 * Maps rubric focus index to folio class name
-	 * @param {number} rubricFocused - Current rubric focus index (1-5)
-	 * @returns {string} Folio class name
+	 * Maps category focus index to portfolio section class name
+	 * @param {number} categoryFocused - Current category focus index (1-5)
+	 * @returns {string} Portfolio section class name
 	 */
-	static getRubricClass(rubricFocused) {
-		const rubricClassMap = {
-			1: 'folio3D',
-			2: 'folio2D',
-			3: 'folioAll',
-			4: 'folioMusic',
-			5: 'folioWeb'
+	static getCategoryClass(categoryFocused) {
+		const categoryClassMap = {
+			1: 'portfolio-3d',
+			2: 'portfolio-2d',
+			3: 'portfolio-all',
+			4: 'portfolio-music',
+			5: 'portfolio-web'
 		};
-		return rubricClassMap[rubricFocused] || 'folioAll';
+		return categoryClassMap[categoryFocused] || 'portfolio-all';
 	}
 
 	/**
-	 * Scrolls to the next visible folio from the current screen
+	 * Scrolls to the next visible portfolio section from the current screen
 	 * @param {string} currentScreenId - ID of the current screen
 	 */
-	static goToFolios(currentScreenId) {
+	static goToPortfolioSections(currentScreenId) {
 		const currentElement = document.querySelector('#' + currentScreenId);
 		if (!currentElement) return;
 
-		// Find the first visible .folio element (not just any next sibling)
-		const allFolios = document.querySelectorAll('.folio');
-		let nextVisibleFolio = null;
+		// Find the first visible .portfolioSection element (not just any next sibling)
+		const allPortfolioSections = document.querySelectorAll('.portfolioSection');
+		let nextVisiblePortfolioSection = null;
 
-		for (const folio of allFolios) {
-			// Check if this folio comes after the current screen in the DOM
-			if (currentElement.compareDocumentPosition(folio) & Node.DOCUMENT_POSITION_FOLLOWING) {
+		for (const portfolioSection of allPortfolioSections) {
+			// Check if this portfolio section comes after the current screen in the DOM
+			if (currentElement.compareDocumentPosition(portfolioSection) & Node.DOCUMENT_POSITION_FOLLOWING) {
 				// Verify it's actually visible using computed style
-				const style = window.getComputedStyle(folio);
+				const style = window.getComputedStyle(portfolioSection);
 				if (style.display !== 'none' && style.visibility !== 'hidden') {
-					nextVisibleFolio = folio;
+					nextVisiblePortfolioSection = portfolioSection;
 					break;
 				}
 			}
 		}
 
-		if (nextVisibleFolio) {
-			debugLog('Navigating to folio:', nextVisibleFolio.id);
-			nextVisibleFolio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		if (nextVisiblePortfolioSection) {
+			debugLog('Navigating to portfolio section:', nextVisiblePortfolioSection.id);
+			nextVisiblePortfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		}
 	}
 
 	/**
-	 * Updates folio visibility store based on rubric class
-	 * Components react to this store to show/hide folios
-	 * @param {string} rubricClass - Class name of folios to show
+	 * Updates portfolio section visibility store based on category class
+	 * Components react to this store to show/hide portfolio sections
+	 * @param {string} categoryClass - Class name of portfolio sections to show
 	 */
-	static hideIrrelevantFolios(rubricClass) {
+	static hideIrrelevantPortfolioSections(categoryClass) {
 		const visibilityMap = new Map();
 
-		// Get all folios and determine visibility based on rubric class
-		document.querySelectorAll('.folio').forEach((folio) => {
-			const folioId = folio.id;
-			// Check if folio has the matching rubric class
-			const isVisible = folio.classList.contains(rubricClass);
-			visibilityMap.set(folioId, isVisible);
+		// Get all portfolio sections and determine visibility based on category class
+		document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
+			const portfolioSectionId = portfolioSection.id;
+			// Check if portfolio section has the matching category class
+			const isVisible = portfolioSection.classList.contains(categoryClass);
+			visibilityMap.set(portfolioSectionId, isVisible);
 		});
 
-		stores.navigation.folioVisibility.set(visibilityMap);
+		stores.navigation.portfolioSectionVisibility.set(visibilityMap);
 		debugLog(
-			'Filtered folios - showing:',
-			rubricClass,
+			'Filtered portfolio sections - showing:',
+			categoryClass,
 			'visible count:',
 			Array.from(visibilityMap.values()).filter((v) => v).length
 		);
@@ -98,21 +98,21 @@ export class Navigation {
 	 */
 	constructor() {
 		// State - only keep non-store properties
-		this.allRubrics = [];
+		this.allCategories = [];
 
 		// Initialize stores
 		stores.navigation.currentScreen.set('startScreen');
-		stores.navigation.rubricFocused.set(3);
-		stores.navigation.menuSelected.set(1);
+		stores.navigation.categoryFocused.set(3);
+		stores.navigation.selectedMenuItem.set(1);
 	}
 
 	/**
 	 * Initialize navigation controller
 	 */
 	init() {
-		this.allRubrics = document.querySelectorAll('.rubric');
+		this.allCategories = document.querySelectorAll('.category');
 		debugLog('Navigation initialized');
-		this.setupCartography();
+		this.setupScrollTracking();
 		this.setupKeyboardNavigation();
 		this.setupMouseNavigation();
 		window.addEventListener('resize', DOM.reSnap);
@@ -120,9 +120,9 @@ export class Navigation {
 	}
 
 	/**
-	 * Setup scroll tracking (cartography) with IntersectionObserver
+	 * Setup scroll tracking with IntersectionObserver
 	 */
-	setupCartography() {
+	setupScrollTracking() {
 		const allFullPages = document.querySelectorAll('.fullPage');
 		const self = this;
 
@@ -198,31 +198,31 @@ export class Navigation {
 			observer.observe(video.parentElement);
 		}
 
-		function revealFoliosWhenRubricsVisible() {
+		function revealPortfolioSectionsWhenCategoriesVisible() {
 			const elementObserver = new IntersectionObserver(
 				(entries) => {
 					if (entries[0].isIntersecting === true) {
-						const rubricFocused = get(stores.navigation.rubricFocused);
-						const rubricClass = Navigation.getRubricClass(rubricFocused);
+						const categoryFocused = get(stores.navigation.categoryFocused);
+						const categoryClass = Navigation.getCategoryClass(categoryFocused);
 						setTimeout(() => {
-							document.querySelectorAll('.' + rubricClass).forEach((folio) => {
-								folio.classList.remove('hidden');
+							document.querySelectorAll('.' + categoryClass).forEach((portfolioSection) => {
+								portfolioSection.classList.remove('hidden');
 							});
 						}, 500);
 					}
 				},
 				{ threshold: [0.5] }
 			);
-			elementObserver.observe(document.querySelector('#rubrics'));
+			elementObserver.observe(document.querySelector('#categories'));
 		}
 
-		function hideFoliosWhenSplashscreenVisible() {
+		function hidePortfolioSectionsWhenSplashscreenVisible() {
 			const elementObserver = new IntersectionObserver(
 				(entries) => {
 					if (entries[0].isIntersecting === true) {
 						setTimeout(() => {
-							document.querySelectorAll('.folio').forEach((folio) => {
-								folio.classList.add('hidden');
+							document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
+								portfolioSection.classList.add('hidden');
 							});
 						}, 500);
 					}
@@ -232,8 +232,8 @@ export class Navigation {
 			elementObserver.observe(document.querySelector('#splashscreen'));
 		}
 
-		revealFoliosWhenRubricsVisible();
-		hideFoliosWhenSplashscreenVisible();
+		revealPortfolioSectionsWhenCategoriesVisible();
+		hidePortfolioSectionsWhenSplashscreenVisible();
 		allFullPages.forEach((page) => updateHashWhenVisible(page));
 		document.querySelectorAll('.largeVideo').forEach((video) => videoObserver(video));
 	}
@@ -303,7 +303,7 @@ export class Navigation {
 		function handleNavUp() {
 			const currentScreen = get(stores.navigation.currentScreen);
 			// Skip if screen has its own ArrowUp handler
-			if (['rubrics', 'splashscreen', 'startScreen'].includes(currentScreen)) {
+			if (['categories', 'splashscreen', 'startScreen'].includes(currentScreen)) {
 				return;
 			}
 			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + currentScreen));
@@ -316,7 +316,7 @@ export class Navigation {
 		function handleNavDown() {
 			const currentScreen = get(stores.navigation.currentScreen);
 			// Skip if screen has its own ArrowDown handler
-			if (['splashscreen', 'rubrics'].includes(currentScreen)) {
+			if (['splashscreen', 'categories'].includes(currentScreen)) {
 				return;
 			}
 			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));

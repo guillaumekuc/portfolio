@@ -388,7 +388,7 @@ body {
 	scroll-snap-align: end;
 }
 
-.folioWrapper {
+.portfolioSectionWrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -409,7 +409,7 @@ body {
 	max-height: calc(100vh - 4 * var(--safeMargin));
 }
 
-.folio {
+.portfolioSection {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -685,7 +685,7 @@ Gallery / Slick Carousel Styles
 	justify-content: center;
 }
 
-/* Anim folio gallery - 60vh height */
+/* Anim portfolio section gallery - 60vh height */
 #animFolio1 .gallery .slick-slide,
 #modeFolio1 .gallery .slick-slide {
 	height: 60vh !important;

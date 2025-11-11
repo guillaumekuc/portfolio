@@ -1,79 +1,79 @@
-<div id="musicPlaylistFolio" class="fullPage folio folioMusic folioAll">
+<div id="musicPlaylistFolio" class="fullPage portfolioSection portfolio-music portfolio-all">
 	<MusicPlaylistFolio />
 </div>
 
-<div id="illustrationFolio1" class="fullPage folio folio2D folioAll">
+<div id="illustrationFolio1" class="fullPage portfolioSection portfolio-2d portfolio-all">
 	<IllustrationFolio1 />
 </div>
 
-<div id="gridzFolio" class="fullPage folio folioWeb folioAll">
+<div id="gridzFolio" class="fullPage portfolioSection portfolio-web portfolio-all">
 	<Gridz />
 </div>
 
-<div id="drawingFolio1" class="fullPage folio folio2D folioAll">
+<div id="drawingFolio1" class="fullPage portfolioSection portfolio-2d portfolio-all">
 	<DrawingFolio1 />
 </div>
 
-<div id="modeFolio1" class="fullPage folio folioAll folio3D">
+<div id="modeFolio1" class="fullPage portfolioSection portfolio-all portfolio-3d">
 	<ModeFolio1 />
 </div>
 
-<div id="illustrationFolio2" class="fullPage folio folio2D folioAll">
+<div id="illustrationFolio2" class="fullPage portfolioSection portfolio-2d portfolio-all">
 	<IllustrationFolio2 />
 </div>
 
-<div id="musicVidFolio" class="fullPage folio folioMusic folioAll">
+<div id="musicVidFolio" class="fullPage portfolioSection portfolio-music portfolio-all">
 	<MusicFolio1 />
 </div>
 
-<div id="animFolio1" class="fullPage folio folio3D folioAll">
+<div id="animFolio1" class="fullPage portfolioSection portfolio-3d portfolio-all">
 	<AnimFolio1 />
 </div>
 
-<div id="drawingFolio2" class="fullPage folio folio2D folioAll">
+<div id="drawingFolio2" class="fullPage portfolioSection portfolio-2d portfolio-all">
 	<DrawingFolio2 />
 </div>
 
-<div id="P4book" class="fullPage folio folioMusic folioAll">
+<div id="P4book" class="fullPage portfolioSection portfolio-music portfolio-all">
 	<P4bookFolio />
 </div>
 
-<div id="websitesFolio" class="fullPage folio folioWeb folioAll">
+<div id="websitesFolio" class="fullPage portfolioSection portfolio-web portfolio-all">
 	<Websites />
 </div>
 
 <script>
 	import { onMount } from 'svelte';
 	import { stores } from '../stores.js';
-	import MusicPlaylistFolio from './folios/MusicPlaylistFolio.svelte';
-	import IllustrationFolio1 from './folios/IllustrationFolio1.svelte';
-	import IllustrationFolio2 from './folios/IllustrationFolio2.svelte';
-	import Gridz from './folios/Gridz.svelte';
-	import DrawingFolio1 from './folios/DrawingFolio1.svelte';
-	import DrawingFolio2 from './folios/DrawingFolio2.svelte';
-	import ModeFolio1 from './folios/ModeFolio1.svelte';
-	import MusicFolio1 from './folios/MusicFolio1.svelte';
-	import AnimFolio1 from './folios/AnimFolio1.svelte';
-	import P4bookFolio from './folios/P4bookFolio.svelte';
-	import Websites from './folios/Websites.svelte';
+	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
+	import IllustrationFolio1 from './portfolioSections/IllustrationFolio1.svelte';
+	import IllustrationFolio2 from './portfolioSections/IllustrationFolio2.svelte';
+	import Gridz from './portfolioSections/Gridz.svelte';
+	import DrawingFolio1 from './portfolioSections/DrawingFolio1.svelte';
+	import DrawingFolio2 from './portfolioSections/DrawingFolio2.svelte';
+	import ModeFolio1 from './portfolioSections/ModeFolio1.svelte';
+	import MusicFolio1 from './portfolioSections/MusicFolio1.svelte';
+	import AnimFolio1 from './portfolioSections/AnimFolio1.svelte';
+	import P4bookFolio from './portfolioSections/P4bookFolio.svelte';
+	import Websites from './portfolioSections/Websites.svelte';
 
-	// Reactive folio visibility from store
-	const folioVisibilityStore = stores.navigation.folioVisibility;
-	$: folioVisibility = $folioVisibilityStore;
+	// Reactive portfolio section visibility from store
+	const portfolioSectionVisibilityStore = stores.navigation.portfolioSectionVisibility;
+	$: portfolioSectionVisibility = $portfolioSectionVisibilityStore;
 
 	// Reactive statements to update DOM based on store
 	$: {
-		if (folioVisibility && folioVisibility.size > 0) {
-			// Update each folio's visibility based on store
-			folioVisibility.forEach((isVisible, folioId) => {
-				const folioElement = document.getElementById(folioId);
-				if (folioElement) {
+		if (portfolioSectionVisibility && portfolioSectionVisibility.size > 0) {
+			// Update each portfolio section's visibility based on store
+			portfolioSectionVisibility.forEach((isVisible, portfolioSectionId) => {
+				const portfolioSectionElement = document.getElementById(portfolioSectionId);
+				if (portfolioSectionElement) {
 					if (isVisible) {
-						folioElement.classList.remove('hidden');
-						folioElement.style.removeProperty('display');
+						portfolioSectionElement.classList.remove('hidden');
+						portfolioSectionElement.style.removeProperty('display');
 					} else {
-						folioElement.classList.add('hidden');
-						folioElement.style.setProperty('display', 'none', 'important');
+						portfolioSectionElement.classList.add('hidden');
+						portfolioSectionElement.style.setProperty('display', 'none', 'important');
 					}
 				}
 			});

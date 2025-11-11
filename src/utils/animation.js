@@ -3,16 +3,16 @@
  */
 export class Animation {
 	/**
-	 * Creates a fake hover event effect by temporarily adding a class
-	 * @param {HTMLElement} target - Element to apply fake hover to
+	 * Creates a programmatic hover event effect by temporarily adding a class
+	 * @param {HTMLElement} target - Element to apply programmatic hover to
 	 */
-	static fakeHoverEvent(target) {
+	static programmaticHover(target) {
 		if (!target) return;
 
 		target.style.transition = 'none';
-		target.classList.add('fakeHoverEvent');
+		target.classList.add('programmaticHover');
 		setTimeout(() => {
-			target.classList.remove('fakeHoverEvent');
+			target.classList.remove('programmaticHover');
 		}, 100);
 	}
 
@@ -23,7 +23,7 @@ export class Animation {
 	 * @param {HTMLElement} elements.art - Art element
 	 * @param {HTMLElement} elements.title - Title element
 	 * @param {HTMLElement} elements.subtitle - Subtitle element
-	 * @param {HTMLElement} elements.oneLiner - Description element
+	 * @param {HTMLElement} elements.tagline - Description element
 	 * @param {HTMLElement} elements.domains - Domains element
 	 * @param {HTMLElement} elements.splashNav - Navigation element
 	 * @param {NodeList} elements.splashLinks - Splash link elements
@@ -35,7 +35,7 @@ export class Animation {
 			art,
 			title,
 			subtitle,
-			oneLiner,
+			tagline,
 			domains,
 			splashNav,
 			splashLinks,
@@ -53,7 +53,7 @@ export class Animation {
 		// Fade in text elements
 		if (title) title.style.opacity = '100%';
 		if (subtitle) subtitle.style.opacity = '100%';
-		if (oneLiner) oneLiner.style.opacity = '100%';
+		if (tagline) tagline.style.opacity = '100%';
 		if (domains) domains.style.opacity = '100%';
 		if (splashNav) splashNav.style.opacity = '100%';
 

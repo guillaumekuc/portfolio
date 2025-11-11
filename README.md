@@ -49,7 +49,8 @@ A modern portfolio website built with Vite, showcasing creative work.
   - `App.svelte` - Root Svelte component
   - `components/` - Svelte component modules
     - `Head.svelte`, `Header.svelte`, `Footer.svelte`, etc. - Layout components
-    - `folios/` - Portfolio item components
+    - `portfolioSections/` - Portfolio section components (full-page sections containing portfolio items)
+    - `Rubrics.svelte` - Categories navigation component
   - `scripts.js` - Initialization script (~50 lines)
   - `stores.js` - Svelte stores for state management
   - `utils/` - Utility modules
@@ -86,9 +87,9 @@ The project uses **Svelte** framework with a modern component-based architecture
 
 ---
 
-## Recent Development Recap (November 10, 2025)
+## Recent Development Recap
 
-### Major Transformation
+### Major Transformation (November 10, 2025)
 
 The project underwent a complete architectural overhaul, migrating from a PHP-based monolithic structure to a modern Svelte + Vite application.
 
@@ -107,7 +108,7 @@ The project underwent a complete architectural overhaul, migrating from a PHP-ba
   - `navigation.js` - Navigation controller
   - `dom.js` - DOM utilities
   - `shortcuts.js` - Keyboard shortcut system (142 lines)
-  - `animation.js`, `init.js`, `loading.js`, `time.js` - Additional utilities
+  - `animation.js`, `loading.js`, `time.js`, `tooltip.js`, `debuglog.js` - Additional utilities
 - Proper ES6 module structure with dependency injection
 
 #### 3. **CSS Refactoring**
@@ -128,19 +129,53 @@ The project underwent a complete architectural overhaul, migrating from a PHP-ba
 - Migrated shortcuts to their respective components
 - Added conflict prevention and scope management
 
+### Naming Refactoring (Latest)
+
+#### **Improved Code Clarity and Standards**
+- **Terminology Updates:**
+  - `rubrics` → `categories` - More intuitive terminology for portfolio categories
+  - `folios` → `portfolioSections` - Clearer naming for full-page portfolio sections
+  - Folder renamed: `components/folios/` → `components/portfolioSections/`
+  
+- **Abbreviated IDs Replaced:**
+  - `rBtn1-5` → `categoryButton1-5` - Descriptive button IDs
+  - `hnBtn1-5` → `headerNavButton1-5` - Clear header navigation button IDs
+  - `L0-L5` → Descriptive link classes (`contactLink`, `blogLink`, `artstationLink`, etc.)
+
+- **Method and Variable Names:**
+  - `cartography` → `scrollTracking` - Standard terminology
+  - `fakeHoverEvent` → `programmaticHover` - More accurate description
+  - `sleekHandler` → `seekHandler` - Corrected typo
+  - `menuSelected` → `selectedMenuItem` - More descriptive
+  - `showNavClues` → `showNavigationHints` - Clearer intent
+
+- **CSS Class Names:**
+  - `folio3D`, `folio2D`, etc. → `portfolio-3d`, `portfolio-2d`, etc. - Consistent kebab-case
+  - `scrollThis` → `scrollable` - Standard naming
+  - `extraClass` → `additionalClass` - More descriptive
+  - `folioWrapper` → `portfolioSectionWrapper` - Consistent with new terminology
+
+- **Element IDs and Variables:**
+  - `myPic` → `profilePicture`
+  - `myDescription` → `aboutDescription`
+  - `myHello` → `greeting`
+  - `myMail` → `emailLink`
+  - `oneLiner` → `tagline`
+
 ### Impact
 
 The project is now significantly more maintainable with:
 - **Better code organization** - Modular structure, easier to navigate
 - **Modern stack** - Svelte + Vite instead of PHP
 - **Improved code quality** - Separation of concerns, reusable utilities
-- **Better developer experience** - Proper reactivity, component lifecycle
+- **Intuitive naming** - Standard terminology that's self-documenting
+- **Better developer experience** - Proper reactivity, component lifecycle, clear naming
 - **Comprehensive documentation** - Clear guides for future work
-- **Multiple bug fixes** - Issues resolved throughout the day
+- **Multiple bug fixes** - Issues resolved throughout development
 
 ### Remaining Work
 
-See `MAINTAINABILITY_RECOMMENDATIONS.md` and `REFACTORING_OPPORTUNITIES.md` for:
+See `docs/MAINTAINABILITY_ANALYSIS.md` and `docs/CODE_QUALITY_ISSUES.md` for:
 - CSS module organization
 - ESLint/Prettier setup
 - Testing framework integration

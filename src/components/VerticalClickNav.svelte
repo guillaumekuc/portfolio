@@ -40,7 +40,7 @@
 		debugLog('Top arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
 
-		if (currentScreenValue === 'rubrics') {
+		if (currentScreenValue === 'categories') {
 			scrollToElement('splashscreen');
 		} else {
 			const currentElement = document.querySelector(`#${currentScreenValue}`);

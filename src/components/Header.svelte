@@ -12,7 +12,7 @@
 					type="button"
 					id={item.id}
 					class={item.id}
-					class:focus={rubricFocused === item.focused}
+					class:focus={categoryFocused === item.focused}
 					on:click={() => handleHeaderNavClick(item.target, item.focused)}
 				>
 					{item.label}
@@ -34,28 +34,28 @@
 	import { Navigation } from '../utils/navigation.js';
 
 	const headerNavItems = [
-		{ id: 'hnBtn3', target: 'folioAll', label: 'All', focused: 3 },
-		{ id: 'hnBtn2', target: 'folio2D', label: 'Illustration', focused: 2 },
-		{ id: 'hnBtn4', target: 'folioMusic', label: 'Music', focused: 4 },
-		{ id: 'hnBtn1', target: 'folio3D', label: '3D', focused: 1 },
-		{ id: 'hnBtn5', target: 'folioWeb', label: 'Web', focused: 5 }
+		{ id: 'headerNavButton3', target: 'portfolio-all', label: 'All', focused: 3 },
+		{ id: 'headerNavButton2', target: 'portfolio-2d', label: 'Illustration', focused: 2 },
+		{ id: 'headerNavButton4', target: 'portfolio-music', label: 'Music', focused: 4 },
+		{ id: 'headerNavButton1', target: 'portfolio-3d', label: '3D', focused: 1 },
+		{ id: 'headerNavButton5', target: 'portfolio-web', label: 'Web', focused: 5 }
 	];
 
 	// Extract the store for reactive access
-	const rubricFocusedStore = stores.navigation.rubricFocused;
-	$: rubricFocused = $rubricFocusedStore;
+	const categoryFocusedStore = stores.navigation.categoryFocused;
+	$: categoryFocused = $categoryFocusedStore;
 
 	function handleHeaderNavClick(target, focused) {
-		stores.navigation.rubricFocused.set(focused);
+		stores.navigation.categoryFocused.set(focused);
 
-		// Hide irrelevant folios
-		const rubricClass = Navigation.getRubricClass(focused);
-		Navigation.hideIrrelevantFolios(rubricClass);
+		// Hide irrelevant portfolio sections
+		const categoryClass = Navigation.getCategoryClass(focused);
+		Navigation.hideIrrelevantPortfolioSections(categoryClass);
 
-		// Scroll to next visible folio
-		const rubricsElement = document.querySelector('#rubrics');
-		if (rubricsElement) {
-			const next = DOM.nextVisibleSibling(rubricsElement);
+		// Scroll to next visible portfolio section
+		const categoriesElement = document.querySelector('#categories');
+		if (categoriesElement) {
+			const next = DOM.nextVisibleSibling(categoriesElement);
 			if (next) next.scrollIntoView();
 		}
 	}

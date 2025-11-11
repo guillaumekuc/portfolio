@@ -1,40 +1,40 @@
-<div id="rubrics" class="rubrics fullPage">
-	{#each rubrics as rubric}
+<div id="categories" class="categories fullPage">
+	{#each categories as category}
 		<div
-			id={rubric.id}
-			class="rubric {rubric.extraClass}"
-			class:focus={rubricFocused === rubric.focused}
-			style="background-image : url('{rubric.backgroundImage}');"
+			id={category.id}
+			class="category {category.additionalClass}"
+			class:focus={categoryFocused === category.focused}
+			style="background-image : url('{category.backgroundImage}');"
 			role="button"
 			tabindex="0"
-			on:mousemove={() => handleRubricHover(rubric.focused)}
-			on:click={handleRubricClick}
+			on:mousemove={() => handleCategoryHover(category.focused)}
+			on:click={handleCategoryClick}
 			on:keydown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
 					e.preventDefault();
-					handleRubricClick();
+					handleCategoryClick();
 				}
 			}}
 		>
-			<div class="softwareIcons" class:navClues={rubric.showNavClues}>
-				{#if rubric.showNavClues}
+			<div class="softwareIcons" class:showNavigationHints={category.showNavigationHints}>
+				{#if category.showNavigationHints}
 					<img src="/img/icons/leftArrow.png" alt="Left arrow" />
-					<span class="rubricEnter">Enter</span>
+					<span class="categoryEnter">Enter</span>
 					<img src="/img/icons/rightArrow.png" alt="Right arrow" />
 				{:else}
-					{#each rubric.softwareIcons as icon}
+					{#each category.softwareIcons as icon}
 						<img src={icon.src} alt={icon.alt} />
 					{/each}
 				{/if}
 			</div>
-			<div class="bigRubricLogo">
-				<img src={rubric.bigLogo.src} alt={rubric.bigLogo.alt} />
+			<div class="categoryLogo">
+				<img src={category.bigLogo.src} alt={category.bigLogo.alt} />
 			</div>
-			<span class="label">{rubric.label}</span>
+			<span class="label">{category.label}</span>
 		</div>
 	{/each}
 
-	<div class="rubricsMask"></div>
+	<div class="categoriesMask"></div>
 </div>
 
 <script>
@@ -46,68 +46,68 @@
 	import { debugLog } from '../utils/debuglog.js';
 
 	// Extract the store for reactive access
-	const rubricFocusedStore = stores.navigation.rubricFocused;
-	$: rubricFocused = $rubricFocusedStore;
+	const categoryFocusedStore = stores.navigation.categoryFocused;
+	$: categoryFocused = $categoryFocusedStore;
 
-	// Reactive statement to update header nav focus and folio visibility
+	// Reactive statement to update header nav focus and portfolio section visibility
 	$: {
-		const rubricFocused = get(stores.navigation.rubricFocused);
+		const categoryFocused = get(stores.navigation.categoryFocused);
 		// Update header nav focus (cross-component, acceptable querySelector)
-		const target = '#hnBtn' + rubricFocused;
+		const target = '#headerNavButton' + categoryFocused;
 		document.querySelectorAll('.headerNav button').forEach((btn) => {
 			btn.classList.remove('focus');
 		});
 		const headerNavLink = document.querySelector(target);
 		if (headerNavLink) headerNavLink.classList.add('focus');
 
-		// Update folio visibility
-		const rubricClass = Navigation.getRubricClass(rubricFocused);
-		Navigation.hideIrrelevantFolios(rubricClass);
+		// Update portfolio section visibility
+		const categoryClass = Navigation.getCategoryClass(categoryFocused);
+		Navigation.hideIrrelevantPortfolioSections(categoryClass);
 	}
 
-	function selectNextRubric() {
-		const rubricFocused = get(stores.navigation.rubricFocused);
-		const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
-		stores.navigation.rubricFocused.set(newRubricFocused);
-		debugLog('Rubric changed:', newRubricFocused);
+	function selectNextCategory() {
+		const categoryFocused = get(stores.navigation.categoryFocused);
+		const newCategoryFocused = categoryFocused === 5 ? 1 : categoryFocused + 1;
+		stores.navigation.categoryFocused.set(newCategoryFocused);
+		debugLog('Category changed:', newCategoryFocused);
 	}
 
-	function selectPreviousRubric() {
-		const rubricFocused = get(stores.navigation.rubricFocused);
-		const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
-		stores.navigation.rubricFocused.set(newRubricFocused);
-		debugLog('Rubric changed:', newRubricFocused);
+	function selectPreviousCategory() {
+		const categoryFocused = get(stores.navigation.categoryFocused);
+		const newCategoryFocused = categoryFocused === 1 ? 5 : categoryFocused - 1;
+		stores.navigation.categoryFocused.set(newCategoryFocused);
+		debugLog('Category changed:', newCategoryFocused);
 	}
 
 	function goToSplashscreen() {
 		document.querySelector('#splashscreen')?.scrollIntoView();
 	}
 
-	function goToFolios() {
-		// Ensure filtering is applied based on current rubric focus before navigation
-		const rubricFocused = get(stores.navigation.rubricFocused);
-		const rubricClass = Navigation.getRubricClass(rubricFocused);
-		Navigation.hideIrrelevantFolios(rubricClass);
+	function goToPortfolioSections() {
+		// Ensure filtering is applied based on current category focus before navigation
+		const categoryFocused = get(stores.navigation.categoryFocused);
+		const categoryClass = Navigation.getCategoryClass(categoryFocused);
+		Navigation.hideIrrelevantPortfolioSections(categoryClass);
 
 		const currentScreen = get(stores.navigation.currentScreen);
-		Navigation.goToFolios(currentScreen);
+		Navigation.goToPortfolioSections(currentScreen);
 	}
 
 	onMount(() => {
-		shortcuts.addScreenShortcut('rubrics', 'ArrowRight', selectNextRubric);
-		shortcuts.addScreenShortcut('rubrics', 'ArrowLeft', selectPreviousRubric);
-		shortcuts.addScreenShortcut('rubrics', 'ArrowUp', goToSplashscreen);
-		shortcuts.addScreenShortcut('rubrics', 'Enter', goToFolios);
-		shortcuts.addScreenShortcut('rubrics', 'ArrowDown', goToFolios);
+		shortcuts.addScreenShortcut('categories', 'ArrowRight', selectNextCategory);
+		shortcuts.addScreenShortcut('categories', 'ArrowLeft', selectPreviousCategory);
+		shortcuts.addScreenShortcut('categories', 'ArrowUp', goToSplashscreen);
+		shortcuts.addScreenShortcut('categories', 'Enter', goToPortfolioSections);
+		shortcuts.addScreenShortcut('categories', 'ArrowDown', goToPortfolioSections);
 	});
 
 	onDestroy(() => {
-		shortcuts.removeScreenShortcuts('rubrics');
+		shortcuts.removeScreenShortcuts('categories');
 	});
 
-	const rubrics = [
+	const categories = [
 		{
-			id: 'rBtn1',
+			id: 'categoryButton1',
 			focused: 1,
 			backgroundImage: '/img/panorama1.jpg',
 			label: '3D & Animation',
@@ -117,10 +117,10 @@
 				{ src: '/img/icons/3ds48.png', alt: '3ds Max' }
 			],
 			bigLogo: { src: '/img/icons/3D.png', alt: '3D' },
-			extraClass: ''
+			additionalClass: ''
 		},
 		{
-			id: 'rBtn2',
+			id: 'categoryButton2',
 			focused: 2,
 			backgroundImage: '/img/panorama2.jpg',
 			label: 'Illustration',
@@ -129,10 +129,10 @@
 				{ src: '/img/icons/tablet58.png', alt: 'Tablet' }
 			],
 			bigLogo: { src: '/img/icons/painting.png', alt: 'Painting' },
-			extraClass: 'IllustrationrBtn'
+			additionalClass: 'illustrationButton'
 		},
 		{
-			id: 'rBtn3',
+			id: 'categoryButton3',
 			focused: 3,
 			backgroundImage: '/img/panorama3.jpg',
 			label: 'All',
@@ -141,11 +141,11 @@
 				{ src: '/img/icons/rightArrow.png', alt: 'Right arrow' }
 			],
 			bigLogo: { src: '/img/icons/asterisk.png', alt: 'All' },
-			extraClass: '',
-			showNavClues: true
+			additionalClass: '',
+			showNavigationHints: true
 		},
 		{
-			id: 'rBtn4',
+			id: 'categoryButton4',
 			focused: 4,
 			backgroundImage: '/img/panorama4.jpg',
 			label: 'Music',
@@ -155,10 +155,10 @@
 				{ src: '/img/icons/piano48.png', alt: 'Piano' }
 			],
 			bigLogo: { src: '/img/icons/music.png', alt: 'Music' },
-			extraClass: ''
+			additionalClass: ''
 		},
 		{
-			id: 'rBtn5',
+			id: 'categoryButton5',
 			focused: 5,
 			backgroundImage: '/img/panorama5.jpg',
 			label: 'Web development',
@@ -169,38 +169,38 @@
 				{ src: '/img/icons/html48.png', alt: 'HTML' }
 			],
 			bigLogo: { src: '/img/icons/code.png', alt: 'Code' },
-			extraClass: ''
+			additionalClass: ''
 		}
 	];
 
-	function handleRubricHover(focused) {
-		stores.navigation.rubricFocused.set(focused);
-		const rubricClass = Navigation.getRubricClass(focused);
-		Navigation.hideIrrelevantFolios(rubricClass);
-		debugLog('Rubric hover:', focused, 'class:', rubricClass);
+	function handleCategoryHover(focused) {
+		stores.navigation.categoryFocused.set(focused);
+		const categoryClass = Navigation.getCategoryClass(focused);
+		Navigation.hideIrrelevantPortfolioSections(categoryClass);
+		debugLog('Category hover:', focused, 'class:', categoryClass);
 	}
 
-	function handleRubricClick() {
-		// Ensure filtering is applied based on current rubric focus
-		const rubricFocused = get(stores.navigation.rubricFocused);
-		const rubricClass = Navigation.getRubricClass(rubricFocused);
-		Navigation.hideIrrelevantFolios(rubricClass);
-		debugLog('Rubric click - filtering for:', rubricClass, 'rubric:', rubricFocused);
-		Navigation.goToFolios('rubrics');
+	function handleCategoryClick() {
+		// Ensure filtering is applied based on current category focus
+		const categoryFocused = get(stores.navigation.categoryFocused);
+		const categoryClass = Navigation.getCategoryClass(categoryFocused);
+		Navigation.hideIrrelevantPortfolioSections(categoryClass);
+		debugLog('Category click - filtering for:', categoryClass, 'category:', categoryFocused);
+		Navigation.goToPortfolioSections('categories');
 	}
 </script>
 
 <style>
-	.rubrics {
+	.categories {
 		font-size: var(--fs2o3);
 	}
 	@media (max-height: 432px) {
-		.rubrics {
+		.categories {
 			font-size: var(--fs1o2);
 		}
 	}
 
-	.rubrics {
+	.categories {
 		position: relative;
 		display: flex;
 		flex-direction: row;
@@ -208,7 +208,7 @@
 		justify-content: center;
 	}
 
-	.rubric {
+	.category {
 		position: relative;
 		z-index: 70;
 		width: 20%;
@@ -224,7 +224,7 @@
 		user-select: none;
 	}
 
-	.bigRubricLogo {
+	.categoryLogo {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -235,12 +235,12 @@
 		pointer-events: none;
 	}
 
-	.rubric.focus .bigRubricLogo {
+	.category.focus .categoryLogo {
 		display: block;
 		opacity: 100%;
 	}
 
-	.rubric .label {
+	.category .label {
 		display: block;
 		text-align: center;
 		height: 100%;
@@ -253,7 +253,7 @@
 		transition: background-color 0.25s ease-in;
 	}
 
-	.rubric:after {
+	.category:after {
 		content: '\A';
 		position: absolute;
 		width: 100%;
@@ -264,22 +264,22 @@
 		z-index: -1;
 		opacity: 1;
 	}
-	.rubric.focus:after {
+	.category.focus:after {
 		opacity: 0;
 	}
 
-	.rubric .label:hover {
+	.category .label:hover {
 		cursor: pointer;
 	}
 
-	.rubric.focus .label {
+	.category.focus .label {
 		transition: none;
 	}
 
-	.rubric.focus .label::after {
+	.category.focus .label::after {
 		content: ' —';
 	}
-	.rubric.focus .label::before {
+	.category.focus .label::before {
 		content: '— ';
 	}
 
@@ -307,12 +307,12 @@
 		vertical-align: middle;
 	}
 
-	.rubric.focus .softwareIcons {
+	.category.focus .softwareIcons {
 		display: block;
 		z-index: 101;
 	}
 
-	.rubricEnter {
+	.categoryEnter {
 		display: inline-block;
 		height: 1.5em;
 		font-size: 1em;

@@ -36,7 +36,7 @@ npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
 - `src/scripts.js` - Remove `window.musicPlayer = musicPlayer`
 - `src/components/Footer.svelte` - Use context
 - `src/components/SplashSound.svelte` - Use context
-- `src/components/folios/MusicPlaylistFolio.svelte` - Use context
+- `src/components/portfolioSections/MusicPlaylistFolio.svelte` - Use context
 - `src/components/Splashscreen.svelte` - Use context
 
 **Impact:** Better testability, clearer dependencies, easier refactoring
