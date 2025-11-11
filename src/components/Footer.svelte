@@ -45,7 +45,7 @@
 			id="footerVolumeSlider"
 			class="footerVolumeSlider"
 			type="range"
-			value={volume}
+			value={displayVolume}
 			on:input={handleVolumeInput}
 		/>
 	</div>
@@ -69,6 +69,8 @@
 
 	const volumeStore = stores.music.volume;
 	$: volume = $volumeStore;
+
+	$: displayVolume = isMuted ? 0 : volume;
 
 	const currentTimeStore = stores.music.currentTime;
 	$: currentTime = $currentTimeStore;
@@ -106,6 +108,13 @@
 	$: {
 		if (!isSeeking) {
 			sliderValue = seekValue;
+		}
+	}
+
+	// Update volume slider when display volume changes
+	$: {
+		if (footerVolumeSlider) {
+			footerVolumeSlider.value = displayVolume;
 		}
 	}
 
@@ -173,7 +182,7 @@
 
 		// Sync volume slider with store
 		if (footerVolumeSlider) {
-			footerVolumeSlider.value = volume;
+			footerVolumeSlider.value = displayVolume;
 		}
 
 		// Update time display reactively

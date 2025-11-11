@@ -3,7 +3,7 @@
 		bind:this={splashscreenVolumeSlider}
 		class="volume-slider"
 		type="range"
-		value={volume}
+		value={displayVolume}
 		on:input={handleVolumeInput}
 	/>
 	<button class="mute-button" class:isMuted on:click={handleMuteClick}></button>
@@ -19,6 +19,8 @@
 	const isMutedStore = stores.music.isMuted;
 	$: isMuted = $isMutedStore;
 
+	$: displayVolume = isMuted ? 0 : volume;
+
 	let splashscreenVolumeSlider;
 
 	const musicPlayerStore = stores.music.musicPlayer;
@@ -26,7 +28,7 @@
 
 	$: {
 		if (musicPlayer && splashscreenVolumeSlider) {
-			splashscreenVolumeSlider.value = volume;
+			splashscreenVolumeSlider.value = displayVolume;
 		}
 	}
 
@@ -45,7 +47,7 @@
 	onMount(() => {
 
 		if (splashscreenVolumeSlider) {
-			splashscreenVolumeSlider.value = volume;
+			splashscreenVolumeSlider.value = displayVolume;
 		}
 	});
 </script>
@@ -83,7 +85,6 @@
 		overflow: hidden;
 		transition: width 0.3s ease, margin-right 0.3s ease;
 		margin-right: 0;
-		flex-shrink: 0;
 	}
 
 	.splashscreen-sound:hover .volume-slider {
@@ -99,7 +100,6 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: var(--splashscreen-sound-icon-size);
-		flex-shrink: 0;
 	}
 
 	.splashscreen-sound .mute-button.isMuted {	
