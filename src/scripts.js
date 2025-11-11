@@ -65,31 +65,3 @@ export function initAPI() {
 	debugLog('API initialized');
 }
 
-/**
- * Initialize all scripts with element references
- * Convenience function that calls initAudio, initNavigation, and initAPI in order
- * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
- * @returns {Object|null} Object with musicPlayer and navigationController, or null if initialization failed
- */
-export function initScripts(audioElement) {
-	debugLog('Initializing scripts');
-	
-	const musicPlayer = initAudio(audioElement);
-	if (!musicPlayer) {
-		return null;
-	}
-	
-	const navigationController = initNavigation();
-	if (!navigationController) {
-		return null;
-	}
-	
-	initAPI();
-	
-	debugLog('Scripts initialized');
-	return {
-		musicPlayer,
-		navigationController
-	};
-}
-

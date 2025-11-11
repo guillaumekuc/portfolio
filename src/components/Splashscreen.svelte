@@ -36,7 +36,7 @@
 
 <script>
 	import { onMount } from 'svelte';
-	import { initScripts } from '../scripts.js';
+	import { initAudio, initNavigation, initAPI } from '../scripts.js';
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
 	import SplashLinks from './SplashLinks.svelte';
@@ -45,22 +45,28 @@
 
 	let bgMusicElement;
 
+	function startBackgroundMusic() {
+		// Wait a bit for the animation to start before playing music
+		setTimeout(() => {
+			const musicPlayer = get(stores.music.musicPlayer);
+			if (musicPlayer) {
+				musicPlayer.play();
+			}
+		}, 1000);
+	}
+
 	onMount(() => {
 		// Initialize scripts with audio element once it's available
 		if (bgMusicElement) {
-			initScripts(bgMusicElement);
+			const musicPlayer = initAudio(bgMusicElement);
+			if (musicPlayer) {
+				initNavigation();
+				initAPI();
+			}
 		}
 
 		// Listen for enter button press to start music
-		window.addEventListener('enterPressed', () => {
-			// Wait a bit for the animation to start
-			setTimeout(() => {
-				const musicPlayer = get(stores.music.musicPlayer);
-				if (musicPlayer) {
-					musicPlayer.play();
-				}
-			}, 1000);
-		});
+		window.addEventListener('enterPressed', startBackgroundMusic);
 	});
 </script>
 
