@@ -41,19 +41,7 @@
 	}
 
 	function goToSplashscreen() {
-		const isChrome = Boolean(window.chrome);
-		if (isChrome) {
-			// Chrome workaround
-			document.querySelector('#header')?.classList.add('hidden');
-			document.querySelector('#footer')?.classList.add('hidden');
-			document.querySelector('#splashscreen')?.scrollIntoView();
-			setTimeout(() => {
-				document.querySelector('#header')?.classList.remove('hidden');
-				document.querySelector('#footer')?.classList.remove('hidden');
-			}, 500);
-		} else {
-			document.querySelector('#splashscreen')?.scrollIntoView();
-		}
+		document.querySelector('#splashscreen')?.scrollIntoView();
 	}
 
 	function goToFolios() {
