@@ -1,5 +1,10 @@
 <div id="splashscreen-hero" class="splashscreen-hero">
-	<div bind:this={logoElement} class="splashscreen-logo"></div>
+	<div bind:this={logoElement} class="splashscreen-logo">
+		
+		<svg class="splashscreen-hero-emblem" role="img" aria-label="Splashscreen Emblem">
+			<use href="/img/emblem.svg#root"></use>
+		</svg>
+	</div>
 	<h1 bind:this={titleElement} id="splashscreen-hero-title" class="splashscreen-hero-title">{heroContent.name}</h1>
 	<h2 bind:this={headlineElement} id="splashscreen-hero-headline" class="splashscreen-hero-headline">{heroContent.headline}</h2>
 </div>
@@ -47,10 +52,16 @@
 <style>
 
 	.splashscreen-logo {
-		width: 100%;
-		height: 450px;
-		background-color: red;
+		color: white;
 		opacity: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.splashscreen-logo svg {
+		width: 304px;
+		height: auto;
 	}
 
 	.splashscreen-hero {
@@ -63,6 +74,11 @@
 		align-items: center;
 		justify-content: center;
 		gap: var(--splashscreen-hero-gap);
+	}
+
+	.splashscreen-hero-emblem {
+		width: 304px;
+		height: auto;
 	}
 
 	.splashscreen-hero-title {
