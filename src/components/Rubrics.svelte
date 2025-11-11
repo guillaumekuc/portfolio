@@ -18,9 +18,9 @@
 		>
 			<div class="softwareIcons" class:showNavigationHints={category.showNavigationHints}>
 				{#if category.showNavigationHints}
-					<img src="/img/icons/leftArrow.png" alt="Left arrow" />
+					<img src="/img/.old/icons/leftArrow.png" alt="Left arrow" />
 					<span class="categoryEnter">Enter</span>
-					<img src="/img/icons/rightArrow.png" alt="Right arrow" />
+					<img src="/img/.old/icons/rightArrow.png" alt="Right arrow" />
 				{:else}
 					{#each category.softwareIcons as icon}
 						<img src={icon.src} alt={icon.alt} />
@@ -109,66 +109,66 @@
 		{
 			id: 'categoryButton1',
 			focused: 1,
-			backgroundImage: '/img/panorama1.jpg',
+			backgroundImage: '/img/.old/panorama1.jpg',
 			label: '3D & Animation',
 			softwareIcons: [
-				{ src: '/img/icons/blender48.png', alt: 'Blender' },
-				{ src: '/img/icons/maya48.png', alt: 'Maya' },
-				{ src: '/img/icons/3ds48.png', alt: '3ds Max' }
+				{ src: '/img/.old/icons/blender48.png', alt: 'Blender' },
+				{ src: '/img/.old/icons/maya48.png', alt: 'Maya' },
+				{ src: '/img/.old/icons/3ds48.png', alt: '3ds Max' }
 			],
-			bigLogo: { src: '/img/icons/3D.png', alt: '3D' },
+			bigLogo: { src: '/img/.old/icons/3D.png', alt: '3D' },
 			additionalClass: ''
 		},
 		{
 			id: 'categoryButton2',
 			focused: 2,
-			backgroundImage: '/img/panorama2.jpg',
+			backgroundImage: '/img/.old/panorama2.jpg',
 			label: 'Illustration',
 			softwareIcons: [
-				{ src: '/img/icons/photoshop48.png', alt: 'Photoshop' },
-				{ src: '/img/icons/tablet58.png', alt: 'Tablet' }
+				{ src: '/img/.old/icons/photoshop48.png', alt: 'Photoshop' },
+				{ src: '/img/.old/icons/tablet58.png', alt: 'Tablet' }
 			],
-			bigLogo: { src: '/img/icons/painting.png', alt: 'Painting' },
+			bigLogo: { src: '/img/.old/icons/painting.png', alt: 'Painting' },
 			additionalClass: 'illustrationButton'
 		},
 		{
 			id: 'categoryButton3',
 			focused: 3,
-			backgroundImage: '/img/panorama3.jpg',
+			backgroundImage: '/img/.old/panorama3.jpg',
 			label: 'All',
 			softwareIcons: [
-				{ src: '/img/icons/leftArrow.png', alt: 'Left arrow' },
-				{ src: '/img/icons/rightArrow.png', alt: 'Right arrow' }
+				{ src: '/img/.old/icons/leftArrow.png', alt: 'Left arrow' },
+				{ src: '/img/.old/icons/rightArrow.png', alt: 'Right arrow' }
 			],
-			bigLogo: { src: '/img/icons/asterisk.png', alt: 'All' },
+			bigLogo: { src: '/img/.old/icons/asterisk.png', alt: 'All' },
 			additionalClass: '',
 			showNavigationHints: true
 		},
 		{
 			id: 'categoryButton4',
 			focused: 4,
-			backgroundImage: '/img/panorama4.jpg',
+			backgroundImage: '/img/.old/panorama4.jpg',
 			label: 'Music',
 			softwareIcons: [
-				{ src: '/img/icons/reaper48.png', alt: 'Reaper' },
-				{ src: '/img/icons/guitar48.png', alt: 'Guitar' },
-				{ src: '/img/icons/piano48.png', alt: 'Piano' }
+				{ src: '/img/.old/icons/reaper48.png', alt: 'Reaper' },
+				{ src: '/img/.old/icons/guitar48.png', alt: 'Guitar' },
+				{ src: '/img/.old/icons/piano48.png', alt: 'Piano' }
 			],
-			bigLogo: { src: '/img/icons/music.png', alt: 'Music' },
+			bigLogo: { src: '/img/.old/icons/music.png', alt: 'Music' },
 			additionalClass: ''
 		},
 		{
 			id: 'categoryButton5',
 			focused: 5,
-			backgroundImage: '/img/panorama5.jpg',
+			backgroundImage: '/img/.old/panorama5.jpg',
 			label: 'Web development',
 			softwareIcons: [
-				{ src: '/img/icons/stext48.png', alt: 'Text' },
-				{ src: '/img/icons/js48.png', alt: 'JavaScript' },
-				{ src: '/img/icons/css48.png', alt: 'CSS' },
-				{ src: '/img/icons/html48.png', alt: 'HTML' }
+				{ src: '/img/.old/icons/stext48.png', alt: 'Text' },
+				{ src: '/img/.old/icons/js48.png', alt: 'JavaScript' },
+				{ src: '/img/.old/icons/css48.png', alt: 'CSS' },
+				{ src: '/img/.old/icons/html48.png', alt: 'HTML' }
 			],
-			bigLogo: { src: '/img/icons/code.png', alt: 'Code' },
+			bigLogo: { src: '/img/.old/icons/code.png', alt: 'Code' },
 			additionalClass: ''
 		}
 	];

@@ -1,6 +1,6 @@
 <div class="portfolioSectionWrapper">
 	<div class="halfColumn">
-		<img src="/img/P4cover.jpg" alt="P4 Cover" />
+		<img src="/img/.old/P4cover.jpg" alt="P4 Cover" />
 	</div>
 	<div class="halfColumn P4bookQuote scrollable">
 		<span class="title">All fourths tuning — <small>Improvisation</small></span>
@@ -17,7 +17,7 @@
 		<a
 			class="focus extLinkBtn"
 			href="https://www.amazon.fr/All-fourths-tuning-Improvisation-English-ebook/dp/B07F89CW6V"
-			><img src="/img/icons/gotoURL.png" alt="Go to URL" /><span>More on Kindle</span></a
+			><img src="/img/.old/icons/gotoURL.png" alt="Go to URL" /><span>More on Kindle</span></a
 		>
 	</div>
 </div>

@@ -8,7 +8,7 @@
 			on:mousemove={() => handleMouseMove(0)}
 		>
 			<img class="screenshot" src={websites[0].screenshot} alt={websites[0].screenshotAlt} />
-			<img src="/img/icons/gotoURL.png" class="redirection" alt="Go to URL" />
+			<img src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[0].label}</span><span>
 				{websites[0].suffix}</span
 			>
@@ -23,7 +23,7 @@
 			on:mousemove={() => handleMouseMove(1)}
 		>
 			<img class="screenshot" src={websites[1].screenshot} alt={websites[1].screenshotAlt} />
-			<img src="/img/icons/gotoURL.png" class="redirection" alt="Go to URL" />
+			<img src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[1].label}</span><span>
 				{websites[1].suffix}</span
 			>
@@ -39,14 +39,14 @@
 	const websites = [
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
-			screenshot: '/img/gkartscreenshot.png',
+			screenshot: '/img/.old/gkartscreenshot.png',
 			screenshotAlt: 'GK Art Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.art'
 		},
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.blog',
-			screenshot: '/img/gkblogscreenshot.png',
+			screenshot: '/img/.old/gkblogscreenshot.png',
 			screenshotAlt: 'GK Blog Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.blog'

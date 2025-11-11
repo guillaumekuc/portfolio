@@ -1,7 +1,7 @@
 <div id="about" class="fullPage aboutme">
 	<div class="vertWrapper">
 		<div id="aboutTop" style="">
-			<div id="profilePicture"><img src="/img/profilePic.jpg" alt="Profile" /></div>
+			<div id="profilePicture"><img src="/img/.old/profilePic.jpg" alt="Profile" /></div>
 			<div style="color : grey;">
 				Protean, <small>adjective</small> :
 				<li style="list-style: none;">
@@ -74,7 +74,7 @@
 					}
 				}}
 			>
-				<img src="/img/icons/backToTop2.png" alt="Back to top" />
+				<img src="/img/.old/icons/backToTop2.png" alt="Back to top" />
 			</a>
 			<div id="copyright">
 				<span style="font-variant : small-caps;">Guillaume Kuc</span> .art — ©2022 Guillaume Kuc

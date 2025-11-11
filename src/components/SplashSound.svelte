@@ -96,13 +96,13 @@
 	.splashscreen-sound .mute-button {
 		width: var(--splashscreen-sound-icon-size);
 		height: var(--splashscreen-sound-icon-size);
-		background-image: url('/img/icons/volume.svg');
+		background-image: url('/img/.old/icons/volume.svg');
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: var(--splashscreen-sound-icon-size);
 	}
 
 	.splashscreen-sound .mute-button.isMuted {	
-		background-image: url('/img/icons/mute.svg');
+		background-image: url('/img/.old/icons/mute.svg');
 	}
 </style>

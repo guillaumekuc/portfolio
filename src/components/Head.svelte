@@ -91,7 +91,7 @@
 		height: 100%;
 		position: fixed;
 		z-index: 101;
-		background: url(img/icons/preloader.svg) no-repeat center center rgba(0, 0, 0, 1);
+		background: url(img/.old/icons/preloader.svg) no-repeat center center rgba(0, 0, 0, 1);
 	}
 
 	:global(#load.active) {

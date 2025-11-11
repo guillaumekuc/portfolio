@@ -5,24 +5,24 @@
 	on:click|preventDefault={() => window.open('mailto:guillaume@guillaumekuc.com', 'mail')}
 	href="mailto:guillaume@guillaumekuc.com"
 >
-	<img src="/img/icons/contact_w.svg" alt="Contact" />
+	<img src="/img/.old/icons/contact_w.svg" alt="Contact" />
 </a>
 
 <a class="blogLink" title="guillaumekuc.blog" href="http://guillaumekuc.blog">
-	<img src="/img/icons/blog.svg" alt="Blog" />
+	<img src="/img/.old/icons/blog.svg" alt="Blog" />
 </a>
 
 <span style="pointer-events: none;"> · </span>
 
 <a class="artstationLink" title="artstation" href="https://www.artstation.com/guillaumekuc">
-	<img src="/img/icons/artstation.svg" alt="Artstation" />
+	<img src="/img/.old/icons/artstation.svg" alt="Artstation" />
 </a>
 <a class="soundcloudLink" title="soundcloud" href="https://soundcloud.com/guillaume-kuc-3397062">
-	<img src="/img/icons/soundcloud.svg" alt="Soundcloud" />
+	<img src="/img/.old/icons/soundcloud.svg" alt="Soundcloud" />
 </a>
 
 <a class="gumroadLink" title="gumroad" href="https://app.gumroad.com/guillaumekuc">
-	<img src="/img/icons/gumroad.svg" alt="Gumroad" />
+	<img src="/img/.old/icons/gumroad.svg" alt="Gumroad" />
 </a>
 
 <a
@@ -30,5 +30,5 @@
 	title="amazon kindle"
 	href="https://www.amazon.fr/s?i=digital-text&rh=p_27%3AGuillaume+Kuc&s=relevancerank&text=Guillaume+Kuc&ref=dp_byline_sr_ebooks_1"
 >
-	<img src="/img/icons/amazon.svg" alt="Amazon" />
+	<img src="/img/.old/icons/amazon.svg" alt="Amazon" />
 </a>

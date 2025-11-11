@@ -100,7 +100,7 @@
 		width: 100%;
 		height: 100%;
 		transform: scale(1.1);
-		background: center no-repeat url('img/oldbg.jpg');
+		background: center no-repeat url('img/.old/oldbg.jpg');
 		background-size: cover;
 		transition: 3s ease-out;
 	}

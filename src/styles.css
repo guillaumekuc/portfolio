@@ -560,7 +560,7 @@ body {
 	pointer-events: none;
 	position: absolute;
 	content: '';
-	background: no-repeat center / contain url('img/icons/play.svg');
+	background: no-repeat center / contain url('img/.old/icons/play.svg');
 	display: block;
 	top: 50%;
 	left: 50%;
@@ -587,7 +587,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic {
-	background: no-repeat url('img/icons/volume.svg');
+	background: no-repeat url('img/.old/icons/volume.svg');
 	background-size: 80%;
 	background-position: center;
 }
@@ -597,7 +597,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic.isMuted {
-	background: no-repeat url('img/icons/mute.svg') !important;
+	background: no-repeat url('img/.old/icons/mute.svg') !important;
 	background-size: 80% !important;
 	background-position: center !important ;
 }

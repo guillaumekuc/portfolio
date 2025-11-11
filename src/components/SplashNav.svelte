@@ -3,7 +3,7 @@
 	<div id="splashNavArea" class="splashNavArea">
 		<div bind:this={navElement} id="splashNav" class="splashNav">
 			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
-				<img src="/img/icons/blog.svg" alt="Blog" />
+				<img src="/img/.old/icons/blog.svg" alt="Blog" />
 				<span class="navLabel">Blog</span>
 			</a>
 
@@ -25,7 +25,7 @@
 					}
 				}}
 			>
-				<img src="/img/icons/keydown2_w.svg" alt="Works" />
+				<img src="/img/.old/icons/keydown2_w.svg" alt="Works" />
 				<span class="navLabel">Works</span>
 			</a>
 
@@ -41,7 +41,7 @@
 				}}
 				href="mailto:guillaume@guillaumekuc.com"
 			>
-				<img src="/img/icons/contact_w.svg" alt="Contact" />
+				<img src="/img/.old/icons/contact_w.svg" alt="Contact" />
 				<span class="navLabel">Contact</span>
 			</a>
 		</div>

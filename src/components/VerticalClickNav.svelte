@@ -5,7 +5,7 @@
 	class:hidden={!showTopArrow}
 	on:click={clickTopArrow}
 >
-	<img src="/img/icons/upArrow.png" alt="Up arrow" />
+	<img src="/img/.old/icons/upArrow.png" alt="Up arrow" />
 </button>
 <button
 	type="button"
@@ -14,7 +14,7 @@
 	class:hidden={!showBottomArrow}
 	on:click={clickBottomArrow}
 >
-	<img src="/img/icons/downArrow.png" alt="Down arrow" />
+	<img src="/img/.old/icons/downArrow.png" alt="Down arrow" />
 </button>
 
 <script>

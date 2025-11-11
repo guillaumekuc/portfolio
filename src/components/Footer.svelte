@@ -4,7 +4,7 @@
 			id="footerPreviousBtn"
 			class="footerPreviousBtn"
 			class:firstTrack={isFirstTrack}
-			on:click={handlePreviousClick}><img src="/img/icons/previous2.png" alt="Previous" /></button
+			on:click={handlePreviousClick}><img src="/img/.old/icons/previous2.png" alt="Previous" /></button
 		>
 		<button id="footerPlayBtn" class="footerPlayBtn" class:isPlaying on:click={handlePlayClick}
 		></button>
@@ -12,7 +12,7 @@
 			id="footerNextBtn"
 			class="footerNextBtn rSpacer"
 			class:lastTrack={isLastTrack}
-			on:click={handleNextClick}><img src="/img/icons/next2.png" alt="Next" /></button
+			on:click={handleNextClick}><img src="/img/.old/icons/next2.png" alt="Next" /></button
 		>
 		<input
 			bind:this={footerSleekSlider}
@@ -263,12 +263,12 @@
 	}
 
 	.footerPlayBtn {
-		background: no-repeat center url('img/icons/play_alt.png');
+		background: no-repeat center url('img/.old/icons/play_alt.png');
 		background-size: 80%;
 	}
 
 	.footerPlayBtn.isPlaying {
-		background: no-repeat center url('img/icons/pause.svg') !important;
+		background: no-repeat center url('img/.old/icons/pause.svg') !important;
 		background-size: 80% !important;
 	}
 
@@ -277,7 +277,7 @@
 	}
 
 	.footerLoopBtn {
-		background: no-repeat center url('img/icons/loop.png');
+		background: no-repeat center url('img/.old/icons/loop.png');
 		background-size: 80%;
 		opacity: 1;
 	}
