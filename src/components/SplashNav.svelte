@@ -1,7 +1,7 @@
 <div id="splashNavPositioner">
 	<div id="splashNavEmptySpace"></div>
 	<div id="splashNavArea" class="splashNavArea">
-		<div id="splashNav" class="splashNav">
+		<div bind:this={navElement} id="splashNav" class="splashNav">
 			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
 				<img src="/img/icons/blog.svg" alt="Blog" />
 				<span class="navLabel">Blog</span>
@@ -57,6 +57,25 @@
 	import { shortcuts } from '../utils/shortcuts.js';
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
+
+	let navElement;
+
+	function handleNavAnimate() {
+		if (navElement) {
+			navElement.style.opacity = '100%';
+		}
+		const navLinks = navElement?.querySelectorAll('a');
+		if (navLinks) {
+			navLinks.forEach((link) => {
+				link.style.opacity = '100%';
+			});
+			setTimeout(() => {
+				navLinks.forEach((link) => {
+					link.style.pointerEvents = 'auto';
+				});
+			}, 4000);
+		}
+	}
 
 	function updateSplashNavFocus() {
 		document.querySelectorAll('.splashNav a').forEach((link) => {
@@ -143,10 +162,13 @@
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowLeft', selectPreviousMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowRight', selectNextMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerSelectedMenuItem);
+
+		window.addEventListener('navAnimate', handleNavAnimate);
 	});
 
 	onDestroy(() => {
 		shortcuts.removeScreenShortcuts('splashscreen');
+		window.removeEventListener('navAnimate', handleNavAnimate);
 	});
 </script>
 

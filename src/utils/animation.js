@@ -17,64 +17,27 @@ export class Animation {
 	}
 
 	/**
-	 * Animates the opening sequence when entering the site
-	 * @param {Object} elements - Object containing DOM elements to animate
-	 * @param {HTMLElement} elements.startScreen - Start screen element
-	 * @param {HTMLElement} elements.art - Art element
-	 * @param {HTMLElement} elements.title - Title element
-	 * @param {HTMLElement} elements.subtitle - Subtitle element
-	 * @param {HTMLElement} elements.tagline - Description element
-	 * @param {HTMLElement} elements.domains - Domains element
-	 * @param {HTMLElement} elements.splashNav - Navigation element
-	 * @param {NodeList} elements.splashLinks - Splash link elements
-	 * @param {NodeList} elements.splashNavLinks - Navigation link elements
+	 * Coordinates the opening sequence animations by dispatching events to components
+	 * Each component handles its own animation logic internally
 	 */
-	static animateOpening(elements) {
-		const {
-			startScreen,
-			art,
-			title,
-			subtitle,
-			tagline,
-			domains,
-			splashNav,
-			splashLinks,
-			splashNavLinks
-		} = elements;
+	static animateOpening() {
+		// Start screen fade out - immediate
+		window.dispatchEvent(new CustomEvent('startScreenAnimate'));
 
-		// Fade out start screen
-		if (startScreen) {
-			startScreen.classList.add('fadeOut');
-		}
+		// Art scale animation - immediate
+		window.dispatchEvent(new CustomEvent('artAnimate'));
 
-		// Animate splash art
-		if (art) art.style.transform = 'scale(1)';
+		// Navigation animation - immediate (CSS transitions handle link delays)
+		window.dispatchEvent(new CustomEvent('navAnimate'));
 
-		// Fade in text elements
-		if (title) title.style.opacity = '100%';
-		if (subtitle) subtitle.style.opacity = '100%';
-		if (tagline) tagline.style.opacity = '100%';
-		if (domains) domains.style.opacity = '100%';
-		if (splashNav) splashNav.style.opacity = '100%';
+		// Hero animation - offset by 2.75s to match overall timing
+		setTimeout(() => {
+			window.dispatchEvent(new CustomEvent('heroAnimate'));
+		}, 2750);
 
-		// Animate splash links with staggered timing
-		let animStartTime = 3;
-		if (splashLinks) {
-			splashLinks.forEach((link) => {
-				link.style.transition = `opacity 1s ease-out ${animStartTime}s`;
-				link.style.opacity = '1';
-				animStartTime += 0.25;
-			});
-		}
-
-		// Animate navigation links
-		if (splashNavLinks) {
-			splashNavLinks.forEach((link) => {
-				link.style.opacity = '100%';
-				setTimeout(() => {
-					link.style.pointerEvents = 'auto';
-				}, 4000);
-			});
-		}
+		// Links staggered animation - starts at 3s
+		setTimeout(() => {
+			window.dispatchEvent(new CustomEvent('linksAnimate'));
+		}, 3000);
 	}
 }

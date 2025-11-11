@@ -21,6 +21,12 @@
 	let startScreenElement;
 	let enterBtn;
 
+	function handleStartScreenAnimate() {
+		if (startScreenElement) {
+			startScreenElement.classList.add('fadeOut');
+		}
+	}
+
 	function handleEnter() {
 		debugLog('Enter pressed');
 		// Clear modal flag and remove shortcuts immediately when Enter is pressed
@@ -34,19 +40,8 @@
 		const portfolioSections = document.querySelectorAll('.portfolioSection');
 		portfolioSections.forEach((portfolioSection) => portfolioSection.classList.add('hidden'));
 
-		// Get animation elements (cross-component access - acceptable for sibling components)
-		// Using querySelector is fine here since Head and Splashscreen are siblings
-		Animation.animateOpening({
-			startScreen: startScreenElement,
-			art: document.querySelector('#splashArt'),
-			title: document.querySelector('#splashTitle'),
-			subtitle: document.querySelector('#splashSubTitle'),
-			tagline: document.querySelector('#splashDescription'),
-			domains: document.querySelector('#splashDomains'),
-			splashNav: document.querySelector('#splashNav'),
-			splashLinks: document.querySelectorAll('.splashLinks a'),
-			splashNavLinks: document.querySelectorAll('.splashNav a')
-		});
+		// Trigger opening animations via coordinator
+		Animation.animateOpening();
 
 		// Display scrollbar
 		document.body.style.overflow = 'auto';
@@ -77,12 +72,16 @@
 
 		// Register Enter as modal shortcut
 		shortcuts.addModalShortcut('startScreen', 'Enter', triggerEnterButton);
+
+		// Listen for start screen animation trigger
+		window.addEventListener('startScreenAnimate', handleStartScreenAnimate);
 	});
 
 	onDestroy(() => {
 		// Clear modal and remove shortcuts
 		stores.navigation.currentModal.set(null);
 		shortcuts.removeModalShortcuts('startScreen');
+		window.removeEventListener('startScreenAnimate', handleStartScreenAnimate);
 	});
 </script>
 

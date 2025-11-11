@@ -4,7 +4,7 @@
 	<SplashBranding />
 
 	<div id="splashArtArea" class="splashArtArea">
-		<div id="splashArt" class="splashArt zoomIn">
+		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn">
 			<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"
 			></audio>
 
@@ -18,7 +18,7 @@
 </div>
 
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { initAudio, initNavigation, initAPI } from '../scripts.js';
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
@@ -28,6 +28,13 @@
 	import SplashBranding from './SplashBranding.svelte';
 
 	let bgMusicElement;
+	let artElement;
+
+	function handleArtAnimate() {
+		if (artElement) {
+			artElement.style.transform = 'scale(1)';
+		}
+	}
 
 	function startBackgroundMusic() {
 		// Wait a bit for the animation to start before playing music
@@ -51,6 +58,13 @@
 
 		// Listen for enter button press to start music
 		window.addEventListener('enterPressed', startBackgroundMusic);
+
+		// Listen for art animation trigger
+		window.addEventListener('artAnimate', handleArtAnimate);
+	});
+
+	onDestroy(() => {
+		window.removeEventListener('artAnimate', handleArtAnimate);
 	});
 </script>
 
@@ -66,7 +80,11 @@
 
 	.splashscreen {
 		position: relative;
-		z-index: 90;
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.splashArtArea {

@@ -1,36 +1,71 @@
-<div id="splashBranding" class="splashBranding">
-	<h1 id="splashTitle" class="splashTitle">Guillaume Kuc</h1>
-	<h2 id="splashSubTitle" class="splashSubTitle">— Protean artist —</h2>
-	<h2 id="splashDescription" class="splashDescription">
-		<small><i>...because some people just can't choose</i> 😅</small>
-	</h2>
-	<h2 id="splashDomains" class="splashDomains">Illustration · Music · 3D · Web</h2>
+<div id="splashscreen-hero" class="splashscreen-hero">
+	<div bind:this={logoElement} class="splashscreen-logo"></div>
+	<h1 bind:this={titleElement} id="splashscreen-hero-title" class="splashscreen-hero-title">{heroContent.name}</h1>
+	<h2 bind:this={headlineElement} id="splashscreen-hero-headline" class="splashscreen-hero-headline">{heroContent.headline}</h2>
 </div>
 
-<style>
-	.splashBranding {
-		position: absolute;
-		z-index: 95;
-		right: 0;
-		bottom: 10vh;
-		color: var(--shadeWhite);
-		--contourColor: rgba(0, 0, 0, 0.2);
-		text-shadow:
-			1px 0 var(--contourColor),
-			0 1px var(--contourColor),
-			-1px 0 var(--contourColor),
-			0 -1px var(--contourColor),
-			-1px -1px var(--contourColor),
-			-1px 1px var(--contourColor),
-			1px -1px var(--contourColor),
-			1px 1px var(--contourColor);
-		text-align: right;
-		line-height: 0;
-		padding-right: var(--safeMargin);
-		padding-bottom: calc(var(--safeMargin) / 2.5);
+<script>
+	import { onMount, onDestroy } from 'svelte';
+	import heroContent from '../config/splashscreen-hero.json';
+
+	let logoElement;
+	let titleElement;
+	let headlineElement;
+	let hasAnimated = false;
+
+	function animateHero() {
+		if (logoElement) {
+			logoElement.style.transition = 'opacity 1s ease-out 0s';
+			logoElement.style.opacity = '100%';
+		}
+		if (titleElement) {
+			titleElement.style.transition = 'opacity 1s ease-out 0.25s';
+			titleElement.style.opacity = '100%';
+		}
+		if (headlineElement) {
+			headlineElement.style.transition = 'opacity 1s ease-out 0.5s';
+			headlineElement.style.opacity = '100%';
+		}
 	}
 
-	.splashTitle {
+	function handleHeroTrigger() {
+		if (!hasAnimated) {
+			hasAnimated = true;
+			animateHero();
+		}
+	}
+
+	onMount(() => {
+		window.addEventListener('heroAnimate', handleHeroTrigger);
+	});
+
+	onDestroy(() => {
+		window.removeEventListener('heroAnimate', handleHeroTrigger);
+	});
+</script>
+
+<style>
+
+	.splashscreen-logo {
+		width: 100%;
+		height: 450px;
+		background-color: red;
+		opacity: 0;
+	}
+
+	.splashscreen-hero {
+		--splashscreen-hero-gap: 12px;
+		position: absolute;
+		z-index: 1;
+		color: white;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--splashscreen-hero-gap);
+	}
+
+	.splashscreen-hero-title {
 		opacity: 0;
 		font-size: 100%;
 		font-family: var(--ff1);
@@ -41,28 +76,12 @@
 		transition: opacity 1s ease-out 3s;
 	}
 
-	.splashSubTitle {
+	.splashscreen-hero-headline {
 		opacity: 0;
 		font-size: 66.66%;
 		line-height: 1;
 		margin: 0;
 		transition: opacity 1s ease-out 3.25s;
-	}
-
-	.splashDescription {
-		opacity: 0;
-		font-size: 66.66%;
-		margin: 0;
-		line-height: 1;
-		transition: opacity 1s ease-out 3.5s;
-	}
-
-	.splashDomains {
-		opacity: 0;
-		line-height: 1.5;
-		font-size: 66.66%;
-		transition: opacity 1s ease-out 3.75s;
-		margin-bottom: 0;
 	}
 </style>
 

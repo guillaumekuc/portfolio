@@ -3,7 +3,31 @@
 </div>
 
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import Links from './Links.svelte';
+
+	let linksContainer;
+
+	function handleLinksAnimate() {
+		if (linksContainer) {
+			const links = linksContainer.querySelectorAll('a');
+			let animStartTime = 0;
+			links.forEach((link) => {
+				link.style.transition = `opacity 1s ease-out ${animStartTime}s`;
+				link.style.opacity = '1';
+				animStartTime += 0.25;
+			});
+		}
+	}
+
+	onMount(() => {
+		linksContainer = document.querySelector('.splashLinks');
+		window.addEventListener('linksAnimate', handleLinksAnimate);
+	});
+
+	onDestroy(() => {
+		window.removeEventListener('linksAnimate', handleLinksAnimate);
+	});
 </script>
 
 <style>
