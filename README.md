@@ -82,7 +82,6 @@ The project uses **Svelte** framework with a modern component-based architecture
 ### Notes
 
 - The project was converted from PHP to a modern Svelte + Vite stack
-- Large media files (videos, images) are tracked in git. Consider using Git LFS for large files if needed
 - For production deployment, use `npm run build` and serve the `dist/` directory
 
 ---
@@ -129,39 +128,9 @@ The project underwent a complete architectural overhaul, migrating from a PHP-ba
 - Migrated shortcuts to their respective components
 - Added conflict prevention and scope management
 
-### Naming Refactoring (Latest)
-
-#### **Improved Code Clarity and Standards**
-- **Terminology Updates:**
-  - `rubrics` → `categories` - More intuitive terminology for portfolio categories
-  - `folios` → `portfolioSections` - Clearer naming for full-page portfolio sections
-  - Folder renamed: `components/folios/` → `components/portfolioSections/`
-  
-- **Abbreviated IDs Replaced:**
-  - `rBtn1-5` → `categoryButton1-5` - Descriptive button IDs
-  - `hnBtn1-5` → `headerNavButton1-5` - Clear header navigation button IDs
-  - `L0-L5` → Descriptive link classes (`contactLink`, `blogLink`, `artstationLink`, etc.)
-
-- **Method and Variable Names:**
-  - `cartography` → `scrollTracking` - Standard terminology
-  - `fakeHoverEvent` → `programmaticHover` - More accurate description
-  - `sleekHandler` → `seekHandler` - Corrected typo
-  - `menuSelected` → `selectedMenuItem` - More descriptive
-  - `showNavClues` → `showNavigationHints` - Clearer intent
-
-- **CSS Class Names:**
-  - `folio3D`, `folio2D`, etc. → `portfolio-3d`, `portfolio-2d`, etc. - Consistent kebab-case
-  - `scrollThis` → `scrollable` - Standard naming
-  - `extraClass` → `additionalClass` - More descriptive
-  - `folioWrapper` → `portfolioSectionWrapper` - Consistent with new terminology
-
-- **Element IDs and Variables:**
-  - `myPic` → `profilePicture`
-  - `myDescription` → `aboutDescription`
-  - `myHello` → `greeting`
-  - `myMail` → `emailLink`
-  - `oneLiner` → `tagline`
-
+#### 6. **Improved Code Clarity and Standards**
+- **Terminology Updates**
+ 
 ### Impact
 
 The project is now significantly more maintainable with:
@@ -170,15 +139,5 @@ The project is now significantly more maintainable with:
 - **Improved code quality** - Separation of concerns, reusable utilities
 - **Intuitive naming** - Standard terminology that's self-documenting
 - **Better developer experience** - Proper reactivity, component lifecycle, clear naming
-- **Comprehensive documentation** - Clear guides for future work
 - **Multiple bug fixes** - Issues resolved throughout development
-
-### Remaining Work
-
-See `docs/MAINTAINABILITY_ANALYSIS.md` and `docs/CODE_QUALITY_ISSUES.md` for:
-- CSS module organization
-- ESLint/Prettier setup
-- Testing framework integration
-- Focus management utilities extraction
-- jQuery dependency removal (still used for slick-carousel)
 
