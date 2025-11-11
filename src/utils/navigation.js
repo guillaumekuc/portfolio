@@ -176,7 +176,7 @@ export class Navigation {
 		function videoObserver(video) {
 			const observer = new IntersectionObserver((entries) => {
 				const entry = entries[0];
-				if (entry.intersectionRatio != 1 && !video.paused) {
+				if (entry.intersectionRatio !== 1 && !video.paused) {
 					video.pause();
 					const playBtn = video.parentElement.querySelector('.videoPlayBtn');
 					if (playBtn) playBtn.classList.remove('hidden');

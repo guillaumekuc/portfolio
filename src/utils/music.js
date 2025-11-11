@@ -119,7 +119,7 @@ export class Music {
 	unmute() {
 		if (!this.bgMusicElement) return;
 		const currentVolume = get(stores.music.volume);
-		if (currentVolume == undefined || currentVolume == 0) {
+		if (currentVolume === undefined || currentVolume === 0) {
 			this.bgMusicElement.volume = 1;
 			document.querySelectorAll('.largeVideo').forEach((video) => {
 				video.volume = 1;
@@ -147,7 +147,7 @@ export class Music {
 			video.volume = newVolume / 100;
 		});
 
-		if (newVolume == 0) {
+		if (newVolume === 0) {
 			stores.music.isMuted.set(true);
 		} else {
 			stores.music.isMuted.set(false);
