@@ -1,0 +1,34 @@
+---
+description: Rules
+globs:
+alwaysApply: true
+---
+
+- Svelte
+    - Ordering: markup, script, styles (in that order)
+    - File names use PascalCase for components (UserCard.svelte)
+    - Avoid inline reactive complex expressions ({formattedPrice} not {price.toFixed(2)} inline).
+- javascript
+    - Always use semicolons
+    - Classes: UpperCamelCase
+    - Variables and functions: lowerCamelCase
+    - Use arrow functions only for anonymous callbacks.
+    - Prefer function declarations for named functions.
+    - One default export per file.
+    - Use descriptive names for functions and variables; avoid abbreviations (e.g., totalPrice, not totPr).
+    - Avoid single letters except for indices/loop counters (i, j, k)
+    - Prefer async/await over raw .then() chains; handle errors with try/catch.
+    - use debugLog for logging. Do not use console.log.
+- general
+    - one responsibility per file. Split when a file gets too big (more than 300 lines) or mixes concerns.
+    - Avoid comments. Use descriptive names for functions and variables instead. 
+    - Use comments only to clarify non-obvious trade-offs or side effects.
+    - Comments can also be used to group code into sections.
+    - Multi lines comments shouldn't have a reason to exist: code should be self-explanatory.
+    - Outdated comments are worse than non-existant comments.
+- workflow
+    - after completing an operation, check for leftovers and clean-up dead code.
+    - while doing operations, also check the files that you are editing for adherence to the rules exposed above (continuous improvement).
+    - Do not include conversational text in code files. You can drop notes in the docs folder if needed.
+
+
