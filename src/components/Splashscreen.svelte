@@ -1,7 +1,4 @@
 <div id="splashscreen" class="splashscreen fullPage snap">
-	<div class="splashLinks">
-		<SplashLinks />
-	</div>
 	<SplashSound />
 
 	<SplashBranding />
@@ -12,18 +9,13 @@
 			></audio>
 
 			<div id="splashArtShader" class="splashArtShader"></div>
-			<!--#splashArtShader-->
 		</div>
-		<!--#splashArt-->
 	</div>
-	<!--splashArtArea-->
 
 	<div id="splashNavPositioner">
 		<SplashNav />
 	</div>
 </div>
-
-<!--#splashscreen-->
 
 <script>
 	import { onMount } from 'svelte';

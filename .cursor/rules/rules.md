@@ -8,6 +8,9 @@ alwaysApply: true
     - Ordering: markup, script, styles (in that order)
     - File names use PascalCase for components (UserCard.svelte)
     - Avoid inline reactive complex expressions ({formattedPrice} not {price.toFixed(2)} inline).
+- HTML/CSS
+    - CSS classes: use kebab-case (hyphenated lowercase) - e.g., `splashscreen-sound-controller`, `volume-slider`
+    - HTML IDs: use kebab-case (hyphenated lowercase) for consistency with CSS classes - e.g., `splashscreen-sound-controller`, `volume-slider`
 - javascript
     - Always use semicolons
     - Classes: UpperCamelCase
@@ -26,6 +29,7 @@ alwaysApply: true
     - Comments can also be used to group code into sections.
     - Multi lines comments shouldn't have a reason to exist: code should be self-explanatory.
     - Outdated comments are worse than non-existant comments.
+    - Do not add explanatory or conversational comments in code (including CSS). Examples of what NOT to add: "/* this property inherits from above */", "/* background-size is not overridden */", etc. Code should be self-explanatory through proper naming and structure.
 - workflow
     - after completing an operation, check for leftovers and clean-up dead code.
     - while doing operations, also check the files that you are editing for adherence to the rules exposed above (continuous improvement).
