@@ -105,12 +105,6 @@
 	.headerNav button.focus {
 		color : var(--shadeWhite);
 	}
-
-	.headerLinks  .tooltipText {
-		top : 125%;
-		left : 50%;
-		transform : translateX(-50%);
-	}
 </style>
 
 <div id="header" class="header">

@@ -214,7 +214,12 @@
 			<a class="myMail" target="_blank" on:click|preventDefault={handleMailClick} href="mailto:guillaume@guillaumekuc.com">guillaume[at]guillaumekuc.com</a>
 		</div>
 		<div id="aboutBottom">	
-			<a id="backToTop" on:click={handleBackToTop}>
+			<a id="backToTop" role="button" tabindex="0" on:click={handleBackToTop} on:keydown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					handleBackToTop();
+				}
+			}}>
 				<img src="/img/icons/backToTop2.png" alt="Back to top" />
 			</a>
 			<div id="copyright"><span style="font-variant : small-caps;">Guillaume Kuc</span> .art — ©2022 Guillaume Kuc</div>

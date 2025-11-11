@@ -240,9 +240,15 @@
 
 			<span>·</span>
 
-			<a id="worksBtn" on:click={() => {
+			<a id="worksBtn" role="button" tabindex="0" on:click={() => {
 				const rubrics = document.querySelector('#rubrics');
 				if (rubrics) rubrics.scrollIntoView();
+			}} on:keydown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					const rubrics = document.querySelector('#rubrics');
+					if (rubrics) rubrics.scrollIntoView();
+				}
 			}}>
                 <img src="/img/icons/keydown2_w.svg" alt="Works" />
                 <span class="navLabel">Works</span>

@@ -299,8 +299,16 @@
 			class="rubric {rubric.extraClass}"
 			class:focus={rubricFocused === rubric.focused}
 			style="background-image : url('{rubric.backgroundImage}');"
+			role="button"
+			tabindex="0"
 			on:mousemove={() => handleRubricHover(rubric.focused)}
 			on:click={handleRubricClick}
+			on:keydown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					handleRubricClick();
+				}
+			}}
 		>
 			<div class="softwareIcons" class:navClues={rubric.showNavClues}>
 				{#if rubric.showNavClues}

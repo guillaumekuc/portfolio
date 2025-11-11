@@ -54,12 +54,6 @@
 </script>
 
 <style>
-	.siteLabel {
-		background-color: var(--shade2);
-		border-radius: 5px;
-		vertical-align: middle;
-	}
-
 	.websiteLink {
 		display : inline-block;
 		width : 90%;

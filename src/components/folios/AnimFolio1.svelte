@@ -78,8 +78,9 @@
 	<div bind:this={videoContainer} class="wideLeftThirds" style="position : relative;background-color : #5a5d5a; overflow:hidden; ">
 		<video bind:this={videoElement} class="largeVideo" preload="none" loop poster="/vid/anim/animReelPoster.png" on:click={handleVideoClick}>
 			<source src="/vid/anim/animReel.mp4" type="video/mp4">
+			<track kind="captions" />
 		</video>
-		<a bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn}></a>
+		<button type="button" bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn} aria-label="Play video"></button>
 	</div>
 	<div class="shortRightThirds">
 		<span class="title">Animation Demoreel<small></small></span>
