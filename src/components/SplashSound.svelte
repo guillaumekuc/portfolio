@@ -64,7 +64,7 @@
 		position: absolute;
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-end;
 		top: var(--splashscreen-sound-margins);
 		right: var(--splashscreen-sound-margins);
 		background: var(--splashscreen-sound-background-color);
@@ -81,11 +81,15 @@
 		height: calc(var(--splashscreen-sound-size) / 2);
 		background: rgba(255, 255, 255, 0.5);
 		overflow: hidden;
-		transition: width 0.3s ease, opacity 0.3s ease, margin-right 0.3s ease;
+		transition: width 0.3s ease, margin-right 0.3s ease;
+		margin-right: 0;
+		flex-shrink: 0;
 	}
 
 	.splashscreen-sound:hover .volume-slider {
 		width: var(--splashscreen-sound-slider-width);
+		margin-right: calc(var(--splashscreen-sound-margins) / 2);
+		margin-left: calc(var(--splashscreen-sound-margins) / 2);
 	}
 
 	.splashscreen-sound .mute-button {
@@ -95,6 +99,7 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: var(--splashscreen-sound-icon-size);
+		flex-shrink: 0;
 	}
 
 	.splashscreen-sound .mute-button.isMuted {	
