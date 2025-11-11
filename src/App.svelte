@@ -16,8 +16,6 @@
 	import 'slick-carousel/slick/slick.css';
 	import 'slick-carousel/slick/slick-theme.css';
 	
-	// Import scripts - initialization now handles everything
-	import { initScripts } from './scripts.js';
 	import { debugLog } from './utils/debuglog.js';
 	
 	onMount(() => {

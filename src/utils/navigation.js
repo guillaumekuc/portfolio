@@ -91,10 +91,9 @@ export class Navigation {
 	/**
 	 * Instance methods for navigation controller
 	 */
-	constructor(musicPlayer, websitesArray) {
+	constructor(musicPlayer) {
 		// Dependencies
 		this.musicPlayer = musicPlayer;
-		this.websitesArray = websitesArray;
 		
 		// State - only keep non-store properties
 		this.allRubrics = [];

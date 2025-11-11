@@ -12,9 +12,8 @@ window.$ = window.jQuery = $;
 /**
  * Initialize scripts with element references
  * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
- * @param {Array} websitesArray - Array of website link elements (optional, can be empty initially)
  */
-export function initScripts(audioElement, websitesArray = []) {
+export function initScripts(audioElement) {
 	debugLog('Initializing scripts');
 	
 	if (!audioElement) {
@@ -27,7 +26,7 @@ export function initScripts(audioElement, websitesArray = []) {
 	musicPlayer.init(audioElement);
 	
 	// Initialize navigation controller
-	const navigationController = new Navigation(musicPlayer, websitesArray);
+	const navigationController = new Navigation(musicPlayer);
 	navigationController.init();
 	
 	// Store instances in stores for component access
@@ -46,15 +45,3 @@ export function initScripts(audioElement, websitesArray = []) {
 	};
 }
 
-// Export functions for backward compatibility
-export function bgMusicControls() {
-	// Music controls are now handled by Music class instance
-	// This function is kept for backward compatibility but does nothing
-	// as setup is done in initScripts()
-}
-
-export function navigation() {
-	// Navigation is now handled by NavigationController class instance
-	// This function is kept for backward compatibility but does nothing
-	// as setup is done in initScripts()
-}
