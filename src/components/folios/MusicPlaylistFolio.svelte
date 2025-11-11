@@ -39,8 +39,8 @@
 	stores.music.tracks.set(tracks);
 	
 	function handleTrackClick(index) {
-		const player = window.musicPlayer;
-		const bgMusic = document.querySelector('#bgMusic');
+		const player = get(stores.music.musicPlayer);
+		const bgMusic = player?.bgMusicElement;
 		if (player && bgMusic) {
 			const track = tracks[index];
 			bgMusic.setAttribute('src', track.sound);
@@ -59,7 +59,7 @@
 	}
 
 	function playNextTrack() {
-		const player = window.musicPlayer;
+		const player = get(stores.music.musicPlayer);
 		if (player) {
 			player.nextTrackHandler();
 			setTimeout(() => {
@@ -71,7 +71,7 @@
 	}
 
 	function playPreviousTrack() {
-		const player = window.musicPlayer;
+		const player = get(stores.music.musicPlayer);
 		if (player) {
 			player.previousTrackHandler();
 			setTimeout(() => {
@@ -83,8 +83,11 @@
 	}
 
 	onMount(() => {
-		bgMusicElement = document.querySelector('#bgMusic');
-		musicPlayer = window.musicPlayer;
+		const player = get(stores.music.musicPlayer);
+		if (player) {
+			bgMusicElement = player.bgMusicElement;
+			musicPlayer = player;
+		}
 		stores.music.playlistLength.set(tracks.length);
 		
 		// Initialize track image

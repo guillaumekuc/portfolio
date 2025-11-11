@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { stores } from '../stores.js';
+	import { get } from 'svelte/store';
 	
 	const volumeStore = stores.music.volume;
 	$: volume = $volumeStore;
@@ -9,39 +10,31 @@
 	$: isMuted = $isMutedStore;
 	
 	let splashscreenVolumeSlider;
-	let musicPlayer;
 	
-	// Reactively wait for musicPlayer to be available
+	// Get music player from store
+	const musicPlayerStore = stores.music.musicPlayer;
+	$: musicPlayer = $musicPlayerStore;
+	
+	// Sync volume slider when musicPlayer becomes available
 	$: {
-		if (window.musicPlayer && !musicPlayer) {
-			musicPlayer = window.musicPlayer;
-			// Sync volume slider with store once musicPlayer is available
-			if (splashscreenVolumeSlider) {
-				splashscreenVolumeSlider.value = volume;
-			}
+		if (musicPlayer && splashscreenVolumeSlider) {
+			splashscreenVolumeSlider.value = volume;
 		}
 	}
 	
 	function handleVolumeInput(e) {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.volumeHandler(e.target);
+		if (musicPlayer) {
+			musicPlayer.volumeHandler(e.target);
 		}
 	}
 	
 	function handleMuteClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.muteHandler();
+		if (musicPlayer) {
+			musicPlayer.muteHandler();
 		}
 	}
 	
 	onMount(() => {
-		// Try to get musicPlayer immediately
-		if (window.musicPlayer) {
-			musicPlayer = window.musicPlayer;
-		}
-		
 		// Sync volume slider with store
 		if (splashscreenVolumeSlider) {
 			splashscreenVolumeSlider.value = volume;

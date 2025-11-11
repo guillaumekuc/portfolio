@@ -1,7 +1,5 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { get } from 'svelte/store';
-	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 
 	// Website data
@@ -22,41 +20,25 @@
 		}
 	];
 
-	// Extract store for reactive access
-	const websitesCurrentIndexStore = stores.navigation.websitesCurrentIndex;
-	$: websitesCurrentIndex = $websitesCurrentIndexStore;
+	// Local state for website selection (not shared across components)
+	let websitesCurrentIndex = 0;
 
 	function handleMouseMove(index) {
-		stores.navigation.websitesCurrentIndex.set(index);
+		websitesCurrentIndex = index;
 	}
 
 	function focusNextWebsite() {
-		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-		const newIndex = websitesCurrentIndex < 1 ? websitesCurrentIndex + 1 : 0;
-		stores.navigation.websitesCurrentIndex.set(newIndex);
-		document.querySelectorAll('.websiteLink').forEach((link) => {
-			link.classList.remove('focus');
-		});
-		const websiteLink = document.querySelectorAll('.websiteLink')[newIndex];
-		if (websiteLink) websiteLink.classList.add('focus');
+		websitesCurrentIndex = websitesCurrentIndex < 1 ? websitesCurrentIndex + 1 : 0;
 	}
 
 	function focusPreviousWebsite() {
-		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-		const newIndex = websitesCurrentIndex > 0 ? websitesCurrentIndex - 1 : 1;
-		stores.navigation.websitesCurrentIndex.set(newIndex);
-		document.querySelectorAll('.websiteLink').forEach((link) => {
-			link.classList.remove('focus');
-		});
-		const websiteLink = document.querySelectorAll('.websiteLink')[newIndex];
-		if (websiteLink) websiteLink.classList.add('focus');
+		websitesCurrentIndex = websitesCurrentIndex > 0 ? websitesCurrentIndex - 1 : 1;
 	}
 
 	function openSelectedWebsite() {
-		const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-		const websiteLink = document.querySelectorAll('.websiteLink')[websitesCurrentIndex];
-		if (websiteLink) {
-			window.open(websiteLink.getAttribute('href'));
+		const website = websites[websitesCurrentIndex];
+		if (website) {
+			window.open(website.href);
 		}
 	}
 

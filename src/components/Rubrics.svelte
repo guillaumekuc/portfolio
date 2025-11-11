@@ -10,22 +10,18 @@
 	const rubricFocusedStore = stores.navigation.rubricFocused;
 	$: rubricFocused = $rubricFocusedStore;
 
-	let allRubrics = [];
-
-	function updateRubricFocus() {
+	// Reactive statement to update header nav focus and folio visibility
+	$: {
 		const rubricFocused = get(stores.navigation.rubricFocused);
-		const idToFocus = '#rBtn' + rubricFocused;
-		allRubrics.forEach((rubric) => rubric.classList.remove('focus'));
-		const rubricElement = document.querySelector(idToFocus);
-		if (rubricElement) rubricElement.classList.add('focus');
-		
+		// Update header nav focus (cross-component, acceptable querySelector)
 		const target = '#hnBtn' + rubricFocused;
-		document.querySelectorAll('.headerNav a').forEach((link) => {
-			link.classList.remove('focus');
+		document.querySelectorAll('.headerNav button').forEach((btn) => {
+			btn.classList.remove('focus');
 		});
 		const headerNavLink = document.querySelector(target);
 		if (headerNavLink) headerNavLink.classList.add('focus');
 		
+		// Update folio visibility
 		const rubricClass = Navigation.getRubricClass(rubricFocused);
 		Navigation.hideIrrelevantFolios(rubricClass);
 	}
@@ -35,7 +31,6 @@
 		const newRubricFocused = rubricFocused === 5 ? 1 : rubricFocused + 1;
 		stores.navigation.rubricFocused.set(newRubricFocused);
 		debugLog('Rubric changed:', newRubricFocused);
-		updateRubricFocus();
 	}
 
 	function selectPreviousRubric() {
@@ -43,7 +38,6 @@
 		const newRubricFocused = rubricFocused === 1 ? 5 : rubricFocused - 1;
 		stores.navigation.rubricFocused.set(newRubricFocused);
 		debugLog('Rubric changed:', newRubricFocused);
-		updateRubricFocus();
 	}
 
 	function goToSplashscreen() {
@@ -73,8 +67,6 @@
 	}
 
 	onMount(() => {
-		allRubrics = document.querySelectorAll('.rubric');
-
 		shortcuts.addScreenShortcut('rubrics', 'ArrowRight', selectNextRubric);
 		shortcuts.addScreenShortcut('rubrics', 'ArrowLeft', selectPreviousRubric);
 		shortcuts.addScreenShortcut('rubrics', 'ArrowUp', goToSplashscreen);

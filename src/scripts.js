@@ -2,31 +2,42 @@ import $ from 'jquery';
 import 'slick-carousel';
 import { Music } from './utils/music.js';
 import { Navigation } from './utils/navigation.js';
-import { Init } from './utils/init.js';
 import { debugLog } from './utils/debuglog.js';
+import { stores } from './stores.js';
+import { appAPI } from './utils/api.js';
 
 // Make jQuery available globally for slick-carousel
 window.$ = window.jQuery = $;
 
-// Global instances
-let musicPlayer;
-let navigationController;
-
-// Initialize script variables after DOM is ready
-export function initScripts() {
+/**
+ * Initialize scripts with element references
+ * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
+ * @param {Array} websitesArray - Array of website link elements (optional, can be empty initially)
+ */
+export function initScripts(audioElement, websitesArray = []) {
 	debugLog('Initializing scripts');
-	const elements = Init.initScripts();
 	
-	// Initialize music player
-	musicPlayer = new Music();
-	musicPlayer.init(elements);
+	if (!audioElement) {
+		debugLog('Warning: Audio element not provided');
+		return null;
+	}
+	
+	// Initialize music player with audio element
+	const musicPlayer = new Music();
+	musicPlayer.init(audioElement);
 	
 	// Initialize navigation controller
-	navigationController = new Navigation(musicPlayer, elements.websitesArray);
+	const navigationController = new Navigation(musicPlayer, websitesArray);
 	navigationController.init();
 	
-	// Make music player globally accessible for event listeners
-	window.musicPlayer = musicPlayer;
+	// Store instances in stores for component access
+	stores.music.musicPlayer.set(musicPlayer);
+	stores.navigation.controller.set(navigationController);
+	
+	// Expose to window.app for console debugging (external access only)
+	appAPI.musicPlayer = musicPlayer;
+	appAPI.navigation = navigationController;
+	appAPI.stores = stores;
 	
 	debugLog('Scripts initialized');
 	return {

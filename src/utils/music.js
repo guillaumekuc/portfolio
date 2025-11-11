@@ -24,10 +24,11 @@ export class Music {
 	}
 
 	/**
-	 * Initialize music player with DOM elements
+	 * Initialize music player with audio element
+	 * @param {HTMLAudioElement} audioElement - The audio element to control
 	 */
-	init(elements) {
-		this.bgMusicElement = elements.bgMusicElement;
+	init(audioElement) {
+		this.bgMusicElement = audioElement;
 		debugLog('Music player initialized');
 		
 		// Setup time update listener to update stores

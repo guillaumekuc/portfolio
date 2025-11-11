@@ -19,14 +19,14 @@
 		document.querySelector('#splashscreen')?.scrollIntoView();
 	}
 
+	let scrollThisElement;
+
 	function scrollContentUp() {
-		const scrollThis = document.querySelector('#about .scrollThis');
-		if (scrollThis) scrollThis.scrollTop -= 30;
+		if (scrollThisElement) scrollThisElement.scrollTop -= 30;
 	}
 
 	function scrollContentDown() {
-		const scrollThis = document.querySelector('#about .scrollThis');
-		if (scrollThis) scrollThis.scrollTop += 30;
+		if (scrollThisElement) scrollThisElement.scrollTop += 30;
 	}
 
 	onMount(() => {
@@ -197,7 +197,7 @@
 					<ul><small>2. </small>Able to do many different things; versatile.</ul><br>
 			</div>
 			
-			<div id="myDescription" class="scrollThis">
+			<div bind:this={scrollThisElement} id="myDescription" class="scrollThis">
 				<div id="myHello">Bonjour !</div>
 				<span>I am currently employed as a 2D/3D graphic designer <a href="https://visioglobe.com/">@visioglobe</a> and am also open for any kind of comissions that I would be suited for, which ranges from <strong>Illustration</strong> <i>[concept-art, book covers, game-art]</i>, to <strong>Music</strong> <i>[score writing, guitar recording, sound design]</i>, covering <strong>Web-development</strong><i>[showcase sites, blogs, design]</i> and <strong>3D animation</strong>.</span>
 

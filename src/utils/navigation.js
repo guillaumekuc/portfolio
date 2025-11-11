@@ -62,25 +62,23 @@ export class Navigation {
 	}
 
 	/**
-	 * Hides all folios except those matching the rubric class
+	 * Updates folio visibility store based on rubric class
+	 * Components react to this store to show/hide folios
 	 * @param {string} rubricClass - Class name of folios to show
 	 */
 	static hideIrrelevantFolios(rubricClass) {
-		// Hide all folios - use both CSS class and inline style for immediate, reliable hiding
-		// Inline style ensures IntersectionObserver can't detect elements during async callbacks
+		const visibilityMap = new Map();
+		
+		// Get all folios and determine visibility based on rubric class
 		document.querySelectorAll('.folio').forEach(folio => {
-			folio.classList.add('hidden');
-			folio.style.setProperty('display', 'none', 'important');
+			const folioId = folio.id;
+			// Check if folio has the matching rubric class
+			const isVisible = folio.classList.contains(rubricClass);
+			visibilityMap.set(folioId, isVisible);
 		});
 		
-		// Show only folios matching the rubric class
-		const visibleFolios = document.querySelectorAll('.' + rubricClass);
-		visibleFolios.forEach(folio => {
-			folio.classList.remove('hidden');
-			folio.style.removeProperty('display');
-		});
-		
-		debugLog('Filtered folios - showing:', rubricClass, 'count:', visibleFolios.length);
+		stores.navigation.folioVisibility.set(visibilityMap);
+		debugLog('Filtered folios - showing:', rubricClass, 'visible count:', Array.from(visibilityMap.values()).filter(v => v).length);
 	}
 
 	/**
@@ -105,7 +103,6 @@ export class Navigation {
 		stores.navigation.currentScreen.set('startScreen');
 		stores.navigation.rubricFocused.set(3);
 		stores.navigation.menuSelected.set(1);
-		stores.navigation.websitesCurrentIndex.set(0);
 	}
 
 	/**
@@ -168,15 +165,8 @@ export class Navigation {
 						if (bottomArrow) bottomArrow.classList.add('hidden');
 					}
 
-					if (currentScreen === 'websitesFolio') {
-						document.querySelectorAll('.websiteLink').forEach((link) => {
-							link.classList.remove('focus');
-						});
-						const websitesCurrentIndex = get(stores.navigation.websitesCurrentIndex);
-						if (self.websitesArray[websitesCurrentIndex]) {
-							self.websitesArray[websitesCurrentIndex].classList.add('focus');
-						}
-					}
+					// Websites component handles focus reactively via local state
+					// No need to manipulate DOM here
 				}
 			}, { threshold: [0.5] });
 

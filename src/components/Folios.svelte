@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { stores } from '../stores.js';
 	import MusicPlaylistFolio from './folios/MusicPlaylistFolio.svelte';
 	import IllustrationFolio1 from './folios/IllustrationFolio1.svelte';
 	import IllustrationFolio2 from './folios/IllustrationFolio2.svelte';
@@ -11,6 +12,29 @@
 	import AnimFolio1 from './folios/AnimFolio1.svelte';
 	import P4bookFolio from './folios/P4bookFolio.svelte';
 	import Websites from './folios/Websites.svelte';
+
+	// Reactive folio visibility from store
+	const folioVisibilityStore = stores.navigation.folioVisibility;
+	$: folioVisibility = $folioVisibilityStore;
+
+	// Reactive statements to update DOM based on store
+	$: {
+		if (folioVisibility && folioVisibility.size > 0) {
+			// Update each folio's visibility based on store
+			folioVisibility.forEach((isVisible, folioId) => {
+				const folioElement = document.getElementById(folioId);
+				if (folioElement) {
+					if (isVisible) {
+						folioElement.classList.remove('hidden');
+						folioElement.style.removeProperty('display');
+					} else {
+						folioElement.classList.add('hidden');
+						folioElement.style.setProperty('display', 'none', 'important');
+					}
+				}
+			});
+		}
+	}
 
 	onMount(() => {
 		// Initialize slick carousel on galleries

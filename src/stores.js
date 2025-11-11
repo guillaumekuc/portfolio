@@ -18,7 +18,9 @@ export const stores = {
 		duration: writable(0),
 		playlistLength: writable(0),
 		trackImage: writable('/img/bgMusic.jpg'),
-		tracks: writable([])
+		tracks: writable([]),
+		// Music player instance
+		musicPlayer: writable(null)
 	},
 
 	/**
@@ -29,7 +31,10 @@ export const stores = {
 		currentModal: writable(null),
 		rubricFocused: writable(3),
 		menuSelected: writable(1),
-		websitesCurrentIndex: writable(0)
+		// Map of folio ID to visibility boolean for reactive folio visibility
+		folioVisibility: writable(new Map()),
+		// Navigation controller instance
+		controller: writable(null)
 	},
 
 	/**
@@ -39,22 +44,3 @@ export const stores = {
 		debug: writable(true)
 	}
 };
-
-// Helper function to get DOM elements (for compatibility with existing code)
-export function getMusicElements() {
-	return {
-		bgMusicElement: document.querySelector("#bgMusic"),
-		splashscreenVolumeSlider: document.querySelector('#bgVolume'),
-		footerVolumeSlider: document.querySelector('#footerVolumeSlider'),
-		splashscreenMuteBtn: document.querySelector('#muteBgMusic'),
-		footerMuteBtn: document.querySelector('#footerMuteBtn'),
-		footerPlayBtn: document.querySelector('#footerPlayBtn'),
-		footerSleekSlider: document.querySelector('#footerSleekSlider'),
-		footerLoopBtn: document.querySelector('#footerLoopBtn'),
-		currentTimeDisplay: document.querySelector('#currentTime'),
-		durationDisplay: document.querySelector('#duration'),
-		musicPlaylist: document.querySelectorAll('#musicPlaylist li'),
-		musicArray: Array.from(document.querySelector('#musicPlaylist')?.children || []),
-		websitesArray: Array.from(document.querySelectorAll('.websiteLink') || [])
-	};
-}

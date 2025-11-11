@@ -21,10 +21,9 @@
 	import { debugLog } from './utils/debuglog.js';
 	
 	onMount(() => {
-		// Initialize all scripts (music player, navigation, etc.)
-		// This now handles everything that was previously in bgMusicControls() and navigation()
+		// Scripts are now initialized by Splashscreen component when audio element is available
+		// This ensures the element exists before initialization
 		debugLog('App mounted');
-		initScripts();
 	});
 </script>
 

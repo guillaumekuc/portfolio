@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { stores } from '../stores.js';
 	import { Time } from '../utils/time.js';
+	import { get } from 'svelte/store';
 	
 	const isPlayingStore = stores.music.isPlaying;
 	$: isPlaying = $isPlayingStore;
@@ -40,9 +41,12 @@
 	let footerVolumeSlider;
 	let footerSleekSlider;
 	let bgMusicElement;
-	let musicPlayer;
 	let isSeeking = false;
 	let sliderValue = 0;
+	
+	// Get music player from store
+	const musicPlayerStore = stores.music.musicPlayer;
+	$: musicPlayer = $musicPlayerStore;
 	
 	// Update slider value only when not being dragged by user
 	$: {
@@ -50,53 +54,40 @@
 			sliderValue = seekValue;
 		}
 	}
-	
-	// Reactively wait for musicPlayer to be available
-	$: {
-		if (window.musicPlayer && !musicPlayer) {
-			musicPlayer = window.musicPlayer;
-		}
-	}
-	
+
 	function handlePlayClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.playHandler();
+		if (musicPlayer) {
+			musicPlayer.playHandler();
 		}
 	}
-	
+
 	function handleMuteClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.muteHandler();
+		if (musicPlayer) {
+			musicPlayer.muteHandler();
 		}
 	}
-	
+
 	function handleLoopClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.loopHandler();
+		if (musicPlayer) {
+			musicPlayer.loopHandler();
 		}
 	}
-	
+
 	function handleNextClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.nextTrackHandler();
+		if (musicPlayer) {
+			musicPlayer.nextTrackHandler();
 		}
 	}
-	
+
 	function handlePreviousClick() {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.previousTrackHandler();
+		if (musicPlayer) {
+			musicPlayer.previousTrackHandler();
 		}
 	}
-	
+
 	function handleVolumeInput(e) {
-		const player = musicPlayer || window.musicPlayer;
-		if (player) {
-			player.volumeHandler(e.target);
+		if (musicPlayer) {
+			musicPlayer.volumeHandler(e.target);
 		}
 	}
 	
@@ -112,8 +103,7 @@
 	
 	function handleSeekEnd() {
 		isSeeking = false;
-		const player = musicPlayer || window.musicPlayer;
-		if (player && bgMusicElement && footerSleekSlider) {
+		if (musicPlayer && bgMusicElement && footerSleekSlider) {
 			const newTime = (sliderValue / 100) * bgMusicElement.duration;
 			bgMusicElement.currentTime = newTime;
 			stores.music.currentTime.set(newTime);
@@ -121,10 +111,10 @@
 	}
 	
 	onMount(() => {
-		bgMusicElement = document.querySelector('#bgMusic');
-		// Try to get musicPlayer immediately
-		if (window.musicPlayer) {
-			musicPlayer = window.musicPlayer;
+		// Get music player and audio element from store
+		const player = get(stores.music.musicPlayer);
+		if (player) {
+			bgMusicElement = player.bgMusicElement;
 		}
 		
 		// Sync volume slider with store

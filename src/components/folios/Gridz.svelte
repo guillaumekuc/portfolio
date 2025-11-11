@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
-	import { getMusicElements } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 
 	let videoElement;
@@ -17,7 +16,8 @@
 			videoElement.pause();
 			showPlayBtn = true;
 			
-			const { bgMusicElement } = getMusicElements();
+			const musicPlayer = get(stores.music.musicPlayer);
+			const bgMusicElement = musicPlayer?.bgMusicElement;
 			const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 			if (bgMusicElement && bgMusicElement.paused && unpauseWhenDone) {
 				bgMusicElement.play();
@@ -27,7 +27,8 @@
 			videoElement.play();
 			showPlayBtn = false;
 			
-			const { bgMusicElement } = getMusicElements();
+			const musicPlayer = get(stores.music.musicPlayer);
+			const bgMusicElement = musicPlayer?.bgMusicElement;
 			const isPlaying = get(stores.music.isPlaying);
 			if (isPlaying && !videoElement.muted && bgMusicElement) {
 				bgMusicElement.pause();
@@ -52,7 +53,8 @@
 					videoElement.pause();
 					showPlayBtn = true;
 					
-					const { bgMusicElement } = getMusicElements();
+					const musicPlayer = get(stores.music.musicPlayer);
+			const bgMusicElement = musicPlayer?.bgMusicElement;
 					const unpauseWhenDone = get(stores.music.unpauseWhenDone);
 					if (unpauseWhenDone && bgMusicElement) {
 						bgMusicElement.play();

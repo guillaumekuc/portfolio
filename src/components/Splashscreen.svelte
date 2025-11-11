@@ -1,16 +1,27 @@
 <script>
 	import { onMount } from 'svelte';
+	import { initScripts } from '../scripts.js';
+	import { stores } from '../stores.js';
+	import { get } from 'svelte/store';
 	import SplashLinks from './SplashLinks.svelte';
 	import SplashSound from './SplashSound.svelte';
 	import SplashNav from './SplashNav.svelte';
 
+	let bgMusicElement;
+
 	onMount(() => {
+		// Initialize scripts with audio element once it's available
+		if (bgMusicElement) {
+			initScripts(bgMusicElement);
+		}
+
 		// Listen for enter button press to start music
 		window.addEventListener('enterPressed', () => {
 			// Wait a bit for the animation to start
 			setTimeout(() => {
-				if (window.musicPlayer) {
-					window.musicPlayer.play();
+				const musicPlayer = get(stores.music.musicPlayer);
+				if (musicPlayer) {
+					musicPlayer.play();
 				}
 			}, 1000);
 		});
@@ -145,7 +156,7 @@
 
 <div id="splashArtArea" class="splashArtArea">
 	<div id="splashArt" class="splashArt zoomIn">
-		<audio id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"></audio>
+		<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"></audio>
 
 		<div id="splashArtShader" class="splashArtShader">
 		</div><!--#splashArtShader-->
