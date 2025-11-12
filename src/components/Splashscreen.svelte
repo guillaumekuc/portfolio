@@ -32,7 +32,7 @@
 
 	function handleArtAnimate() {
 		if (artElement) {
-			artElement.style.transform = 'scale(1)';
+			artElement.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
 		}
 	}
 

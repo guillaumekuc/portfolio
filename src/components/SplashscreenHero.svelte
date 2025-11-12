@@ -8,18 +8,38 @@
 	</div>
 
 	<h2 bind:this={headlineElement} id="splashscreen-hero-headline" class="splashscreen-hero-headline">{heroContent.headline}</h2>
+
+	<div bind:this={socialsElement} class="splashscreen-hero-socials">
+		{#each enabledSocials as social, index}
+			<a
+				href={social.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="social-link"
+				aria-label={social.name}
+			>
+				<SocialIcon iconPath={social.icon} />
+			</a>
+		{/each}
+	</div>
 </div>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import heroContent from '../config/splashscreen-hero.json';
+	import socialsData from '../config/socials.json';
 	import TitleSvg from './TitleSvg.svelte';
 	import EmblemSvg from './EmblemSvg.svelte';
+	import SocialIcon from './SocialIcon.svelte';
 
 	let logoElement;
 	let titleElement;
 	let headlineElement;
+	let socialsElement;
 	let hasAnimated = false;
+
+	// Filter enabled socials for cleaner iteration
+	$: enabledSocials = socialsData.socials.filter(social => !social.disabled);
 
 	function animateHero() {
 		if (logoElement) {
@@ -33,6 +53,19 @@
 		if (headlineElement) {
 			headlineElement.style.transition = 'opacity 1s ease-out 0.5s';
 			headlineElement.style.opacity = '100%';
+		}
+		if (socialsElement) {
+			// Animate the container first
+			socialsElement.style.transition = 'opacity 0.3s ease-out 0.75s';
+			socialsElement.style.opacity = '100%';
+			
+			// Then animate individual icons with staggered delays
+			const socialLinks = socialsElement.querySelectorAll('.social-link');
+			socialLinks.forEach((link, index) => {
+				const delay = 0.75 + index * 0.1;
+				link.style.transition = `opacity 0.5s ease-out ${delay}s, transform 0.2s ease`;
+				link.style.opacity = '100%';
+			});
 		}
 	}
 
@@ -57,7 +90,7 @@
 
 	.splashscreen-logo {
 		color: var(--splashscreen-hero-text-primary);
-		opacity: 1;
+		opacity: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -94,6 +127,9 @@
 		align-items: center;
 		justify-content: center;
         color: var(--splashscreen-hero-text-accent);
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		
 	}
 
 	.splashscreen-hero-headline {
@@ -103,6 +139,32 @@
         font-weight: bold;
         letter-spacing: 0.1em;
         color: var(--splashscreen-hero-text-primary);
+		margin-bottom: 0px;
+	}
+
+	.splashscreen-hero-socials {
+		opacity: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		flex-wrap: wrap;
+		color: var(--splashscreen-hero-text-primary);
+	}
+
+	.splashscreen-hero-socials .social-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		opacity: 0;
+		transition: opacity 0.5s ease-out, transform 0.2s ease;
+		color: inherit;
+	}
+
+	.splashscreen-hero-socials .social-link:hover {
+		transform: scale(1.1);
 	}
 </style>
 

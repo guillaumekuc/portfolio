@@ -1,0 +1,40 @@
+{
+    "socials": [
+        {
+            "name": "Artstation",
+            "url": "https://www.artstation.com/guillaumekuc",
+            "icon": "/img/socials/artstation.svg"
+        },
+        {
+            "name": "Soundcloud",
+            "url": "https://soundcloud.com/guillaumekuc",
+            "icon": "/img/socials/soundcloud.svg"
+        },
+        {
+            "name": "Github",
+            "url": "https://github.com/guillaumekuc",
+            "icon": "/img/socials/github.svg"
+        },
+        {
+            "name": "Youtube",
+            "url": "https://www.youtube.com/@guillaumekuc",
+            "icon": "/img/socials/youtube.svg"
+        },
+        {
+            "name": "LinkedIn",
+            "url": "https://www.linkedin.com/in/guillaumekuc/",
+            "icon": "/img/socials/linkedin.svg"
+        },
+        {
+            "name": "BlueSky",
+            "url": "@guillaumekuc.bsky.social",
+            "icon": "/img/socials/bluesky.svg"
+        },
+        {
+            "name": "Telegram",
+            "url": "https://t.me/guillaumekuc",
+            "icon": "/img/socials/telegram.svg",
+            "disabled": true
+        }
+    ]
+}
