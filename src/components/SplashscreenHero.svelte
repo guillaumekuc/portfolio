@@ -1,17 +1,20 @@
 <div id="splashscreen-hero" class="splashscreen-hero">
 	<div bind:this={logoElement} class="splashscreen-logo">
-		
-		<svg class="splashscreen-hero-emblem" viewBox="0 0 772 1144.34" role="img" aria-label="Splashscreen Emblem">
-			<use href="/img/emblem.svg#root" xlink:href="/img/emblem.svg#root"></use>
-		</svg>
+		<EmblemSvg />
 	</div>
-	<h1 bind:this={titleElement} id="splashscreen-hero-title" class="splashscreen-hero-title">{heroContent.name}</h1>
+
+	<div bind:this={titleElement} class="splashscreen-hero-title">
+		<TitleSvg />
+	</div>
+
 	<h2 bind:this={headlineElement} id="splashscreen-hero-headline" class="splashscreen-hero-headline">{heroContent.headline}</h2>
 </div>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import heroContent from '../config/splashscreen-hero.json';
+	import TitleSvg from './TitleSvg.svelte';
+	import EmblemSvg from './EmblemSvg.svelte';
 
 	let logoElement;
 	let titleElement;
@@ -50,31 +53,35 @@
 </script>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
 
 	.splashscreen-logo {
-		color: white;
-		opacity: 0;
+		color: var(--splashscreen-hero-text-primary);
+		opacity: 1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	.splashscreen-logo svg {
-		width: 304px;
-		height: auto;
-	}
-
 	.splashscreen-hero {
 		--splashscreen-hero-gap: 12px;
+        --splashscreen-hero-text-primary: #FFF;
+        --splashscreen-hero-text-accent: #60BF60;
+        --splashscreen-hero-text-outline: #FFF;
+        --splashscreen-hero-text-font-size: 27px;
+
+
 		position: absolute;
 		z-index: 1;
-		color: white;
+
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: var(--splashscreen-hero-gap);
 	}
+
+
 
 	.splashscreen-hero-emblem {
 		width: 304px;
@@ -83,21 +90,19 @@
 
 	.splashscreen-hero-title {
 		opacity: 0;
-		font-size: 100%;
-		font-family: var(--ff1);
-		font-weight: 400;
-		font-variant: small-caps;
-		vertical-align: top;
-		margin: 0;
-		transition: opacity 1s ease-out 3s;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+        color: var(--splashscreen-hero-text-accent);
 	}
 
 	.splashscreen-hero-headline {
-		opacity: 0;
-		font-size: 66.66%;
-		line-height: 1;
-		margin: 0;
-		transition: opacity 1s ease-out 3.25s;
+        opacity: 0;
+        font-family: 'M PLUS Rounded 1c';
+        font-size: var(--splashscreen-hero-text-font-size);
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        color: var(--splashscreen-hero-text-primary);
 	}
 </style>
 
