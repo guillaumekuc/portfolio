@@ -1,7 +1,7 @@
 <div id="splashscreen" class="splashscreen fullPage snap">
-	<SplashSound />
+	<SplashscreenSound />
 
-	<SplashBranding />
+	<SplashscreenHero />
 
 	<div id="splashArtArea" class="splashArtArea">
 		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn">
@@ -23,9 +23,9 @@
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
 	import SplashLinks from './SplashLinks.svelte';
-	import SplashSound from './SplashSound.svelte';
+	import SplashscreenSound from './SplashscreenSound.svelte';
 	import SplashNav from './SplashNav.svelte';
-	import SplashBranding from './SplashBranding.svelte';
+	import SplashscreenHero from './SplashscreenHero.svelte';
 
 	let bgMusicElement;
 	let artElement;

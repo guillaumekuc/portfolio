@@ -106,3 +106,4 @@
 		background-image: url('/img/.old/icons/mute.svg');
 	}
 </style>
+
