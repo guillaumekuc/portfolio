@@ -2,9 +2,9 @@
 	<div id="stickyHeader" class="stickyHeader">
 		<HeaderLinks />
 		<div id="headerBranding" class="headerBranding">
-			<button type="button" class="headerTitle" on:click={handleTitleClick}>Guillaume Kuc</button>
+			<button type="button" class="headerTitle" on:click={handleTitleClick}>{profile.name}</button>
 			<span>&nbsp;—&nbsp;</span>
-			<span class="headerSubTitle">Protean artist</span>
+			<span class="headerSubTitle">{profile.headline}</span>
 		</div>
 		<div id="headerNav" class="headerNav">
 			{#each headerNavItems as item, index}
@@ -32,14 +32,27 @@
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
+	import navConfig from '../config/nav.json';
+	import profileConfig from '../config/profile.json';
 
-	const headerNavItems = [
-		{ id: 'headerNavButton3', target: 'portfolio-all', label: 'All' },
-		{ id: 'headerNavButton2', target: 'portfolio-2d', label: 'Illustration' },
-		{ id: 'headerNavButton4', target: 'portfolio-music', label: 'Music' },
-		{ id: 'headerNavButton1', target: 'portfolio-3d', label: '3D' },
-		{ id: 'headerNavButton5', target: 'portfolio-web', label: 'Web' }
-	];
+	// Get profile info from config
+	const profile = profileConfig;
+
+	// Filter navigation items to only include internal items
+	// Sort so CTA items come first, then map to the format needed for the header
+	const headerNavItems = navConfig.navigation
+		.filter(item => item.type === 'internal' && item.target)
+		.sort((a, b) => {
+			// CTA items come first
+			if (a.cta && !b.cta) return -1;
+			if (!a.cta && b.cta) return 1;
+			return 0; // Maintain original order for non-CTA items
+		})
+		.map(item => ({
+			id: `headerNavButton-${item.id}`,
+			target: item.target,
+			label: item.label
+		}));
 
 	// Extract the store for reactive access
 	const currentNavTargetStore = stores.navigation.currentNavTarget;
