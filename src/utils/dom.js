@@ -15,13 +15,14 @@ export class DOM {
 		return null;
 	}
 
-	// Finds the previous visible sibling element (skips hidden elements)
+	// Finds the previous visible sibling element (skips hidden elements and non-fullPage elements like header)
 	static previousVisibleSibling(element) {
 		let previousElement = element.previousElementSibling;
 
 		while (previousElement) {
 			const style = window.getComputedStyle(previousElement);
-			if (style.display !== 'none' && style.visibility !== 'hidden') {
+			// Skip hidden elements and only return elements with fullPage class (skip header and other non-scrollable elements)
+			if (style.display !== 'none' && style.visibility !== 'hidden' && previousElement.classList.contains('fullPage')) {
 				return previousElement;
 			}
 			previousElement = previousElement.previousElementSibling;

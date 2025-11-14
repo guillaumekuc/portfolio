@@ -290,7 +290,8 @@ export class Navigation {
 			
 			const prevSibling = DOM.previousVisibleSibling(currentElement);
 			if (prevSibling) {
-				debugLog('Navigate up');
+				debugLog('Navigate up'); 
+				debugLog(prevSibling);
 				prevSibling.scrollIntoView({ behavior: 'smooth' });
 			} else {
 				// If no previous sibling, we're at the first section - go to splashscreen
