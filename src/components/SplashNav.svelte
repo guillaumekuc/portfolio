@@ -47,7 +47,6 @@
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
 	import { Navigation } from '../utils/navigation.js';
-	import { DOM } from '../utils/dom.js';
 	import { debugLog } from '../utils/debuglog.js';
 	import navConfig from '../config/nav.json';
 	import NavIcon from './NavIcon.svelte';
@@ -62,25 +61,32 @@
 	const selectedMenuItemStore = stores.navigation.selectedMenuItem;
 	const currentNavTargetStore = stores.navigation.currentNavTarget;
 
+	// Find CTA item (used for initialization)
+	function findCtaItem() {
+		return navItems.find(item => item.cta === true);
+	}
+
 	function findCtaIndex() {
 		return navItems.findIndex(item => item.cta === true);
 	}
 
-	// Selects the CTA item if no item is currently selected
-	function selectCtaIfNoSelection() {
-		const selectedMenuItem = $selectedMenuItemStore;
-		if (selectedMenuItem < 0) {
+	function findCtaTarget() {
+		const ctaItem = findCtaItem();
+		return ctaItem && ctaItem.type === 'internal' ? ctaItem.target : null;
+	}
+
+	// Initialize selectedMenuItem to CTA index if not set
+	function initializeSelectedMenuItem() {
+		const currentSelected = $selectedMenuItemStore;
+		if (currentSelected < 0) {
 			const ctaIndex = findCtaIndex();
 			if (ctaIndex >= 0) {
 				selectedMenuItemStore.set(ctaIndex);
-				return true;
 			}
 		}
-		return false;
 	}
 
 	function handleNavAnimate() {
-
 		const ANIMATION_BASE_DELAY_MS = 3000;
 		const ANIMATION_DELAY_INCREMENT_MS = 250;
 		const ANIMATION_TRANSITION_DURATION_MS = 1500;
@@ -88,19 +94,25 @@
 		if (navElement) {
 			navElement.style.opacity = '100%';
 		}
+		
 		// Dynamically set transition delays based on index
 		navLinkElements.forEach((link, index) => {
-			if (link) {
-				const baseDelaySeconds = ANIMATION_BASE_DELAY_MS / 1000;
-				const delayIncrementSeconds = ANIMATION_DELAY_INCREMENT_MS / 1000;
-				const transitionDurationSeconds = ANIMATION_TRANSITION_DURATION_MS / 1000;
-				const delay = baseDelaySeconds + (index * delayIncrementSeconds);
-				link.style.transition = `opacity ${transitionDurationSeconds}s ease-out ${delay}s`;
-				link.style.opacity = '100%';
-			}
+			if (!link) return;
+			
+			const baseDelaySeconds = ANIMATION_BASE_DELAY_MS / 1000;
+			const delayIncrementSeconds = ANIMATION_DELAY_INCREMENT_MS / 1000;
+			const transitionDurationSeconds = ANIMATION_TRANSITION_DURATION_MS / 1000;
+			const delay = baseDelaySeconds + (index * delayIncrementSeconds);
+			
+			link.style.transition = `opacity ${transitionDurationSeconds}s ease-out ${delay}s`;
+			link.style.opacity = '100%';
 		});
-		// Calculate total animation time: base delay + (items * increment) + transition duration
-		const totalAnimationTime = ANIMATION_BASE_DELAY_MS + (navLinkElements.length * ANIMATION_DELAY_INCREMENT_MS) + ANIMATION_TRANSITION_DURATION_MS;
+		
+		// Calculate total animation time and enable pointer events
+		const totalAnimationTime = ANIMATION_BASE_DELAY_MS + 
+			(navLinkElements.length * ANIMATION_DELAY_INCREMENT_MS) + 
+			ANIMATION_TRANSITION_DURATION_MS;
+		
 		setTimeout(() => {
 			navLinkElements.forEach((link) => {
 				if (link) link.style.pointerEvents = 'auto';
@@ -109,115 +121,160 @@
 	}
 
 	function goToPortfolioSections() {
-		// Find item with cta property (Quick Tour), or default to first item
+		// Find item with cta property (Quick Tour), or default to first internal item
 		const ctaIndex = findCtaIndex();
-		const defaultIndex = ctaIndex >= 0 ? ctaIndex : 0;
-		selectedMenuItemStore.set(defaultIndex);
-		const link = navLinkElements[defaultIndex];
-		if (link) {
-			Animation.programmaticHover(link);
-		}
-		// Trigger the selected item to navigate
-		if (defaultIndex >= 0 && defaultIndex < navItems.length) {
+		const defaultIndex = ctaIndex >= 0 ? ctaIndex : navItems.findIndex(item => item.type === 'internal');
+		
+		if (defaultIndex >= 0) {
+			selectedMenuItemStore.set(defaultIndex);
+			const link = navLinkElements[defaultIndex];
+			if (link) {
+				Animation.programmaticHover(link);
+			}
+			// Trigger navigation
 			handleNavItemClick(navItems[defaultIndex], defaultIndex);
 		}
 	}
 
 	function selectPreviousMenuItem() {
-		// If no selection, select CTA item first
-		if (selectCtaIfNoSelection()) {
-			return;
-		}
+		// Initialize if needed
+		initializeSelectedMenuItem();
 		
 		const selectedMenuItem = $selectedMenuItemStore;
+		if (selectedMenuItem < 0) return;
+		
 		const totalItems = navItems.length;
-		// Cycle backwards
-		const newSelectedMenuItem = selectedMenuItem <= 0 ? totalItems - 1 : selectedMenuItem - 1;
+		// Cycle backwards through all items
+		const newSelectedMenuItem = selectedMenuItem <= 0 
+			? totalItems - 1 
+			: selectedMenuItem - 1;
+		
 		selectedMenuItemStore.set(newSelectedMenuItem);
 	}
 
 	function selectNextMenuItem() {
-		// If no selection, select CTA item first
-		if (selectCtaIfNoSelection()) {
-			return;
-		}
+		// Initialize if needed
+		initializeSelectedMenuItem();
 		
 		const selectedMenuItem = $selectedMenuItemStore;
+		if (selectedMenuItem < 0) return;
+		
 		const totalItems = navItems.length;
-		// Cycle forwards
-		const newSelectedMenuItem = selectedMenuItem >= totalItems - 1 ? 0 : selectedMenuItem + 1;
+		// Cycle forwards through all items
+		const newSelectedMenuItem = selectedMenuItem >= totalItems - 1 
+			? 0 
+			: selectedMenuItem + 1;
+		
 		selectedMenuItemStore.set(newSelectedMenuItem);
 	}
 
-	function triggerSelectedMenuItem() {
+	// Scroll to target for internal items only
+	function scrollToTarget() {
+		// Initialize if needed
+		initializeSelectedMenuItem();
+		
 		const selectedMenuItem = $selectedMenuItemStore;
-		if (selectedMenuItem >= 0 && selectedMenuItem < navItems.length) {
-			const item = navItems[selectedMenuItem];
+		if (selectedMenuItem < 0 || selectedMenuItem >= navItems.length) return;
+		
+		const item = navItems[selectedMenuItem];
+		
+		// Only works for internal items
+		if (item.type === 'internal' && item.target) {
 			handleNavItemClick(item, selectedMenuItem);
 		}
 	}
 
-	function handleNavItemClick(item, index) {
-		// Apply filtering based on nav item target
-		const target = item.target;
+	// Trigger nav item: scroll if internal, open link if external
+	function triggerNavItem() {
+		// Initialize if needed
+		initializeSelectedMenuItem();
 		
-		// Update current nav target for header nav tracking (only for internal items)
-		if (item.type === 'internal' && target) {
-			stores.navigation.currentNavTarget.set(target);
-		}
+		const selectedMenuItem = $selectedMenuItemStore;
+		if (selectedMenuItem < 0 || selectedMenuItem >= navItems.length) return;
 		
-		// Filter portfolio sections based on target (only for internal items)
-		if (item.type === 'internal' && target) {
-			Navigation.filterPortfolioSectionsByNavTarget(target);
-			
-			// Unified scrolling logic: wait for filtering to apply, then find and scroll to target element
-			setTimeout(() => {
-				let targetElement = null;
-				
-				// First, try to find by ID (target might be an element ID like 'about')
-				targetElement = document.querySelector(`#${target}`);
-				
-				// If not found by ID, find first visible portfolio section with matching category
-				if (!targetElement) {
-					const allPortfolioSections = document.querySelectorAll('.portfolioSection');
-					for (const portfolioSection of allPortfolioSections) {
-						// Check if this section has the target category in data-categories attribute
-						const categoriesAttr = portfolioSection.getAttribute('data-categories');
-						const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
-						const hasTargetCategory = categories.includes(target);
-						
-						if (hasTargetCategory) {
-							const style = window.getComputedStyle(portfolioSection);
-							if (style.display !== 'none' && style.visibility !== 'hidden') {
-								targetElement = portfolioSection;
-								break;
-							}
-						}
-					}
-				} else {
-					// Found by ID, but verify it's visible (filtering might have hidden it)
-					const style = window.getComputedStyle(targetElement);
-					if (style.display === 'none' || style.visibility === 'hidden') {
-						targetElement = null;
-					}
-				}
-				
-				if (targetElement) {
-					targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-					debugLog('Navigated to section:', targetElement.id);
-				}
-			}, 100);
-		} else {
-			// External items - no navigation needed, they open in new tab
-			debugLog('External nav item clicked:', item.id);
+		const item = navItems[selectedMenuItem];
+		
+		if (item.type === 'internal' && item.target) {
+			// Internal items: scroll to target
+			handleNavItemClick(item, selectedMenuItem);
+		} else if (item.type === 'external') {
+			// External items: programmatically click the link
+			const link = navLinkElements[selectedMenuItem];
+			if (link) {
+				link.click();
+			}
 		}
 	}
 
+	// Find target element for scrolling (by ID or category)
+	function findTargetElement(target) {
+		// First, try to find by ID (target might be an element ID like 'about')
+		let targetElement = document.querySelector(`#${target}`);
+		
+		if (targetElement) {
+			// Verify it's visible
+			const style = window.getComputedStyle(targetElement);
+			if (style.display === 'none' || style.visibility === 'hidden') {
+				targetElement = null;
+			}
+		}
+		
+		// If not found by ID, find first visible portfolio section with matching category
+		if (!targetElement) {
+			const allPortfolioSections = document.querySelectorAll('.portfolioSection');
+			for (const portfolioSection of allPortfolioSections) {
+				const categoriesAttr = portfolioSection.getAttribute('data-categories');
+				const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
+				
+				if (categories.includes(target)) {
+					const style = window.getComputedStyle(portfolioSection);
+					if (style.display !== 'none' && style.visibility !== 'hidden') {
+						targetElement = portfolioSection;
+						break;
+					}
+				}
+			}
+		}
+		
+		return targetElement;
+	}
+
+	function handleNavItemClick(item, index) {
+		// Update selectedMenuItem to keep keyboard focus in sync
+		selectedMenuItemStore.set(index);
+		
+		// Only process internal items
+		if (item.type !== 'internal' || !item.target) {
+			debugLog('External nav item clicked:', item.id);
+			return;
+		}
+		
+		const target = item.target;
+		
+		// Update current nav target for header nav tracking
+		stores.navigation.currentNavTarget.set(target);
+		
+		// Filter portfolio sections based on target
+		Navigation.filterPortfolioSectionsByNavTarget(target);
+		
+		// Wait for filtering to apply, then find and scroll to target element
+		setTimeout(() => {
+			const targetElement = findTargetElement(target);
+			if (targetElement) {
+				targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				debugLog('Navigated to section:', targetElement.id);
+			}
+		}, 100);
+	}
+
 	onMount(() => {
-		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', triggerSelectedMenuItem);
+		// Don't initialize selectedMenuItem on mount - let it start at -1
+		// It will be initialized when keyboard navigation starts
+		
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', scrollToTarget);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowLeft', selectPreviousMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowRight', selectNextMenuItem);
-		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerSelectedMenuItem);
+		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerNavItem);
 
 		window.addEventListener('navAnimate', handleNavAnimate);
 	});
@@ -282,7 +339,7 @@
 
 		color: var(--splashscreen-nav-primary-color);
 		text-transform: lowercase;
-		font-family: var(--splashscreen-nav-font-family) ;
+		font-family: var(--splashscreen-nav-font-family);
 		font-style: normal;
 		font-weight: 300;
 		font-size: 24px;
@@ -290,18 +347,8 @@
 		opacity: 20%;
 		pointer-events: none;
 		user-select: none;
-	}
-
-	.splashNav a.cta {
-		font-family: 'M PLUS Rounded 1c';
-		text-transform: capitalize;
-		font-weight: 700;
-		letter-spacing: 0.05em;
-		background-color: var(--splashscreen-nav-accent-color);
-	}
-
-	/* Transition will be set dynamically in handleNavAnimate */
-	.splashNav a {
+		
+		/* Transition will be set dynamically in handleNavAnimate */
 		transition: opacity 1.5s ease-out;
 	}
 
@@ -320,6 +367,76 @@
 	}
 	
 	.splashNav a.active {
+		transition: none !important;
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-accent-color) !important;
+	}
+
+	/* Active + hover: white border takes precedence */
+	.splashNav a.active:hover {
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* Active + focus: white border takes precedence */
+	.splashNav a.active.focus {
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* Active + focus + hover: white border takes precedence */
+	.splashNav a.active.focus:hover {
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA default state - green background, low opacity, no border */
+	.splashNav a.cta {
+		font-family: 'M PLUS Rounded 1c';
+		text-transform: capitalize;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		background-color: var(--splashscreen-nav-accent-color);
+		opacity: 20%;
+		border: 1px solid transparent;
+	}
+
+	/* CTA hover state - white border, full opacity */
+	.splashNav a.cta:hover {
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA focus state (keyboard navigation) - green border, full opacity */
+	.splashNav a.cta.focus {
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA active state (current selection) - no border, full opacity */
+	.splashNav a.cta.active {
+		opacity: 100% !important;
+		border: 1px solid transparent !important;
+	}
+
+	/* CTA focus + hover - white border takes precedence */
+	.splashNav a.cta.focus:hover {
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA active + hover - white border, full opacity */
+	.splashNav a.cta.active:hover {
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA active + focus - green border (focus takes precedence over active) */
+	.splashNav a.cta.active.focus {
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+
+	/* CTA active + focus + hover - white border (hover takes precedence) */
+	.splashNav a.cta.active.focus:hover {
+		opacity: 100% !important;
 		border: 1px solid var(--splashscreen-nav-primary-color) !important;
 	}
 	
