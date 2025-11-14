@@ -98,12 +98,8 @@ export class Navigation {
 	 */
 	constructor() {
 		// State - only keep non-store properties
+		// Store values are initialized in stores.js - single source of truth
 		this.allCategories = [];
-
-		// Initialize stores
-		stores.navigation.currentScreen.set('startScreen');
-		stores.navigation.categoryFocused.set(3);
-		stores.navigation.selectedMenuItem.set(1);
 	}
 
 	/**

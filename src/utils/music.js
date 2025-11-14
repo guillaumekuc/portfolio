@@ -10,17 +10,8 @@ import { debugLog } from './debuglog.js';
 export class Music {
 	constructor() {
 		// Only keep reference to audio element for playback control
+		// Store values are initialized in stores.js - single source of truth
 		this.bgMusicElement = null;
-
-		// Initialize stores
-		stores.music.isPlaying.set(false);
-		stores.music.isLooping.set(false);
-		stores.music.isMuted.set(false);
-		stores.music.volume.set(0);
-		stores.music.currentIndex.set(0);
-		stores.music.unpauseWhenDone.set(false);
-		stores.music.currentTime.set(0);
-		stores.music.duration.set(0);
 	}
 
 	/**
@@ -71,6 +62,21 @@ export class Music {
 
 	play() {
 		if (!this.bgMusicElement) return;
+		
+		// If volume is 0 (initial muted state), set to full volume when music starts
+		const currentVolume = get(stores.music.volume);
+		if (currentVolume === 0) {
+			stores.music.volume.set(100);
+			this.bgMusicElement.volume = 1;
+			document.querySelectorAll('.largeVideo').forEach((video) => {
+				video.volume = 1;
+			});
+			stores.music.isMuted.set(false);
+		} else {
+			// Apply current volume setting
+			this.bgMusicElement.volume = currentVolume / 100;
+		}
+		
 		this.bgMusicElement.play();
 		stores.music.isPlaying.set(true);
 		debugLog('Music playing');

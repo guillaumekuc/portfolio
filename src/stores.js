@@ -11,7 +11,7 @@ export const stores = {
 		isPlaying: writable(false),
 		isLooping: writable(false),
 		isMuted: writable(false),
-		volume: writable(0),
+		volume: writable(0), // 0-100 scale, starts at 0 (muted)
 		currentIndex: writable(0),
 		unpauseWhenDone: writable(false),
 		currentTime: writable(0),
@@ -30,7 +30,7 @@ export const stores = {
 		currentScreen: writable('startScreen'),
 		currentModal: writable(null),
 		categoryFocused: writable(3),
-		selectedMenuItem: writable(1),
+		selectedMenuItem: writable(-1),
 		// Map of portfolio section ID to visibility boolean for reactive portfolio section visibility
 		portfolioSectionVisibility: writable(new Map()),
 		// Navigation controller instance

@@ -1,159 +1,153 @@
-<div id="splashNavPositioner">
-	<div id="splashNavEmptySpace"></div>
-	<div id="splashNavArea" class="splashNavArea">
-		<div bind:this={navElement} id="splashNav" class="splashNav">
-			<a id="blogBtn" href="http://guillaumekuc.blog" target="_blank">
-				<img src="/img/.old/icons/blog.svg" alt="Blog" />
-				<span class="navLabel">Blog</span>
-			</a>
-
-			<span>·</span>
-
+<div bind:this={navElement} class="splashNav">
+	{#each navItems as item, index}
+		{#if item.type === 'external'}
 			<a
-				id="worksBtn"
+				bind:this={navLinkElements[index]}
+				id="{item.id}Btn"
+				class:cta={item.cta}
+				class:focus={$selectedMenuItemStore === index}
+				href={item.url}
+				target={item.openInNewTab ? '_blank' : undefined}
+				rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
+			>
+				{#if item.icon}
+					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
+				{/if}
+				<span class="navLabel">{item.label}</span>
+			</a>
+		{:else}
+			<a
+				bind:this={navLinkElements[index]}
+				id="{item.id}Btn"
+				class:cta={item.cta}
+				class:focus={$selectedMenuItemStore === index}
 				role="button"
 				tabindex="0"
-				on:click={() => {
-					const categories = document.querySelector('#categories');
-					if (categories) categories.scrollIntoView();
-				}}
-				on:keydown={(e) => {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault();
-						const categories = document.querySelector('#categories');
-						if (categories) categories.scrollIntoView();
-					}
-				}}
 			>
-				<img src="/img/.old/icons/keydown2_w.svg" alt="Works" />
-				<span class="navLabel">Works</span>
+				{#if item.icon}
+					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
+				{/if}
+				<span class="navLabel">{item.label}</span>
 			</a>
-
-			<span>·</span>
-
-			<a
-				id="contactBtn"
-				class="mailTooltip"
-				target="_blank"
-				on:click|preventDefault={(e) => {
-					Tooltip.handleMailTooltip(e);
-					window.open('mailto:guillaume@guillaumekuc.com', 'mail');
-				}}
-				href="mailto:guillaume@guillaumekuc.com"
-			>
-				<img src="/img/.old/icons/contact_w.svg" alt="Contact" />
-				<span class="navLabel">Contact</span>
-			</a>
-		</div>
-		<!--#splashNav-->
-	</div>
-	<!--#splashNavArea-->
+		{/if}
+	{/each}
 </div>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { get } from 'svelte/store';
-	import { Tooltip } from '../utils/tooltip.js';
 	import { shortcuts } from '../utils/shortcuts.js';
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
+	import navConfig from '../config/nav.json';
+	import NavIcon from './NavIcon.svelte';
 
 	let navElement;
+	let navLinkElements = [];
+	
+	// Get navigation items from config
+	const navItems = navConfig.navigation;
+	
+	// Extract the store for reactive access
+	const selectedMenuItemStore = stores.navigation.selectedMenuItem;
+
+	/**
+	 * Finds the index of the menu item with the cta property
+	 * @returns {number} Index of CTA item, or -1 if not found
+	 */
+	function findCtaIndex() {
+		return navItems.findIndex(item => item.cta === true);
+	}
+
+	/**
+	 * Selects the CTA item if no item is currently selected
+	 * @returns {boolean} True if CTA was selected, false otherwise
+	 */
+	function selectCtaIfNoSelection() {
+		const selectedMenuItem = $selectedMenuItemStore;
+		if (selectedMenuItem < 0) {
+			const ctaIndex = findCtaIndex();
+			if (ctaIndex >= 0) {
+				selectedMenuItemStore.set(ctaIndex);
+				return true;
+			}
+		}
+		return false;
+	}
 
 	function handleNavAnimate() {
+
+		const ANIMATION_BASE_DELAY_MS = 3000;
+		const ANIMATION_DELAY_INCREMENT_MS = 250;
+		const ANIMATION_TRANSITION_DURATION_MS = 1500;
+
 		if (navElement) {
 			navElement.style.opacity = '100%';
 		}
-		const navLinks = navElement?.querySelectorAll('a');
-		if (navLinks) {
-			navLinks.forEach((link) => {
+		// Dynamically set transition delays based on index
+		navLinkElements.forEach((link, index) => {
+			if (link) {
+				const baseDelaySeconds = ANIMATION_BASE_DELAY_MS / 1000;
+				const delayIncrementSeconds = ANIMATION_DELAY_INCREMENT_MS / 1000;
+				const transitionDurationSeconds = ANIMATION_TRANSITION_DURATION_MS / 1000;
+				const delay = baseDelaySeconds + (index * delayIncrementSeconds);
+				link.style.transition = `opacity ${transitionDurationSeconds}s ease-out ${delay}s`;
 				link.style.opacity = '100%';
-			});
-			setTimeout(() => {
-				navLinks.forEach((link) => {
-					link.style.pointerEvents = 'auto';
-				});
-			}, 4000);
-		}
-	}
-
-	function updateSplashNavFocus() {
-		document.querySelectorAll('.splashNav a').forEach((link) => {
-			link.classList.remove('focus');
+			}
 		});
-		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
-		if (selectedMenuItem === 0) {
-			const blogBtn = document.querySelector('#blogBtn');
-			if (blogBtn) blogBtn.classList.add('focus');
-		} else if (selectedMenuItem === 1) {
-			const worksBtn = document.querySelector('#worksBtn');
-			if (worksBtn) worksBtn.classList.add('focus');
-		} else if (selectedMenuItem === 2) {
-			const contactBtn = document.querySelector('#contactBtn');
-			if (contactBtn) contactBtn.classList.add('focus');
-		}
+		// Calculate total animation time: base delay + (items * increment) + transition duration
+		const totalAnimationTime = ANIMATION_BASE_DELAY_MS + (navLinkElements.length * ANIMATION_DELAY_INCREMENT_MS) + ANIMATION_TRANSITION_DURATION_MS;
+		setTimeout(() => {
+			navLinkElements.forEach((link) => {
+				if (link) link.style.pointerEvents = 'auto';
+			});
+		}, totalAnimationTime);
 	}
 
 	function goToCategories() {
-		document.querySelectorAll('.splashNav a').forEach((link) => {
-			link.classList.remove('focus');
-		});
-		stores.navigation.selectedMenuItem.set(1);
-		Animation.programmaticHover(document.querySelector('#worksBtn'));
+		// Find item with cta property, or default to first item
+		const ctaIndex = findCtaIndex();
+		const defaultIndex = ctaIndex >= 0 ? ctaIndex : 0;
+		selectedMenuItemStore.set(defaultIndex);
+		const link = navLinkElements[defaultIndex];
+		if (link) {
+			Animation.programmaticHover(link);
+		}
 		document.querySelector('#categories')?.scrollIntoView();
 	}
 
 	function selectPreviousMenuItem() {
-		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
-		let newSelectedMenuItem;
-		if (selectedMenuItem === 1) {
-			newSelectedMenuItem = 0;
-		} else if (selectedMenuItem === 0) {
-			newSelectedMenuItem = 2;
-		} else {
-			newSelectedMenuItem = 1;
+		// If no selection, select CTA item first
+		if (selectCtaIfNoSelection()) {
+			return;
 		}
-		stores.navigation.selectedMenuItem.set(newSelectedMenuItem);
-		updateSplashNavFocus();
+		
+		const selectedMenuItem = $selectedMenuItemStore;
+		const totalItems = navItems.length;
+		// Cycle backwards
+		const newSelectedMenuItem = selectedMenuItem <= 0 ? totalItems - 1 : selectedMenuItem - 1;
+		selectedMenuItemStore.set(newSelectedMenuItem);
 	}
 
 	function selectNextMenuItem() {
-		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
-		let newSelectedMenuItem;
-		if (selectedMenuItem === 2) {
-			newSelectedMenuItem = 0;
-		} else if (selectedMenuItem === 1) {
-			newSelectedMenuItem = 2;
-		} else {
-			newSelectedMenuItem = 1;
+		// If no selection, select CTA item first
+		if (selectCtaIfNoSelection()) {
+			return;
 		}
-		stores.navigation.selectedMenuItem.set(newSelectedMenuItem);
-		updateSplashNavFocus();
+		
+		const selectedMenuItem = $selectedMenuItemStore;
+		const totalItems = navItems.length;
+		// Cycle forwards
+		const newSelectedMenuItem = selectedMenuItem >= totalItems - 1 ? 0 : selectedMenuItem + 1;
+		selectedMenuItemStore.set(newSelectedMenuItem);
 	}
 
 	function triggerSelectedMenuItem() {
-		const selectedMenuItem = get(stores.navigation.selectedMenuItem);
-		if (selectedMenuItem === 0) {
-			const blogBtn = document.querySelector('#blogBtn');
-			if (blogBtn) {
-				window.open(blogBtn.getAttribute('href')).focus();
-			}
-			document.querySelectorAll('.splashNav a').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			stores.navigation.selectedMenuItem.set(1);
-		} else if (selectedMenuItem === 1) {
-			document.querySelector('#categories')?.scrollIntoView();
-			document.querySelectorAll('.splashNav a').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			stores.navigation.selectedMenuItem.set(1);
-		} else if (selectedMenuItem === 2) {
-			window.open('mailto:guillaume@guillaumekuc.com', 'mail');
-			document.querySelectorAll('.splashNav a').forEach((link) => {
-				link.classList.remove('focus');
-			});
-			stores.navigation.selectedMenuItem.set(1);
+		const selectedMenuItem = $selectedMenuItemStore;
+		if (selectedMenuItem >= 0 && selectedMenuItem < navItems.length) {
+			// For now, just reset to CTA item (behavior will be added later)
+			const ctaIndex = findCtaIndex();
+			const defaultIndex = ctaIndex >= 0 ? ctaIndex : 0;
+			selectedMenuItemStore.set(defaultIndex);
 		}
 	}
 
@@ -173,137 +167,99 @@
 </script>
 
 <style>
-	#splashNavPositioner {
-		position: absolute;
-		display: block;
-		width: 100%;
-		top: 0;
-		left: 0;
-		height: 100%;
-	}
 
-	#splashNavEmptySpace {
-		display: block;
-		position: relative;
-		visibility: hidden;
-		z-index: -100;
-		height: 90%;
-		max-height: calc(100% - 2 * var(--safeMargin));
-	}
-
-	.splashNavArea {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-		height: 10vh;
-		width: 100%;
-		min-height: calc(2 * var(--safeMargin));
-		background-color: rgba(09, 09, 09, 0.9);
-	}
 
 	.splashNav {
+		--splashscreen-nav-radius: 16px;
+		--splashscreen-nav-bottom: 16px;
+		--splashscreen-nav-width: 1220px;
+		--splashscreen-nav-height: auto;
+		--splashscreen-nav-font-family: 'M PLUS Rounded 1c';
+		--splashscreen-nav-primary-color: white;
+		--splashscreen-nav-accent-color: #60BF60;
+		--splashscreen-nav-background-color: oklch(18% 0 0 / 0.67);
+
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
-		width: calc(100vw / 3);
-		min-width: 384px;
-		height: 80%;
-		z-index: 200;
+
+		position: absolute;
+		width: var(--splashscreen-nav-width);
+		height: var(--splashscreen-nav-height);
+		left: auto;
+		right: auto;
+		padding: 10px;
+
+		bottom: var(--splashscreen-nav-bottom);
+
+		background-color: var(--splashscreen-nav-background-color);
+		background-blend-mode: luminosity;
+		backdrop-filter: blur(2px);
+
+		border-radius: var(--splashscreen-nav-radius);
+
+
 	}
 
-	@media (max-width: 768px) {
-		.splashNav {
-			width: calc(100vw / 2);
-			min-width: calc(100vw / 2);
-		}
+	.splashNav :global(.nav-icon) {
+		height: 32px;
+		width: 32px;
 	}
-	.splashNav > a,
-	.splashNav > span {
-		position: relative;
+
+	.splashNav a {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-between;
-		color: var(--shadeWhite);
-		font-variant: small-caps;
-		font-size: calc(var(--safeMargin) / 2);
+
+		border-radius: var(--splashscreen-nav-radius);
+		border: 1px solid transparent;
+
+		padding: 5px 20px;
+
+		color: var(--splashscreen-nav-primary-color);
+		text-transform: lowercase;
+		font-family: var(--splashscreen-nav-font-family) ;
+		font-style: normal;
+		font-weight: 300;
+		font-size: 24px;
+
 		opacity: 20%;
 		pointer-events: none;
 		user-select: none;
 	}
 
-	#blogBtn {
-		transition: opacity 1.5s ease-out 3.25s;
-	}
-	#worksBtn {
-		transition: opacity 1.5s ease-out 3s;
-	}
-	#contactBtn {
-		transition: opacity 1.5s ease-out 3.5s;
+	.splashNav a.cta {
+		font-family: 'M PLUS Rounded 1c';
+		text-transform: capitalize;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		background-color: var(--splashscreen-nav-accent-color);
 	}
 
-	.splashNav img {
-		width: calc(1.2 * var(--safeMargin));
-		height: calc(1.2 * var(--safeMargin));
+	/* Transition will be set dynamically in handleNavAnimate */
+	.splashNav a {
+		transition: opacity 1.5s ease-out;
 	}
 
-	@media (max-height: 432px) {
-		.splashNav img {
-			width: calc(0.9 * var(--safeMargin));
-			height: calc(0.9 * var(--safeMargin));
-		}
-	}
 
-	@media (max-height: 864px) {
-		.splashNav img {
-			width: calc(1.05 * var(--safeMargin));
-			height: calc(1.05 * var(--safeMargin));
-		}
-	}
-
-	.splashNav > a:hover {
+	.splashNav a:hover {
 		transition: none !important;
 		opacity: 100%;
 		cursor: pointer;
+		border: 1px solid var(--splashscreen-nav-primary-color);
 	}
+	
+	.splashNav a.focus {
+		transition: none !important;
+		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+	
 	:global(.splashNav > a.programmaticHover) {
 		opacity: 100% !important;
 		transition: none !important;
-	}
-
-	.splashNav > a:hover img {
-		background-color: var(--shadePop);
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform: scale(1.2);
-		border: calc(4vh / 10) solid var(--shadePop);
-	}
-
-	.splashNav > a.focus img {
-		background-color: var(--shadePop) !important;
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform: scale(1.2);
-		border: calc(4vh / 10) solid var(--shadePop);
-		transition: 0s linear;
-	}
-
-	.splashNav > a.programmaticHover img {
-		background-color: var(--shadePop);
-		border-radius: calc(4vh / 5);
-		box-sizing: border-box;
-		transform: scale(1.2);
-		border: calc(4vh / 10) solid var(--shadePop);
-	}
-
-	:global(#contactBtn .tooltipText) {
-		top: -25%;
-		left: 50%;
-		transform: translateX(-50%) translateY(-100%);
-		font-variant: normal;
-		font-family: var(--ff1);
-		font-size: 90%;
+		border: 1px solid var(--splashscreen-nav-primary-color);
 	}
 </style>

@@ -26,7 +26,7 @@
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import heroContent from '../config/splashscreen-hero.json';
+	import heroContent from '../config/profile.json';
 	import socialsData from '../config/socials.json';
 	import TitleSvg from './TitleSvg.svelte';
 	import EmblemSvg from './EmblemSvg.svelte';
@@ -86,8 +86,6 @@
 </script>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
-
 	.splashscreen-logo {
 		color: var(--splashscreen-hero-text-primary);
 		opacity: 0;
@@ -102,6 +100,7 @@
         --splashscreen-hero-text-accent: #60BF60;
         --splashscreen-hero-text-outline: #FFF;
         --splashscreen-hero-text-font-size: 27px;
+        --splashscreen-hero-text-font-family: 'M PLUS Rounded 1c';
 
 
 		position: absolute;
@@ -134,9 +133,9 @@
 
 	.splashscreen-hero-headline {
         opacity: 0;
-        font-family: 'M PLUS Rounded 1c';
+        font-family: var(--splashscreen-hero-text-font-family);
         font-size: var(--splashscreen-hero-text-font-size);
-        font-weight: bold;
+        font-weight: 700;
         letter-spacing: 0.1em;
         color: var(--splashscreen-hero-text-primary);
 		margin-bottom: 0px;

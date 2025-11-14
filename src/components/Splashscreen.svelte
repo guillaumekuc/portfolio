@@ -12,9 +12,9 @@
 		</div>
 	</div>
 
-	<div id="splashNavPositioner">
-		<SplashNav />
-	</div>
+
+	<SplashNav />
+
 </div>
 
 <script>

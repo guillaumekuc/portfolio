@@ -1,0 +1,87 @@
+{
+	"navigation": [
+		{
+			"id": "2d",
+			"label": "2D",
+			"type": "internal",
+			"target": "portfolio-2d",
+			"icon": {
+				"src": "/img/.old/icons/painting.png",
+				"alt": "2D"
+			}
+		},
+		{
+			"id": "3d",
+			"label": "3D",
+			"type": "internal",
+			"target": "portfolio-3d",
+			"icon": {
+				"src": "/img/.old/icons/3D.png",
+				"alt": "3D"
+			}
+		},
+		{
+			"id": "music",
+			"label": "Music",
+			"type": "internal",
+			"target": "portfolio-music",
+			"icon": {
+				"src": "/img/.old/icons/music.png",
+				"alt": "Music"
+			}
+		},
+		{
+			"id": "dev",
+			"label": "Dev",
+			"type": "internal",
+			"target": "portfolio-web",
+			"icon": {
+				"src": "/img/.old/icons/code.png",
+				"alt": "Web"
+			}
+		},
+		{
+			"id": "quick-tour",
+			"label": "Quick Tour",
+			"type": "internal",
+			"target": "categories",
+			"icon": {
+				"src": "/img/.old/icons/downArrow.png",
+				"alt": "All"
+			},
+			"cta": true
+		},
+		{
+			"id": "about",
+			"label": "About",
+			"type": "internal",
+			"target": "about",
+			"icon": {
+				"src": "/img/nav/profile.svg",
+				"alt": "All"
+			}
+		},
+		{
+			"id": "blog",
+			"label": "Blog",
+			"type": "external",
+			"url": "http://guillaumekuc.blog",
+			"openInNewTab": true,
+			"icon": {
+				"src": "/img/.old/icons/blog.svg",
+				"alt": "Blog"
+			}
+		},
+		{
+			"id": "contact",
+			"label": "Contact",
+			"type": "external",
+			"url": "mailto:guillaume@guillaumekuc.com",
+			"openInNewTab": true,
+			"icon": {
+				"src": "/img/.old/icons/contact_w.svg",
+				"alt": "Contact"
+			}
+		}
+	]
+}
