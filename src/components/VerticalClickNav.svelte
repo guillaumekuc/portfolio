@@ -40,16 +40,17 @@
 		debugLog('Top arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
 
-		if (currentScreenValue === 'categories') {
-			scrollToElement('splashscreen');
-		} else {
-			const currentElement = document.querySelector(`#${currentScreenValue}`);
-			if (currentElement) {
-				const prev = DOM.previousVisibleSibling(currentElement);
-				if (prev) {
-					debugLog('Scroll to previous:', prev.id);
-					prev.scrollIntoView({ behavior: 'smooth' });
-				}
+		if (currentScreenValue === 'splashscreen' || currentScreenValue === 'startScreen') {
+			// Already at top, do nothing
+			return;
+		}
+
+		const currentElement = document.querySelector(`#${currentScreenValue}`);
+		if (currentElement) {
+			const prev = DOM.previousVisibleSibling(currentElement);
+			if (prev) {
+				debugLog('Scroll to previous:', prev.id);
+				prev.scrollIntoView({ behavior: 'smooth' });
 			}
 		}
 	}

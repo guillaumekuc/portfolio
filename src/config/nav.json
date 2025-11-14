@@ -44,7 +44,7 @@
 			"id": "quick-tour",
 			"label": "Quick Tour",
 			"type": "internal",
-			"target": "categories",
+			"target": "portfolio-all",
 			"icon": {
 				"src": "/img/.old/icons/downArrow.png",
 				"alt": "All"

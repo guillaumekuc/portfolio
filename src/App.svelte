@@ -3,7 +3,6 @@
 	<VerticalClickNav />
 	<Splashscreen />
 	<Header />
-	<Rubrics />
 	<Folios />
 	<About />
 	<Footer />
@@ -16,7 +15,6 @@
 	import VerticalClickNav from './components/VerticalClickNav.svelte';
 	import Splashscreen from './components/Splashscreen.svelte';
 	import Header from './components/Header.svelte';
-	import Rubrics from './components/Rubrics.svelte';
 	import Folios from './components/Folios.svelte';
 	import About from './components/About.svelte';
 	import Footer from './components/Footer.svelte';

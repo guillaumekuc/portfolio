@@ -12,8 +12,8 @@
 					type="button"
 					id={item.id}
 					class={item.id}
-					class:focus={categoryFocused === item.focused}
-					on:click={() => handleHeaderNavClick(item.target, item.focused)}
+					class:focus={currentNavTarget === item.target}
+					on:click={() => handleHeaderNavClick(item.target)}
 				>
 					{item.label}
 				</button>
@@ -34,30 +34,35 @@
 	import { Navigation } from '../utils/navigation.js';
 
 	const headerNavItems = [
-		{ id: 'headerNavButton3', target: 'portfolio-all', label: 'All', focused: 3 },
-		{ id: 'headerNavButton2', target: 'portfolio-2d', label: 'Illustration', focused: 2 },
-		{ id: 'headerNavButton4', target: 'portfolio-music', label: 'Music', focused: 4 },
-		{ id: 'headerNavButton1', target: 'portfolio-3d', label: '3D', focused: 1 },
-		{ id: 'headerNavButton5', target: 'portfolio-web', label: 'Web', focused: 5 }
+		{ id: 'headerNavButton3', target: 'portfolio-all', label: 'All' },
+		{ id: 'headerNavButton2', target: 'portfolio-2d', label: 'Illustration' },
+		{ id: 'headerNavButton4', target: 'portfolio-music', label: 'Music' },
+		{ id: 'headerNavButton1', target: 'portfolio-3d', label: '3D' },
+		{ id: 'headerNavButton5', target: 'portfolio-web', label: 'Web' }
 	];
 
 	// Extract the store for reactive access
-	const categoryFocusedStore = stores.navigation.categoryFocused;
-	$: categoryFocused = $categoryFocusedStore;
+	const currentNavTargetStore = stores.navigation.currentNavTarget;
+	$: currentNavTarget = $currentNavTargetStore;
 
-	function handleHeaderNavClick(target, focused) {
-		stores.navigation.categoryFocused.set(focused);
+	function handleHeaderNavClick(target) {
+		// Update the current nav target
+		stores.navigation.currentNavTarget.set(target);
 
-		// Hide irrelevant portfolio sections
-		const categoryClass = Navigation.getCategoryClass(focused);
-		Navigation.hideIrrelevantPortfolioSections(categoryClass);
+		// Hide irrelevant portfolio sections using the new nav-based filtering
+		Navigation.filterPortfolioSectionsByNavTarget(target);
 
-		// Scroll to next visible portfolio section
-		const categoriesElement = document.querySelector('#categories');
-		if (categoriesElement) {
-			const next = DOM.nextVisibleSibling(categoriesElement);
-			if (next) next.scrollIntoView();
-		}
+		// Scroll to first visible portfolio section
+		setTimeout(() => {
+			const allPortfolioSections = document.querySelectorAll('.portfolioSection');
+			for (const portfolioSection of allPortfolioSections) {
+				const style = window.getComputedStyle(portfolioSection);
+				if (style.display !== 'none' && style.visibility !== 'hidden') {
+					portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					break;
+				}
+			}
+		}, 100);
 	}
 
 	function handleTitleClick() {

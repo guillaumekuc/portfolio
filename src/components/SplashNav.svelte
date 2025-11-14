@@ -21,8 +21,16 @@
 				id="{item.id}Btn"
 				class:cta={item.cta}
 				class:focus={$selectedMenuItemStore === index}
+				class:active={item.target && item.target === $currentNavTargetStore}
 				role="button"
 				tabindex="0"
+				on:click={() => handleNavItemClick(item, index)}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						handleNavItemClick(item, index);
+					}
+				}}
 			>
 				{#if item.icon}
 					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
@@ -38,6 +46,9 @@
 	import { shortcuts } from '../utils/shortcuts.js';
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
+	import { Navigation } from '../utils/navigation.js';
+	import { DOM } from '../utils/dom.js';
+	import { debugLog } from '../utils/debuglog.js';
 	import navConfig from '../config/nav.json';
 	import NavIcon from './NavIcon.svelte';
 
@@ -49,6 +60,7 @@
 	
 	// Extract the store for reactive access
 	const selectedMenuItemStore = stores.navigation.selectedMenuItem;
+	const currentNavTargetStore = stores.navigation.currentNavTarget;
 
 	function findCtaIndex() {
 		return navItems.findIndex(item => item.cta === true);
@@ -96,8 +108,8 @@
 		}, totalAnimationTime);
 	}
 
-	function goToCategories() {
-		// Find item with cta property, or default to first item
+	function goToPortfolioSections() {
+		// Find item with cta property (Quick Tour), or default to first item
 		const ctaIndex = findCtaIndex();
 		const defaultIndex = ctaIndex >= 0 ? ctaIndex : 0;
 		selectedMenuItemStore.set(defaultIndex);
@@ -105,7 +117,10 @@
 		if (link) {
 			Animation.programmaticHover(link);
 		}
-		document.querySelector('#categories')?.scrollIntoView();
+		// Trigger the selected item to navigate
+		if (defaultIndex >= 0 && defaultIndex < navItems.length) {
+			handleNavItemClick(navItems[defaultIndex], defaultIndex);
+		}
 	}
 
 	function selectPreviousMenuItem() {
@@ -137,15 +152,69 @@
 	function triggerSelectedMenuItem() {
 		const selectedMenuItem = $selectedMenuItemStore;
 		if (selectedMenuItem >= 0 && selectedMenuItem < navItems.length) {
-			// For now, just reset to CTA item (behavior will be added later)
-			const ctaIndex = findCtaIndex();
-			const defaultIndex = ctaIndex >= 0 ? ctaIndex : 0;
-			selectedMenuItemStore.set(defaultIndex);
+			const item = navItems[selectedMenuItem];
+			handleNavItemClick(item, selectedMenuItem);
+		}
+	}
+
+	function handleNavItemClick(item, index) {
+		// Apply filtering based on nav item target
+		const target = item.target;
+		
+		// Update current nav target for header nav tracking (only for internal items)
+		if (item.type === 'internal' && target) {
+			stores.navigation.currentNavTarget.set(target);
+		}
+		
+		// Filter portfolio sections based on target (only for internal items)
+		if (item.type === 'internal' && target) {
+			Navigation.filterPortfolioSectionsByNavTarget(target);
+			
+			// Unified scrolling logic: wait for filtering to apply, then find and scroll to target element
+			setTimeout(() => {
+				let targetElement = null;
+				
+				// First, try to find by ID (target might be an element ID like 'about')
+				targetElement = document.querySelector(`#${target}`);
+				
+				// If not found by ID, find first visible portfolio section with matching category
+				if (!targetElement) {
+					const allPortfolioSections = document.querySelectorAll('.portfolioSection');
+					for (const portfolioSection of allPortfolioSections) {
+						// Check if this section has the target category in data-categories attribute
+						const categoriesAttr = portfolioSection.getAttribute('data-categories');
+						const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
+						const hasTargetCategory = categories.includes(target);
+						
+						if (hasTargetCategory) {
+							const style = window.getComputedStyle(portfolioSection);
+							if (style.display !== 'none' && style.visibility !== 'hidden') {
+								targetElement = portfolioSection;
+								break;
+							}
+						}
+					}
+				} else {
+					// Found by ID, but verify it's visible (filtering might have hidden it)
+					const style = window.getComputedStyle(targetElement);
+					if (style.display === 'none' || style.visibility === 'hidden') {
+						targetElement = null;
+					}
+				}
+				
+				if (targetElement) {
+					targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					debugLog('Navigated to section:', targetElement.id);
+				}
+			}, 100);
+		} else {
+			// External items - no navigation needed, they open in new tab
+			debugLog('External nav item clicked:', item.id);
 		}
 	}
 
 	onMount(() => {
-		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', goToCategories);
+		shortcuts.addScreenShortcut('splashscreen', 'ArrowDown', triggerSelectedMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowLeft', selectPreviousMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'ArrowRight', selectNextMenuItem);
 		shortcuts.addScreenShortcut('splashscreen', 'Enter', triggerSelectedMenuItem);
@@ -247,6 +316,10 @@
 	.splashNav a.focus {
 		transition: none !important;
 		opacity: 100% !important;
+		border: 1px solid var(--splashscreen-nav-primary-color) !important;
+	}
+	
+	.splashNav a.active {
 		border: 1px solid var(--splashscreen-nav-primary-color) !important;
 	}
 	

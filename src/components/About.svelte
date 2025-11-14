@@ -1,4 +1,4 @@
-<div id="about" class="fullPage aboutme">
+<div id="about" class="fullPage portfolioSection aboutme" data-categories="portfolio-about any">
 	<div class="vertWrapper">
 		<div id="aboutTop" style="">
 			<div id="profilePicture"><img src="/img/.old/profilePic.jpg" alt="Profile" /></div>

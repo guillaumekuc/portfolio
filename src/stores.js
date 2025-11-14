@@ -23,7 +23,8 @@ export const stores = {
 	navigation: {
 		currentScreen: writable('startScreen'),
 		currentModal: writable(null),
-		categoryFocused: writable(3),
+		categoryFocused: writable(3), // Deprecated - kept for backward compatibility
+		currentNavTarget: writable('portfolio-all'), // Current navigation target (e.g., 'portfolio-2d', 'portfolio-3d', etc.)
 		selectedMenuItem: writable(-1),
 		// Map of portfolio section ID to visibility boolean for reactive portfolio section visibility
 		portfolioSectionVisibility: writable(new Map()),

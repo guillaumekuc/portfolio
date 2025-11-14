@@ -10,6 +10,7 @@
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
 	import { Animation } from '../utils/animation.js';
 	import { Navigation } from '../utils/navigation.js';
@@ -36,9 +37,11 @@
 		// Initialize scroll
 		Navigation.initializeScroll();
 
-		// Hide all portfolio sections (cross-component, so querySelector is acceptable)
-		const portfolioSections = document.querySelectorAll('.portfolioSection');
-		portfolioSections.forEach((portfolioSection) => portfolioSection.classList.add('hidden'));
+		// Apply filtering based on current nav target (defaults to CTA target)
+		const currentNavTarget = get(stores.navigation.currentNavTarget);
+		if (currentNavTarget) {
+			Navigation.filterPortfolioSectionsByNavTarget(currentNavTarget);
+		}
 
 		// Trigger opening animations via coordinator
 		Animation.animateOpening();

@@ -4,6 +4,7 @@ import { stores } from '../stores.js';
 import { get } from 'svelte/store';
 import { shortcuts } from './shortcuts.js';
 import { debugLog } from './debuglog.js';
+import navConfig from '../config/nav.json';
 
 // Navigation controller - handles keyboard/mouse navigation and scroll tracking
 export class Navigation {
@@ -67,6 +68,49 @@ export class Navigation {
 		);
 	}
 
+	// Filters portfolio sections based on nav item target
+	// target can be: 'portfolio-2d', 'portfolio-3d', 'portfolio-music', 'portfolio-web', 'portfolio-all', 'portfolio-about', 'about', or null/undefined for external items
+	static filterPortfolioSectionsByNavTarget(target) {
+		const visibilityMap = new Map();
+
+		// Get all portfolio sections
+		document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
+			const portfolioSectionId = portfolioSection.id;
+			const categoriesAttr = portfolioSection.getAttribute('data-categories');
+			const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
+			const hasAnyCategory = categories.includes('any');
+			const isAboutSection = portfolioSection.id === 'about' || categories.includes('portfolio-about');
+			let isVisible = false;
+
+			// Sections with "any" category should always be visible regardless of filtering
+			if (hasAnyCategory) {
+				isVisible = true;
+			} else if (target === 'portfolio-all') {
+				// Show all portfolio sections (anything with portfolio-all category)
+				isVisible = categories.includes('portfolio-all');
+			} else if (target === 'about' || target === 'portfolio-about') {
+				// Show only about section (sections with portfolio-about category or "any" category)
+				isVisible = isAboutSection || hasAnyCategory;
+			} else if (target && target.startsWith('portfolio-')) {
+				// Show only sections with the matching portfolio category
+				isVisible = categories.includes(target);
+			} else {
+				// External items (blog, contact) or no target - hide all portfolio sections
+				isVisible = false;
+			}
+
+			visibilityMap.set(portfolioSectionId, isVisible);
+		});
+
+		stores.navigation.portfolioSectionVisibility.set(visibilityMap);
+		debugLog(
+			'Filtered portfolio sections by nav target:',
+			target,
+			'visible count:',
+			Array.from(visibilityMap.values()).filter((v) => v).length
+		);
+	}
+
 	static initializeScroll() {
 		document.body.scroll(0, 0);
 	}
@@ -85,6 +129,14 @@ export class Navigation {
 		this.setupMouseNavigation();
 		window.addEventListener('resize', DOM.reSnap);
 		this.registerGlobalShortcuts();
+		
+		// Initialize filtering with CTA target (default active category)
+		const ctaItem = navConfig.navigation.find(item => item.cta === true);
+		if (ctaItem && ctaItem.type === 'internal' && ctaItem.target) {
+			stores.navigation.currentNavTarget.set(ctaItem.target);
+			Navigation.filterPortfolioSectionsByNavTarget(ctaItem.target);
+			debugLog('Initialized filtering with CTA target:', ctaItem.target);
+		}
 	}
 
 	// Setup scroll tracking with IntersectionObserver
@@ -164,42 +216,8 @@ export class Navigation {
 			observer.observe(video.parentElement);
 		}
 
-		function revealPortfolioSectionsWhenCategoriesVisible() {
-			const elementObserver = new IntersectionObserver(
-				(entries) => {
-					if (entries[0].isIntersecting === true) {
-						const categoryFocused = get(stores.navigation.categoryFocused);
-						const categoryClass = Navigation.getCategoryClass(categoryFocused);
-						setTimeout(() => {
-							document.querySelectorAll('.' + categoryClass).forEach((portfolioSection) => {
-								portfolioSection.classList.remove('hidden');
-							});
-						}, 500);
-					}
-				},
-				{ threshold: [0.5] }
-			);
-			elementObserver.observe(document.querySelector('#categories'));
-		}
-
-		function hidePortfolioSectionsWhenSplashscreenVisible() {
-			const elementObserver = new IntersectionObserver(
-				(entries) => {
-					if (entries[0].isIntersecting === true) {
-						setTimeout(() => {
-							document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
-								portfolioSection.classList.add('hidden');
-							});
-						}, 500);
-					}
-				},
-				{ threshold: [0.5] }
-			);
-			elementObserver.observe(document.querySelector('#splashscreen'));
-		}
-
-		revealPortfolioSectionsWhenCategoriesVisible();
-		hidePortfolioSectionsWhenSplashscreenVisible();
+		// Removed revealPortfolioSectionsWhenCategoriesVisible - categories section removed
+		// Removed hidePortfolioSectionsWhenSplashscreenVisible - portfolio sections are no longer hidden when splashscreen is visible
 		allFullPages.forEach((page) => updateHashWhenVisible(page));
 		document.querySelectorAll('.largeVideo').forEach((video) => videoObserver(video));
 	}
@@ -264,20 +282,30 @@ export class Navigation {
 		function handleNavUp() {
 			const currentScreen = get(stores.navigation.currentScreen);
 			// Skip if screen has its own ArrowUp handler
-			if (['categories', 'splashscreen', 'startScreen'].includes(currentScreen)) {
+			if (['splashscreen', 'startScreen'].includes(currentScreen)) {
 				return;
 			}
-			const prevSibling = DOM.previousVisibleSibling(document.querySelector('#' + currentScreen));
+			const currentElement = document.querySelector('#' + currentScreen);
+			if (!currentElement) return;
+			
+			const prevSibling = DOM.previousVisibleSibling(currentElement);
 			if (prevSibling) {
 				debugLog('Navigate up');
-				prevSibling.scrollIntoView();
+				prevSibling.scrollIntoView({ behavior: 'smooth' });
+			} else {
+				// If no previous sibling, we're at the first section - go to splashscreen
+				const splashscreen = document.querySelector('#splashscreen');
+				if (splashscreen) {
+					debugLog('Navigate up to splashscreen');
+					splashscreen.scrollIntoView({ behavior: 'smooth' });
+				}
 			}
 		}
 
 		function handleNavDown() {
 			const currentScreen = get(stores.navigation.currentScreen);
 			// Skip if screen has its own ArrowDown handler
-			if (['splashscreen', 'categories'].includes(currentScreen)) {
+			if (['splashscreen'].includes(currentScreen)) {
 				return;
 			}
 			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));

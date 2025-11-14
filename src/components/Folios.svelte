@@ -1,50 +1,52 @@
-<div id="musicPlaylistFolio" class="fullPage portfolioSection portfolio-music portfolio-all">
+<div id="musicPlaylistFolio" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
 	<MusicPlaylistFolio />
 </div>
 
-<div id="illustrationFolio1" class="fullPage portfolioSection portfolio-2d portfolio-all">
+<div id="illustrationFolio1" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
 	<IllustrationFolio1 />
 </div>
 
-<div id="gridzFolio" class="fullPage portfolioSection portfolio-web portfolio-all">
+<div id="gridzFolio" class="fullPage portfolioSection" data-categories="portfolio-web portfolio-all">
 	<Gridz />
 </div>
 
-<div id="drawingFolio1" class="fullPage portfolioSection portfolio-2d portfolio-all">
+<div id="drawingFolio1" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
 	<DrawingFolio1 />
 </div>
 
-<div id="modeFolio1" class="fullPage portfolioSection portfolio-all portfolio-3d">
+<div id="modeFolio1" class="fullPage portfolioSection" data-categories="portfolio-all portfolio-3d">
 	<ModeFolio1 />
 </div>
 
-<div id="illustrationFolio2" class="fullPage portfolioSection portfolio-2d portfolio-all">
+<div id="illustrationFolio2" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
 	<IllustrationFolio2 />
 </div>
 
-<div id="musicVidFolio" class="fullPage portfolioSection portfolio-music portfolio-all">
+<div id="musicVidFolio" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
 	<MusicFolio1 />
 </div>
 
-<div id="animFolio1" class="fullPage portfolioSection portfolio-3d portfolio-all">
+<div id="animFolio1" class="fullPage portfolioSection" data-categories="portfolio-3d portfolio-all">
 	<AnimFolio1 />
 </div>
 
-<div id="drawingFolio2" class="fullPage portfolioSection portfolio-2d portfolio-all">
+<div id="drawingFolio2" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
 	<DrawingFolio2 />
 </div>
 
-<div id="P4book" class="fullPage portfolioSection portfolio-music portfolio-all">
+<div id="P4book" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
 	<P4bookFolio />
 </div>
 
-<div id="websitesFolio" class="fullPage portfolioSection portfolio-web portfolio-all">
+<div id="websitesFolio" class="fullPage portfolioSection" data-categories="portfolio-web portfolio-all">
 	<Websites />
 </div>
 
 <script>
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
+	import { Navigation } from '../utils/navigation.js';
 	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
 	import IllustrationFolio1 from './portfolioSections/IllustrationFolio1.svelte';
 	import IllustrationFolio2 from './portfolioSections/IllustrationFolio2.svelte';
@@ -81,6 +83,13 @@
 	}
 
 	onMount(() => {
+		// Ensure filtering is applied on mount if it hasn't been applied yet
+		const currentNavTarget = get(stores.navigation.currentNavTarget);
+		if (currentNavTarget) {
+			// Apply filtering to ensure sections are visible based on current target
+			Navigation.filterPortfolioSectionsByNavTarget(currentNavTarget);
+		}
+		
 		// Initialize slick carousel on galleries
 		// jQuery is already available globally from scripts.js
 		setTimeout(() => {
