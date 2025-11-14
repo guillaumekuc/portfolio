@@ -9,11 +9,7 @@ import { appAPI } from './utils/api.js';
 // Make jQuery available globally for slick-carousel
 window.$ = window.jQuery = $;
 
-/**
- * Initialize audio/music player
- * @param {HTMLAudioElement} audioElement - Audio element from Splashscreen component
- * @returns {Music|null} Music player instance or null if initialization failed
- */
+// Initialize audio/music player
 export function initAudio(audioElement) {
 	debugLog('Initializing audio');
 
@@ -33,10 +29,7 @@ export function initAudio(audioElement) {
 	return musicPlayer;
 }
 
-/**
- * Initialize navigation controller
- * @returns {Navigation|null} Navigation controller instance or null if initialization failed
- */
+// Initialize navigation controller
 export function initNavigation() {
 	debugLog('Initializing navigation');
 
@@ -52,9 +45,7 @@ export function initNavigation() {
 	return navigationController;
 }
 
-/**
- * Initialize API exposure for console debugging and external access
- */
+// Initialize API exposure for console debugging and external access
 export function initAPI() {
 	debugLog('Initializing API');
 

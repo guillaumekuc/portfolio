@@ -1,11 +1,6 @@
-
-// Utility class for animation-related operations
-
+// Animation utilities
 export class Animation {
-	
-	// Creates a programmatic hover event effect by temporarily adding a class
-	// @param {HTMLElement} target - Element to apply programmatic hover to
-	
+	// Creates a programmatic hover effect by temporarily adding a class
 	static programmaticHover(target) {
 		if (!target) return;
 
@@ -16,10 +11,7 @@ export class Animation {
 		}, 100);
 	}
 
-
-	// Coordinates the opening sequence animations by dispatching events to components
-	// Each component handles its own animation logic internally
-
+	// Coordinates opening sequence animations by dispatching events to components
 	static animateOpening() {
 		// Start screen fade out - immediate
 		window.dispatchEvent(new CustomEvent('startScreenAnimate'));

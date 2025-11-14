@@ -1,12 +1,8 @@
 import { writable } from 'svelte/store';
 
-/**
- * Organized store namespaces
- */
+// Organized store namespaces
 export const stores = {
-	/**
-	 * Music-related state
-	 */
+	// Music-related state
 	music: {
 		isPlaying: writable(false),
 		isLooping: writable(false),
@@ -23,9 +19,7 @@ export const stores = {
 		musicPlayer: writable(null)
 	},
 
-	/**
-	 * Navigation-related state
-	 */
+	// Navigation-related state
 	navigation: {
 		currentScreen: writable('startScreen'),
 		currentModal: writable(null),
@@ -37,9 +31,7 @@ export const stores = {
 		controller: writable(null)
 	},
 
-	/**
-	 * Configuration settings
-	 */
+	// Configuration settings
 	config: {
 		debug: writable(true)
 	}

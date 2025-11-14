@@ -2,14 +2,8 @@ import { get } from 'svelte/store';
 import { stores } from '../stores.js';
 import { debugLog } from './debuglog.js';
 
-/**
- * Keyboard shortcuts
- *
- * Three types (priority order):
- * - Modal: Highest priority, active when a modal is open (e.g., startScreen)
- * - Screen: Active only when a full-page section is visible
- * - Global: Always active (e.g., music controls)
- */
+// Keyboard shortcuts system
+// Priority order: Modal (highest) → Screen → Global (always active)
 class Shortcuts {
 	constructor() {
 		this.global = new Map();
@@ -36,17 +30,11 @@ class Shortcuts {
 		this.ready = false;
 	}
 
-	/**
-	 * Add a global shortcut (always active)
-	 */
 	addGlobalShortcut(key, handler, id, prevent = true) {
 		this.global.set(id, { key, handler, prevent });
 		debugLog('Global shortcut added:', key, id);
 	}
 
-	/**
-	 * Add a screen shortcut (active only when screen is visible)
-	 */
 	addScreenShortcut(screen, key, handler, prevent = true) {
 		if (!this.screens.has(screen)) {
 			this.screens.set(screen, new Map());
@@ -57,9 +45,6 @@ class Shortcuts {
 		map.set(key, { key, handler, prevent });
 	}
 
-	/**
-	 * Add a modal shortcut (highest priority, active when modal is open)
-	 */
 	addModalShortcut(modal, key, handler, prevent = true) {
 		if (!this.modals.has(modal)) {
 			this.modals.set(modal, new Map());
@@ -69,32 +54,20 @@ class Shortcuts {
 		map.set(key, { key, handler, prevent });
 	}
 
-	/**
-	 * Remove a global shortcut
-	 */
 	removeGlobalShortcut(id) {
 		this.global.delete(id);
 	}
 
-	/**
-	 * Remove all shortcuts for a screen
-	 */
 	removeScreenShortcuts(screen) {
 		this.screens.delete(screen);
 	}
 
-	/**
-	 * Remove all shortcuts for a modal
-	 */
 	removeModalShortcuts(modal) {
 		this.modals.delete(modal);
 	}
 
-	/**
-	 * Handle keydown events
-	 * Priority: Modal → Screen → Global
-	 * When a modal is active, only modal shortcuts work (others are frozen)
-	 */
+	// Handle keydown events - priority: Modal → Screen → Global
+	// When a modal is active, only modal shortcuts work (others are frozen)
 	onKey(e) {
 		// Check modal shortcuts first (highest priority)
 		const currentModal = get(stores.navigation.currentModal);

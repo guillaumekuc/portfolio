@@ -1,11 +1,5 @@
-/**
- * Utility class for loading screen operations
- */
+// Loading screen utilities
 export class Loading {
-	/**
-	 * Initializes the loading screen animation
-	 * @param {HTMLElement} loadElement - The loading screen element
-	 */
 	static initLoadingScreen(loadElement) {
 		if (!loadElement) return;
 

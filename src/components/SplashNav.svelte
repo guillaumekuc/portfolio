@@ -50,18 +50,11 @@
 	// Extract the store for reactive access
 	const selectedMenuItemStore = stores.navigation.selectedMenuItem;
 
-	/**
-	 * Finds the index of the menu item with the cta property
-	 * @returns {number} Index of CTA item, or -1 if not found
-	 */
 	function findCtaIndex() {
 		return navItems.findIndex(item => item.cta === true);
 	}
 
-	/**
-	 * Selects the CTA item if no item is currently selected
-	 * @returns {boolean} True if CTA was selected, false otherwise
-	 */
+	// Selects the CTA item if no item is currently selected
 	function selectCtaIfNoSelection() {
 		const selectedMenuItem = $selectedMenuItemStore;
 		if (selectedMenuItem < 0) {

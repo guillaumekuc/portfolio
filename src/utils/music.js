@@ -3,10 +3,7 @@ import { stores } from '../stores.js';
 import { get } from 'svelte/store';
 import { debugLog } from './debuglog.js';
 
-/**
- * Music player controller class
- * Handles all background music and playlist functionality
- */
+// Music player controller - handles background music and playlist functionality
 export class Music {
 	constructor() {
 		// Only keep reference to audio element for playback control
@@ -14,10 +11,6 @@ export class Music {
 		this.bgMusicElement = null;
 	}
 
-	/**
-	 * Initialize music player with audio element
-	 * @param {HTMLAudioElement} audioElement - The audio element to control
-	 */
 	init(audioElement) {
 		this.bgMusicElement = audioElement;
 		debugLog('Music player initialized');

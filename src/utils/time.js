@@ -1,12 +1,6 @@
-/**
- * Utility class for time-related operations
- */
+// Time formatting utilities
 export class Time {
-	/**
-	 * Formats seconds into MM:SS format
-	 * @param {number} seconds - Time in seconds
-	 * @returns {string} Formatted time string (e.g., "3:45")
-	 */
+	// Formats seconds into MM:SS format
 	static formatTime(seconds) {
 		const m = Math.floor(seconds / 60);
 		let s = Math.floor(seconds % 60);

@@ -30,9 +30,13 @@ alwaysApply: true
     - Multi lines comments shouldn't have a reason to exist: code should be self-explanatory.
     - Outdated comments are worse than non-existant comments.
     - Do not add explanatory or conversational comments in code (including CSS). Examples of what NOT to add: "/* this property inherits from above */", "/* background-size is not overridden */", etc. Code should be self-explanatory through proper naming and structure.
+    - Comment guidelines:
+        - Remove JSDoc from simple, self-explanatory functions (e.g., `findCtaIndex()` doesn't need documentation)
+        - Keep minimal comments only for complex logic or non-obvious behavior
+        - Use single-line comments (`//`) for brief explanations when needed
+        - Prefer self-documenting code over comments
+        - Comments should add value, not duplicate what the code already says
 - workflow
     - after completing an operation, check for leftovers and clean-up dead code.
     - while doing operations, also check the files that you are editing for adherence to the rules exposed above (continuous improvement).
     - Do not include conversational text in code files. You can drop notes in the docs folder if needed.
-
-

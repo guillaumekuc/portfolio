@@ -1,12 +1,6 @@
-/**
- * Utility class for DOM manipulation operations
- */
+// DOM manipulation utilities
 export class DOM {
-	/**
-	 * Finds the next visible sibling element (skips hidden elements)
-	 * @param {HTMLElement} element - Starting element
-	 * @returns {HTMLElement|null} Next visible sibling or null
-	 */
+	// Finds the next visible sibling element (skips hidden elements)
 	static nextVisibleSibling(element) {
 		let nextElement = element.nextElementSibling;
 
@@ -21,11 +15,7 @@ export class DOM {
 		return null;
 	}
 
-	/**
-	 * Finds the previous visible sibling element (skips hidden elements)
-	 * @param {HTMLElement} element - Starting element
-	 * @returns {HTMLElement|null} Previous visible sibling or null
-	 */
+	// Finds the previous visible sibling element (skips hidden elements)
 	static previousVisibleSibling(element) {
 		let previousElement = element.previousElementSibling;
 
@@ -40,10 +30,7 @@ export class DOM {
 		return null;
 	}
 
-	/**
-	 * Scrolls by one pixel to force a resnap when the window is resized
-	 * Used for CSS scroll-snap functionality
-	 */
+	// Scrolls by one pixel to force a resnap when window is resized (for CSS scroll-snap)
 	static reSnap() {
 		setTimeout(() => {
 			document.body.scrollTop += 1;

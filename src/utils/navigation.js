@@ -5,21 +5,9 @@ import { get } from 'svelte/store';
 import { shortcuts } from './shortcuts.js';
 import { debugLog } from './debuglog.js';
 
-/**
- * Navigation controller class
- * Handles keyboard navigation, mouse navigation, and scroll tracking
- * Also provides static utility methods for navigation operations
- */
+// Navigation controller - handles keyboard/mouse navigation and scroll tracking
 export class Navigation {
-	/**
-	 * Static utility methods
-	 */
-
-	/**
-	 * Maps category focus index to portfolio section class name
-	 * @param {number} categoryFocused - Current category focus index (1-5)
-	 * @returns {string} Portfolio section class name
-	 */
+	// Maps category focus index (1-5) to portfolio section class name
 	static getCategoryClass(categoryFocused) {
 		const categoryClassMap = {
 			1: 'portfolio-3d',
@@ -31,10 +19,7 @@ export class Navigation {
 		return categoryClassMap[categoryFocused] || 'portfolio-all';
 	}
 
-	/**
-	 * Scrolls to the next visible portfolio section from the current screen
-	 * @param {string} currentScreenId - ID of the current screen
-	 */
+	// Scrolls to the next visible portfolio section from the current screen
 	static goToPortfolioSections(currentScreenId) {
 		const currentElement = document.querySelector('#' + currentScreenId);
 		if (!currentElement) return;
@@ -61,11 +46,7 @@ export class Navigation {
 		}
 	}
 
-	/**
-	 * Updates portfolio section visibility store based on category class
-	 * Components react to this store to show/hide portfolio sections
-	 * @param {string} categoryClass - Class name of portfolio sections to show
-	 */
+	// Updates portfolio section visibility store - components react to show/hide sections
 	static hideIrrelevantPortfolioSections(categoryClass) {
 		const visibilityMap = new Map();
 
@@ -86,25 +67,16 @@ export class Navigation {
 		);
 	}
 
-	/**
-	 * Initializes scroll position to top
-	 */
 	static initializeScroll() {
 		document.body.scroll(0, 0);
 	}
 
-	/**
-	 * Instance methods for navigation controller
-	 */
 	constructor() {
 		// State - only keep non-store properties
 		// Store values are initialized in stores.js - single source of truth
 		this.allCategories = [];
 	}
 
-	/**
-	 * Initialize navigation controller
-	 */
 	init() {
 		this.allCategories = document.querySelectorAll('.category');
 		debugLog('Navigation initialized');
@@ -115,9 +87,7 @@ export class Navigation {
 		this.registerGlobalShortcuts();
 	}
 
-	/**
-	 * Setup scroll tracking with IntersectionObserver
-	 */
+	// Setup scroll tracking with IntersectionObserver
 	setupScrollTracking() {
 		const allFullPages = document.querySelectorAll('.fullPage');
 		const self = this;
@@ -234,18 +204,13 @@ export class Navigation {
 		document.querySelectorAll('.largeVideo').forEach((video) => videoObserver(video));
 	}
 
-	/**
-	 * Setup keyboard navigation event listener
-	 * Note: Most shortcuts are now handled by components via shortcuts system
-	 */
+	// Setup keyboard navigation - most shortcuts handled by components via shortcuts system
 	setupKeyboardNavigation() {
 		// Keyboard navigation is now handled by the shortcuts system
 		// This method is kept for backward compatibility
 	}
 
-	/**
-	 * Register global shortcuts (music controls and general navigation)
-	 */
+	// Register global shortcuts (music controls and general navigation)
 	registerGlobalShortcuts() {
 		function handleMusicPrev() {
 			const musicPlayer = get(stores.music.musicPlayer);
@@ -337,9 +302,6 @@ export class Navigation {
 		shortcuts.addGlobalShortcut('ArrowDown', handleNavDown, 'nav-down');
 	}
 
-	/**
-	 * Setup mouse navigation
-	 */
 	setupMouseNavigation() {
 		// Mobile/tablet detection
 		window.mobileAndTabletCheck = function () {
