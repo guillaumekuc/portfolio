@@ -23,12 +23,14 @@
 
 <script>
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import MonogramSvg from './MonogramSvg.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
 	import navConfig from '../config/nav.json';
 	import profileConfig from '../config/profile.json';
+	import portfolioConfig from '../config/portfolio.json';
 
 	// Get profile info from config
 	const profile = profileConfig;
@@ -63,14 +65,21 @@
 		// Hide irrelevant portfolio sections using the new nav-based filtering
 		Navigation.filterPortfolioSectionsByNavTarget(target);
 
-		// Scroll to first visible portfolio section
+		// Scroll to first visible portfolio section using store
 		setTimeout(() => {
-			const allPortfolioSections = document.querySelectorAll('.portfolioSection');
-			for (const portfolioSection of allPortfolioSections) {
-				const style = window.getComputedStyle(portfolioSection);
-				if (style.display !== 'none' && style.visibility !== 'hidden') {
-					portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-					break;
+			const visibility = get(stores.navigation.portfolioSectionVisibility);
+			
+			for (const section of portfolioConfig.portfolioSections) {
+				const isVisible = !visibility || visibility.size === 0 
+					? true 
+					: (visibility.get(section.id) ?? true);
+				
+				if (isVisible) {
+					const sectionElement = document.getElementById(section.id);
+					if (sectionElement) {
+						sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						break;
+					}
 				}
 			}
 		}, 100);

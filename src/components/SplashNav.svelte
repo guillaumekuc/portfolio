@@ -49,7 +49,9 @@
 	import { Navigation } from '../utils/navigation.js';
 	import { debugLog } from '../utils/debuglog.js';
 	import navConfig from '../config/nav.json';
+	import portfolioConfig from '../config/portfolio.json';
 	import NavIcon from './NavIcon.svelte';
+	import { get } from 'svelte/store';
 
 	let navElement;
 	let navLinkElements = [];
@@ -212,25 +214,38 @@
 		let targetElement = document.querySelector(`#${target}`);
 		
 		if (targetElement) {
-			// Verify it's visible
-			const style = window.getComputedStyle(targetElement);
-			if (style.display === 'none' || style.visibility === 'hidden') {
-				targetElement = null;
+			// Verify it's visible using store (for portfolio sections) or computed style (for about)
+			if (targetElement.classList.contains('portfolioSection')) {
+				const visibility = get(stores.navigation.portfolioSectionVisibility);
+				const isVisible = !visibility || visibility.size === 0 
+					? true 
+					: (visibility.get(targetElement.id) ?? true);
+				if (!isVisible) {
+					targetElement = null;
+				}
+			} else {
+				// For non-portfolio sections (like about), check computed style
+				const style = window.getComputedStyle(targetElement);
+				if (style.display === 'none' || style.visibility === 'hidden') {
+					targetElement = null;
+				}
 			}
 		}
 		
-		// If not found by ID, find first visible portfolio section with matching category
+		// If not found by ID, find first visible portfolio section with matching category using config
 		if (!targetElement) {
-			const allPortfolioSections = document.querySelectorAll('.portfolioSection');
-			for (const portfolioSection of allPortfolioSections) {
-				const categoriesAttr = portfolioSection.getAttribute('data-categories');
-				const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
-				
+			const visibility = get(stores.navigation.portfolioSectionVisibility);
+			
+			for (const section of portfolioConfig.portfolioSections) {
+				const categories = section.categories.split(/\s+/);
 				if (categories.includes(target)) {
-					const style = window.getComputedStyle(portfolioSection);
-					if (style.display !== 'none' && style.visibility !== 'hidden') {
-						targetElement = portfolioSection;
-						break;
+					const isVisible = !visibility || visibility.size === 0 
+						? true 
+						: (visibility.get(section.id) ?? true);
+					
+					if (isVisible) {
+						targetElement = document.getElementById(section.id);
+						if (targetElement) break;
 					}
 				}
 			}

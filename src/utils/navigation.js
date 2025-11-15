@@ -13,25 +13,26 @@ export class Navigation {
 		const currentElement = document.querySelector('#' + currentScreenId);
 		if (!currentElement) return;
 
-		// Find the first visible .portfolioSection element (not just any next sibling)
-		const allPortfolioSections = document.querySelectorAll('.portfolioSection');
-		let nextVisiblePortfolioSection = null;
-
-		for (const portfolioSection of allPortfolioSections) {
-			// Check if this portfolio section comes after the current screen in the DOM
-			if (currentElement.compareDocumentPosition(portfolioSection) & Node.DOCUMENT_POSITION_FOLLOWING) {
-				// Verify it's actually visible using computed style
-				const style = window.getComputedStyle(portfolioSection);
-				if (style.display !== 'none' && style.visibility !== 'hidden') {
-					nextVisiblePortfolioSection = portfolioSection;
-					break;
-				}
+		// Get visibility from store instead of querying DOM
+		const visibility = get(stores.navigation.portfolioSectionVisibility);
+		
+		// Find the first visible portfolio section after current screen
+		for (const section of portfolioConfig.portfolioSections) {
+			// Check if section is visible using store
+			const isVisible = !visibility || visibility.size === 0 
+				? true 
+				: (visibility.get(section.id) ?? true);
+			
+			if (!isVisible) continue;
+			
+			// Check if this section comes after current screen in DOM
+			const sectionElement = document.getElementById(section.id);
+			if (sectionElement && 
+				currentElement.compareDocumentPosition(sectionElement) & Node.DOCUMENT_POSITION_FOLLOWING) {
+				debugLog('Navigating to portfolio section:', section.id);
+				sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				break;
 			}
-		}
-
-		if (nextVisiblePortfolioSection) {
-			debugLog('Navigating to portfolio section:', nextVisiblePortfolioSection.id);
-			nextVisiblePortfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		}
 	}
 
