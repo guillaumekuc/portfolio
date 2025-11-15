@@ -1,4 +1,4 @@
-<div id="header" class="header">
+<div id="header" class="header" class:visible={isVisible}>
 	<div id="stickyHeader" class="stickyHeader">
 		<HeaderLinks />
 		<div id="headerBranding" class="headerBranding">
@@ -28,6 +28,7 @@
 <!--#header-->
 
 <script>
+	import { onMount } from 'svelte';
 	import HeaderLinks from './HeaderLinks.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
@@ -37,6 +38,9 @@
 
 	// Get profile info from config
 	const profile = profileConfig;
+
+	// Visibility state for header
+	let isVisible = false;
 
 	// Filter navigation items to only include internal items
 	// Sort so CTA items come first, then map to the format needed for the header
@@ -82,6 +86,14 @@
 		const splashscreen = document.querySelector('#splashscreen');
 		if (splashscreen) splashscreen.scrollIntoView({ behavior: 'smooth' });
 	}
+
+	onMount(() => {
+		const cleanup = DOM.setupSplashscreenVisibilityObserver((visible) => {
+			isVisible = visible;
+		});
+
+		return cleanup;
+	});
 </script>
 
 <style>
@@ -101,13 +113,25 @@
 
 	.header {
 		display: block;
-		position: sticky;
+		position: fixed;
 		top: 0;
+		left: 0;
+		right: 0;
 		height: calc(2 * var(--safeMargin));
 		width: 100%;
 		color: white;
 		background-color: var(--shade1);
 		z-index: 85;
+		opacity: 0;
+		transform: translateY(-10px);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+		pointer-events: none;
+	}
+
+	.header.visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
 	}
 
 	.headerBranding {

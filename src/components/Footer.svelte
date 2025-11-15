@@ -1,4 +1,4 @@
-<div id="footer" class="footer">
+<div id="footer" class="footer" class:visible={isVisible}>
 	<div id="stickyFooter" class="stickyFooter">
 		<button
 			id="footerPreviousBtn"
@@ -53,10 +53,14 @@
 <!--#footer-->
 
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { stores } from '../stores.js';
 	import { Time } from '../utils/time.js';
+	import { DOM } from '../utils/dom.js';
 	import { get } from 'svelte/store';
+
+	// Visibility state for footer
+	let isVisible = false;
 
 	const isPlayingStore = stores.music.isPlaying;
 	$: isPlaying = $isPlayingStore;
@@ -199,24 +203,47 @@
 			bgMusicElement.addEventListener('timeupdate', updateTime);
 		}
 
+		const cleanupSplashscreenObserver = DOM.setupSplashscreenVisibilityObserver((visible) => {
+			isVisible = visible;
+		});
+
 		return () => {
 			if (bgMusicElement) {
 				bgMusicElement.removeEventListener('timeupdate', updateTime);
 			}
+			if (cleanupSplashscreenObserver) {
+				cleanupSplashscreenObserver();
+			}
 		};
+	});
+
+	onDestroy(() => {
+		// Cleanup handled in onMount return
 	});
 </script>
 
 <style>
 	.footer {
 		display: block;
-		position: sticky;
+		position: fixed;
 		bottom: 0;
+		left: 0;
+		right: 0;
 		height: calc(2 * var(--safeMargin));
 		width: 100%;
 		color: white;
 		background-color: var(--shade1);
 		z-index: 2;
+		opacity: 0;
+		transform: translateY(10px);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+		pointer-events: none;
+	}
+
+	.footer.visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
 	}
 
 	.stickyFooter {

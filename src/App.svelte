@@ -1,11 +1,11 @@
 <div id="siteContainer" class="siteContainer">
+	<Header />
+	<Footer />
 	<Head />
 	<VerticalClickNav />
 	<Splashscreen />
-	<Header />
 	<Folios />
 	<About />
-	<Footer />
 	<RotateDevice />
 </div>
 

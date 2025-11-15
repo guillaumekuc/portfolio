@@ -38,4 +38,31 @@ export class DOM {
 			document.body.scrollTop -= 1;
 		}, 500);
 	}
+
+	// Sets up an IntersectionObserver to watch splashscreen visibility
+	// Returns cleanup function to disconnect observer
+	// Component is visible when splashscreen is NOT visible (scrolled past)
+	static setupSplashscreenVisibilityObserver(onVisibilityChange) {
+		const splashscreen = document.querySelector('#splashscreen');
+		if (!splashscreen) return null;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const entry = entries[0];
+				// Component is visible when splashscreen is NOT visible (scrolled past)
+				onVisibilityChange(!entry.isIntersecting);
+			},
+			{
+				threshold: [0, 1],
+				rootMargin: '-50px'
+			}
+		);
+
+		observer.observe(splashscreen);
+
+		// Return cleanup function
+		return () => {
+			observer.disconnect();
+		};
+	}
 }
