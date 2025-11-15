@@ -226,13 +226,14 @@
 	.footer {
 		--footer-background-color: oklch(0.1776 0 0);
 		--footer-border-color: #2E2E2E;
+		--footer-height: 66px;	
 
 		display: block;
 		position: fixed;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		height: calc(2 * var(--safeMargin));
+		height: var(--footer-height);
 		width: 100%;
 		color: white;
 		background-color: var(--footer-background-color);
