@@ -62,16 +62,21 @@
 	}
 
 	@media (orientation: portrait) {
+		/* Hide all direct children of #app except #rotatePlease */
+		:global(#app > *) {
+			display: none !important;
+		}
+
+		/* Explicitly show #rotatePlease with higher specificity */
+		:global(#app > #rotatePlease),
 		.rotatePlease {
-			display: flex;
+			display: flex !important;
 			align-items: center;
 			justify-content: center;
 			background-color: var(--shade1);
 			color: var(--shadeWhite);
-		}
-
-		:global(body > *:not(#rotatePlease)) {
-			display: none !important;
+			position: fixed !important;
+			z-index: 9999 !important;
 		}
 	}
 </style>

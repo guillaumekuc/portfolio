@@ -1,3 +1,4 @@
+<RotateDevice />
 <Header />
 <Footer />
 <Head />
@@ -5,7 +6,7 @@
 <Splashscreen />
 <Folios />
 <About />
-<RotateDevice />
+
 
 <script>
 	import { onMount } from 'svelte';
