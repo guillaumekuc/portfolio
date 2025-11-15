@@ -2,7 +2,7 @@
 	<div
 		id={section.id}
 		class="fullPage portfolioSection"
-		class:hidden={!isSectionVisible(section.id)}
+		class:hidden={!sectionVisibility.get(section.id)}
 		data-categories={section.categories}
 	>
 		<svelte:component this={section.component} />
@@ -53,13 +53,25 @@
 
 	// Reactive portfolio section visibility from store
 	const portfolioSectionVisibilityStore = stores.navigation.portfolioSectionVisibility;
-	$: visibility = $portfolioSectionVisibilityStore;
-
-	// Simple helper: check if a section should be visible
-	function isSectionVisible(sectionId) {
-		if (!visibility || visibility.size === 0) return true;
-		return visibility.get(sectionId) ?? true;
-	}
+	
+	// Create a reactive map of visibility for each section
+	// This ensures Svelte properly tracks store changes
+	$: sectionVisibility = (() => {
+		const visibilityMap = new Map();
+		const storeValue = $portfolioSectionVisibilityStore;
+		
+		portfolioSections.forEach((section) => {
+			// If store is empty/uninitialized, show all by default
+			if (!storeValue || storeValue.size === 0) {
+				visibilityMap.set(section.id, true);
+			} else {
+				// Get visibility from store, default to true if not found
+				visibilityMap.set(section.id, storeValue.get(section.id) ?? true);
+			}
+		});
+		
+		return visibilityMap;
+	})();
 
 	onMount(() => {
 		// Ensure filtering is applied on mount if it hasn't been applied yet
