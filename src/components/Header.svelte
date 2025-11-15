@@ -195,6 +195,6 @@
 	}
 	.header-nav button.focus {
 		color: var(--header-primary-color);
-		border: 1px solid var(--header-accent-color);
+	
 	}
 </style>
