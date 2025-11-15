@@ -123,7 +123,7 @@
 		padding: auto;
 		width: 100%;
 		height: 100%;
-		background: center no-repeat url('img/.old/oldbg.jpg');
+		background: center no-repeat url('img/.old/guillaumekuc_oldbg.jpg');
 		background-size: cover;
 		transform: scale(1.1);
 		transition: transform 3s ease-out;

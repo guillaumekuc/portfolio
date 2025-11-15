@@ -13,7 +13,7 @@ export const stores = {
 		currentTime: writable(0),
 		duration: writable(0),
 		playlistLength: writable(0),
-		trackImage: writable('/img/.old/bgMusic.jpg'),
+		trackImage: writable('/img/.old/guillaumekuc_bgMusic.jpg'),
 		tracks: writable([]),
 		// Music player instance
 		musicPlayer: writable(null)
