@@ -4,6 +4,7 @@ import { get } from 'svelte/store';
 import { shortcuts } from './shortcuts.js';
 import { debugLog } from './debuglog.js';
 import navConfig from '../config/nav.json';
+import portfolioConfig from '../config/portfolio.json';
 
 // Navigation controller - handles keyboard/mouse navigation and scroll tracking
 export class Navigation {
@@ -39,13 +40,11 @@ export class Navigation {
 	static filterPortfolioSectionsByNavTarget(target) {
 		const visibilityMap = new Map();
 
-		// Get all portfolio sections
-		document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
-			const portfolioSectionId = portfolioSection.id;
-			const categoriesAttr = portfolioSection.getAttribute('data-categories');
-			const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
+		// Process portfolio sections from config
+		portfolioConfig.portfolioSections.forEach((section) => {
+			const portfolioSectionId = section.id;
+			const categories = section.categories.split(/\s+/);
 			const hasAnyCategory = categories.includes('any');
-			const isAboutSection = portfolioSection.id === 'about' || categories.includes('portfolio-about');
 			let isVisible = false;
 
 			// Sections with "any" category should always be visible regardless of filtering
@@ -54,9 +53,6 @@ export class Navigation {
 			} else if (target === 'portfolio-all') {
 				// Show all portfolio sections (anything with portfolio-all category)
 				isVisible = categories.includes('portfolio-all');
-			} else if (target === 'about' || target === 'portfolio-about') {
-				// Show only about section (sections with portfolio-about category or "any" category)
-				isVisible = isAboutSection || hasAnyCategory;
 			} else if (target && target.startsWith('portfolio-')) {
 				// Show only sections with the matching portfolio category
 				isVisible = categories.includes(target);
@@ -67,6 +63,30 @@ export class Navigation {
 
 			visibilityMap.set(portfolioSectionId, isVisible);
 		});
+
+		// Handle about section separately (it's not in portfolio config)
+		// Check if about section exists in DOM for backward compatibility
+		const aboutSection = document.querySelector('#about');
+		if (aboutSection) {
+			const categoriesAttr = aboutSection.getAttribute('data-categories');
+			const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
+			const hasAnyCategory = categories.includes('any');
+			const isAboutSection = aboutSection.id === 'about' || categories.includes('portfolio-about');
+			let isVisible = false;
+
+			if (hasAnyCategory) {
+				isVisible = true;
+			} else if (target === 'about' || target === 'portfolio-about') {
+				isVisible = isAboutSection || hasAnyCategory;
+			} else if (target === 'portfolio-all') {
+				// About section should be visible when showing all
+				isVisible = categories.includes('portfolio-all') || categories.includes('any');
+			} else {
+				isVisible = false;
+			}
+
+			visibilityMap.set('about', isVisible);
+		}
 
 		stores.navigation.portfolioSectionVisibility.set(visibilityMap);
 		debugLog(

@@ -1,0 +1,60 @@
+{
+	"portfolioSections": [
+		{
+			"id": "musicPlaylistFolio",
+			"component": "MusicPlaylistFolio",
+			"categories": "portfolio-music portfolio-all"
+		},
+		{
+			"id": "illustrationFolio1",
+			"component": "IllustrationFolio1",
+			"categories": "portfolio-2d portfolio-all"
+		},
+		{
+			"id": "gridzFolio",
+			"component": "Gridz",
+			"categories": "portfolio-web portfolio-all"
+		},
+		{
+			"id": "drawingFolio1",
+			"component": "DrawingFolio1",
+			"categories": "portfolio-2d portfolio-all"
+		},
+		{
+			"id": "modeFolio1",
+			"component": "ModeFolio1",
+			"categories": "portfolio-all portfolio-3d"
+		},
+		{
+			"id": "illustrationFolio2",
+			"component": "IllustrationFolio2",
+			"categories": "portfolio-2d portfolio-all"
+		},
+		{
+			"id": "musicVidFolio",
+			"component": "MusicFolio1",
+			"categories": "portfolio-music portfolio-all"
+		},
+		{
+			"id": "animFolio1",
+			"component": "AnimFolio1",
+			"categories": "portfolio-3d portfolio-all"
+		},
+		{
+			"id": "drawingFolio2",
+			"component": "DrawingFolio2",
+			"categories": "portfolio-2d portfolio-all"
+		},
+		{
+			"id": "P4book",
+			"component": "P4bookFolio",
+			"categories": "portfolio-music portfolio-all"
+		},
+		{
+			"id": "websitesFolio",
+			"component": "Websites",
+			"categories": "portfolio-web portfolio-all"
+		}
+	]
+}
+

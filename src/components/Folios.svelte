@@ -1,52 +1,22 @@
-<div id="musicPlaylistFolio" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
-	<MusicPlaylistFolio />
-</div>
-
-<div id="illustrationFolio1" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
-	<IllustrationFolio1 />
-</div>
-
-<div id="gridzFolio" class="fullPage portfolioSection" data-categories="portfolio-web portfolio-all">
-	<Gridz />
-</div>
-
-<div id="drawingFolio1" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
-	<DrawingFolio1 />
-</div>
-
-<div id="modeFolio1" class="fullPage portfolioSection" data-categories="portfolio-all portfolio-3d">
-	<ModeFolio1 />
-</div>
-
-<div id="illustrationFolio2" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
-	<IllustrationFolio2 />
-</div>
-
-<div id="musicVidFolio" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
-	<MusicFolio1 />
-</div>
-
-<div id="animFolio1" class="fullPage portfolioSection" data-categories="portfolio-3d portfolio-all">
-	<AnimFolio1 />
-</div>
-
-<div id="drawingFolio2" class="fullPage portfolioSection" data-categories="portfolio-2d portfolio-all">
-	<DrawingFolio2 />
-</div>
-
-<div id="P4book" class="fullPage portfolioSection" data-categories="portfolio-music portfolio-all">
-	<P4bookFolio />
-</div>
-
-<div id="websitesFolio" class="fullPage portfolioSection" data-categories="portfolio-web portfolio-all">
-	<Websites />
-</div>
+{#each portfolioSections as section}
+	<div
+		id={section.id}
+		class="fullPage portfolioSection"
+		class:hidden={!isSectionVisible(section.id)}
+		data-categories={section.categories}
+	>
+		<svelte:component this={section.component} />
+	</div>
+{/each}
 
 <script>
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { stores } from '../stores.js';
 	import { Navigation } from '../utils/navigation.js';
+	
+	import portfolioConfig from '../config/portfolio.json';
+
 	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
 	import IllustrationFolio1 from './portfolioSections/IllustrationFolio1.svelte';
 	import IllustrationFolio2 from './portfolioSections/IllustrationFolio2.svelte';
@@ -59,27 +29,36 @@
 	import P4bookFolio from './portfolioSections/P4bookFolio.svelte';
 	import Websites from './portfolioSections/Websites.svelte';
 
+	// Component mapping
+	const componentMap = {
+		MusicPlaylistFolio,
+		IllustrationFolio1,
+		IllustrationFolio2,
+		Gridz,
+		DrawingFolio1,
+		DrawingFolio2,
+		ModeFolio1,
+		MusicFolio1,
+		AnimFolio1,
+		P4bookFolio,
+		Websites
+	};
+
+	// Map JSON config to components
+	const portfolioSections = portfolioConfig.portfolioSections.map((section) => ({
+		id: section.id,
+		component: componentMap[section.component],
+		categories: section.categories
+	}));
+
 	// Reactive portfolio section visibility from store
 	const portfolioSectionVisibilityStore = stores.navigation.portfolioSectionVisibility;
-	$: portfolioSectionVisibility = $portfolioSectionVisibilityStore;
+	$: visibility = $portfolioSectionVisibilityStore;
 
-	// Reactive statements to update DOM based on store
-	$: {
-		if (portfolioSectionVisibility && portfolioSectionVisibility.size > 0) {
-			// Update each portfolio section's visibility based on store
-			portfolioSectionVisibility.forEach((isVisible, portfolioSectionId) => {
-				const portfolioSectionElement = document.getElementById(portfolioSectionId);
-				if (portfolioSectionElement) {
-					if (isVisible) {
-						portfolioSectionElement.classList.remove('hidden');
-						portfolioSectionElement.style.removeProperty('display');
-					} else {
-						portfolioSectionElement.classList.add('hidden');
-						portfolioSectionElement.style.setProperty('display', 'none', 'important');
-					}
-				}
-			});
-		}
+	// Simple helper: check if a section should be visible
+	function isSectionVisible(sectionId) {
+		if (!visibility || visibility.size === 0) return true;
+		return visibility.get(sectionId) ?? true;
 	}
 
 	onMount(() => {
