@@ -354,12 +354,14 @@ img {
 html {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 }
 
 body {
 	margin: 0;
 	padding: 0;
-	overflow: auto;
+	overflow: visible;
+	min-height: 100%;
 	background-color: var(--shade1);
 }
 

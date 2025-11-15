@@ -34,8 +34,8 @@ export class DOM {
 	// Scrolls by one pixel to force a resnap when window is resized (for CSS scroll-snap)
 	static reSnap() {
 		setTimeout(() => {
-			document.body.scrollTop += 1;
-			document.body.scrollTop -= 1;
+			document.documentElement.scrollTop += 1;
+			document.documentElement.scrollTop -= 1;
 		}, 500);
 	}
 
