@@ -29,11 +29,27 @@
 
 	let bgMusicElement;
 	let artElement;
+	let rafId = null;
 
 	function handleArtAnimate() {
 		if (artElement) {
 			artElement.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
 		}
+	}
+
+	function handleParallax() {
+		if (rafId) {
+			cancelAnimationFrame(rafId);
+		}
+		rafId = requestAnimationFrame(() => {
+			if (artElement) {
+				const scrollY = window.scrollY || window.pageYOffset;
+				// Subtle parallax effect: background moves at 30% of scroll speed
+				const parallaxOffset = scrollY * 0.3;
+				artElement.style.backgroundPosition = `center calc(50% + ${parallaxOffset}px)`;
+			}
+			rafId = null;
+		});
 	}
 
 	function startBackgroundMusic() {
@@ -61,10 +77,18 @@
 
 		// Listen for art animation trigger
 		window.addEventListener('artAnimate', handleArtAnimate);
+
+		// Set up parallax effect
+		handleParallax(); // Initial position
+		window.addEventListener('scroll', handleParallax, { passive: true });
 	});
 
 	onDestroy(() => {
 		window.removeEventListener('artAnimate', handleArtAnimate);
+		window.removeEventListener('scroll', handleParallax);
+		if (rafId) {
+			cancelAnimationFrame(rafId);
+		}
 	});
 </script>
 
@@ -91,9 +115,7 @@
 		position: relative;
 		height: 100vh;
 		width: 100%;
-		background: center no-repeat url('img/.old/oldbg.jpg');
-		background-size: cover;
-		background-attachment: fixed;
+		overflow: hidden;
 	}
 
 	.splashArt {
@@ -102,8 +124,11 @@
 		padding: auto;
 		width: 100%;
 		height: 100%;
+		background: center no-repeat url('img/.old/oldbg.jpg');
+		background-size: cover;
 		transform: scale(1.1);
-		transition: 3s ease-out;
+		transition: transform 3s ease-out;
+		will-change: background-position;
 	}
 
 	.splashArtShader {
