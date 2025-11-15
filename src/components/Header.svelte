@@ -1,12 +1,11 @@
 <div id="header" class="header" class:visible={isVisible}>
-	<div id="stickyHeader" class="stickyHeader">
-		<HeaderLinks />
-		<div id="headerBranding" class="headerBranding">
-			<button type="button" class="headerTitle" on:click={handleTitleClick}>{profile.name}</button>
-			<span>&nbsp;—&nbsp;</span>
-			<span class="headerSubTitle">{profile.headline}</span>
-		</div>
-		<div id="headerNav" class="headerNav">
+	<div class="header-title">
+		<span class="header-monogram">
+			<MonogramSvg />
+		</span>
+		<button type="button" class="header-title-button" on:click={handleTitleClick}>{profile.siteName}</button>
+	</div>
+		<div class="header-nav">
 			{#each headerNavItems as item, index}
 				<button
 					type="button"
@@ -17,19 +16,15 @@
 				>
 					{item.label}
 				</button>
-				{#if index < headerNavItems.length - 1}
-					<span>&nbsp;·&nbsp;</span>
-				{/if}
 			{/each}
 		</div>
-	</div>
-	<!--#stickyHeader-->
 </div>
 <!--#header-->
 
 <script>
 	import { onMount } from 'svelte';
 	import HeaderLinks from './HeaderLinks.svelte';
+	import MonogramSvg from './MonogramSvg.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
@@ -97,34 +92,33 @@
 </script>
 
 <style>
-	.header {
-		font-size: var(--fs2o3);
-	}
-	@media (max-height: 648px) {
-		.header {
-			font-size: var(--fs1o2);
-		}
-	}
-	@media (max-height: 432px) {
-		.header {
-			font-size: var(--fs1o2);
-		}
-	}
+
 
 	.header {
-		display: block;
+		--header-height: 66px;
+		--header-background-color: oklch(0.1776 0 0);
+		--header-border-color: #2E2E2E;
+		--header-primary-color: #FFFFFF;
+		--header-accent-color: #60BF60;
+
+
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: left;
+		
 		position: fixed;
 		top: 0;
-		left: 0;
-		right: 0;
-		height: calc(2 * var(--safeMargin));
+		height: var(--header-height);
 		width: 100%;
 		color: white;
-		background-color: var(--shade1);
-		z-index: 85;
+		background-color: var(--header-background-color);
+		z-index: 100;
 		transform: translateY(-100%);
 		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		pointer-events: none;
+		border-bottom: 1px solid var(--header-border-color);
 	}
 
 	.header.visible {
@@ -132,55 +126,75 @@
 		pointer-events: auto;
 	}
 
-	.headerBranding {
-		position: absolute;
-		top: 0;
-		height: var(--safeMargin);
-		padding-left: var(--safeMargin);
+	.header-title {
 		display: flex;
+		flex-direction: row;
 		align-items: center;
 		justify-content: left;
+		gap: 12px;
+
+		border-right: 1px solid var(--header-border-color);
+		height: 100%;
+		padding-left: 38px;
+		padding-right: 38px;
+
+		font-family: 'M PLUS Rounded 1c';
+		font-size: 27px;
+		font-weight: 400;
+		letter-spacing: 0.05em;
 	}
 
-	.headerTitle {
+	.header-monogram {
+		color: #60BF60;
+		display: inline-block;
+	}
+
+	.header-monogram :global(svg) {
+		height: 1em;
+		width: auto;
+		height: 100%;
+		display: block;
+	}
+
+	.header-title-button {
 		color: var(--shadeWhite);
 		font-size: 1em;
+		font-family: 'M PLUS Rounded 1c';
+		letter-spacing: 0.05em;
+		font-weight: 400;
+		text-transform: lowercase;
+
 	}
 
-	.headerTitle:hover {
-		cursor: pointer;
-		color: var(--shadeWhite);
-	}
-
-	.headerNav {
-		position: absolute;
-		top: var(--safeMargin);
-		width: 100%;
-		height: var(--safeMargin);
-		padding-left: var(--safeMargin);
-		padding-right: var(--safeMargin);
+	.header-nav {
 		display: flex;
+		flex-direction: row;
 		align-items: center;
 		justify-content: left;
 		color: var(--shade3);
-		line-height: auto;
-		user-select: none;
+		gap: 10px;
+		height: 100%;
+		padding-left: 10px;
+
 	}
 
-	.headerNav button {
+	.header-nav button {
+		font-family: 'M PLUS Rounded 1c';
+		font-size: 24px;
+		font-weight: 300;
+		text-transform: lowercase;
 		color: var(--shade3);
-		height: content;
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
-		font: inherit;
+		padding: 5px 20px;
+		border-radius: 16px;
+		border: 1px solid transparent;
 	}
 
-	.headerNav button:hover {
-		color: var(--shade4);
+	.header-nav button:hover {
+		color: var(--header-primary-color);
+		border: 1px solid var(--header-primary-color);
 	}
-	.headerNav button.focus {
-		color: var(--shadeWhite);
+	.header-nav button.focus {
+		color: var(--header-primary-color);
+		border: 1px solid var(--header-accent-color);
 	}
 </style>

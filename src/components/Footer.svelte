@@ -224,6 +224,9 @@
 
 <style>
 	.footer {
+		--footer-background-color: oklch(0.1776 0 0);
+		--footer-border-color: #2E2E2E;
+
 		display: block;
 		position: fixed;
 		bottom: 0;
@@ -232,11 +235,12 @@
 		height: calc(2 * var(--safeMargin));
 		width: 100%;
 		color: white;
-		background-color: var(--shade1);
+		background-color: var(--footer-background-color);
 		z-index: 2;
 		transform: translateY(100%);
 		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		pointer-events: none;
+		border-top: 1px solid var(--footer-border-color);
 	}
 
 	.footer.visible {
