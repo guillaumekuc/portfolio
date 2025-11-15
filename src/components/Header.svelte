@@ -122,14 +122,12 @@
 		color: white;
 		background-color: var(--shade1);
 		z-index: 85;
-		opacity: 0;
-		transform: translateY(-10px);
-		transition: opacity 0.3s ease, transform 0.3s ease;
+		transform: translateY(-100%);
+		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		pointer-events: none;
 	}
 
 	.header.visible {
-		opacity: 1;
 		transform: translateY(0);
 		pointer-events: auto;
 	}
