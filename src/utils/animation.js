@@ -26,10 +26,5 @@ export class Animation {
 		setTimeout(() => {
 			window.dispatchEvent(new CustomEvent('heroAnimate'));
 		}, 2750);
-
-		// Links staggered animation - starts at 3s
-		setTimeout(() => {
-			window.dispatchEvent(new CustomEvent('linksAnimate'));
-		}, 3000);
 	}
 }

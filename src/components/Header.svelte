@@ -23,7 +23,6 @@
 
 <script>
 	import { onMount } from 'svelte';
-	import HeaderLinks from './HeaderLinks.svelte';
 	import MonogramSvg from './MonogramSvg.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';

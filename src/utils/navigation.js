@@ -8,18 +8,6 @@ import navConfig from '../config/nav.json';
 
 // Navigation controller - handles keyboard/mouse navigation and scroll tracking
 export class Navigation {
-	// Maps category focus index (1-5) to portfolio section class name
-	static getCategoryClass(categoryFocused) {
-		const categoryClassMap = {
-			1: 'portfolio-3d',
-			2: 'portfolio-2d',
-			3: 'portfolio-all',
-			4: 'portfolio-music',
-			5: 'portfolio-web'
-		};
-		return categoryClassMap[categoryFocused] || 'portfolio-all';
-	}
-
 	// Scrolls to the next visible portfolio section from the current screen
 	static goToPortfolioSections(currentScreenId) {
 		const currentElement = document.querySelector('#' + currentScreenId);
@@ -45,27 +33,6 @@ export class Navigation {
 			debugLog('Navigating to portfolio section:', nextVisiblePortfolioSection.id);
 			nextVisiblePortfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		}
-	}
-
-	// Updates portfolio section visibility store - components react to show/hide sections
-	static hideIrrelevantPortfolioSections(categoryClass) {
-		const visibilityMap = new Map();
-
-		// Get all portfolio sections and determine visibility based on category class
-		document.querySelectorAll('.portfolioSection').forEach((portfolioSection) => {
-			const portfolioSectionId = portfolioSection.id;
-			// Check if portfolio section has the matching category class
-			const isVisible = portfolioSection.classList.contains(categoryClass);
-			visibilityMap.set(portfolioSectionId, isVisible);
-		});
-
-		stores.navigation.portfolioSectionVisibility.set(visibilityMap);
-		debugLog(
-			'Filtered portfolio sections - showing:',
-			categoryClass,
-			'visible count:',
-			Array.from(visibilityMap.values()).filter((v) => v).length
-		);
 	}
 
 	// Filters portfolio sections based on nav item target
@@ -118,11 +85,9 @@ export class Navigation {
 	constructor() {
 		// State - only keep non-store properties
 		// Store values are initialized in stores.js - single source of truth
-		this.allCategories = [];
 	}
 
 	init() {
-		this.allCategories = document.querySelectorAll('.category');
 		debugLog('Navigation initialized');
 		this.setupScrollTracking();
 		this.setupKeyboardNavigation();

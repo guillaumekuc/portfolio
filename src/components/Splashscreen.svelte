@@ -22,7 +22,6 @@
 	import { initAudio, initNavigation, initAPI } from '../scripts.js';
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
-	import SplashLinks from './SplashLinks.svelte';
 	import SplashscreenSound from './SplashscreenSound.svelte';
 	import SplashNav from './SplashNav.svelte';
 	import SplashscreenHero from './SplashscreenHero.svelte';
@@ -148,8 +147,4 @@
 		opacity: 0;
 	}
 
-	:global(#splashscreen .splashLinks .mailTooltip .tooltipText) {
-		top: 125%;
-		left: 0;
-	}
 </style>
