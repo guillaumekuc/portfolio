@@ -9,11 +9,11 @@
 			bind:this={videoElement}
 			class="largeVideo"
 			preload="none"
-			poster="/vid/Demoguitar.png"
+			poster="/vid/guillaumekuc_Demoguitar.png"
 			style="border-radius : 15px;"
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/Demoguitar.mp4" type="video/mp4" />
+			<source src="/vid/guillaumekuc_Demoguitar.mp4" type="video/mp4" />
 			<track kind="captions" />
 		</video>
 		<button bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn}></button>

@@ -9,10 +9,10 @@
 			class="largeVideo"
 			preload="none"
 			loop
-			poster="/vid/anim/animReelPoster.png"
+			poster="/vid/anim/guillaumekuc_animReelPoster.png"
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/anim/animReel.mp4" type="video/mp4" />
+			<source src="/vid/anim/guillaumekuc_animReel.mp4" type="video/mp4" />
 			<track kind="captions" />
 		</video>
 		<button

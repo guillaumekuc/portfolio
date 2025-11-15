@@ -21,10 +21,10 @@
 			preload="none"
 			muted
 			loop
-			poster="/vid/gridzDemoCover.jpg"
+			poster="/vid/guillaumekuc_gridzDemoCover.jpg"
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/gridzDemo.mp4" type="video/mp4" />
+			<source src="/vid/guillaumekuc_gridzDemo.mp4" type="video/mp4" />
 		</video>
 		<button
 			type="button"

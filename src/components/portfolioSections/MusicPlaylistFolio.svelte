@@ -44,26 +44,26 @@
 	let bgMusicElement;
 
 	const tracks = [
-		{ sound: '/sound/bgmusic.wav', image: '/img/.old/bgMusic.jpg', title: 'Background music #1' },
-		{ sound: '/sound/bgmusic2.wav', image: '/img/.old/bgMusic.jpg', title: 'Background music #2' },
-		{ sound: '/sound/MallowHazard.mp3', image: '/img/.old/bgMusic.jpg', title: 'Mallow Hazard' },
-		{ sound: "/sound/Chris'Journey.mp3", image: '/img/.old/bgMusic.jpg', title: "Chris' Journey" },
-		{ sound: '/sound/ChillingVastitude.mp3', image: '/img/.old/bgMusic.jpg', title: 'Chilling Vastitude' },
-		{ sound: '/sound/ChaoticIntruders.mp3', image: '/img/.old/bgMusic.jpg', title: 'Chaotic Intruders' },
-		{ sound: '/sound/DistractingScent.mp3', image: '/img/.old/bgMusic.jpg', title: 'Distracting Scent' },
-		{ sound: '/sound/FerventHorizon.mp3', image: '/img/.old/bgMusic.jpg', title: 'Fervent Horizon' },
-		{ sound: '/sound/GalvanizingQuest.wav', image: '/img/.old/bgMusic.jpg', title: 'Galvanizing Quest' },
-		{ sound: '/sound/InvigoratingFarm.mp3', image: '/img/.old/bgMusic.jpg', title: 'Invigorating Farm' },
+		{ sound: '/sound/bgmusic.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #1' },
+		{ sound: '/sound/bgmusic2.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #2' },
+		{ sound: '/sound/MallowHazard.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Mallow Hazard' },
+		{ sound: "/sound/Chris'Journey.mp3", image: '/img/.old/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
+		{ sound: '/sound/ChillingVastitude.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Chilling Vastitude' },
+		{ sound: '/sound/ChaoticIntruders.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Chaotic Intruders' },
+		{ sound: '/sound/DistractingScent.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Distracting Scent' },
+		{ sound: '/sound/FerventHorizon.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Fervent Horizon' },
+		{ sound: '/sound/GalvanizingQuest.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Galvanizing Quest' },
+		{ sound: '/sound/InvigoratingFarm.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Invigorating Farm' },
 		{
 			sound: '/sound/RecalcitrantWaterflow.mp3',
-			image: '/img/.old/bgMusic.jpg',
+			image: '/img/.old/guillaumekuc_bgMusic.jpg',
 			title: 'Recalcitrant Waterflow'
 		},
-		{ sound: '/sound/SpicyGallant.mp3', image: '/img/.old/bgMusic.jpg', title: 'Spicy Gallant' },
-		{ sound: '/sound/UntroubledMorning.mp3', image: '/img/.old/bgMusic.jpg', title: 'Untroubled Morning' },
-		{ sound: "/sound/Chris'Journey.mp3", image: '/img/.old/bgMusic.jpg', title: "Chris' Journey" },
-		{ sound: '/sound/StunnedChickens.mp3', image: '/img/.old/bgMusic.jpg', title: 'Stunned Chickens' },
-		{ sound: '/sound/Meanwhile.mp3', image: '/img/.old/bgMusic.jpg', title: 'Meanwhile' }
+		{ sound: '/sound/SpicyGallant.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Spicy Gallant' },
+		{ sound: '/sound/UntroubledMorning.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Untroubled Morning' },
+		{ sound: "/sound/Chris'Journey.mp3", image: '/img/.old/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
+		{ sound: '/sound/StunnedChickens.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Stunned Chickens' },
+		{ sound: '/sound/Meanwhile.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Meanwhile' }
 	];
 
 	// Store tracks in store for music.js to access

@@ -39,14 +39,14 @@
 	const websites = [
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
-			screenshot: '/img/.old/gkartscreenshot.png',
+			screenshot: '/img/.old/guillaumekuc_gkartscreenshot.png',
 			screenshotAlt: 'GK Art Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.art'
 		},
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.blog',
-			screenshot: '/img/.old/gkblogscreenshot.png',
+			screenshot: '/img/.old/guillaumekuc_gkblogscreenshot.png',
 			screenshotAlt: 'GK Blog Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.blog'
