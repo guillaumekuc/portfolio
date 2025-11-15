@@ -1,13 +1,11 @@
-<div id="siteContainer" class="siteContainer">
-	<Header />
-	<Footer />
-	<Head />
-	<VerticalClickNav />
-	<Splashscreen />
-	<Folios />
-	<About />
-	<RotateDevice />
-</div>
+<Header />
+<Footer />
+<Head />
+<VerticalClickNav />
+<Splashscreen />
+<Folios />
+<About />
+<RotateDevice />
 
 <script>
 	import { onMount } from 'svelte';

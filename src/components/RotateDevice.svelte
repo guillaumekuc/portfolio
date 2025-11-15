@@ -70,10 +70,8 @@
 			color: var(--shadeWhite);
 		}
 
-		:global(.siteContainer) {
-			position: relative;
-			width: 100%;
-			display: none;
+		:global(body > *:not(#rotatePlease)) {
+			display: none !important;
 		}
 	}
 </style>
