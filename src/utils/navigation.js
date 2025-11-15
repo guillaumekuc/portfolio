@@ -312,7 +312,7 @@ export class Navigation {
 			const nextSibling = DOM.nextVisibleSibling(document.querySelector('#' + currentScreen));
 			if (nextSibling) {
 				debugLog('Navigate down');
-				nextSibling.scrollIntoView();
+				nextSibling.scrollIntoView({ behavior: 'smooth' });
 			}
 		}
 

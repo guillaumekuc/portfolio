@@ -46,8 +46,7 @@
 		// Trigger opening animations via coordinator
 		Animation.animateOpening();
 
-		// Display scrollbar
-		document.body.style.overflow = 'auto';
+		// Scrollbar is now always enabled via CSS
 
 		// Update current screen
 		stores.navigation.currentScreen.set('splashscreen');

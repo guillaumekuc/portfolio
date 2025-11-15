@@ -142,10 +142,12 @@ td {
 }
 
 html {
-	overflow: hidden;
+	overflow: auto;
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
 	scrollbar-color: var(--shade3) var(--shadeBlack);
+	scroll-behavior: smooth;
+	scroll-snap-type: y mandatory;
 }
 
 ::-webkit-scrollbar {
@@ -350,20 +352,14 @@ img {
 5.0 - General
 -------------------------------------------------------------- */
 html {
-	height: 100vh;
-	width: 100vw;
 	margin: 0;
 	padding: 0;
 }
 
 body {
-	height: 100vh;
-	width: 100vw;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
-	scroll-behavior: smooth;
-	scroll-snap-type: y mandatory;
+	overflow: auto;
 	background-color: var(--shade1);
 }
 
