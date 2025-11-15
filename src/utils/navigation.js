@@ -1,5 +1,4 @@
 import { DOM } from './dom.js';
-import { Animation } from './animation.js';
 import { stores } from '../stores.js';
 import { get } from 'svelte/store';
 import { shortcuts } from './shortcuts.js';
@@ -107,7 +106,6 @@ export class Navigation {
 	// Setup scroll tracking with IntersectionObserver
 	setupScrollTracking() {
 		const allFullPages = document.querySelectorAll('.fullPage');
-		const self = this;
 
 		function updateHashWhenVisible(element) {
 			const elementObserver = new IntersectionObserver(
