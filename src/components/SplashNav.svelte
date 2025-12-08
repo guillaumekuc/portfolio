@@ -301,17 +301,21 @@
 </script>
 
 <style>
-
-
 	.splashNav {
-		--splashscreen-nav-radius: 16px;
-		--splashscreen-nav-bottom: 16px;
-		--splashscreen-nav-width: 1220px;
-		--splashscreen-nav-height: auto;
+		/* Static values */
 		--splashscreen-nav-font-family: 'M PLUS Rounded 1c';
 		--splashscreen-nav-primary-color: white;
 		--splashscreen-nav-accent-color: #60BF60;
 		--splashscreen-nav-background-color: oklch(18% 0 0 / 0.67);
+
+		/* Responsive values */
+		--splashscreen-nav-width: 1220px;
+		--splashscreen-nav-radius: 16px;
+		--splashscreen-nav-bottom: 16px;
+		--splashscreen-nav-padding: 10px;
+		--splashscreen-nav-link-padding: 5px 20px;
+		--splashscreen-nav-font-size: 24px;
+		--splashscreen-nav-icon-size: 32px;
 
 		display: flex;
 		flex-direction: row;
@@ -320,10 +324,10 @@
 
 		position: absolute;
 		width: var(--splashscreen-nav-width);
-		height: var(--splashscreen-nav-height);
+		height: auto;
 		left: auto;
 		right: auto;
-		padding: 10px;
+		padding: var(--splashscreen-nav-padding);
 
 		bottom: var(--splashscreen-nav-bottom);
 
@@ -332,13 +336,11 @@
 		backdrop-filter: blur(2px);
 
 		border-radius: var(--splashscreen-nav-radius);
-
-
 	}
 
 	.splashNav :global(.nav-icon) {
-		height: 32px;
-		width: 32px;
+		height: var(--splashscreen-nav-icon-size);
+		width: var(--splashscreen-nav-icon-size);
 	}
 
 	.splashNav a {
@@ -350,14 +352,14 @@
 		border-radius: var(--splashscreen-nav-radius);
 		border: 1px solid transparent;
 
-		padding: 5px 20px;
+		padding: var(--splashscreen-nav-link-padding);
 
 		color: var(--splashscreen-nav-primary-color);
 		text-transform: lowercase;
 		font-family: var(--splashscreen-nav-font-family);
 		font-style: normal;
 		font-weight: 300;
-		font-size: 24px;
+		font-size: var(--splashscreen-nav-font-size);
 
 		opacity: 20%;
 		pointer-events: none;
@@ -460,4 +462,44 @@
 		transition: none !important;
 		border: 1px solid var(--splashscreen-nav-primary-color);
 	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.splashNav {
+			--splashscreen-nav-width: 1000px;
+			--splashscreen-nav-radius: 14px;
+			--splashscreen-nav-bottom: 14px;
+			--splashscreen-nav-padding: 8px;
+			--splashscreen-nav-link-padding: 4px 16px;
+			--splashscreen-nav-font-size: 20px;
+			--splashscreen-nav-icon-size: 28px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.splashNav {
+			--splashscreen-nav-width: 800px;
+			--splashscreen-nav-radius: 12px;
+			--splashscreen-nav-bottom: 12px;
+			--splashscreen-nav-padding: 6px;
+			--splashscreen-nav-link-padding: 4px 12px;
+			--splashscreen-nav-font-size: 16px;
+			--splashscreen-nav-icon-size: 24px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.splashNav {
+			--splashscreen-nav-width: 600px;
+			--splashscreen-nav-radius: 10px;
+			--splashscreen-nav-bottom: 8px;
+			--splashscreen-nav-padding: 4px;
+			--splashscreen-nav-link-padding: 3px 8px;
+			--splashscreen-nav-font-size: 12px;
+			--splashscreen-nav-icon-size: 18px;
+		}
+	}
+
 </style>

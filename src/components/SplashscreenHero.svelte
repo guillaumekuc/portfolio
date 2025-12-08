@@ -86,22 +86,21 @@
 </script>
 
 <style>
-	.splashscreen-logo {
-		color: var(--splashscreen-hero-text-primary);
-		opacity: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
 	.splashscreen-hero {
-		--splashscreen-hero-gap: 12px;
-        --splashscreen-hero-text-primary: #FFF;
-        --splashscreen-hero-text-accent: #60BF60;
-        --splashscreen-hero-text-outline: #FFF;
-        --splashscreen-hero-text-font-size: 27px;
-        --splashscreen-hero-text-font-family: 'M PLUS Rounded 1c';
+		/* Static values */
+		--splashscreen-hero-text-primary: #FFF;
+		--splashscreen-hero-text-accent: #60BF60;
+		--splashscreen-hero-text-outline: #FFF;
+		--splashscreen-hero-text-font-family: 'M PLUS Rounded 1c';
 
+		/* Responsive values */
+		--splashscreen-hero-gap: 12px;
+		--splashscreen-hero-text-font-size: 27px;
+		--splashscreen-hero-logo-size: 304px;
+		--splashscreen-hero-title-size: 304px;
+		--splashscreen-hero-title-margin: 0.5rem;
+		--splashscreen-hero-socials-gap: 16px;
+		--splashscreen-hero-social-icon-size: 32px;
 
 		position: absolute;
 		z-index: 1;
@@ -113,31 +112,33 @@
 		gap: var(--splashscreen-hero-gap);
 	}
 
-
-
-	.splashscreen-hero-emblem {
-		width: 304px;
+	.splashscreen-logo {
+		width: var(--splashscreen-hero-logo-size);
 		height: auto;
-	}
-
-	.splashscreen-hero-title {
+		color: var(--splashscreen-hero-text-primary);
 		opacity: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-        color: var(--splashscreen-hero-text-accent);
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
-		
+	}
+
+	.splashscreen-hero-title {
+		width: var(--splashscreen-hero-title-size);
+		opacity: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--splashscreen-hero-text-accent);
+		margin-top: var(--splashscreen-hero-title-margin);
 	}
 
 	.splashscreen-hero-headline {
-        opacity: 0;
-        font-family: var(--splashscreen-hero-text-font-family);
-        font-size: var(--splashscreen-hero-text-font-size);
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        color: var(--splashscreen-hero-text-primary);
+		opacity: 0;
+		font-family: var(--splashscreen-hero-text-font-family);
+		font-size: var(--splashscreen-hero-text-font-size);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: var(--splashscreen-hero-text-primary);
 		margin-bottom: 0px;
 	}
 
@@ -146,7 +147,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 16px;
+		gap: var(--splashscreen-hero-socials-gap);
 		flex-wrap: wrap;
 		color: var(--splashscreen-hero-text-primary);
 	}
@@ -155,8 +156,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 32px;
-		height: 32px;
+		width: var(--splashscreen-hero-social-icon-size);
+		height: var(--splashscreen-hero-social-icon-size);
 		opacity: 0;
 		transition: opacity 0.5s ease-out, transform 0.2s ease;
 		color: inherit;
@@ -165,5 +166,44 @@
 	.splashscreen-hero-socials .social-link:hover {
 		transform: scale(1.1);
 	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.splashscreen-hero {
+			--splashscreen-hero-gap: 10px;
+			--splashscreen-hero-text-font-size: 24px;
+			--splashscreen-hero-logo-size: 260px;
+			--splashscreen-hero-title-size: 270px;
+			--splashscreen-hero-title-margin: 0.4rem;
+			--splashscreen-hero-social-icon-size: 28px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.splashscreen-hero {
+			--splashscreen-hero-gap: 6px;
+			--splashscreen-hero-text-font-size: 20px;
+			--splashscreen-hero-logo-size: 200px;
+			--splashscreen-hero-title-size: 225px;
+			--splashscreen-hero-title-margin: 0.25rem;
+			--splashscreen-hero-socials-gap: 12px;
+			--splashscreen-hero-social-icon-size: 26px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.splashscreen-hero {
+			--splashscreen-hero-gap: 4px;
+			--splashscreen-hero-text-font-size: 16px;
+			--splashscreen-hero-logo-size: 100px;
+			--splashscreen-hero-title-size: 180px;
+			--splashscreen-hero-title-margin: 0.15rem;
+			--splashscreen-hero-socials-gap: 10px;
+			--splashscreen-hero-social-icon-size: 22px;
+		}
+	}
+
 </style>
 
