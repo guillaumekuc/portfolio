@@ -4,6 +4,7 @@
 			<a
 				bind:this={navLinkElements[index]}
 				id="{item.id}Btn"
+				class="external"
 				class:cta={item.cta}
 				class:focus={$selectedMenuItemStore === index}
 				href={item.url}
@@ -367,6 +368,12 @@
 		
 		/* Transition will be set dynamically in handleNavAnimate */
 		transition: opacity 1.5s ease-out;
+	}
+
+	.splashNav a.external .navLabel::after {
+		content: '↗';
+		margin-left: 0.25em;
+		font-size: 0.8em;
 	}
 
 
