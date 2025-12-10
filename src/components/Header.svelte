@@ -86,8 +86,30 @@
 	}
 
 	function handleTitleClick() {
-		const splashscreen = document.querySelector('#splashscreen');
-		if (splashscreen) splashscreen.scrollIntoView({ behavior: 'smooth' });
+		// Temporarily disable scroll-snap to allow smooth scroll to top
+		const html = document.documentElement;
+		const originalSnapType = html.style.scrollSnapType;
+		html.style.scrollSnapType = 'none';
+		
+		// Scroll to top of page
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		
+		// Re-enable scroll-snap when we reach the top (or after timeout as fallback)
+		let fallbackTimeout;
+		const onScroll = () => {
+			if (window.scrollY === 0) {
+				html.style.scrollSnapType = originalSnapType;
+				window.removeEventListener('scroll', onScroll);
+				clearTimeout(fallbackTimeout);
+			}
+		};
+		window.addEventListener('scroll', onScroll);
+		
+		// Fallback timeout in case scroll event doesn't fire (e.g., already at top)
+		fallbackTimeout = setTimeout(() => {
+			html.style.scrollSnapType = originalSnapType;
+			window.removeEventListener('scroll', onScroll);
+		}, 1500);
 	}
 
 	onMount(() => {
@@ -100,15 +122,23 @@
 </script>
 
 <style>
-
-
 	.header {
-		--header-height: 66px;
+		/* Static values */
 		--header-background-color: oklch(0.1776 0 0);
 		--header-border-color: #2E2E2E;
 		--header-primary-color: #FFFFFF;
-		--header-accent-color: #60BF60;
+		--header-accent-color: var(--accentColor);
 
+		/* Responsive values (height inherits from global --safeMargin) */
+		--header-height: var(--safeMargin);
+		--header-monogram-size: 55px;
+		--header-title-font-size: 27px;
+		--header-title-gap: 12px;
+		--header-title-padding: 38px;
+		--header-nav-font-size: 24px;
+		--header-nav-gap: 10px;
+		--header-nav-padding: 5px 20px;
+		--header-nav-radius: 16px;
 
 		box-sizing: border-box;
 		display: flex;
@@ -139,28 +169,29 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: left;
-		gap: 12px;
+		gap: var(--header-title-gap);
 
 		border-right: 1px solid var(--header-border-color);
 		height: 100%;
-		padding-left: 38px;
-		padding-right: 38px;
+		padding-left: var(--header-title-padding);
+		padding-right: var(--header-title-padding);
 
 		font-family: 'M PLUS Rounded 1c';
-		font-size: 27px;
+		font-size: var(--header-title-font-size);
 		font-weight: 400;
 		letter-spacing: 0.05em;
 	}
 
 	.header-monogram {
-		color: #60BF60;
+		color: var(--header-accent-color);
 		display: inline-block;
+		height: var(--header-monogram-size);
+		width: var(--header-monogram-size);
 	}
 
 	.header-monogram :global(svg) {
-		height: 1em;
-		width: auto;
 		height: 100%;
+		width: auto;
 		display: block;
 	}
 
@@ -171,7 +202,6 @@
 		letter-spacing: 0.05em;
 		font-weight: 400;
 		text-transform: lowercase;
-
 	}
 
 	.header-nav {
@@ -180,20 +210,19 @@
 		align-items: center;
 		justify-content: left;
 		color: var(--shade3);
-		gap: 10px;
+		gap: var(--header-nav-gap);
 		height: 100%;
-		padding-left: 10px;
-
+		padding-left: var(--header-nav-gap);
 	}
 
 	.header-nav button {
 		font-family: 'M PLUS Rounded 1c';
-		font-size: 24px;
+		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		text-transform: lowercase;
 		color: var(--shade3);
-		padding: 5px 20px;
-		border-radius: 16px;
+		padding: var(--header-nav-padding);
+		border-radius: var(--header-nav-radius);
 		border: 1px solid transparent;
 	}
 
@@ -201,8 +230,50 @@
 		color: var(--header-primary-color);
 		border: 1px solid var(--header-primary-color);
 	}
+
 	.header-nav button.focus {
 		color: var(--header-primary-color);
-	
+	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.header {
+			--header-monogram-size: 46px;
+			--header-title-font-size: 24px;
+			--header-title-gap: 10px;
+			--header-title-padding: 30px;
+			--header-nav-font-size: 20px;
+			--header-nav-gap: 8px;
+			--header-nav-padding: 4px 16px;
+			--header-nav-radius: 14px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.header {
+			--header-monogram-size: 36px;
+			--header-title-font-size: 20px;
+			--header-title-gap: 8px;
+			--header-title-padding: 24px;
+			--header-nav-font-size: 16px;
+			--header-nav-gap: 6px;
+			--header-nav-padding: 4px 12px;
+			--header-nav-radius: 12px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.header {
+			--header-monogram-size: 24px;
+			--header-title-font-size: 16px;
+			--header-title-gap: 6px;
+			--header-title-padding: 16px;
+			--header-nav-font-size: 12px;
+			--header-nav-gap: 4px;
+			--header-nav-padding: 3px 8px;
+			--header-nav-radius: 10px;
+		}
 	}
 </style>
