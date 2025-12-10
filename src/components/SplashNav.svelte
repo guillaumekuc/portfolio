@@ -306,7 +306,7 @@
 		/* Static values */
 		--splashscreen-nav-font-family: 'M PLUS Rounded 1c';
 		--splashscreen-nav-primary-color: white;
-		--splashscreen-nav-accent-color: #60BF60;
+		--splashscreen-nav-accent-color: var(--accentColor);
 		--splashscreen-nav-background-color: oklch(18% 0 0 / 0.67);
 
 		/* Responsive values */
@@ -492,7 +492,11 @@
 			--splashscreen-nav-padding: 6px;
 			--splashscreen-nav-link-padding: 4px 12px;
 			--splashscreen-nav-font-size: 16px;
-			--splashscreen-nav-icon-size: 24px;
+			--splashscreen-nav-icon-size: 0px;
+		}
+
+		.splashNav :global(.nav-icon) {
+			display: none;
 		}
 	}
 
@@ -505,7 +509,11 @@
 			--splashscreen-nav-padding: 4px;
 			--splashscreen-nav-link-padding: 3px 8px;
 			--splashscreen-nav-font-size: 12px;
-			--splashscreen-nav-icon-size: 18px;
+			--splashscreen-nav-icon-size: 0px;
+		}
+
+		.splashNav :global(.nav-icon) {
+			display: none;
 		}
 	}
 
