@@ -54,7 +54,10 @@
 
 <style>
 	.splashscreen-sound {
+		/* Static values */
 		--splashscreen-sound-background-color: hsla(0, 0%, 7%, 0.67);
+
+		/* Responsive values */
 		--splashscreen-sound-slider-width: 200px;
 		--splashscreen-sound-icon-size: 32px;
 		--splashscreen-sound-margins: 16px;
@@ -104,6 +107,39 @@
 
 	.splashscreen-sound .mute-button.isMuted {	
 		background-image: url('/img/.old/icons/mute.svg');
+	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.splashscreen-sound {
+			--splashscreen-sound-slider-width: 160px;
+			--splashscreen-sound-icon-size: 28px;
+			--splashscreen-sound-margins: 14px;
+			--splashscreen-sound-padding: 5px;
+			--splashscreen-sound-size: 38px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.splashscreen-sound {
+			--splashscreen-sound-slider-width: 120px;
+			--splashscreen-sound-icon-size: 24px;
+			--splashscreen-sound-margins: 12px;
+			--splashscreen-sound-padding: 4px;
+			--splashscreen-sound-size: 32px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.splashscreen-sound {
+			--splashscreen-sound-slider-width: 80px;
+			--splashscreen-sound-icon-size: 20px;
+			--splashscreen-sound-margins: 8px;
+			--splashscreen-sound-padding: 3px;
+			--splashscreen-sound-size: 26px;
+		}
 	}
 </style>
 
