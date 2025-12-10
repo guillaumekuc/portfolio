@@ -4,50 +4,33 @@
 			id="footerPreviousBtn"
 			class="footerPreviousBtn"
 			class:firstTrack={isFirstTrack}
-			on:click={handlePreviousClick}><img src="/img/.old/icons/previous2.png" alt="Previous" /></button
-		>
+			on:click={handlePreviousClick}
+		></button>
 		<button id="footerPlayBtn" class="footerPlayBtn" class:isPlaying on:click={handlePlayClick}
 		></button>
 		<button
 			id="footerNextBtn"
-			class="footerNextBtn rSpacer"
+			class="footerNextBtn"
 			class:lastTrack={isLastTrack}
-			on:click={handleNextClick}><img src="/img/.old/icons/next2.png" alt="Next" /></button
-		>
-		<input
-			bind:this={footerSleekSlider}
-			bind:value={sliderValue}
-			id="footerSleekSlider"
-			class="footerSleekSlider rSpacer"
-			type="range"
-			min="0"
-			max="100"
-			step="0.1"
-			on:mousedown={handleSeekStart}
-			on:mouseup={handleSeekEnd}
-			on:touchstart={handleSeekStart}
-			on:touchend={handleSeekEnd}
-			on:input={handleSeekInput}
-		/>
-		<span class="footerTime rSpacer"
-			><span id="currentTime">{currentTimeFormatted}</span> /
-			<span id="duration">{durationFormatted}</span>
-		</span>
+			on:click={handleNextClick}
+		></button>
 		<button
 			id="footerLoopBtn"
-			class="footerLoopBtn rSpacer"
+			class="footerLoopBtn"
 			class:isLooping
 			on:click={handleLoopClick}
 		></button>
-		<button id="footerMuteBtn" class="muteBgMusic" class:isMuted on:click={handleMuteClick}></button>
-		<input
-			bind:this={footerVolumeSlider}
-			id="footerVolumeSlider"
-			class="footerVolumeSlider"
-			type="range"
-			value={displayVolume}
-			on:input={handleVolumeInput}
-		/>
+		<div class="volumeGroup">
+			<button id="footerMuteBtn" class="muteBgMusic" class:isMuted on:click={handleMuteClick}></button>
+			<input
+				bind:this={footerVolumeSlider}
+				id="footerVolumeSlider"
+				class="footerVolumeSlider"
+				type="range"
+				value={displayVolume}
+				on:input={handleVolumeInput}
+			/>
+		</div>
 	</div>
 </div>
 <!--#footer-->
@@ -55,7 +38,6 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { stores } from '../stores.js';
-	import { Time } from '../utils/time.js';
 	import { DOM } from '../utils/dom.js';
 	import { get } from 'svelte/store';
 
@@ -76,12 +58,6 @@
 
 	$: displayVolume = isMuted ? 0 : volume;
 
-	const currentTimeStore = stores.music.currentTime;
-	$: currentTime = $currentTimeStore;
-
-	const durationStore = stores.music.duration;
-	$: duration = $durationStore;
-
 	const currentIndexStore = stores.music.currentIndex;
 	$: currentIndex = $currentIndexStore;
 
@@ -93,27 +69,11 @@
 	// Only grey out next button if we're at the last track AND playlist is initialized
 	$: isLastTrack = playlistLength > 0 && currentIndex + 1 >= playlistLength;
 
-	$: currentTimeFormatted = Time.formatTime(currentTime);
-	$: durationFormatted = Time.formatTime(duration);
-
-	$: seekValue = duration > 0 ? (currentTime / duration) * 100 : 0;
-
 	let footerVolumeSlider;
-	let footerSleekSlider;
-	let bgMusicElement;
-	let isSeeking = false;
-	let sliderValue = 0;
 
 	// Get music player from store
 	const musicPlayerStore = stores.music.musicPlayer;
 	$: musicPlayer = $musicPlayerStore;
-
-	// Update slider value only when not being dragged by user
-	$: {
-		if (!isSeeking) {
-			sliderValue = seekValue;
-		}
-	}
 
 	// Update volume slider when display volume changes
 	$: {
@@ -158,49 +118,10 @@
 		}
 	}
 
-	function handleSeekStart() {
-		isSeeking = true;
-	}
-
-	function handleSeekInput(e) {
-		if (footerSleekSlider) {
-			sliderValue = parseFloat(footerSleekSlider.value);
-		}
-	}
-
-	function handleSeekEnd() {
-		isSeeking = false;
-		if (musicPlayer && bgMusicElement && footerSleekSlider) {
-			const newTime = (sliderValue / 100) * bgMusicElement.duration;
-			bgMusicElement.currentTime = newTime;
-			stores.music.currentTime.set(newTime);
-		}
-	}
-
 	onMount(() => {
-		// Get music player and audio element from store
-		const player = get(stores.music.musicPlayer);
-		if (player) {
-			bgMusicElement = player.bgMusicElement;
-		}
-
 		// Sync volume slider with store
 		if (footerVolumeSlider) {
 			footerVolumeSlider.value = displayVolume;
-		}
-
-		// Update time display reactively
-		const updateTime = () => {
-			if (bgMusicElement) {
-				stores.music.currentTime.set(bgMusicElement.currentTime);
-				if (bgMusicElement.duration) {
-					stores.music.duration.set(bgMusicElement.duration);
-				}
-			}
-		};
-
-		if (bgMusicElement) {
-			bgMusicElement.addEventListener('timeupdate', updateTime);
 		}
 
 		const cleanupSplashscreenObserver = DOM.setupSplashscreenVisibilityObserver((visible) => {
@@ -208,9 +129,6 @@
 		});
 
 		return () => {
-			if (bgMusicElement) {
-				bgMusicElement.removeEventListener('timeupdate', updateTime);
-			}
 			if (cleanupSplashscreenObserver) {
 				cleanupSplashscreenObserver();
 			}
@@ -224,9 +142,16 @@
 
 <style>
 	.footer {
+		/* Static values */
 		--footer-background-color: oklch(0.1776 0 0);
 		--footer-border-color: #2E2E2E;
-		--footer-height: 66px;	
+		--footer-accent-color: var(--accentColor);
+
+		/* Responsive values (height inherits from global --safeMargin) */
+		--footer-height: var(--safeMargin);
+		--footer-button-size: 24px;
+		--footer-play-button-size: 48px;
+		--footer-gap: 50px;
 
 		display: block;
 		position: fixed;
@@ -253,77 +178,98 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		gap: var(--footer-gap);
 		height: 100%;
 	}
 
 	.footer button {
 		vertical-align: middle;
-		padding: calc(var(--safeMargin) / 5);
-		width: var(--safeMargin);
-		height: var(--safeMargin);
+		width: var(--footer-button-size);
+		height: var(--footer-button-size);
 		margin-top: auto;
 		margin-bottom: auto;
-		background-size: 80% !important;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-
-	.footer button img {
-		height: 100%;
-		width: 100%;
+		border-radius: 5px;
+		background-color: white;
+		-webkit-mask-size: 100%;
+		mask-size: 100%;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
 	}
 
 	.footer button:hover {
-		background-color: var(--shadePop);
-		border-radius: 5px;
+		background-color: var(--footer-accent-color);
 	}
 
-	.footerSleekSlider {
-		width: calc(var(--safeMargin) * 10);
-		height: calc(var(--safeMargin) / 2);
+	.volumeGroup {
+		display: flex;
+		align-items: center;
+		gap: 10px;
 	}
+
 	.footerVolumeSlider {
-		width: calc(var(--safeMargin) * 2);
+		width: 180px;
+		height: 10px;
 	}
 
-	.footerTime {
-		font-family: var(--ff3);
-		font-size: 75%;
+	.footerPreviousBtn {
+		-webkit-mask-image: url('/img/audio-player/previous-track.svg');
+		mask-image: url('/img/audio-player/previous-track.svg');
 	}
 
-	.footerPlayBtn {
-		background: no-repeat center url('img/.old/icons/play_alt.png');
-		background-size: 80%;
+	button.footerPlayBtn {
+		width: var(--footer-play-button-size) !important;
+		height: var(--footer-play-button-size) !important;
+		-webkit-mask-image: url('/img/audio-player/play-arrow.svg');
+		mask-image: url('/img/audio-player/play-arrow.svg');
 	}
 
-	.footerPlayBtn.isPlaying {
-		background: no-repeat center url('img/.old/icons/pause.svg') !important;
-		background-size: 80% !important;
+	button.footerPlayBtn.isPlaying {
+		-webkit-mask-image: url('/img/audio-player/pause.svg');
+		mask-image: url('/img/audio-player/pause.svg');
+		animation: playingPulse 2s ease-in-out infinite;
 	}
 
-	.footerPlayBtn.isPlaying:hover {
-		background-color: var(--shadePop) !important  ;
+	button.footerPlayBtn.isPlaying:hover {
+		animation: none;
+		background-color: var(--footer-accent-color) !important;
+	}
+
+	.footerNextBtn {
+		-webkit-mask-image: url('/img/audio-player/next-track.svg');
+		mask-image: url('/img/audio-player/next-track.svg');
+	}
+
+	@keyframes playingPulse {
+		0%, 100% {
+			background-color: white;
+		}
+		50% {
+			background-color: var(--footer-accent-color);
+		}
 	}
 
 	.footerLoopBtn {
-		background: no-repeat center url('img/.old/icons/loop.png');
-		background-size: 80%;
-		opacity: 1;
-	}
-
-	.footerLoopBtn:hover {
-		opacity: 1;
+		-webkit-mask-image: url('/img/audio-player/repeat.svg');
+		mask-image: url('/img/audio-player/repeat.svg');
 	}
 
 	.footerLoopBtn.isLooping {
-		opacity: 1;
-		border-radius: 5px;
-		background-color: var(--shade2);
+		background-color: var(--footer-accent-color);
 	}
 
-	.rSpacer {
-		margin-right: calc(var(--safeMargin) / 2);
+	.muteBgMusic {
+		-webkit-mask-image: url('/img/audio-player/volume.svg');
+		mask-image: url('/img/audio-player/volume.svg');
+	}
+
+	.muteBgMusic.isMuted {
+		-webkit-mask-image: url('/img/audio-player/mute.svg');
+		mask-image: url('/img/audio-player/mute.svg');
 	}
 
 	.footerNextBtn.lastTrack {
@@ -334,5 +280,32 @@
 	.footerPreviousBtn.firstTrack {
 		opacity: 20%;
 		pointer-events: none;
+	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.footer {
+			--footer-button-size: 20px;
+			--footer-play-button-size: 40px;
+			--footer-gap: 40px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.footer {
+			--footer-button-size: 18px;
+			--footer-play-button-size: 36px;
+			--footer-gap: 30px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.footer {
+			--footer-button-size: 16px;
+			--footer-play-button-size: 32px;
+			--footer-gap: 20px;
+		}
 	}
 </style>
