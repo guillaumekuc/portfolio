@@ -28,7 +28,9 @@ export const stores = {
 		// Map of portfolio section ID to visibility boolean for reactive portfolio section visibility
 		portfolioSectionVisibility: writable(new Map()),
 		// Navigation controller instance
-		controller: writable(null)
+		controller: writable(null),
+		// True after user clicks Enter on start screen (never goes back to false)
+		hasEnteredSite: writable(false)
 	},
 
 	// Configuration settings

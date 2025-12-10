@@ -74,6 +74,9 @@
 	})();
 
 	onMount(() => {
+		// Refresh scroll tracking to register new sections with IntersectionObserver
+		Navigation.refreshScrollTracking();
+		
 		// Ensure filtering is applied on mount if it hasn't been applied yet
 		const currentNavTarget = get(stores.navigation.currentNavTarget);
 		if (currentNavTarget) {

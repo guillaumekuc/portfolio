@@ -11,7 +11,7 @@
 			mathematically accurate as can be.
 		</blockquote>
 		<a class="focus extLinkBtn" href="https://app.gumroad.com/guillaumekuc" target="_blank"
-			><img src="/img/.old/icons/gotoURL.png" alt="Go to URL" /><span>Check on gumroad</span></a
+			><img loading="lazy" src="/img/.old/icons/gotoURL.png" alt="Go to URL" /><span>Check on gumroad</span></a
 		>
 	</div>
 	<div bind:this={videoContainer} class="wideRightThirds">

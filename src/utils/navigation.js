@@ -102,6 +102,14 @@ export class Navigation {
 		document.body.scroll(0, 0);
 	}
 
+	// Static method to refresh scroll tracking when new sections are added
+	static refreshScrollTracking() {
+		const controller = get(stores.navigation.controller);
+		if (controller) {
+			controller.refreshScrollTracking();
+		}
+	}
+
 	constructor() {
 		// State - only keep non-store properties
 		// Store values are initialized in stores.js - single source of truth
@@ -126,6 +134,11 @@ export class Navigation {
 
 	// Setup scroll tracking with IntersectionObserver
 	setupScrollTracking() {
+		this.refreshScrollTracking();
+	}
+
+	// Refresh scroll tracking - can be called when new sections are added to DOM
+	refreshScrollTracking() {
 		const allFullPages = document.querySelectorAll('.fullPage');
 
 		function updateHashWhenVisible(element) {

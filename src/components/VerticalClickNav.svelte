@@ -80,8 +80,8 @@
 
 		const topArea = 2.5 * safeMargin;
 		const bottomArea = window.innerHeight - 2.5 * safeMargin;
-		const topAreaMin = 1.5 * safeMargin;
-		const bottomAreaMax = window.innerHeight - 1.5 * safeMargin;
+		const topAreaMin = 1 * safeMargin;
+		const bottomAreaMax = window.innerHeight - 1 * safeMargin;
 		const xMin = 0.4 * window.innerWidth;
 		const xMax = 0.6 * window.innerWidth;
 

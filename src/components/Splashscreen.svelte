@@ -5,7 +5,7 @@
 
 	<div id="splashArtArea" class="splashArtArea">
 		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn">
-			<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.wav" loop type="audio/mpeg"
+			<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.mp3" loop type="audio/mpeg" preload="none"
 			></audio>
 
 			<div id="splashArtShader" class="splashArtShader"></div>

@@ -7,8 +7,8 @@
 			target="_blank"
 			on:mousemove={() => handleMouseMove(0)}
 		>
-			<img class="screenshot" src={websites[0].screenshot} alt={websites[0].screenshotAlt} />
-			<img src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
+			<img loading="lazy" class="screenshot" src={websites[0].screenshot} alt={websites[0].screenshotAlt} />
+			<img loading="lazy" src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[0].label}</span><span>
 				{websites[0].suffix}</span
 			>
@@ -22,8 +22,8 @@
 			target="_blank"
 			on:mousemove={() => handleMouseMove(1)}
 		>
-			<img class="screenshot" src={websites[1].screenshot} alt={websites[1].screenshotAlt} />
-			<img src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
+			<img loading="lazy" class="screenshot" src={websites[1].screenshot} alt={websites[1].screenshotAlt} />
+			<img loading="lazy" src="/img/.old/icons/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[1].label}</span><span>
 				{websites[1].suffix}</span
 			>

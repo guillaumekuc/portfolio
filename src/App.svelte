@@ -4,7 +4,9 @@
 <Head />
 <VerticalClickNav />
 <Splashscreen />
-<Folios />
+{#if hasEntered}
+	<Folios />
+{/if}
 <About />
 
 
@@ -18,6 +20,7 @@
 	import About from './components/About.svelte';
 	import Footer from './components/Footer.svelte';
 	import RotateDevice from './components/RotateDevice.svelte';
+	import { stores } from './stores.js';
 
 	// Import styles
 	import './styles.css';
@@ -26,6 +29,10 @@
 	import 'slick-carousel/slick/slick-theme.css';
 
 	import { debugLog } from './utils/debuglog.js';
+
+	// Only render Folios after user clicks Enter (defers loading ~20MB of images)
+	const hasEnteredSiteStore = stores.navigation.hasEnteredSite;
+	$: hasEntered = $hasEnteredSiteStore;
 
 	onMount(() => {
 		// Scripts are now initialized by Splashscreen component when audio element is available

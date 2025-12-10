@@ -1,15 +1,15 @@
 <div id="rotatePlease" class="rotatePlease">
 	<div id="rotatePleaseContent" class="rotatePleaseContent">
-		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-
-		<lottie-player
-			class="rotateIcon"
-			src="https://assets8.lottiefiles.com/private_files/lf30_uqnbeq1u.json"
-			background="transparent"
-			speed="1"
-			loop
-			autoplay
-		></lottie-player>
+		{#if isPortrait}
+			<lottie-player
+				class="rotateIcon"
+				src="https://assets8.lottiefiles.com/private_files/lf30_uqnbeq1u.json"
+				background="transparent"
+				speed="1"
+				loop
+				autoplay
+			></lottie-player>
+		{/if}
 
 		<h1>
 			<span
@@ -21,6 +21,34 @@
 	<!--#rotatePleaseContent-->
 </div>
 <!--#rotatePlease-->
+
+<script>
+	import { onMount } from 'svelte';
+
+	let isPortrait = false;
+
+	function checkOrientation() {
+		isPortrait = window.matchMedia('(orientation: portrait)').matches;
+		
+		// Only load lottie-player script when in portrait mode
+		if (isPortrait && !document.querySelector('script[src*="lottie-player"]')) {
+			const script = document.createElement('script');
+			script.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
+			script.async = true;
+			document.head.appendChild(script);
+		}
+	}
+
+	onMount(() => {
+		checkOrientation();
+		const mediaQuery = window.matchMedia('(orientation: portrait)');
+		mediaQuery.addEventListener('change', checkOrientation);
+		
+		return () => {
+			mediaQuery.removeEventListener('change', checkOrientation);
+		};
+	});
+</script>
 
 <style>
 	.rotatePlease {

@@ -44,15 +44,15 @@
 	let bgMusicElement;
 
 	const tracks = [
-		{ sound: '/sound/bgmusic.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #1' },
-		{ sound: '/sound/bgmusic2.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #2' },
+		{ sound: '/sound/bgmusic.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #1' },
+		{ sound: '/sound/bgmusic2.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Background music #2' },
 		{ sound: '/sound/MallowHazard.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Mallow Hazard' },
 		{ sound: "/sound/Chris'Journey.mp3", image: '/img/.old/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
 		{ sound: '/sound/ChillingVastitude.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Chilling Vastitude' },
 		{ sound: '/sound/ChaoticIntruders.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Chaotic Intruders' },
 		{ sound: '/sound/DistractingScent.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Distracting Scent' },
 		{ sound: '/sound/FerventHorizon.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Fervent Horizon' },
-		{ sound: '/sound/GalvanizingQuest.wav', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Galvanizing Quest' },
+		{ sound: '/sound/GalvanizingQuest.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Galvanizing Quest' },
 		{ sound: '/sound/InvigoratingFarm.mp3', image: '/img/.old/guillaumekuc_bgMusic.jpg', title: 'Invigorating Farm' },
 		{
 			sound: '/sound/RecalcitrantWaterflow.mp3',

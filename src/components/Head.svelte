@@ -30,6 +30,8 @@
 
 	function handleEnter() {
 		debugLog('Enter pressed');
+		// Mark that user has entered the site (enables deferred content loading)
+		stores.navigation.hasEnteredSite.set(true);
 		// Clear modal flag and remove shortcuts immediately when Enter is pressed
 		stores.navigation.currentModal.set(null);
 		shortcuts.removeModalShortcuts('startScreen');
@@ -93,7 +95,26 @@
 		height: 100%;
 		position: fixed;
 		z-index: 101;
-		background: url(img/.old/icons/preloader.svg) no-repeat center center rgba(0, 0, 0, 1);
+		background: rgba(0, 0, 0, 1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#load::before {
+		content: '';
+		width: 40px;
+		height: 40px;
+		border: 4px solid var(--shade3);
+		border-top-color: var(--shadeWhite);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	:global(#load.active) {
