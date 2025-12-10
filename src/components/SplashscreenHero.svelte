@@ -89,7 +89,7 @@
 	.splashscreen-hero {
 		/* Static values */
 		--splashscreen-hero-text-primary: #FFF;
-		--splashscreen-hero-text-accent: #60BF60;
+		--splashscreen-hero-text-accent: var(--accentColor);
 		--splashscreen-hero-text-outline: #FFF;
 		--splashscreen-hero-text-font-family: 'M PLUS Rounded 1c';
 

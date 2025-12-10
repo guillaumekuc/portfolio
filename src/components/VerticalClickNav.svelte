@@ -7,6 +7,7 @@
 >
 	<img src="/img/.old/icons/upArrow.png" alt="Up arrow" />
 </button>
+
 <button
 	type="button"
 	bind:this={bottomArrow}
@@ -69,13 +70,18 @@
 		}
 	}
 
+	function getSafeMargin() {
+		return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safeMargin'));
+	}
+
 	function displayBorderArrows(event) {
 		const currentScreenValue = get(stores.navigation.currentScreen);
+		const safeMargin = getSafeMargin();
 
-		const topArea = 3.5 * 38.4;
-		const bottomArea = window.innerHeight - 3.5 * 38.4;
-		const topAreaMin = 1.5 * 38.4;
-		const bottomAreaMax = window.innerHeight - 1.5 * 38.4;
+		const topArea = 2.5 * safeMargin;
+		const bottomArea = window.innerHeight - 2.5 * safeMargin;
+		const topAreaMin = 1.5 * safeMargin;
+		const bottomAreaMax = window.innerHeight - 1.5 * safeMargin;
 		const xMin = 0.4 * window.innerWidth;
 		const xMax = 0.6 * window.innerWidth;
 
@@ -136,57 +142,84 @@
 </script>
 
 <style>
-	.topArrow {
+	.topArrow,
+	.bottomArrow {
+		/* Local references to global variables */
+		--arrow-safe-margin: var(--safeMargin);
+		--arrow-color-text: var(--shadeWhite);
+		--arrow-color-bg: transparent;
+		--arrow-color-hover: var(--accentColor);
+
+		/* Responsive values */
+		--arrow-size: 48px;
+		--arrow-border: 8px;
+		--arrow-radius: 8px;
+		--arrow-offset: calc(var(--arrow-safe-margin) + (var(--arrow-safe-margin) - var(--arrow-size)) / 2);
+
 		position: fixed;
-		top: calc(2 * var(--safeMargin) + 2px);
-		left: calc((100% - 17px) / 2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		left: 50%;
 		transform: translateX(-50%);
 		z-index: 100;
-		color: var(--shadeWhite);
-		background-color: var(--shade1);
-		width: 4vh;
-		min-width: 25px;
-		height: 4vh;
-		min-height: 25px;
-		box-sizing: content-box;
-		border: 7.5px solid var(--shade1);
-		border-radius: 7.5px;
+		color: var(--arrow-color-text);
+		background-color: var(--arrow-color-bg);
+		width: var(--arrow-size);
+		height: var(--arrow-size);
+		box-sizing: border-box;
+		border: var(--arrow-border) solid var(--arrow-color-bg);
+		border-radius: var(--arrow-radius);
 		pointer-events: auto;
+	}
+
+	.topArrow {
+		top: var(--arrow-offset);
 	}
 
 	.bottomArrow {
-		position: fixed;
-		bottom: calc(2 * var(--safeMargin) + 2px);
-		left: calc((100% - 17px) / 2);
-		transform: translateX(-50%);
-		z-index: 100;
-		color: var(--shadeWhite);
-		background-color: var(--shade1);
-		width: 4vh;
-		min-width: 25px;
-		height: 4vh;
-		min-height: 25px;
-		box-sizing: content-box;
-		border: 7.5px solid var(--shade1);
-		border-radius: 7.5px;
-		margin-bottom: 2px;
-		pointer-events: auto;
+		bottom: var(--arrow-offset);
 	}
 
-	.topArrow:hover {
-		cursor: pointer;
-		background-color: var(--shadePop);
-		border: 7.5px solid var(--shadePop);
-	}
-
+	.topArrow:hover,
 	.bottomArrow:hover {
 		cursor: pointer;
-		background-color: var(--shadePop);
-		border: 7.5px solid var(--shadePop);
+		background-color: var(--arrow-color-hover);
+		border-color: var(--arrow-color-hover);
 	}
 
 	.topArrow.hidden,
 	.bottomArrow.hidden {
 		display: none;
+	}
+
+	/* small desktop viewport */
+	@media (max-height: 950px) {
+		.topArrow,
+		.bottomArrow {
+			--arrow-size: 40px;
+			--arrow-border: 6px;
+			--arrow-radius: 6px;
+		}
+	}
+
+	/* tablet viewport */
+	@media (max-height: 750px) {
+		.topArrow,
+		.bottomArrow {
+			--arrow-size: 34px;
+			--arrow-border: 5px;
+			--arrow-radius: 5px;
+		}
+	}
+
+	/* mobile viewport */
+	@media (max-height: 500px) {
+		.topArrow,
+		.bottomArrow {
+			--arrow-size: 28px;
+			--arrow-border: 4px;
+			--arrow-radius: 4px;
+		}
 	}
 </style>

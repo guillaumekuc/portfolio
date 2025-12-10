@@ -30,7 +30,7 @@ GLOBAL STYLES - Utilities, Reset, Typography, General
 }
 
 html {
-	--safeMargin: calc(1920px / 5 / 10); /*38.4*/
+	--safeMargin: 66px;
 
 	/*--COLORS--*/
 	--shadeBlack: #000;
@@ -40,6 +40,7 @@ html {
 	--shade3: #343434;
 	--shade4: #aaaaaa;
 	--shadePop: #ffa500;
+	--accentColor: #60BF60;
 	--iconBorderColor: rgba(0, 0, 0, 0.5);
 
 	/*--FONT-FAMILIES--*/
@@ -64,9 +65,28 @@ html {
 	--fs1o2: calc(var(--fs1) * 1 / 2);
 }
 
-@media (max-height: 648px) {
+/* --------------------------------------------------------------
+1.1 - Responsive Breakpoints
+-------------------------------------------------------------- */
+
+/* small desktop viewport */
+@media (max-height: 950px) {
 	html {
-		--safeMargin: calc(1920px / 5 / 10 * 2 / 3) !important;
+		--safeMargin: 56px;
+	}
+}
+
+/* tablet viewport */
+@media (max-height: 750px) {
+	html {
+		--safeMargin: 48px;
+	}
+}
+
+/* mobile viewport */
+@media (max-height: 500px) {
+	html {
+		--safeMargin: 40px;
 	}
 }
 
