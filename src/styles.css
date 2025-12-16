@@ -24,7 +24,7 @@ GLOBAL STYLES - Utilities, Reset, Typography, General
 
 ::selection {
 	color: var(--shadeWhite);
-	background: var(--shadePop);
+	background: var(--accentColor);
 }
 
 html {
@@ -37,7 +37,6 @@ html {
 	--shade2: #242424;
 	--shade3: #343434;
 	--shade4: #aaaaaa;
-	--shadePop: #ffa500;
 	--accentColor: #60BF60;
 	--iconBorderColor: rgba(0, 0, 0, 0.5);
 
@@ -613,7 +612,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic:hover {
-	background-color: var(--shadePop);
+	background-color: var(--accentColor);
 }
 
 .muteBgMusic.isMuted {
@@ -622,7 +621,7 @@ input[type='range']::-moz-range-progress {
 	background-position: center !important ;
 }
 .muteBgMusic.isMuted:hover {
-	background-color: var(--shadePop) !important;
+	background-color: var(--accentColor) !important;
 }
 
 .extLinkBtn {
@@ -643,7 +642,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .extLinkBtn:hover {
-	background-color: var(--shadePop);
+	background-color: var(--accentColor);
 	border: solid 1px transparent;
 	color: white;
 }

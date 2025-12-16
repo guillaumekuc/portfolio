@@ -90,6 +90,10 @@
 </script>
 
 <style>
+	:global(body) {
+		--head-accent-color: var(--accentColor);
+	}
+
 	#load {
 		width: 100%;
 		height: 100%;
@@ -157,13 +161,13 @@
 	}
 
 	.startScreen button:hover {
-		border: 3px solid var(--shadePop);
-		background-color: var(--shadePop);
+		border: 3px solid var(--head-accent-color);
+		background-color: var(--head-accent-color);
 	}
 
 	:global(.startScreen button.programmaticHover) {
-		border: 3px solid var(--shadePop);
-		background-color: var(--shadePop);
+		border: 3px solid var(--head-accent-color);
+		background-color: var(--head-accent-color);
 	}
 
 	.nameBadge {

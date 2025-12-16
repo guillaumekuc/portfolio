@@ -202,7 +202,7 @@
 	}
 
 	.footer button:hover {
-		background-color: var(--footer-accent-color);
+		background-color: var(--footer-accent-color) !important;
 	}
 
 	.volumeGroup {
@@ -231,12 +231,12 @@
 	button.footerPlayBtn.isPlaying {
 		-webkit-mask-image: url('/img/audio-player/pause.svg');
 		mask-image: url('/img/audio-player/pause.svg');
-		animation: playingPulse 2s ease-in-out infinite;
+		animation: playingScale 2s ease-in-out infinite;
 	}
 
 	button.footerPlayBtn.isPlaying:hover {
 		animation: none;
-		background-color: var(--footer-accent-color) !important;
+		transform: scale(1);
 	}
 
 	.footerNextBtn {
@@ -244,12 +244,12 @@
 		mask-image: url('/img/audio-player/next-track.svg');
 	}
 
-	@keyframes playingPulse {
+	@keyframes playingScale {
 		0%, 100% {
-			background-color: white;
+			transform: scale(1);
 		}
 		50% {
-			background-color: var(--footer-accent-color);
+			transform: scale(1.1);
 		}
 	}
 
@@ -265,11 +265,30 @@
 	.muteBgMusic {
 		-webkit-mask-image: url('/img/audio-player/volume.svg');
 		mask-image: url('/img/audio-player/volume.svg');
+		/* Override global .muteBgMusic styles - remove background-image but keep background-color */
+		background-image: none !important;
+		background-size: unset !important;
+		background-position: unset !important;
+		/* Ensure white background for mask to show through */
+		background-color: white;
 	}
 
 	.muteBgMusic.isMuted {
 		-webkit-mask-image: url('/img/audio-player/mute.svg');
 		mask-image: url('/img/audio-player/mute.svg');
+		/* Override global .muteBgMusic.isMuted styles - remove background-image but keep background-color */
+		background-image: none !important;
+		background-size: unset !important;
+		background-position: unset !important;
+		/* Ensure white background for mask to show through */
+		background-color: white;
+	}
+
+	/* Ensure hover state follows footer button pattern */
+	.muteBgMusic:hover,
+	.muteBgMusic.isMuted:hover {
+		background-color: var(--footer-accent-color) !important;
+		background-image: none !important;
 	}
 
 	.footerNextBtn.lastTrack {

@@ -162,6 +162,7 @@
 	}
 
 	.musicPlaylistWrapper {
+		--music-playlist-accent-color: var(--accentColor);
 		font-size: var(--fs2o3);
 	}
 	@media (max-height: 648px) {
@@ -265,7 +266,7 @@
 	}
 
 	.musicPlaylistButton:hover {
-		background-color: var(--shadePop);
+		background-color: var(--music-playlist-accent-color);
 	}
 
 	.musicPlaylist li.focus .musicPlaylistButton {
@@ -273,7 +274,7 @@
 	}
 
 	.musicPlaylist li.focus .musicPlaylistButton:hover {
-		background-color: var(--shadePop);
+		background-color: var(--music-playlist-accent-color);
 	}
 
 	.musicPlaylist li.focus .playIcon {
