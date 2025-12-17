@@ -44,6 +44,8 @@ html {
 	--ff1: 'Georgia', serif;
 	--ff2: 'Times New Roman', serif;
 	--ff3: 'Helvetica', sans-serif;
+	--ffRounded: 'M PLUS Rounded 1c', sans-serif;
+	--ffCrimson: 'Crimson Pro', serif;
 
 	/*--FONT-SIZES--*/
 	--fs2o1: calc(var(--fs1) * 2 / 1);
