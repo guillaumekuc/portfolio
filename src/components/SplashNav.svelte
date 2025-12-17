@@ -262,28 +262,45 @@
 	}
 
 	function handleNavItemClick(item, index) {
-		// Update selectedMenuItem to keep keyboard focus in sync
 		selectedMenuItemStore.set(index);
 		
-		// Only process internal items
 		if (item.type !== 'internal' || !item.target) {
 			debugLog('External nav item clicked:', item.id);
 			return;
 		}
 		
-		const target = item.target;
+		const htmlElement = document.documentElement;
+		let scrollTimer;
+		let cleanupDone = false;
 		
-		// Update current nav target for header nav tracking
-		stores.navigation.currentNavTarget.set(target);
+		const cleanup = () => {
+			if (cleanupDone) return;
+			cleanupDone = true;
+			htmlElement.style.scrollSnapType = 'y mandatory';
+			Navigation.isNavigating = false;
+			window.removeEventListener('scroll', onScroll);
+			clearTimeout(scrollTimer);
+			clearTimeout(fallbackTimer);
+		};
 		
-		// Filter portfolio sections based on target
-		Navigation.filterPortfolioSectionsByNavTarget(target);
+		const onScroll = () => {
+			clearTimeout(scrollTimer);
+			scrollTimer = setTimeout(cleanup, 150);
+		};
 		
-		// Wait for filtering to apply, then find and scroll to target element
+		// Suppress IntersectionObserver and snap during scroll
+		Navigation.isNavigating = true;
+		htmlElement.style.scrollSnapType = 'none';
+		
+		stores.navigation.currentNavTarget.set(item.target);
+		Navigation.filterPortfolioSectionsByNavTarget(item.target);
+		
 		setTimeout(() => {
-			const targetElement = findTargetElement(target);
+			const targetElement = findTargetElement(item.target);
 			if (targetElement) {
+				window.addEventListener('scroll', onScroll, { passive: true });
 				targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				const fallbackTimer = setTimeout(cleanup, 3000);
 				debugLog('Navigated to section:', targetElement.id);
 			}
 		}, 100);

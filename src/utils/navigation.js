@@ -8,6 +8,55 @@ import portfolioConfig from '../config/portfolio.json';
 
 // Navigation controller - handles keyboard/mouse navigation and scroll tracking
 export class Navigation {
+	// Flag to suppress IntersectionObserver actions during programmatic navigation
+	static isNavigating = false;
+	static overlay = null;
+	
+	// Show navigation overlay (only covers content, not header/footer)
+	static showOverlay() {
+		if (!this.overlay) {
+			// Get actual header and footer heights dynamically
+			const header = document.getElementById('header');
+			const footer = document.getElementById('footer');
+			const headerHeight = header ? header.offsetHeight : 0;
+			const footerHeight = footer ? footer.offsetHeight : 0;
+			
+			this.overlay = document.createElement('div');
+			this.overlay.id = 'navOverlay';
+			this.overlay.style.position = 'fixed';
+			this.overlay.style.top = `${headerHeight}px`;
+			this.overlay.style.left = '0';
+			this.overlay.style.right = '0';
+			this.overlay.style.bottom = `${footerHeight}px`;
+			this.overlay.style.backgroundColor = '#000';
+			this.overlay.style.opacity = '0';
+			this.overlay.style.transition = 'opacity 0.15s ease';
+			this.overlay.style.zIndex = '50';
+			this.overlay.style.pointerEvents = 'none';
+			this.overlay.setAttribute('aria-hidden', 'true');
+			this.overlay.setAttribute('role', 'presentation');
+			
+			document.body.appendChild(this.overlay);
+		}
+		requestAnimationFrame(() => {
+			if (this.overlay) {
+				this.overlay.style.opacity = '1';
+			}
+		});
+	}
+	
+	// Hide navigation overlay
+	static hideOverlay() {
+		if (this.overlay) {
+			this.overlay.style.opacity = '0';
+			setTimeout(() => {
+				if (this.overlay && this.overlay.parentNode) {
+					this.overlay.parentNode.removeChild(this.overlay);
+					this.overlay = null;
+				}
+			}, 150);
+		}
+	}
 	// Scrolls to the next visible portfolio section from the current screen
 	static goToPortfolioSections(currentScreenId) {
 		const currentElement = document.querySelector('#' + currentScreenId);
@@ -102,6 +151,38 @@ export class Navigation {
 		document.body.scroll(0, 0);
 	}
 
+	// Navigate back to splashscreen/home
+	static goToHome() {
+		const htmlElement = document.documentElement;
+		let scrollTimer;
+		let cleanupDone = false;
+		
+		const cleanup = () => {
+			if (cleanupDone) return;
+			cleanupDone = true;
+			htmlElement.style.scrollSnapType = 'y mandatory';
+			Navigation.isNavigating = false;
+			window.removeEventListener('scroll', onScroll);
+			clearTimeout(scrollTimer);
+			clearTimeout(fallbackTimer);
+		};
+		
+		const onScroll = () => {
+			clearTimeout(scrollTimer);
+			scrollTimer = setTimeout(cleanup, 200);
+		};
+		
+		// Suppress IntersectionObserver and snap during scroll
+		Navigation.isNavigating = true;
+		htmlElement.style.scrollSnapType = 'none';
+		
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		
+		// Fallback cleanup
+		const fallbackTimer = setTimeout(cleanup, 3000);
+	}
+
 	// Static method to refresh scroll tracking when new sections are added
 	static refreshScrollTracking() {
 		const controller = get(stores.navigation.controller);
@@ -145,15 +226,17 @@ export class Navigation {
 			const elementObserver = new IntersectionObserver(
 				(entries) => {
 					const entry = entries[0];
-					if (entry.isIntersecting === true && entry.intersectionRatio >= 0.5) {
-						// Check computed style - the most reliable way to detect if element is actually visible
-						// This catches elements hidden via CSS class, inline styles, or any other method
+					if (entry.isIntersecting === true && entry.intersectionRatio >= 0.4) {
 						const style = window.getComputedStyle(element);
-						if (style.display === 'none' || style.visibility === 'hidden') {
-							return;
-						}
+						if (style.display === 'none' || style.visibility === 'hidden') return;
 
-						// Update the store - single source of truth
+						const previousScreen = get(stores.navigation.currentScreen);
+						if (previousScreen === element.id) return;
+
+						// During navigation, only update if we've reached high visibility (80%+)
+						// This prevents intermediate screens from registering but allows final destination
+						if (Navigation.isNavigating && entry.intersectionRatio < 0.8) return;
+
 						stores.navigation.currentScreen.set(element.id);
 						debugLog('Screen changed:', element.id);
 
@@ -162,31 +245,27 @@ export class Navigation {
 							window.$('.gallery').slick('setPosition');
 						}
 
-						const currentScreen = element.id;
-						const gallery = document.querySelector('#' + currentScreen + ' .gallery');
+						const gallery = document.querySelector('#' + element.id + ' .gallery');
 						if (gallery) {
 							gallery.firstChild.focus();
 							const video = document.querySelector('.slick-current video');
 							if (video) video.play();
 						}
 
-						if (currentScreen === 'splashscreen' || currentScreen === 'startScreen') {
+						if (element.id === 'splashscreen' || element.id === 'startScreen') {
 							const topArrow = document.querySelector('#topArrow');
 							const bottomArrow = document.querySelector('#bottomArrow');
 							if (topArrow) topArrow.classList.add('hidden');
 							if (bottomArrow) bottomArrow.classList.add('hidden');
 						}
 
-						if (currentScreen === 'about') {
+						if (element.id === 'about') {
 							const bottomArrow = document.querySelector('#bottomArrow');
 							if (bottomArrow) bottomArrow.classList.add('hidden');
 						}
-
-						// Websites component handles focus reactively via local state
-						// No need to manipulate DOM here
 					}
 				},
-				{ threshold: [0.5] }
+				{ threshold: [0.4, 0.8] }
 			);
 
 			elementObserver.observe(element);

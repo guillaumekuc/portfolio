@@ -59,57 +59,56 @@
 	$: currentNavTarget = $currentNavTargetStore;
 
 	function handleHeaderNavClick(target) {
-		// Update the current nav target
-		stores.navigation.currentNavTarget.set(target);
-
-		// Hide irrelevant portfolio sections using the new nav-based filtering
-		Navigation.filterPortfolioSectionsByNavTarget(target);
-
-		// Scroll to first visible portfolio section using store
+		// Step 1: Show overlay curtain
+		Navigation.showOverlay();
+		
+		// Step 2: Wait for overlay to fully show, then do all changes behind it
 		setTimeout(() => {
-			const visibility = get(stores.navigation.portfolioSectionVisibility);
+			// Update target and filter sections (visual changes hidden by overlay)
+			stores.navigation.currentNavTarget.set(target);
+			Navigation.filterPortfolioSectionsByNavTarget(target);
 			
-			for (const section of portfolioConfig.portfolioSections) {
-				const isVisible = !visibility || visibility.size === 0 
-					? true 
-					: (visibility.get(section.id) ?? true);
+			// Small delay for DOM to update with filtered sections
+			setTimeout(() => {
+				let targetElement = null;
 				
-				if (isVisible) {
-					const sectionElement = document.getElementById(section.id);
-					if (sectionElement) {
-						sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-						break;
+				// Check if target is 'about' or 'portfolio-about'
+				if (target === 'about' || target === 'portfolio-about') {
+					targetElement = document.getElementById('about');
+				} else {
+					// Find first visible portfolio section
+					const visibility = get(stores.navigation.portfolioSectionVisibility);
+					
+					for (const section of portfolioConfig.portfolioSections) {
+						const isVisible = !visibility || visibility.size === 0 
+							? true 
+							: (visibility.get(section.id) ?? true);
+						
+						if (isVisible) {
+							targetElement = document.getElementById(section.id);
+							if (targetElement) break;
+						}
 					}
 				}
-			}
-		}, 100);
+				
+				// Step 3: Instant scroll (teleport) behind the curtain
+				if (targetElement) {
+					Navigation.isNavigating = true;
+					targetElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+				}
+				
+				// Step 4: Remove curtain to reveal final state
+				setTimeout(() => {
+					Navigation.isNavigating = false;
+					Navigation.hideOverlay();
+				}, 50);
+			}, 50);
+		}, 150);
 	}
 
 	function handleTitleClick() {
-		// Temporarily disable scroll-snap to allow smooth scroll to top
-		const html = document.documentElement;
-		const originalSnapType = html.style.scrollSnapType;
-		html.style.scrollSnapType = 'none';
-		
-		// Scroll to top of page
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-		
-		// Re-enable scroll-snap when we reach the top (or after timeout as fallback)
-		let fallbackTimeout;
-		const onScroll = () => {
-			if (window.scrollY === 0) {
-				html.style.scrollSnapType = originalSnapType;
-				window.removeEventListener('scroll', onScroll);
-				clearTimeout(fallbackTimeout);
-			}
-		};
-		window.addEventListener('scroll', onScroll);
-		
-		// Fallback timeout in case scroll event doesn't fire (e.g., already at top)
-		fallbackTimeout = setTimeout(() => {
-			html.style.scrollSnapType = originalSnapType;
-			window.removeEventListener('scroll', onScroll);
-		}, 1500);
+		// Use Navigation.goToHome() which handles scroll-snap properly
+		Navigation.goToHome();
 	}
 
 	onMount(() => {
