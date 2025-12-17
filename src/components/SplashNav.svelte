@@ -49,6 +49,7 @@
 	import { Animation } from '../utils/animation.js';
 	import { Navigation } from '../utils/navigation.js';
 	import { debugLog } from '../utils/debuglog.js';
+	import { getMailtoUrl } from '../utils/email.js';
 	import navConfig from '../config/nav.json';
 	import portfolioConfig from '../config/portfolio.json';
 	import NavIcon from './NavIcon.svelte';
@@ -57,8 +58,13 @@
 	let navElement;
 	let navLinkElements = [];
 	
-	// Get navigation items from config
-	const navItems = navConfig.navigation;
+	// Get navigation items from config and replace email placeholder
+	const navItems = navConfig.navigation.map(item => {
+		if (item.url === '{{EMAIL}}') {
+			return { ...item, url: getMailtoUrl() };
+		}
+		return item;
+	});
 	
 	// Extract the store for reactive access
 	const selectedMenuItemStore = stores.navigation.selectedMenuItem;
