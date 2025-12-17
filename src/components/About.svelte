@@ -6,12 +6,28 @@
 			<div bind:this={scrollableElement} id="aboutDescription" class="scrollable">
 				{@html parsedMarkdown}
 			</div>
-			<a
-				class="emailLink"
-				target="_blank"
-				on:click|preventDefault={handleMailClick}
-				href="mailto:guillaume@guillaumekuc.com">guillaume[at]guillaumekuc.com</a
-			>
+		<div class="contactSection">
+			<div class="iconCircle" on:click={handleMailClick} on:keydown={(e) => e.key === 'Enter' && handleMailClick(e)} role="button" tabindex="0">
+				<div class="contactIcon" style="--icon-url: url('/img/nav/contact.svg')"></div>
+			</div>
+			<div class="contactInfo">
+				<div class="contactLabel">Email</div>
+				<a
+					bind:this={emailElement}
+					class="contactEmail"
+					target="_blank"
+					on:click|preventDefault={handleMailClick}
+					href="#">{emailAddress}</a
+				>
+			</div>
+
+			<div class="iconCircle" on:click={handleResumeClick} on:keydown={(e) => e.key === 'Enter' && handleResumeClick(e)} role="button" tabindex="0">
+				<div class="contactIcon" style="--icon-url: url('/img/nav/resume.svg')"></div>
+			</div>
+			<div class="contactInfo">
+				<div class="contactLabel">Resume</div>
+			</div>
+		</div>
 		</div>
 	</div>
 </div>
@@ -21,6 +37,7 @@
 	import { marked } from 'marked';
 	import { Tooltip } from '../utils/tooltip.js';
 	import { shortcuts } from '../utils/shortcuts.js';
+	import { getEmail, getMailtoUrl, openEmail } from '../utils/email.js';
 	import aboutMarkdown from '../content/about.md?raw';
 
 	// Configure marked to allow HTML
@@ -30,10 +47,16 @@
 	});
 
 	let parsedMarkdown = marked.parse(aboutMarkdown);
+	let emailAddress = '';
+	let emailElement;
 
 	function handleMailClick(event) {
-		Tooltip.handleMailTooltip(event);
-		window.open('mailto:guillaume@guillaumekuc.com', 'mail');
+		// Tooltip.handleMailTooltip(event);
+		openEmail();
+	}
+
+	function handleResumeClick(event) {
+		window.open('https://guillaumekuc.github.io/resume/', '_blank');
 	}
 
 	function goBackToTop() {
@@ -56,6 +79,12 @@
 	}
 
 	onMount(() => {
+		// Assemble email at runtime to protect from bots
+		emailAddress = getEmail();
+		if (emailElement) {
+			emailElement.href = getMailtoUrl();
+		}
+		
 		// Screen-specific shortcuts for the about page
 		// ArrowLeft: scroll content up
 		// ArrowRight: scroll content down
@@ -73,6 +102,7 @@
 <style>
 	#about {
 		--about-accent-color: var(--accentColor);
+		--about-font-rounded: 'M PLUS Rounded 1c', sans-serif;
 		font-size: var(--fs2o3);
 	}
 	@media (max-height: 648px) {
@@ -218,26 +248,84 @@
 		cursor: pointer;
 	}
 
-	.emailLink {
-		position: relative;
+	.contactSection {
 		margin-top: calc(var(--safeMargin) / 3);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 1em;
+	}
+
+	.iconCircle {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		border: 1px solid var(--about-accent-color);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-radius: 5px;
-		padding: 2px 10px;
-		color: var(--shade3);
-	}
-
-	:global(.emailLink .tooltipText) {
-		top: 125%;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-
-	.emailLink:hover {
+		flex-shrink: 0;
 		cursor: pointer;
-		color: var(--shadeWhite);
+		transition: background-color 0.07s ease-in;
+	}
+
+	.iconCircle:hover {
 		background-color: var(--about-accent-color);
+	}
+
+	.contactIcon {
+		width: 32px;
+		height: 32px;
+		background-color: currentColor;
+		mask-image: var(--icon-url);
+		mask-size: contain;
+		mask-repeat: no-repeat;
+		mask-position: center;
+		-webkit-mask-image: var(--icon-url);
+		-webkit-mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		color: var(--shadeWhite);
+		transition: color 0.07s ease-in;
+	}
+
+	.iconCircle:hover .contactIcon {
+		color: var(--shadeWhite);
+	}
+
+	.contactInfo {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 0.25em;
+	}
+
+	.contactLabel {
+		font-family: var(--about-font-rounded);
+		font-weight: 700;
+		font-size: 18px;
+		color: var(--shadeWhite);
+	}
+
+	.contactEmail {
+		position: relative;
+		font-family: var(--about-font-rounded);
+		font-weight: 300;
+		font-size: 11px;
+		color: var(--shade4);
+		text-decoration: none;
+		transition: color 0.07s ease-in;
+	}
+
+	:global(.contactEmail .tooltipText) {
+		top: 125%;
+		left: 0;
+	}
+
+	.contactEmail:hover {
+		cursor: pointer;
+		color: var(--about-accent-color);
 	}
 </style>
