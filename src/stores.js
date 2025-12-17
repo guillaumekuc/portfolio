@@ -1,4 +1,9 @@
 import { writable } from 'svelte/store';
+import { Storage, STORAGE_KEYS } from './utils/storage.js';
+
+// Load saved audio preferences from localStorage
+const savedVolume = Storage.get(STORAGE_KEYS.MUSIC_VOLUME, 0);
+const savedMuted = Storage.get(STORAGE_KEYS.MUSIC_MUTED, false);
 
 // Organized store namespaces
 export const stores = {
@@ -6,8 +11,8 @@ export const stores = {
 	music: {
 		isPlaying: writable(false),
 		isLooping: writable(false),
-		isMuted: writable(false),
-		volume: writable(0), // 0-100 scale, starts at 0 (muted)
+		isMuted: writable(savedMuted),
+		volume: writable(savedVolume), // 0-100 scale, loads from localStorage
 		currentIndex: writable(0),
 		unpauseWhenDone: writable(false),
 		currentTime: writable(0),
@@ -16,7 +21,9 @@ export const stores = {
 		trackImage: writable('/img/.old/guillaumekuc_bgMusic.jpg'),
 		tracks: writable([]),
 		// Music player instance
-		musicPlayer: writable(null)
+		musicPlayer: writable(null),
+		// Track if user has entered the site with music trigger
+		hasEnteredWithMusic: writable(false)
 	},
 
 	// Navigation-related state

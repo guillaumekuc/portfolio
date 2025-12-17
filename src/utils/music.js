@@ -2,6 +2,7 @@ import { Time } from './time.js';
 import { stores } from '../stores.js';
 import { get } from 'svelte/store';
 import { debugLog } from './debuglog.js';
+import { Storage, STORAGE_KEYS } from './storage.js';
 
 // Music player controller - handles background music and playlist functionality
 export class Music {
@@ -56,18 +57,29 @@ export class Music {
 	play() {
 		if (!this.bgMusicElement) return;
 		
-		// If volume is 0 (initial muted state), set to full volume when music starts
 		const currentVolume = get(stores.music.volume);
+		const isMuted = get(stores.music.isMuted);
+		
+		// If user is trying to play while muted, unmute first
+		if (isMuted) {
+			stores.music.isMuted.set(false);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, false);
+		}
+		
+		// If volume is 0 (initial muted state), set to full volume when music starts
 		if (currentVolume === 0) {
 			stores.music.volume.set(100);
 			this.bgMusicElement.volume = 1;
 			document.querySelectorAll('.largeVideo').forEach((video) => {
 				video.volume = 1;
 			});
-			stores.music.isMuted.set(false);
+			Storage.set(STORAGE_KEYS.MUSIC_VOLUME, 100);
 		} else {
 			// Apply current volume setting
 			this.bgMusicElement.volume = currentVolume / 100;
+			document.querySelectorAll('.largeVideo').forEach((video) => {
+				video.volume = currentVolume / 100;
+			});
 		}
 		
 		this.bgMusicElement.play();
@@ -112,18 +124,23 @@ export class Music {
 			video.volume = 0;
 		});
 		stores.music.isMuted.set(true);
+		Storage.set(STORAGE_KEYS.MUSIC_MUTED, true);
 		debugLog('Music muted');
 	}
 
 	unmute() {
 		if (!this.bgMusicElement) return;
 		const currentVolume = get(stores.music.volume);
+		const hasEnteredWithMusic = get(stores.music.hasEnteredWithMusic);
+		const isPlaying = get(stores.music.isPlaying);
+		
 		if (currentVolume === undefined || currentVolume === 0) {
 			this.bgMusicElement.volume = 1;
 			document.querySelectorAll('.largeVideo').forEach((video) => {
 				video.volume = 1;
 			});
 			stores.music.volume.set(100);
+			Storage.set(STORAGE_KEYS.MUSIC_VOLUME, 100);
 		} else {
 			this.bgMusicElement.volume = currentVolume / 100;
 			document.querySelectorAll('.largeVideo').forEach((video) => {
@@ -131,12 +148,20 @@ export class Music {
 			});
 		}
 		stores.music.isMuted.set(false);
+		Storage.set(STORAGE_KEYS.MUSIC_MUTED, false);
+		
+		// If user has entered the site but music never started (because they were muted), start it now
+		if (hasEnteredWithMusic && !isPlaying) {
+			this.play();
+		}
+		
 		debugLog('Music unmuted');
 	}
 
 	volumeHandler(slider) {
 		const newVolume = parseInt(slider.value);
 		stores.music.volume.set(newVolume);
+		Storage.set(STORAGE_KEYS.MUSIC_VOLUME, newVolume);
 		debugLog('Volume changed:', newVolume);
 
 		if (this.bgMusicElement) {
@@ -148,8 +173,10 @@ export class Music {
 
 		if (newVolume === 0) {
 			stores.music.isMuted.set(true);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, true);
 		} else {
 			stores.music.isMuted.set(false);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, false);
 		}
 	}
 
@@ -204,6 +231,7 @@ export class Music {
 		const currentVolume = get(stores.music.volume);
 		const newVolume = Math.min(100, parseInt(currentVolume) + 10);
 		stores.music.volume.set(newVolume);
+		Storage.set(STORAGE_KEYS.MUSIC_VOLUME, newVolume);
 		if (this.bgMusicElement) {
 			this.bgMusicElement.volume = newVolume / 100;
 		}
@@ -212,6 +240,7 @@ export class Music {
 		});
 		if (newVolume > 0) {
 			stores.music.isMuted.set(false);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, false);
 		}
 	}
 
@@ -219,6 +248,7 @@ export class Music {
 		const currentVolume = get(stores.music.volume);
 		const newVolume = Math.max(0, parseInt(currentVolume) - 10);
 		stores.music.volume.set(newVolume);
+		Storage.set(STORAGE_KEYS.MUSIC_VOLUME, newVolume);
 		if (this.bgMusicElement) {
 			this.bgMusicElement.volume = newVolume / 100;
 		}
@@ -227,8 +257,10 @@ export class Music {
 		});
 		if (newVolume === 0) {
 			stores.music.isMuted.set(true);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, true);
 		} else {
 			stores.music.isMuted.set(false);
+			Storage.set(STORAGE_KEYS.MUSIC_MUTED, false);
 		}
 	}
 
