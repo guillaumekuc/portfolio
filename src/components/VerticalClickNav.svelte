@@ -92,8 +92,12 @@
 		const topYCheck = event.clientY < topArea && event.clientY > topAreaMin;
 		const topXCheck = event.clientX > xMin && event.clientX < xMax;
 
-		// Check bottom arrow conditions
-		const isBottomArea = screenCheck && bottomYCheck && bottomXCheck;
+		// Check if there's a next page available
+		const currentElement = document.querySelector(`#${currentScreenValue}`);
+		const hasNextPage = currentElement ? DOM.nextVisibleSibling(currentElement) !== null : false;
+
+		// Check bottom arrow conditions (only show if there's a next page)
+		const isBottomArea = screenCheck && bottomYCheck && bottomXCheck && hasNextPage;
 
 		// Check top arrow conditions
 		const isTopArea = screenCheck && topYCheck && topXCheck;
