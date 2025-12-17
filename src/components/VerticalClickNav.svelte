@@ -5,7 +5,7 @@
 	class:hidden={!showTopArrow}
 	on:click={clickTopArrow}
 >
-	<img src="/img/.old/icons/upArrow.png" alt="Up arrow" />
+	<div class="arrowIcon" style="--arrow-icon-url: url('/img/nav/upArrow.png')"></div>
 </button>
 
 <button
@@ -15,7 +15,7 @@
 	class:hidden={!showBottomArrow}
 	on:click={clickBottomArrow}
 >
-	<img src="/img/.old/icons/downArrow.png" alt="Down arrow" />
+	<div class="arrowIcon" style="--arrow-icon-url: url('/img/nav/downArrow.png')"></div>
 </button>
 
 <script>
@@ -191,6 +191,20 @@
 	.topArrow.hidden,
 	.bottomArrow.hidden {
 		display: none;
+	}
+
+	.arrowIcon {
+		width: 100%;
+		height: 100%;
+		background-color: currentColor;
+		mask-image: var(--arrow-icon-url);
+		mask-size: contain;
+		mask-repeat: no-repeat;
+		mask-position: center;
+		-webkit-mask-image: var(--arrow-icon-url);
+		-webkit-mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		-webkit-mask-position: center;
 	}
 
 	/* small desktop viewport */
