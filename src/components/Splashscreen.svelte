@@ -55,8 +55,15 @@
 		// Wait a bit for the animation to start before playing music
 		setTimeout(() => {
 			const musicPlayer = get(stores.music.musicPlayer);
+			const isMuted = get(stores.music.isMuted);
+			
 			if (musicPlayer) {
-				musicPlayer.play();
+				// Only play if not muted
+				if (!isMuted) {
+					musicPlayer.play();
+				}
+				// Mark that we've attempted to start music (user has entered the site with music enabled)
+				stores.music.hasEnteredWithMusic.set(true);
 			}
 		}, 1000);
 	}
