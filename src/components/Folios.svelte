@@ -1,12 +1,14 @@
 {#each portfolioSections as section}
-	<div
-		id={section.id}
-		class="fullPage portfolioSection"
-		class:hidden={!sectionVisibility.get(section.id)}
-		data-categories={section.categories}
-	>
-		<svelte:component this={section.component} />
-	</div>
+	{#if section.component}
+		<div
+			id={section.id}
+			class="fullPage portfolioSection"
+			class:hidden={!sectionVisibility.get(section.id)}
+			data-categories={section.categories}
+		>
+			<svelte:component this={section.component} />
+		</div>
+	{/if}
 {/each}
 
 <script>

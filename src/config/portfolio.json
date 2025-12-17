@@ -54,6 +54,11 @@
 			"id": "websitesFolio",
 			"component": "Websites",
 			"categories": "portfolio-web portfolio-all"
+		},
+		{
+			"id": "about",
+			"component": null,
+			"categories": "any"
 		}
 	]
 }

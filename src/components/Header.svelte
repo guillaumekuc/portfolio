@@ -70,24 +70,18 @@
 			
 			// Small delay for DOM to update with filtered sections
 			setTimeout(() => {
+				const visibility = get(stores.navigation.portfolioSectionVisibility);
 				let targetElement = null;
 				
-				// Check if target is 'about' or 'portfolio-about'
-				if (target === 'about' || target === 'portfolio-about') {
-					targetElement = document.getElementById('about');
-				} else {
-					// Find first visible portfolio section
-					const visibility = get(stores.navigation.portfolioSectionVisibility);
+				// Find first visible section (including about)
+				for (const section of portfolioConfig.portfolioSections) {
+					const isVisible = !visibility || visibility.size === 0 
+						? true 
+						: (visibility.get(section.id) ?? true);
 					
-					for (const section of portfolioConfig.portfolioSections) {
-						const isVisible = !visibility || visibility.size === 0 
-							? true 
-							: (visibility.get(section.id) ?? true);
-						
-						if (isVisible) {
-							targetElement = document.getElementById(section.id);
-							if (targetElement) break;
-						}
+					if (isVisible) {
+						targetElement = document.getElementById(section.id);
+						if (targetElement) break;
 					}
 				}
 				

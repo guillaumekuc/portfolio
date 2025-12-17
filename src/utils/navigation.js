@@ -114,30 +114,6 @@ export class Navigation {
 			visibilityMap.set(portfolioSectionId, isVisible);
 		});
 
-		// Handle about section separately (it's not in portfolio config)
-		// Check if about section exists in DOM for backward compatibility
-		const aboutSection = document.querySelector('#about');
-		if (aboutSection) {
-			const categoriesAttr = aboutSection.getAttribute('data-categories');
-			const categories = categoriesAttr ? categoriesAttr.split(/\s+/) : [];
-			const hasAnyCategory = categories.includes('any');
-			const isAboutSection = aboutSection.id === 'about' || categories.includes('portfolio-about');
-			let isVisible = false;
-
-			if (hasAnyCategory) {
-				isVisible = true;
-			} else if (target === 'about' || target === 'portfolio-about') {
-				isVisible = isAboutSection || hasAnyCategory;
-			} else if (target === 'portfolio-all') {
-				// About section should be visible when showing all
-				isVisible = categories.includes('portfolio-all') || categories.includes('any');
-			} else {
-				isVisible = false;
-			}
-
-			visibilityMap.set('about', isVisible);
-		}
-
 		stores.navigation.portfolioSectionVisibility.set(visibilityMap);
 		debugLog(
 			'Filtered portfolio sections by nav target:',
