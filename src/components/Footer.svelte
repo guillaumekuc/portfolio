@@ -270,7 +270,7 @@
 		background-size: unset !important;
 		background-position: unset !important;
 		/* Ensure white background for mask to show through */
-		background-color: white;
+		background-color: white !important;
 	}
 
 	.muteBgMusic.isMuted {
@@ -281,7 +281,7 @@
 		background-size: unset !important;
 		background-position: unset !important;
 		/* Ensure white background for mask to show through */
-		background-color: white;
+		background-color: white !important;
 	}
 
 	/* Ensure hover state follows footer button pattern */
