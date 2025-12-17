@@ -24,6 +24,3 @@ On a philosophical note, I am experimenting with a _wu-wei_ approach to life and
 
 Feel free to reach out — I am on the lookout for my next projects and teams, seeking to contribute wherever my skills are most useful.
 
-[guillaume[at]guillaumekuc.com](mailto:guillaume@guillaumekuc.com)
-
-[resume]()
