@@ -30,6 +30,11 @@ GLOBAL STYLES - Utilities, Reset, Typography, General
 html {
 	--safeMargin: 66px;
 
+	/*--BREAKPOINTS--*/
+	--breakpoint-small-desktop: 950px;
+	--breakpoint-tablet: 750px;
+	--breakpoint-mobile: 500px;
+
 	/*--COLORS--*/
 	--shadeBlack: #000;
 	--shadeWhite: #fff;
