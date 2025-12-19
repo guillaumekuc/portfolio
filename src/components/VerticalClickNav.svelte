@@ -215,9 +215,9 @@
 	@media (max-height: 950px) {
 		.topArrow,
 		.bottomArrow {
-			--arrow-size: 40px;
-			--arrow-border: 6px;
-			--arrow-radius: 6px;
+			--arrow-size: 44px;
+			--arrow-border: 7px;
+			--arrow-radius: 7px;
 		}
 	}
 
@@ -225,9 +225,9 @@
 	@media (max-height: 750px) {
 		.topArrow,
 		.bottomArrow {
-			--arrow-size: 34px;
-			--arrow-border: 5px;
-			--arrow-radius: 5px;
+			--arrow-size: 40px;
+			--arrow-border: 6px;
+			--arrow-radius: 6px;
 		}
 	}
 
@@ -235,9 +235,9 @@
 	@media (max-height: 500px) {
 		.topArrow,
 		.bottomArrow {
-			--arrow-size: 28px;
-			--arrow-border: 4px;
-			--arrow-radius: 4px;
+			--arrow-size: 36px;
+			--arrow-border: 5px;
+			--arrow-radius: 5px;
 		}
 	}
 </style>
