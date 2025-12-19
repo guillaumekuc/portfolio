@@ -27,3 +27,7 @@ export function openEmail() {
 	window.open(getMailtoUrl(), 'mail');
 }
 
+
+
+
+

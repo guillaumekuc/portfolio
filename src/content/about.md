@@ -1,6 +1,6 @@
 # Bonjour !
 
-I'm a technical artist working at the intersection of digital creation and software development. My practice spans 2D and 3D digital arts, music composition, and tools development, with each discipline feeding into the others as part of a unified, mutually reinforcing system.
+I'm a technical artist working at the intersection of digital creation and software development. My practice spans 2D and **3D digital arts**, music composition, and tools development, with each discipline feeding into the others as part of a unified, mutually reinforcing system.
 
 > **Technical Artist**: A hybrid role combining artistic fluency with programming skills to create tools, workflows, and technical solutions that support creative production.
 
@@ -20,7 +20,7 @@ I am currently investing a season into deepening my technical art direction and 
 
 On a philosophical note, I am experimenting with a _wu-wei_ approach to life and work: seeking optimal paths and leverage rather than forcefully striving towards a specific target.
 
-## Contact 
+## Contact
 
 Feel free to reach out — I am on the lookout for my next projects and teams, seeking to contribute wherever my skills are most useful.
 
