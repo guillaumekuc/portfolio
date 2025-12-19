@@ -1,8 +1,10 @@
 <div id="header" class="header" class:visible={isVisible}>
 	<div class="header-title">
-		<span class="header-monogram">
-			<MonogramSvg />
-		</span>
+		<button type="button" class="header-monogram-button" on:click={handleTitleClick}>
+			<span class="header-monogram">
+				<MonogramSvg />
+			</span>
+		</button>
 		<button type="button" class="header-title-button" on:click={handleTitleClick}>{profile.siteName}</button>
 	</div>
 		<div class="header-nav">
@@ -116,6 +118,11 @@
 
 <style>
 	.header {
+		/* Interface variables - map global variables to local scope */
+		--bp-small-desktop: var(--breakpoint-small-desktop);
+		--bp-tablet: var(--breakpoint-tablet);
+		--bp-mobile: var(--breakpoint-mobile);
+
 		/* Static values */
 		--header-background-color: oklch(0.1776 0 0);
 		--header-border-color: #2E2E2E;
@@ -175,11 +182,31 @@
 		letter-spacing: 0.05em;
 	}
 
-	.header-monogram {
-		color: var(--header-accent-color);
+	.header-monogram-button {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
 		display: inline-block;
 		height: var(--header-monogram-size);
 		width: var(--header-monogram-size);
+		transition: transform 0.2s ease;
+	}
+
+	.header-monogram-button:hover {
+		transform: scale(1.1);
+	}
+
+	.header-monogram {
+		color: var(--header-accent-color);
+		display: inline-block;
+		height: 100%;
+		width: 100%;
+		transition: color 0.2s ease;
+	}
+
+	.header-monogram-button:hover .header-monogram {
+		color: var(--header-primary-color);
 	}
 
 	.header-monogram :global(svg) {
@@ -195,6 +222,15 @@
 		letter-spacing: 0.05em;
 		font-weight: 400;
 		text-transform: lowercase;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+
+	.header-title-button:hover {
+		color: var(--header-accent-color);
 	}
 
 	.header-nav {

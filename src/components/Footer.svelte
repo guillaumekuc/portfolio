@@ -142,6 +142,11 @@
 
 <style>
 	.footer {
+		/* Interface variables - map global variables to local scope */
+		--bp-small-desktop: var(--breakpoint-small-desktop);
+		--bp-tablet: var(--breakpoint-tablet);
+		--bp-mobile: var(--breakpoint-mobile);
+
 		/* Static values */
 		--footer-background-color: oklch(0.1776 0 0);
 		--footer-border-color: #2E2E2E;

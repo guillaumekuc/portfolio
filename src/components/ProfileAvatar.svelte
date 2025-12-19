@@ -122,9 +122,15 @@
 <style>
 	/* Component container */
 	.profile-avatar {
+		/* Interface variables - map global variables to local scope */
+		--bp-small-desktop: var(--breakpoint-small-desktop);
+		--bp-tablet: var(--breakpoint-tablet);
+		--bp-mobile: var(--breakpoint-mobile);
+
 		position: relative;
 		width: fit-content;
 		height: fit-content;
+		flex-shrink: 0;
 		--avatar-size: 160px;
 		--outline-color: var(--accentColor);
 		--half-tone: url('/img/dots.svg');
@@ -206,10 +212,27 @@
 		box-shadow: 0 0 0 5px var(--outline-color);
 	}
 
-	/* Media query for smaller screens */
-	@media (max-height: 648px) {
+	/* small desktop viewport */
+	@media (max-height: 950px) {
 		.profile-avatar {
-			--avatar-size: 120px;
+			--avatar-size: 140px;
+			--half-tone-size: 100px;
+		}
+	}
+
+	/* tablet viewport - reduced for horizontal layout */
+	@media (max-height: 750px) {
+		.profile-avatar {
+			--avatar-size: 90px;
+			--half-tone-size: 65px;
+		}
+	}
+
+	/* mobile viewport - more aggressive reduction */
+	@media (max-height: 500px) {
+		.profile-avatar {
+			--avatar-size: 70px;
+			--half-tone-size: 50px;
 		}
 	}
 </style>
