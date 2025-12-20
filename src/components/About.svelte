@@ -91,7 +91,7 @@
 <style>
 	#about {
 		/* Interface variables - map global variables to local scope */
-		--about-accent-color: var(--accentColor);
+		--about-accent-color: var(--color-accent);
 		--about-margin: var(--safeMargin);
 		--about-font-rounded: var(--ffRounded);
 		--about-font-primary: var(--ffCrimson);
@@ -100,10 +100,11 @@
 		--about-total-width: 960px;
 		--about-column-gap: 10px;
 		
-		/* Hardcoded color values */
-		--about-white: #fff;
-		--about-gray: #aaaaaa;
-		--about-gray-dark: #343434;
+		/* Color interface variables */
+		--about-white: var(--color-white);
+		--about-gray: var(--color-gray-light);
+		--about-gray-dark: var(--color-gray-medium);
+		--about-background-primary: var(--color-background-primary);
 		
 		/* Responsive font sizes */
 		--about-font-size: 20px;
@@ -153,7 +154,7 @@
 		justify-content: center;
 		gap: var(--about-column-gap);
 		box-sizing: border-box;
-		background-color: var(--shade1);
+		background-color: var(--about-background-primary);
 		z-index: 1;
 		padding-top: calc(2 * var(--about-margin));
 		padding-bottom: calc(2 * var(--about-margin));

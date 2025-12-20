@@ -7,9 +7,10 @@
 				class="external"
 				class:cta={item.cta}
 				class:focus={$selectedMenuItemStore === index}
-				href={item.url}
-				target={item.openInNewTab ? '_blank' : undefined}
-				rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
+				href={item.id === 'contact' ? '#' : item.url}
+				target={item.id === 'contact' ? undefined : (item.openInNewTab ? '_blank' : undefined)}
+				rel={item.id === 'contact' ? undefined : (item.openInNewTab ? 'noopener noreferrer' : undefined)}
+				on:click|preventDefault={item.id === 'contact' ? () => handleContactClick() : undefined}
 			>
 				{#if item.icon}
 					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
@@ -203,7 +204,10 @@
 		
 		const item = navItems[selectedMenuItem];
 		
-		if (item.type === 'internal' && item.target) {
+		if (item.id === 'contact') {
+			// Contact button: open modal
+			handleContactClick();
+		} else if (item.type === 'internal' && item.target) {
 			// Internal items: scroll to target
 			handleNavItemClick(item, selectedMenuItem);
 		} else if (item.type === 'external') {
@@ -261,8 +265,18 @@
 		return targetElement;
 	}
 
+	function handleContactClick() {
+		stores.navigation.currentModal.set('contactModal');
+	}
+
 	function handleNavItemClick(item, index) {
 		selectedMenuItemStore.set(index);
+		
+		// Handle contact button - open modal instead of mailto
+		if (item.id === 'contact') {
+			handleContactClick();
+			return;
+		}
 		
 		if (item.type !== 'internal' || !item.target) {
 			debugLog('External nav item clicked:', item.id);
@@ -328,8 +342,8 @@
 	.splashNav {
 		/* Static values */
 		--splashscreen-nav-font-family: 'M PLUS Rounded 1c';
-		--splashscreen-nav-primary-color: white;
-		--splashscreen-nav-accent-color: var(--accentColor);
+		--splashscreen-nav-primary-color: var(--color-white);
+		--splashscreen-nav-accent-color: var(--color-accent);
 		--splashscreen-nav-background-color: oklch(18% 0 0 / 0.67);
 
 		/* Responsive values */

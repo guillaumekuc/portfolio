@@ -148,21 +148,26 @@
 		box-sizing: border-box;
 		padding-left: 0.4em;
 		padding-right: 0.4em;
-		border: 1px solid var(--shadeWhite);
+		border: 1px solid var(--music-playlist-text-primary);
 		border-radius: 5px;
 		font-family: var(--ff3);
 		text-transform: uppercase;
 		vertical-align: middle;
-		-webkit-filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
-			drop-shadow(-1px -1px 0 var(--iconBorderColor));
-		filter: drop-shadow(1px 1px 0 var(--iconBorderColor))
-			drop-shadow(-1px 1px 0 var(--iconBorderColor)) drop-shadow(1px -1px 0 var(--iconBorderColor))
-			drop-shadow(-1px -1px 0 var(--iconBorderColor));
+		-webkit-filter: drop-shadow(1px 1px 0 var(--music-playlist-overlay))
+			drop-shadow(-1px 1px 0 var(--music-playlist-overlay)) drop-shadow(1px -1px 0 var(--music-playlist-overlay))
+			drop-shadow(-1px -1px 0 var(--music-playlist-overlay));
+		filter: drop-shadow(1px 1px 0 var(--music-playlist-overlay))
+			drop-shadow(-1px 1px 0 var(--music-playlist-overlay)) drop-shadow(1px -1px 0 var(--music-playlist-overlay))
+			drop-shadow(-1px -1px 0 var(--music-playlist-overlay));
 	}
 
 	.musicPlaylistWrapper {
-		--music-playlist-accent-color: var(--accentColor);
+		/* Color interface variables */
+		--music-playlist-accent-color: var(--color-accent);
+		--music-playlist-text-primary: var(--color-white);
+		--music-playlist-background-secondary: var(--color-background-secondary);
+		--music-playlist-overlay: var(--color-overlay);
+		
 		font-size: var(--fs2o3);
 	}
 	@media (max-height: 648px) {
@@ -187,7 +192,7 @@
 		width: calc(2 * 100vw / 3);
 		height: 66.66vh;
 		max-height: calc(100vh - 4 * var(--safeMargin));
-		background-color: var(--shade2);
+		background-color: var(--music-playlist-background-secondary);
 		border-radius: 0 15px 15px 0;
 		position: relative;
 	}
@@ -270,7 +275,7 @@
 	}
 
 	.musicPlaylist li.focus .musicPlaylistButton {
-		background-color: var(--shade2);
+		background-color: var(--music-playlist-background-secondary);
 	}
 
 	.musicPlaylist li.focus .musicPlaylistButton:hover {

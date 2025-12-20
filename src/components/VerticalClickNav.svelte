@@ -3,6 +3,7 @@
 	bind:this={topArrow}
 	class="topArrow"
 	class:hidden={!showTopArrow}
+	class:modal-open={isModalOpen}
 	on:click={clickTopArrow}
 >
 	<div class="arrowIcon" style="--arrow-icon-url: url('/img/nav/upArrow.png')"></div>
@@ -13,6 +14,7 @@
 	bind:this={bottomArrow}
 	class="bottomArrow"
 	class:hidden={!showBottomArrow}
+	class:modal-open={isModalOpen}
 	on:click={clickBottomArrow}
 >
 	<div class="arrowIcon" style="--arrow-icon-url: url('/img/nav/downArrow.png')"></div>
@@ -30,6 +32,10 @@
 	let showTopArrow = false;
 	let showBottomArrow = false;
 
+	// Extract the store for reactive access
+	const currentModalStore = stores.navigation.currentModal;
+	$: isModalOpen = $currentModalStore !== null;
+
 	function scrollToElement(id) {
 		const element = document.querySelector(`#${id}`);
 		if (element) {
@@ -38,6 +44,11 @@
 	}
 
 	function clickTopArrow() {
+		// Don't allow clicks when modal is open
+		if (isModalOpen) {
+			return;
+		}
+
 		debugLog('Top arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
 
@@ -57,6 +68,11 @@
 	}
 
 	function clickBottomArrow() {
+		// Don't allow clicks when modal is open
+		if (isModalOpen) {
+			return;
+		}
+
 		debugLog('Bottom arrow clicked');
 		const currentScreenValue = get(stores.navigation.currentScreen);
 
@@ -75,6 +91,15 @@
 	}
 
 	function displayBorderArrows(event) {
+		// Don't show arrows when modal is open
+		if (isModalOpen) {
+			if (showTopArrow || showBottomArrow) {
+				showTopArrow = false;
+				showBottomArrow = false;
+			}
+			return;
+		}
+
 		const currentScreenValue = get(stores.navigation.currentScreen);
 		const safeMargin = getSafeMargin();
 
@@ -150,9 +175,9 @@
 	.bottomArrow {
 		/* Local references to global variables */
 		--arrow-safe-margin: var(--safeMargin);
-		--arrow-color-text: var(--shadeWhite);
+		--arrow-color-text: var(--color-white);
 		--arrow-color-bg: transparent;
-		--arrow-color-hover: var(--accentColor);
+		--arrow-color-hover: var(--color-accent);
 
 		/* Responsive values */
 		--arrow-size: 48px;
@@ -195,6 +220,12 @@
 	.topArrow.hidden,
 	.bottomArrow.hidden {
 		display: none;
+	}
+
+	.topArrow.modal-open,
+	.bottomArrow.modal-open {
+		pointer-events: none;
+		z-index: 50;
 	}
 
 	.arrowIcon {

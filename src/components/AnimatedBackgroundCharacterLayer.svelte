@@ -21,11 +21,11 @@
 	let mouseY = 0;
 	let isMouseOverCanvas = false;
 
-	// Get the exact footer color from CSS (oklch(0.1776 0 0))
+	// Get the exact footer color from CSS variable
 	function getFooterColor() {
-		// Create a temporary element to compute the oklch color
+		// Get the color from CSS variable
 		const temp = document.createElement('div');
-		temp.style.backgroundColor = 'oklch(0.1776 0 0)';
+		temp.style.backgroundColor = 'var(--color-background-tertiary)';
 		temp.style.position = 'absolute';
 		temp.style.visibility = 'hidden';
 		temp.style.width = '1px';

@@ -88,11 +88,15 @@
 
 <style>
 	.websiteLink {
+		/* Color interface variables */
+		--website-text-primary: var(--color-white);
+		--website-background-secondary: var(--color-background-secondary);
+		
 		display: inline-block;
 		width: 90%;
 		text-align: center;
 		transition: 0.25s ease-out;
-		color: var(--shadeWhite);
+		color: var(--website-text-primary);
 	}
 
 	.websiteLink.focus {
@@ -100,12 +104,12 @@
 	}
 
 	.websiteLink .screenshot {
-		border: 1px solid var(--shade2);
+		border: 1px solid var(--website-background-secondary);
 		border-radius: 15px;
 	}
 
 	.websiteLink.focus .screenshot {
-		border: 2px solid var(--shadeWhite);
+		border: 2px solid var(--website-text-primary);
 	}
 
 	.redirection {

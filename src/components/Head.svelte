@@ -19,7 +19,11 @@
 
 <style>
 	:global(body) {
-		--head-accent-color: var(--accentColor);
+		/* Color interface variables */
+		--head-accent-color: var(--color-accent);
+		--head-background-overlay: rgba(0, 0, 0, 1);
+		--head-border-color: var(--color-gray-medium);
+		--head-border-top-color: var(--color-white);
 	}
 
 	#load {
@@ -27,7 +31,7 @@
 		height: 100%;
 		position: fixed;
 		z-index: 101;
-		background: rgba(0, 0, 0, 1);
+		background: var(--head-background-overlay);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -37,8 +41,8 @@
 		content: '';
 		width: 40px;
 		height: 40px;
-		border: 4px solid var(--shade3);
-		border-top-color: var(--shadeWhite);
+		border: 4px solid var(--head-border-color);
+		border-top-color: var(--head-border-top-color);
 		border-radius: 50%;
 		animation: spin 0.8s linear infinite;
 	}

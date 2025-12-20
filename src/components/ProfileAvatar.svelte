@@ -132,9 +132,10 @@
 		height: fit-content;
 		flex-shrink: 0;
 		--avatar-size: 160px;
-		--outline-color: var(--accentColor);
+		--outline-color: var(--color-accent);
 		--half-tone: url('/img/dots.svg');
 		--half-tone-size: 115px;
+		--avatar-mask-background: rgba(0, 0, 0, 1);
 	}
 
 	.profile-avatar.clickable {
@@ -175,7 +176,7 @@
 		display: block;
 		position: absolute;
 		box-sizing: content-box;
-		background-color: rgba(0, 0, 0, 1);
+		background-color: var(--avatar-mask-background);
 		width: var(--avatar-size);
 		height: var(--avatar-size);
 		border-radius: 50%;

@@ -228,7 +228,7 @@
 	}
 
 	.feedHeader:hover .feedTitle {
-		color: var(--about-accent-color, var(--accentColor));
+		color: var(--about-accent-color, var(--color-accent));
 	}
 
 	.feedTitle {
@@ -282,7 +282,7 @@
 	.chevron {
 		width: 20px;
 		height: 20px;
-		color: var(--about-gray, #aaa);
+		color: var(--about-gray, var(--color-gray-light));
 		transition: transform 0.25s ease, color 0.2s ease;
 		transform: rotate(90deg);
 		flex-shrink: 0;
@@ -293,7 +293,7 @@
 	}
 
 	.feedHeader:hover .chevron {
-		color: var(--about-accent-color, var(--accentColor));
+		color: var(--about-accent-color, var(--color-accent));
 	}
 
 	.postItem {
@@ -316,14 +316,14 @@
 		top: 50%;
 		transform: translateY(-50%);
 		font-size: 0.8em;
-		color: var(--about-gray, #aaa);
+		color: var(--about-gray, var(--color-gray-light));
 		opacity: 0.5;
 		transition: opacity 0.2s ease, color 0.2s ease;
 	}
 
 	.postItem:hover {
 		background-color: rgba(255, 255, 255, 0.08);
-		border-color: var(--about-accent-color, var(--accentColor));
+		border-color: var(--about-accent-color, var(--color-accent));
 		transform: translateX(2px);
 	}
 
@@ -349,7 +349,7 @@
 	.pinIcon {
 		width: 12px;
 		height: 12px;
-		color: var(--about-accent-color, var(--accentColor));
+		color: var(--about-accent-color, var(--color-accent));
 		flex-shrink: 0;
 		opacity: 0.8;
 	}
@@ -358,7 +358,7 @@
 		font-family: var(--about-font-rounded, var(--ffRounded));
 		font-size: 10px;
 		font-weight: 300;
-		color: var(--about-gray, #aaa);
+		color: var(--about-gray, var(--color-gray-light));
 		opacity: 0.6;
 		text-align: left;
 		letter-spacing: 0.02em;
@@ -368,7 +368,7 @@
 		font-family: var(--about-font-rounded, var(--ffRounded));
 		font-size: 13px;
 		font-weight: 400;
-		color: var(--about-gray, #aaa);
+		color: var(--about-gray, var(--color-gray-light));
 		line-height: 1.35;
 		text-align: left;
 		transition: color 0.2s ease;
@@ -388,7 +388,7 @@
 		font-family: var(--about-font-rounded, var(--ffRounded));
 		font-size: 13px;
 		font-weight: 300;
-		color: var(--about-gray, #aaa);
+		color: var(--about-gray, var(--color-gray-light));
 		text-align: left;
 		font-style: italic;
 		padding-left: 0.4em;

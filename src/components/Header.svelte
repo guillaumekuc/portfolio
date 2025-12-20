@@ -7,19 +7,20 @@
 		</button>
 		<button type="button" class="header-title-button" on:click={handleTitleClick}>{profile.siteName}</button>
 	</div>
-		<div class="header-nav">
-			{#each headerNavItems as item, index}
-				<button
-					type="button"
-					id={item.id}
-					class={item.id}
-					class:focus={currentNavTarget === item.target}
-					on:click={() => handleHeaderNavClick(item.target)}
-				>
-					{item.label}
-				</button>
-			{/each}
-		</div>
+	<div class="header-nav">
+		{#each headerNavItems as item, index}
+			<button
+				type="button"
+				id={item.id}
+				class={item.id}
+				class:focus={currentNavTarget === item.target}
+				on:click={() => handleHeaderNavClick(item.target)}
+			>
+				{item.label}
+			</button>
+		{/each}
+	</div>
+	<button type="button" class="header-help-button" on:click={handleHelpClick}>?</button>
 </div>
 <!--#header-->
 
@@ -107,6 +108,10 @@
 		Navigation.goToHome();
 	}
 
+	function handleHelpClick() {
+		stores.navigation.currentModal.set('helpModal');
+	}
+
 	onMount(() => {
 		const cleanup = DOM.setupSplashscreenVisibilityObserver((visible) => {
 			isVisible = visible;
@@ -123,11 +128,12 @@
 		--bp-tablet: var(--breakpoint-tablet);
 		--bp-mobile: var(--breakpoint-mobile);
 
-		/* Static values */
-		--header-background-color: oklch(0.1776 0 0);
-		--header-border-color: #2E2E2E;
-		--header-primary-color: #FFFFFF;
-		--header-accent-color: var(--accentColor);
+		/* Color interface variables */
+		--header-background-color: var(--color-background-tertiary);
+		--header-border-color: var(--color-gray-dark);
+		--header-primary-color: var(--color-white);
+		--header-accent-color: var(--color-accent);
+		--header-text-secondary: var(--color-gray-medium);
 
 		/* Responsive values (height inherits from global --safeMargin) */
 		--header-height: var(--safeMargin);
@@ -143,7 +149,7 @@
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: row;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: left;
 		
 		position: fixed;
@@ -190,11 +196,9 @@
 		display: inline-block;
 		height: var(--header-monogram-size);
 		width: var(--header-monogram-size);
-		transition: transform 0.2s ease;
 	}
 
 	.header-monogram-button:hover {
-		transform: scale(1.1);
 	}
 
 	.header-monogram {
@@ -216,7 +220,7 @@
 	}
 
 	.header-title-button {
-		color: var(--shadeWhite);
+		color: var(--header-primary-color);
 		font-size: 1em;
 		font-family: 'M PLUS Rounded 1c';
 		letter-spacing: 0.05em;
@@ -226,6 +230,7 @@
 		border: none;
 		padding: 0;
 		cursor: pointer;
+		display: inline-block;
 		transition: color 0.2s ease;
 	}
 
@@ -238,7 +243,7 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: left;
-		color: var(--shade3);
+		color: var(--header-text-secondary);
 		gap: var(--header-nav-gap);
 		height: 100%;
 		padding-left: var(--header-nav-gap);
@@ -249,7 +254,7 @@
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		text-transform: lowercase;
-		color: var(--shade3);
+		color: var(--header-text-secondary);
 		padding: var(--header-nav-padding);
 		border-radius: var(--header-nav-radius);
 		border: 1px solid transparent;
@@ -262,6 +267,32 @@
 
 	.header-nav button.focus {
 		color: var(--header-primary-color);
+	}
+
+	.header-help-button {
+		margin-left: auto;
+		font-family: 'M PLUS Rounded 1c';
+		font-size: var(--header-nav-font-size);
+		font-weight: 300;
+		color: var(--header-text-secondary);
+		background: none;
+		border: none;
+		padding: 0;
+		border-radius: var(--header-nav-radius);
+		cursor: pointer;
+		transition: color 0.2s ease, border-color 0.2s ease;
+		border: 1px solid transparent;
+		margin-right: var(--header-title-padding);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: calc(var(--header-nav-font-size) + 10px);
+		width: calc(var(--header-nav-font-size) + 10px);
+	}
+
+	.header-help-button:hover {
+		color: var(--header-primary-color);
+		border: 1px solid var(--header-primary-color);
 	}
 
 	/* small desktop viewport */

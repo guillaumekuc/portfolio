@@ -134,6 +134,12 @@
 		gap: var(--contact-section-gap);
 		overflow: visible;
 		
+		/* Color interface variables */
+		--contact-accent-color: var(--color-accent);
+		--contact-text-primary: var(--color-white);
+		--contact-text-secondary: var(--color-gray-light);
+		--contact-background-secondary: var(--color-background-secondary);
+		
 		/* Contact section variables */
 		--icon-circle-size: 52px;
 		--contact-icon-size: 32px;
@@ -196,7 +202,7 @@
 		width: var(--icon-circle-size);
 		height: var(--icon-circle-size);
 		border-radius: 50%;
-		border: 1px solid var(--accentColor);
+		border: 1px solid var(--contact-accent-color);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -206,7 +212,7 @@
 	}
 
 	.iconCircle:hover {
-		background-color: var(--accentColor);
+		background-color: var(--contact-accent-color);
 	}
 
 	.contactIcon {
@@ -221,12 +227,12 @@
 		-webkit-mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: center;
-		color: #fff;
+		color: var(--contact-text-primary);
 		transition: color 0.07s ease-in;
 	}
 
 	.iconCircle:hover .contactIcon {
-		color: #fff;
+		color: var(--contact-text-primary);
 	}
 
 	.contactInfo {
@@ -266,21 +272,21 @@
 		font-family: var(--ffRounded);
 		font-weight: 700;
 		font-size: var(--contact-label-size);
-		color: #fff;
+		color: var(--contact-text-primary);
 	}
 
 	.contactEmail {
 		font-family: var(--ffRounded);
 		font-weight: 300;
 		font-size: var(--contact-email-size);
-		color: #aaaaaa;
+		color: var(--contact-text-secondary);
 		text-decoration: none;
 		transition: color 0.07s ease-in;
 	}
 
 	.contactEmail:hover {
 		cursor: pointer;
-		color: var(--accentColor);
+		color: var(--contact-accent-color);
 	}
 
 	.emailRow {
@@ -308,14 +314,14 @@
 		-webkit-mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: center;
-		color: #aaaaaa;
+		color: var(--contact-text-secondary);
 		cursor: pointer;
 		transition: color 0.07s ease-in;
 		flex-shrink: 0;
 	}
 
 	.resumeIcon:hover {
-		color: var(--accentColor);
+		color: var(--contact-accent-color);
 	}
 
 	.copyIconWrapper {
@@ -328,14 +334,14 @@
 	.copyIcon {
 		width: 16px;
 		height: 16px;
-		color: #aaaaaa;
+		color: var(--contact-text-secondary);
 		cursor: pointer;
 		transition: color 0.07s ease-in;
 		flex-shrink: 0;
 	}
 
 	.copyIcon:hover {
-		color: var(--accentColor);
+		color: var(--contact-accent-color);
 	}
 
 	.copiedTooltip {
@@ -343,8 +349,8 @@
 		bottom: calc(100% + 8px);
 		left: 50%;
 		transform: translateX(-50%);
-		background-color: var(--accentColor);
-		color: #fff;
+		background-color: var(--contact-accent-color);
+		color: var(--contact-text-primary);
 		padding: 6px 10px;
 		border-radius: 4px;
 		font-size: 11px;
@@ -365,7 +371,7 @@
 		left: 50%;
 		transform: translateX(-50%);
 		border: 5px solid transparent;
-		border-top-color: var(--accentColor);
+		border-top-color: var(--contact-accent-color);
 	}
 </style>
 

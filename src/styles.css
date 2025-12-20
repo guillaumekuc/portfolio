@@ -23,8 +23,8 @@ GLOBAL STYLES - Utilities, Reset, Typography, General
 }
 
 ::selection {
-	color: var(--shadeWhite);
-	background: var(--accentColor);
+	color: var(--color-white);
+	background: var(--color-accent);
 }
 
 html {
@@ -36,14 +36,36 @@ html {
 	--breakpoint-mobile: 500px;
 
 	/*--COLORS--*/
-	--shadeBlack: #000;
-	--shadeWhite: #fff;
-	--shade1: #121212;
-	--shade2: #242424;
-	--shade3: #343434;
-	--shade4: #aaaaaa;
-	--accentColor: #60BF60;
-	--iconBorderColor: rgba(0, 0, 0, 0.5);
+	/* Base colors */
+	--color-black: #000;
+	--color-white: #fff;
+	
+	/* Gray scale */
+	--color-gray-light: #aaaaaa;
+	--color-gray-medium: #343434;
+	--color-gray-dark: #2E2E2E;
+	--color-gray-link: #999;
+	--color-gray-link-hover: #404040;
+	
+	/* Background colors */
+	--color-background-primary: #121212;
+	--color-background-secondary: #242424;
+	--color-background-tertiary: oklch(0.1776 0 0);
+	
+	/* Accent and special colors */
+	--color-accent: #60BF60;
+	--color-border: var(--color-gray-dark);
+	--color-overlay: rgba(0, 0, 0, 0.5);
+	
+	/* Legacy aliases for backward compatibility (will be removed after migration) */
+	--shadeBlack: var(--color-black);
+	--shadeWhite: var(--color-white);
+	--shade1: var(--color-background-primary);
+	--shade2: var(--color-background-secondary);
+	--shade3: var(--color-gray-medium);
+	--shade4: var(--color-gray-light);
+	--accentColor: var(--color-accent);
+	--iconBorderColor: var(--color-overlay);
 
 	/*--FONT-FAMILIES--*/
 	--ff1: 'Georgia', serif;
@@ -169,16 +191,16 @@ html {
 	overflow: auto;
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
-	scrollbar-color: var(--shade3) var(--shadeBlack);
+	scrollbar-color: var(--color-gray-medium) var(--color-black);
 	scroll-behavior: smooth;
 	scroll-snap-type: y mandatory;
 }
 
 ::-webkit-scrollbar {
-	background: var(--shadeBlack);
+	background: var(--color-black);
 }
 ::-webkit-scrollbar-thumb {
-	background: var(--shade3);
+	background: var(--color-gray-medium);
 }
 
 body {
@@ -257,7 +279,7 @@ button,
 input,
 select,
 textarea {
-	color: var(--main4);
+	color: var(--color-gray-light);
 	font-family: var(--ff2);
 	line-height: 1.5;
 }
@@ -335,7 +357,7 @@ big {
 }
 
 a {
-	color: #999;
+	color: var(--color-gray-link);
 	text-decoration: none;
 	-webkit-transition: 0.07s ease-in;
 	-moz-transition: 0.07s ease-in;
@@ -346,7 +368,7 @@ a:hover,
 a:focus,
 a:active {
 	cursor: pointer;
-	color: #404040;
+	color: var(--color-gray-link-hover);
 	-webkit-transition: 0.07s ease-in;
 	-moz-transition: 0.07s ease-in;
 	transition: 0.07s ease-in;
@@ -386,7 +408,7 @@ body {
 	padding: 0;
 	overflow: visible;
 	min-height: 100%;
-	background-color: var(--shade1);
+	background-color: var(--color-background-primary);
 }
 
 .fullPage {
@@ -471,7 +493,7 @@ body {
 	height: calc(100vh * 2 / 3);
 	max-height: calc(100vh - 4 * var(--safeMargin));
 	border-radius: 0 15px 15px 0;
-	background-color: var(--shade2);
+	background-color: var(--color-background-secondary);
 	overflow: hidden;
 }
 
@@ -507,7 +529,7 @@ body {
 	height: calc(100vh * 2 / 3);
 	max-height: calc(100vh - 4 * var(--safeMargin));
 	border-radius: 15px 0 0 15px;
-	background-color: var(--shade2);
+	background-color: var(--color-background-secondary);
 	overflow: hidden;
 }
 
@@ -605,11 +627,11 @@ input[type='range']::-moz-range-track {
 	border: none;
 }
 input[type='range']::-moz-range-thumb {
-	background-color: var(--shadeWhite);
+	background-color: var(--color-white);
 	border: none;
 }
 input[type='range']::-moz-range-progress {
-	background-color: var(--shadeWhite);
+	background-color: var(--color-white);
 }
 
 .muteBgMusic {
@@ -619,7 +641,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic:hover {
-	background-color: var(--accentColor);
+	background-color: var(--color-accent);
 }
 
 .muteBgMusic.isMuted {
@@ -635,10 +657,10 @@ input[type='range']::-moz-range-progress {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: solid 0.5px var(--shadeWhite);
+	border: solid 0.5px var(--color-white);
 	box-sizing: content-box;
 	font-family: var(--ff3);
-	color: var(--shadeWhite);
+	color: var(--color-white);
 	width: max-content;
 	margin-left: auto;
 	margin-right: auto;
@@ -649,7 +671,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .extLinkBtn:hover {
-	background-color: var(--accentColor);
+	background-color: var(--color-accent);
 	border: solid 1px transparent;
 	color: white;
 }
@@ -665,8 +687,8 @@ input[type='range']::-moz-range-progress {
 	z-index: 101;
 	position: absolute;
 	width: max-content;
-	background-color: var(--shade3);
-	color: var(--shadeWhite);
+	background-color: var(--color-gray-medium);
+	color: var(--color-white);
 	border-radius: 5px;
 	padding: 2px 10px;
 }

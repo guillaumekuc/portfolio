@@ -8,6 +8,12 @@
 	<Folios />
 {/if}
 <About />
+{#if currentModal === 'helpModal'}
+	<HelpModal />
+{/if}
+{#if currentModal === 'contactModal'}
+	<ContactModal />
+{/if}
 
 
 <script>
@@ -20,6 +26,8 @@
 	import About from './components/About.svelte';
 	import Footer from './components/Footer.svelte';
 	import RotateDevice from './components/RotateDevice.svelte';
+	import HelpModal from './components/HelpModal.svelte';
+	import ContactModal from './components/ContactModal.svelte';
 	import { stores } from './stores.js';
 
 	// Import styles
@@ -33,6 +41,10 @@
 	// Only render Folios after user clicks Enter (defers loading ~20MB of images)
 	const hasEnteredSiteStore = stores.navigation.hasEnteredSite;
 	$: hasEntered = $hasEnteredSiteStore;
+
+	// Track current modal for conditional rendering
+	const currentModalStore = stores.navigation.currentModal;
+	$: currentModal = $currentModalStore;
 
 	onMount(() => {
 		// Scripts are now initialized by Splashscreen component when audio element is available

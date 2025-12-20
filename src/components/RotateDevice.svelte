@@ -13,7 +13,7 @@
 
 		<h1>
 			<span
-				style="padding : 2px 10px; background-color : var(--shade2); border-radius : 5px ; font-variant:small-caps;"
+				style="padding : 2px 10px; background-color : var(--rotate-background-secondary); border-radius : 5px ; font-variant:small-caps;"
 				>Guillaume Kuc <span style="font-variant : normal	;">.art</span></span
 			> is best displayed horizontally.
 		</h1>
@@ -98,11 +98,16 @@
 		/* Explicitly show #rotatePlease with higher specificity */
 		:global(#app > #rotatePlease),
 		.rotatePlease {
+			/* Color interface variables */
+			--rotate-background-primary: var(--color-background-primary);
+			--rotate-background-secondary: var(--color-background-secondary);
+			--rotate-text-primary: var(--color-white);
+			
 			display: flex !important;
 			align-items: center;
 			justify-content: center;
-			background-color: var(--shade1);
-			color: var(--shadeWhite);
+			background-color: var(--rotate-background-primary);
+			color: var(--rotate-text-primary);
 			position: fixed !important;
 			z-index: 9999 !important;
 		}

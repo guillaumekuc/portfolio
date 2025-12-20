@@ -147,10 +147,10 @@
 		--bp-tablet: var(--breakpoint-tablet);
 		--bp-mobile: var(--breakpoint-mobile);
 
-		/* Static values */
-		--footer-background-color: oklch(0.1776 0 0);
-		--footer-border-color: #2E2E2E;
-		--footer-accent-color: var(--accentColor);
+		/* Color interface variables */
+		--footer-background-color: var(--color-background-tertiary);
+		--footer-border-color: var(--color-gray-dark);
+		--footer-accent-color: var(--color-accent);
 
 		/* Responsive values (height inherits from global --safeMargin) */
 		--footer-height: var(--safeMargin);

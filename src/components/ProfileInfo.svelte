@@ -29,6 +29,11 @@
 		flex: 1;
 		min-width: 0;
 		
+		/* Color interface variables */
+		--profile-text-primary: var(--color-white);
+		--profile-text-secondary: var(--color-gray-light);
+		--profile-accent-color: var(--color-accent);
+		
 		/* Profile section variables */
 		--profile-name-size: 24px;
 		--profile-headline-size: 18px;
@@ -100,7 +105,7 @@
 		font-family: var(--ffRounded);
 		font-size: var(--profile-name-size);
 		font-weight: 500;
-		color: #fff;
+		color: var(--profile-text-primary);
 		text-align: center;
 		letter-spacing: 0.05em;
 	}
@@ -109,7 +114,7 @@
 		font-family: var(--ffRounded);
 		font-size: var(--profile-headline-size);
 		font-weight: 400;
-		color: #aaaaaa;
+		color: var(--profile-text-secondary);
 		text-align: center;
 		letter-spacing: 0.05em;
 	}
@@ -118,7 +123,7 @@
 		font-family: var(--ffRounded);
 		font-size: var(--profile-location-size);
 		font-weight: 300;
-		color: #aaaaaa;
+		color: var(--profile-text-secondary);
 		text-align: center;
 		letter-spacing: 0.05em;
 		margin-top: 0.25em;
@@ -150,13 +155,13 @@
 		-webkit-mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: center;
-		color: #fff;
+		color: var(--profile-text-primary);
 		transition: transform 0.15s ease-in, color 0.15s ease-in;
 	}
 
 	.socialLink:hover {
 		transform: scale(1.1);
-		color: var(--accentColor);
+		color: var(--profile-accent-color);
 	}
 
 </style>

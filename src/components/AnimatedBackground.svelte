@@ -15,6 +15,10 @@
 
 <style>
 	.animated-background {
+		/* Color interface variables */
+		--animated-bg-gradient-top: #1F1F1F;
+		--animated-bg-background-tertiary: var(--color-background-tertiary);
+		
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -28,10 +32,10 @@
 		/* Midpoint at 80% (20% from bottom) with smoother spread */
 		background: linear-gradient(
 			to bottom,
-			#1F1F1F 0%,
-			#1F1F1F 50%,
-			oklch(0.1776 0 0) 80%,
-			oklch(0.1776 0 0) 100%
+			var(--animated-bg-gradient-top) 0%,
+			var(--animated-bg-gradient-top) 50%,
+			var(--animated-bg-background-tertiary) 80%,
+			var(--animated-bg-background-tertiary) 100%
 		);
 	}
 

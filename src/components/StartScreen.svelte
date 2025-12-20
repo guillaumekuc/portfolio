@@ -128,11 +128,16 @@
 
 <style>
 	:global(body) {
-		--head-accent-color: var(--accentColor);
+		--head-accent-color: var(--color-accent);
 	}
 
 	.startScreen {
+		/* Color interface variables */
 		--startscreen-accent-color: var(--head-accent-color);
+		--startscreen-background-primary: var(--color-background-primary);
+		--startscreen-background-secondary: var(--color-background-secondary);
+		--startscreen-text-primary: var(--color-white);
+		
 		position: fixed;
 		display: flex;
 		align-items: center;
@@ -141,8 +146,8 @@
 		z-index: 100;
 		width: 100%;
 		height: 100%;
-		background-color: var(--shade1);
-		color: var(--shadeWhite);
+		background-color: var(--startscreen-background-primary);
+		color: var(--startscreen-text-primary);
 		font-size: var(--fs1);
 		font-family: var(--ff2);
 		padding: 20%;
@@ -156,9 +161,9 @@
 
 	#enterBtn {
 		padding: 20px;
-		border: 3px solid var(--shadeWhite);
+		border: 3px solid var(--startscreen-text-primary);
 		box-sizing: border-box;
-		color: var(--shadeWhite);
+		color: var(--startscreen-text-primary);
 		background-color: transparent;
 		border-radius: 5px;
 		text-transform: uppercase;
@@ -178,7 +183,7 @@
 
 	.nameBadge {
 		padding: 2px 10px;
-		background-color: var(--shade2);
+		background-color: var(--startscreen-background-secondary);
 		border-radius: 5px;
 		font-variant: small-caps;
 	}
@@ -248,7 +253,7 @@
 		mask-repeat: no-repeat;
 		-webkit-mask-position: center;
 		mask-position: center;
-		background-color: var(--shadeWhite);
+		background-color: var(--startscreen-text-primary);
 		-webkit-mask-image: var(--icon-mask);
 		mask-image: var(--icon-mask);
 	}

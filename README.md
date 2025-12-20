@@ -158,5 +158,3 @@ Edit `src/config/socials.json` to configure social media links.
 - Email addresses are obfuscated to prevent bot scraping
 
 ---
-
-For detailed development history and changelog, see [CHANGELOG.md](CHANGELOG.md)
