@@ -1,12 +1,10 @@
-<div class="gallery">
-	<div><img loading="lazy" src="/img/.old/portfolio/guillaumekuc_cardTheo.png" alt="Card Theo" /></div>
+<script>
+	import portfolioConfig from '../../config/portfolio.json';
+	import PortfolioGallery from './PortfolioGallery.svelte';
 
-	<div><img loading="lazy" src="/img/.old/portfolio/guillaumekuc_thefundrawing_M.jpg" alt="The fun drawing" /></div>
+	const sectionConfig = portfolioConfig.portfolioSections.find(
+		(section) => section.id === 'drawingFolio1'
+	);
+</script>
 
-	<div><img loading="lazy" src="/img/.old/portfolio/guillaumekuc_perspDrawing1_M.jpg" alt="Perspective drawing 1" /></div>
-
-	<div><img loading="lazy" src="/img/.old/portfolio/guillaumekuc_perspDrawing2_M.jpg" alt="Perspective drawing 2" /></div>
-
-	<div><img loading="lazy" src="/img/.old/portfolio/guillaumekuc_UnifhinishedFlood_M.jpg" alt="Unfinished flood" /></div>
-</div>
-<!--gallery-->
+<PortfolioGallery {sectionConfig} />
