@@ -126,6 +126,10 @@
 
 <style>
 	.contactSection {
+		/* Font interface variables - map global variables to local scope */
+		--contact-font-rounded: var(--ffRounded);
+	}
+	.contactSection {
 		margin-top: 1em;
 		display: flex;
 		flex-direction: row;
@@ -269,14 +273,14 @@
 	}
 
 	.contactLabel {
-		font-family: var(--ffRounded);
+		font-family: var(--contact-font-rounded);
 		font-weight: 700;
 		font-size: var(--contact-label-size);
 		color: var(--contact-text-primary);
 	}
 
 	.contactEmail {
-		font-family: var(--ffRounded);
+		font-family: var(--contact-font-rounded);
 		font-weight: 300;
 		font-size: var(--contact-email-size);
 		color: var(--contact-text-secondary);

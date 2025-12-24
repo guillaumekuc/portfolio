@@ -61,10 +61,25 @@
 		margin-left: 0;
 		overflow-y: auto;
 		scrollbar-width: thin;
+		scrollbar-color: rgba(170, 170, 170, 0.3) transparent;
 	}
 
 	.P4bookQuote::-webkit-scrollbar {
-		width: 8px;
+		width: 6px;
+	}
+
+	.P4bookQuote::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.P4bookQuote::-webkit-scrollbar-thumb {
+		background-color: rgba(170, 170, 170, 0.3);
+		border-radius: 3px;
+		transition: background-color 0.2s ease;
+	}
+
+	.P4bookQuote::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(170, 170, 170, 0.5);
 	}
 
 	.P4bookQuote blockquote {

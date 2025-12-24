@@ -20,7 +20,9 @@
 			</button>
 		{/each}
 	</div>
-	<button type="button" class="header-help-button" on:click={handleHelpClick}>?</button>
+	<button type="button" class="header-help-button" on:click={handleHelpClick}>
+		<img src="/img/nav/help.svg" alt="Help" />
+	</button>
 </div>
 <!--#header-->
 
@@ -123,6 +125,10 @@
 
 <style>
 	.header {
+		/* Font interface variables - map global variables to local scope */
+		--header-font-rounded: var(--ffRounded);
+	}
+	.header {
 		/* Interface variables - map global variables to local scope */
 		--bp-small-desktop: var(--breakpoint-small-desktop);
 		--bp-tablet: var(--breakpoint-tablet);
@@ -182,7 +188,7 @@
 		padding-left: var(--header-title-padding);
 		padding-right: var(--header-title-padding);
 
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--header-font-rounded);
 		font-size: var(--header-title-font-size);
 		font-weight: 400;
 		letter-spacing: 0.05em;
@@ -222,7 +228,7 @@
 	.header-title-button {
 		color: var(--header-primary-color);
 		font-size: 1em;
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--header-font-rounded);
 		letter-spacing: 0.05em;
 		font-weight: 400;
 		text-transform: lowercase;
@@ -250,7 +256,7 @@
 	}
 
 	.header-nav button {
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		text-transform: lowercase;
@@ -271,17 +277,15 @@
 
 	.header-help-button {
 		margin-left: auto;
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		color: var(--header-text-secondary);
 		background: none;
 		border: none;
 		padding: 0;
-		border-radius: var(--header-nav-radius);
 		cursor: pointer;
-		transition: color 0.2s ease, border-color 0.2s ease;
-		border: 1px solid transparent;
+		transition: color 0.2s ease;
 		margin-right: var(--header-title-padding);
 		display: flex;
 		align-items: center;
@@ -290,9 +294,20 @@
 		width: calc(var(--header-nav-font-size) + 10px);
 	}
 
+	.header-help-button img {
+		width: var(--header-nav-font-size);
+		height: var(--header-nav-font-size);
+		object-fit: contain;
+		filter: brightness(0) saturate(100%) invert(0.4);
+		transition: filter 0.2s ease;
+	}
+
 	.header-help-button:hover {
 		color: var(--header-primary-color);
-		border: 1px solid var(--header-primary-color);
+	}
+
+	.header-help-button:hover img {
+		filter: brightness(0) saturate(100%) invert(1);
 	}
 
 	/* small desktop viewport */

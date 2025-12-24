@@ -3,14 +3,14 @@
 >
 	<div
 		bind:this={videoContainer}
-		style="max-width : 140vh; height : 100%; position: relative;  overflow:hidden;"
+		style="max-width : 140vh; height : 100%; max-height: calc(100vh - 4 * var(--safeMargin)); position: relative;  overflow:hidden;"
 	>
 		<video
 			bind:this={videoElement}
 			class="largeVideo"
 			preload="none"
 			poster="/vid/guillaumekuc_Demoguitar.png"
-			style="border-radius : 15px;"
+			style="border-radius : var(--radius-large); max-height: calc(100vh - 4 * var(--safeMargin));"
 			on:click={handleVideoClick}
 		>
 			<source src="/vid/guillaumekuc_Demoguitar.mp4" type="video/mp4" />

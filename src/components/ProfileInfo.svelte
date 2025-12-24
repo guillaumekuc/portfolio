@@ -23,6 +23,10 @@
 
 <style>
 	.profileInfo {
+		/* Font interface variables - map global variables to local scope */
+		--profile-info-font-rounded: var(--ffRounded);
+	}
+	.profileInfo {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -102,7 +106,7 @@
 	}
 
 	.profileName {
-		font-family: var(--ffRounded);
+		font-family: var(--profile-info-font-rounded);
 		font-size: var(--profile-name-size);
 		font-weight: 500;
 		color: var(--profile-text-primary);
@@ -111,7 +115,7 @@
 	}
 
 	.profileHeadline {
-		font-family: var(--ffRounded);
+		font-family: var(--profile-info-font-rounded);
 		font-size: var(--profile-headline-size);
 		font-weight: 400;
 		color: var(--profile-text-secondary);
@@ -120,7 +124,7 @@
 	}
 
 	.profileLocation {
-		font-family: var(--ffRounded);
+		font-family: var(--profile-info-font-rounded);
 		font-size: var(--profile-location-size);
 		font-weight: 300;
 		color: var(--profile-text-secondary);

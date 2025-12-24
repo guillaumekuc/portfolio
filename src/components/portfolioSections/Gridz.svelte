@@ -1,6 +1,6 @@
-<div class="portfolioSectionWrapper">
+<div class="portfolioSectionWrapper gridzWrapper">
 	<div class="shortLeftThirds scrollable">
-		<span class="title">Gridz — <small>Perspective plugin for Photoshop</small></span>
+		<span class="title gridzTitle">Gridz — <small>Perspective plugin for Photoshop</small></span>
 		<blockquote>
 			Drawing objects in perspective in any orientations is not an easy task. Static grids feel
 			restrictive. Objects typically aren't neatly aligned with an imaginary set of guide-lines.
@@ -119,3 +119,14 @@
 		shortcuts.removeScreenShortcuts('gridzFolio');
 	});
 </script>
+
+<style>
+	.gridzWrapper {
+		/* Font interface variables - map global variables to local scope */
+		--gridz-font-rounded: var(--ffRounded);
+	}
+
+	.gridzTitle {
+		font-family: var(--gridz-font-rounded);
+	}
+</style>

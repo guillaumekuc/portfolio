@@ -340,8 +340,8 @@
 
 <style>
 	.splashNav {
-		/* Static values */
-		--splashscreen-nav-font-family: 'M PLUS Rounded 1c';
+		/* Font interface variables - map global variables to local scope */
+		--splashscreen-nav-font-family: var(--ffRounded);
 		--splashscreen-nav-primary-color: var(--color-white);
 		--splashscreen-nav-accent-color: var(--color-accent);
 		--splashscreen-nav-background-color: oklch(18% 0 0 / 0.67);
@@ -407,7 +407,7 @@
 		transition: opacity 1.5s ease-out;
 	}
 
-	.splashNav a.external .navLabel::after {
+	.splashNav a.external:not([id="contactBtn"]) .navLabel::after {
 		content: '↗';
 		margin-left: 0.25em;
 		font-size: 0.8em;
@@ -450,7 +450,7 @@
 
 	/* CTA default state - green background, low opacity, no border */
 	.splashNav a.cta {
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--splashscreen-nav-font-family);
 		text-transform: capitalize;
 		font-weight: 700;
 		letter-spacing: 0.05em;

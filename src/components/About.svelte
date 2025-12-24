@@ -1,5 +1,5 @@
 <div id="about" class="fullPage portfolioSection aboutme" data-categories="portfolio-about any">
-	<AnimatedBackground />
+	<!-- <AnimatedBackground /> -->
 	<div class="vertWrapper">
 		<div id="contentWrapper" style="">
 			<div class="leftColumn">

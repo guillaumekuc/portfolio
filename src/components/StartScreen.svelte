@@ -127,6 +127,11 @@
 </script>
 
 <style>
+	.startScreen {
+		/* Font interface variables - map global variables to local scope */
+		--startscreen-font-primary: var(--ffCrimson);
+		--startscreen-font-rounded: var(--ffRounded);
+	}
 	:global(body) {
 		--head-accent-color: var(--color-accent);
 	}
@@ -149,7 +154,7 @@
 		background-color: var(--startscreen-background-primary);
 		color: var(--startscreen-text-primary);
 		font-size: var(--fs1);
-		font-family: var(--ff2);
+		font-family: var(--startscreen-font-primary);
 		padding: 20%;
 	}
 
@@ -167,7 +172,7 @@
 		background-color: transparent;
 		border-radius: 5px;
 		text-transform: uppercase;
-		font-family: var(--ff3);
+		font-family: var(--startscreen-font-rounded);
 		font-weight: 600;
 	}
 

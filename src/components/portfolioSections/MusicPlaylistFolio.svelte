@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	<div class="musicPlaylistRPanel">
-		<div class="musicPlaylistTitle">— Jukebox —</div>
+		<div class="musicPlaylistTitle">Playlist</div>
 		<!--title-->
 		<ul id="musicPlaylist" class="musicPlaylist" aria-label="Fragments">
 			{#each tracks as track, index}
@@ -140,6 +140,12 @@
 <!--musicPlaylistWrapper-->
 
 <style>
+	.musicPlaylistWrapper {
+		/* Font interface variables - map global variables to local scope */
+		--music-playlist-font-rounded: var(--ffRounded);
+		/* Border radius interface variable - map global variable to local scope */
+		--music-playlist-radius: var(--radius-large);
+	}
 	i.musicIcon {
 		font-style: normal;
 		display: inline-block;
@@ -149,8 +155,8 @@
 		padding-left: 0.4em;
 		padding-right: 0.4em;
 		border: 1px solid var(--music-playlist-text-primary);
-		border-radius: 5px;
-		font-family: var(--ff3);
+		border-radius: var(--radius-medium);
+		font-family: var(--music-playlist-font-rounded);
 		text-transform: uppercase;
 		vertical-align: middle;
 		-webkit-filter: drop-shadow(1px 1px 0 var(--music-playlist-overlay))
@@ -193,7 +199,7 @@
 		height: 66.66vh;
 		max-height: calc(100vh - 4 * var(--safeMargin));
 		background-color: var(--music-playlist-background-secondary);
-		border-radius: 0 15px 15px 0;
+		border-radius: 0 var(--music-playlist-radius) var(--music-playlist-radius) 0;
 		position: relative;
 	}
 
@@ -215,10 +221,91 @@
 		margin-top: 15px;
 		overflow: auto;
 		scrollbar-width: thin;
+		scrollbar-color: rgba(170, 170, 170, 0.3) transparent;
+	}
+
+	/* Responsive breakpoints for smaller screens */
+	@media (max-height: 950px) {
+		.musicPlaylist {
+			margin-top: 12px;
+		}
+		.musicPlaylistTitle {
+			font-size: 135%;
+		}
+		.musicPlaylist li {
+			margin-top: 0.2em;
+			margin-bottom: 0.2em;
+		}
+		.musicPlaylistButton {
+			padding-top: 0.4em;
+			padding-bottom: 0.4em;
+		}
+	}
+
+	@media (max-height: 750px) {
+		.musicPlaylist {
+			margin-top: 10px;
+		}
+		.musicPlaylistTitle {
+			font-size: 120%;
+		}
+		.musicPlaylist li {
+			margin-top: 0.15em;
+			margin-bottom: 0.15em;
+		}
+		.musicPlaylistButton {
+			padding-top: 0.35em;
+			padding-bottom: 0.35em;
+			padding-left: calc(var(--safeMargin) / 3);
+		}
+		.playIcon {
+			width: 0.9em;
+			height: 0.9em;
+		}
+	}
+
+	@media (max-height: 500px) {
+		.musicPlaylist {
+			margin-top: 5px;
+			font-size: 85%;
+		}
+		.musicPlaylistTitle {
+			font-size: 100%;
+			margin-bottom: 3px;
+		}
+		.musicPlaylist li {
+			margin-top: 0.05em;
+			margin-bottom: 0.05em;
+		}
+		.musicPlaylistButton {
+			padding-top: 0.2em;
+			padding-bottom: 0.2em;
+			padding-left: calc(var(--safeMargin) / 5);
+			line-height: 1.1;
+		}
+		.playIcon {
+			width: 0.7em;
+			height: 0.7em;
+			margin-right: calc(var(--safeMargin) / 4);
+		}
 	}
 
 	.musicPlaylist::-webkit-scrollbar {
-		width: 8px;
+		width: 6px;
+	}
+
+	.musicPlaylist::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.musicPlaylist::-webkit-scrollbar-thumb {
+		background-color: rgba(170, 170, 170, 0.3);
+		border-radius: var(--radius-small);
+		transition: background-color 0.2s ease;
+	}
+
+	.musicPlaylist::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(170, 170, 170, 0.5);
 	}
 
 	.musicPlaylistTitle {
@@ -227,6 +314,7 @@
 		font-weight: bold;
 		font-variant: small-caps;
 		height: max-content;
+		font-family: var(--music-playlist-font-rounded);
 	}
 
 	.playIcon {
@@ -253,7 +341,7 @@
 		text-align: left;
 		line-height: 1;
 		vertical-align: middle;
-		border-radius: 5px;
+		border-radius: var(--radius-medium);
 		padding-top: 0.5em;
 		padding-bottom: 0.5em;
 		padding-left: calc(var(--safeMargin) / 2);

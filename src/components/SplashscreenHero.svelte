@@ -91,7 +91,7 @@
 		--splashscreen-hero-text-primary: var(--color-white);
 		--splashscreen-hero-text-accent: var(--color-accent);
 		--splashscreen-hero-text-outline: var(--color-white);
-		--splashscreen-hero-text-font-family: 'M PLUS Rounded 1c';
+		--splashscreen-hero-text-font-family: var(--ffRounded);
 
 		/* Responsive values */
 		--splashscreen-hero-gap: 12px;

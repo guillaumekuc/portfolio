@@ -91,6 +91,8 @@
 		/* Color interface variables */
 		--website-text-primary: var(--color-white);
 		--website-background-secondary: var(--color-background-secondary);
+		/* Border radius interface variable - map global variable to local scope */
+		--website-radius: var(--radius-large);
 		
 		display: inline-block;
 		width: 90%;
@@ -105,7 +107,7 @@
 
 	.websiteLink .screenshot {
 		border: 1px solid var(--website-background-secondary);
-		border-radius: 15px;
+		border-radius: var(--website-radius);
 	}
 
 	.websiteLink.focus .screenshot {
