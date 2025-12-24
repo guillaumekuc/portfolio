@@ -29,7 +29,7 @@
 	.profileInfo {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: var(--profile-info-align-items, center);
 		flex: 1;
 		min-width: 0;
 		
@@ -45,6 +45,52 @@
 		--profile-availability-size: 14px;
 		--social-link-size: 24px;
 		--social-links-height: 32px;
+		
+		/* Layout variables */
+		--profile-info-align-items: center;
+		--profile-name-text-align: center;
+		--profile-headline-text-align: center;
+		--social-links-justify-content: center;
+		--social-links-gap: 0.75em;
+		--social-links-margin-top: 0.5em;
+	}
+
+	.profileName {
+		font-family: var(--profile-info-font-rounded);
+		font-size: var(--profile-name-size);
+		font-weight: 500;
+		color: var(--profile-text-primary);
+		text-align: var(--profile-name-text-align);
+		letter-spacing: 0.05em;
+	}
+
+	.profileHeadline {
+		font-family: var(--profile-info-font-rounded);
+		font-size: var(--profile-headline-size);
+		font-weight: 400;
+		color: var(--profile-text-secondary);
+		text-align: var(--profile-headline-text-align);
+		letter-spacing: 0.05em;
+	}
+
+	.profileLocation {
+		font-family: var(--profile-info-font-rounded);
+		font-size: var(--profile-location-size);
+		font-weight: 300;
+		color: var(--profile-text-secondary);
+		text-align: center;
+		letter-spacing: 0.05em;
+		margin-top: 0.25em;
+	}
+
+	.socialLinks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--social-links-gap);
+		justify-content: var(--social-links-justify-content);
+		align-items: center;
+		margin-top: var(--social-links-margin-top);
+		min-height: var(--social-links-height);
 	}
 
 	/* small desktop viewport */
@@ -67,17 +113,11 @@
 			--profile-availability-size: 11px;
 			--social-link-size: 18px;
 			--social-links-height: 24px;
-			align-items: flex-start;
-		}
-
-		.profileName,
-		.profileHeadline {
-			text-align: left;
-		}
-
-		.socialLinks {
-			justify-content: flex-start;
-			gap: 0.4em;
+			--profile-info-align-items: flex-start;
+			--profile-name-text-align: left;
+			--profile-headline-text-align: left;
+			--social-links-justify-content: flex-start;
+			--social-links-gap: 0.4em;
 		}
 	}
 
@@ -90,58 +130,13 @@
 			--profile-availability-size: 10px;
 			--social-link-size: 16px;
 			--social-links-height: 20px;
-			align-items: flex-start;
+			--profile-info-align-items: flex-start;
+			--profile-name-text-align: left;
+			--profile-headline-text-align: left;
+			--social-links-justify-content: flex-start;
+			--social-links-gap: 0.33em;
+			--social-links-margin-top: 0.35em;
 		}
-
-		.profileName,
-		.profileHeadline {
-			text-align: left;
-		}
-
-		.socialLinks {
-			justify-content: flex-start;
-			gap: 0.3em;
-			margin-top: 0.35em;
-		}
-	}
-
-	.profileName {
-		font-family: var(--profile-info-font-rounded);
-		font-size: var(--profile-name-size);
-		font-weight: 500;
-		color: var(--profile-text-primary);
-		text-align: center;
-		letter-spacing: 0.05em;
-	}
-
-	.profileHeadline {
-		font-family: var(--profile-info-font-rounded);
-		font-size: var(--profile-headline-size);
-		font-weight: 400;
-		color: var(--profile-text-secondary);
-		text-align: center;
-		letter-spacing: 0.05em;
-	}
-
-	.profileLocation {
-		font-family: var(--profile-info-font-rounded);
-		font-size: var(--profile-location-size);
-		font-weight: 300;
-		color: var(--profile-text-secondary);
-		text-align: center;
-		letter-spacing: 0.05em;
-		margin-top: 0.25em;
-	}
-
-	.socialLinks {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75em;
-		justify-content: center;
-		align-items: center;
-		height: var(--social-links-height);
-		margin-top: 0.5em;
-		min-height: var(--social-links-height);
 	}
 
 	.socialLink {

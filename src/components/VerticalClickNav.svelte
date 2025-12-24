@@ -90,6 +90,10 @@
 		return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safeMargin'));
 	}
 
+	function getHeaderFooterHeight() {
+		return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-footer-height'));
+	}
+
 	function displayBorderArrows(event) {
 		// Don't show arrows when modal is open
 		if (isModalOpen) {
@@ -102,11 +106,12 @@
 
 		const currentScreenValue = get(stores.navigation.currentScreen);
 		const safeMargin = getSafeMargin();
+		const headerFooterHeight = getHeaderFooterHeight();
 
 		const topArea = 2.5 * safeMargin;
 		const bottomArea = window.innerHeight - 2.5 * safeMargin;
-		const topAreaMin = 1 * safeMargin;
-		const bottomAreaMax = window.innerHeight - 1 * safeMargin;
+		const topAreaMin = 1 * headerFooterHeight;
+		const bottomAreaMax = window.innerHeight - 1 * headerFooterHeight;
 		const xMin = 0.4 * window.innerWidth;
 		const xMax = 0.6 * window.innerWidth;
 
@@ -175,6 +180,7 @@
 	.bottomArrow {
 		/* Local references to global variables */
 		--arrow-safe-margin: var(--safeMargin);
+		--arrow-header-footer-spacing: var(--header-footer-height);
 		--arrow-color-text: var(--color-white);
 		--arrow-color-bg: transparent;
 		--arrow-color-hover: var(--color-accent);
@@ -183,7 +189,7 @@
 		--arrow-size: 48px;
 		--arrow-border: 8px;
 		--arrow-radius: 8px;
-		--arrow-offset: calc(var(--arrow-safe-margin) + (var(--arrow-safe-margin) - var(--arrow-size)) / 2);
+		--arrow-offset: calc(var(--arrow-header-footer-spacing) + (var(--arrow-safe-margin) - var(--arrow-size)) / 2);
 
 		position: fixed;
 		display: flex;

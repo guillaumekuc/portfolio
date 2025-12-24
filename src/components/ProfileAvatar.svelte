@@ -133,6 +133,7 @@
 		flex-shrink: 0;
 		--avatar-size: 160px;
 		--outline-color: var(--color-accent);
+		--outline-width: 5px;
 		--half-tone: url('/img/dots.svg');
 		--half-tone-size: 115px;
 		--avatar-mask-background: rgba(0, 0, 0, 1);
@@ -210,7 +211,7 @@
 
 	.profile-avatar:hover .profile-avatar-pic {
 		border-color: transparent;
-		box-shadow: 0 0 0 5px var(--outline-color);
+		box-shadow: 0 0 0 var(--outline-width) var(--outline-color);
 	}
 
 	/* small desktop viewport */
@@ -218,6 +219,7 @@
 		.profile-avatar {
 			--avatar-size: 140px;
 			--half-tone-size: 100px;
+			--outline-width: 4px;
 		}
 	}
 
@@ -226,6 +228,7 @@
 		.profile-avatar {
 			--avatar-size: 90px;
 			--half-tone-size: 65px;
+			--outline-width: 3px;
 		}
 	}
 
@@ -234,6 +237,7 @@
 		.profile-avatar {
 			--avatar-size: 70px;
 			--half-tone-size: 50px;
+			--outline-width: 2px;
 		}
 	}
 </style>

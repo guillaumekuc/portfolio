@@ -357,7 +357,27 @@
 			font-size: 11px;
 		}
 		.postDate {
-			font-size: 9px;
+			display: none !important;
+		}
+		.pinnedItem {
+			flex-direction: row !important;
+			align-items: center;
+			gap: 0.4em;
+		}
+		.pinnedItem .postMeta {
+			display: flex;
+			align-items: center;
+			gap: 0;
+			margin: 0;
+		}
+		.pinnedItem .postTitle {
+			flex: 1;
+			padding-right: 1.5em;
+			margin: 0;
+		}
+		.pinnedItem .pinIcon {
+			width: 11px;
+			height: 11px;
 		}
 	}
 
@@ -369,7 +389,27 @@
 			font-size: 10px;
 		}
 		.postDate {
-			font-size: 8px;
+			display: none !important;
+		}
+		.pinnedItem {
+			flex-direction: row !important;
+			align-items: center;
+			gap: 0.4em;
+		}
+		.pinnedItem .postMeta {
+			display: flex;
+			align-items: center;
+			gap: 0;
+			margin: 0;
+		}
+		.pinnedItem .postTitle {
+			flex: 1;
+			padding-right: 1.5em;
+			margin: 0;
+		}
+		.pinnedItem .pinIcon {
+			width: 10px;
+			height: 10px;
 		}
 	}
 

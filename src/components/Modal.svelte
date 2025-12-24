@@ -89,9 +89,9 @@
 		background-color: var(--modal-background-color);
 		border: 1px solid var(--modal-border-color);
 		border-radius: 8px;
-		padding: 20px;
+		padding: 20px 50px;
 		max-width: var(--modal-max-width, 550px);
-		width: 90%;
+		width: fit-content;
 		max-height: 90vh;
 		overflow-y: auto;
 		cursor: default;

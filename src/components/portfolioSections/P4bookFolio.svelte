@@ -46,7 +46,7 @@
 	.halfColumn {
 		width: 50%;
 		height: 80vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	}
 
 	.halfColumn img {

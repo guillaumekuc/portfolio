@@ -29,6 +29,7 @@ GLOBAL STYLES - Utilities, Reset, Typography, General
 
 html {
 	--safeMargin: 66px;
+	--header-footer-height: 66px;
 
 	/*--BREAKPOINTS--*/
 	--breakpoint-small-desktop: 950px;
@@ -101,6 +102,7 @@ html {
 @media (max-height: 950px) {
 	html {
 		--safeMargin: 56px;
+		--header-footer-height: 56px;
 		--radius-large: 13px;
 		--radius-medium: 4.5px;
 		--radius-small: 2.8px;
@@ -111,6 +113,7 @@ html {
 @media (max-height: 750px) {
 	html {
 		--safeMargin: 48px;
+		--header-footer-height: 48px;
 		--radius-large: 12px;
 		--radius-medium: 4px;
 		--radius-small: 2.5px;
@@ -120,7 +123,8 @@ html {
 /* mobile viewport */
 @media (max-height: 500px) {
 	html {
-		--safeMargin: 40px;
+		--safeMargin: 22px;
+		--header-footer-height: 40px;
 		--radius-large: 10px;
 		--radius-medium: 3px;
 		--radius-small: 2px;
@@ -465,7 +469,7 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 80vh;
-	max-height: calc(100vh - 4 * var(--safeMargin));
+	max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 }
 
 .portfolioSection {
@@ -475,7 +479,7 @@ body {
 }
 
 .twoPanes {
-	max-height: calc(100vh - 4 * var(--safeMargin));
+	max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -502,7 +506,7 @@ body {
 	flex-shrink: 0;
 	width: calc(2 * 100% / 3);
 	height: calc(100vh * 2 / 3);
-	max-height: calc(100vh - 4 * var(--safeMargin));
+	max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	border-radius: 0 var(--radius-large) var(--radius-large) 0;
 	background-color: var(--color-background-secondary);
 	overflow: hidden;
@@ -553,7 +557,7 @@ body {
 	flex-shrink: 0;
 	width: calc(2 * 100% / 3);
 	height: calc(100vh * 2 / 3);
-	max-height: calc(100vh - 4 * var(--safeMargin));
+	max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	border-radius: var(--radius-large) 0 0 var(--radius-large);
 	background-color: var(--color-background-secondary);
 	overflow: hidden;
@@ -563,7 +567,7 @@ body {
 	flex-shrink: 1;
 	width: calc(100% / 3);
 	height: calc(100vh * 2 / 3);
-	max-height: calc(100vh - 4 * var(--safeMargin));
+	max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	margin-left: calc(var(--safeMargin) / 2);
 	margin-right: calc(var(--safeMargin) / 2);
 	padding-left: calc(var(--safeMargin) / 2);
@@ -612,10 +616,10 @@ body {
 
 @media (max-height: calc(4 * var(--safeMargin) * 3)) {
 	.shortLeftThirds {
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	}
 	.shortRightThirds {
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 	}
 }
 

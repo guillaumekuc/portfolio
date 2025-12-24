@@ -152,8 +152,8 @@
 		--footer-border-color: var(--color-gray-dark);
 		--footer-accent-color: var(--color-accent);
 
-		/* Responsive values (height inherits from global --safeMargin) */
-		--footer-height: var(--safeMargin);
+		/* Responsive values (height inherits from global --header-footer-height) */
+		--footer-height: var(--header-footer-height);
 		--footer-button-size: 24px;
 		--footer-play-button-size: 48px;
 		--footer-gap: 50px;

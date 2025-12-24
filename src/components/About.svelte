@@ -10,14 +10,21 @@
 				{#if profile.availableForHire}
 					<div class="profileAvailability">Open to new opportunities <span class="separator">•</span> <span class="profileLocationInline">{profile.location}</span></div>
 				{/if}
-				<BlogFeed />
+				{#if isMobile}
+					<ContactBlocks layout="vertical" showBlog={true} align="left" />
+				{/if}
+				{#if !isMobile}
+					<BlogFeed />
+				{/if}
 			</div>
 
 			<div class="rightColumn">
 				<div bind:this={scrollableElement} id="aboutDescription" class="scrollable">
 					{@html parsedMarkdown}
 				</div>
-				<ContactSection />
+				{#if !isMobile}
+					<ContactBlocks layout="horizontal" showBlog={false} />
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -33,7 +40,7 @@
 	import ProfileAvatar from './ProfileAvatar.svelte';
 	import ProfileInfo from './ProfileInfo.svelte';
 	import BlogFeed from './BlogFeed.svelte';
-	import ContactSection from './ContactSection.svelte';
+	import ContactBlocks from './ContactBlocks.svelte';
 	import AnimatedBackground from './AnimatedBackground.svelte';
 	import profile from '../config/profile.json';
 
@@ -45,6 +52,11 @@
 
 	let parsedMarkdown = marked.parse(aboutMarkdown);
 	let scrollableElement;
+	let isMobile = false;
+
+	function checkMobile() {
+		isMobile = window.innerHeight <= 500;
+	}
 
 	function handleProfileClick(event) {
 		Navigation.goToHome();
@@ -71,6 +83,9 @@
 	}
 
 	onMount(() => {
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		
 		debugLog('About component mounted, registering shortcuts');
 		// Screen-specific shortcuts for the about page
 		// ArrowLeft: scroll content up (note: scrollable element scrolls vertically with horizontal arrows)
@@ -80,6 +95,10 @@
 		shortcuts.addScreenShortcut('about', 'ArrowRight', scrollContentDown, true);
 		shortcuts.addScreenShortcut('about', 'Enter', goBackToTop, true);
 		debugLog('About shortcuts registered for screen: about');
+		
+		return () => {
+			window.removeEventListener('resize', checkMobile);
+		};
 	});
 
 	onDestroy(() => {
@@ -92,7 +111,7 @@
 	#about {
 		/* Interface variables - map global variables to local scope */
 		--about-accent-color: var(--color-accent);
-		--about-margin: var(--safeMargin);
+		--about-margin: calc(var(--header-footer-height) + var(--safeMargin));
 		--about-font-rounded: var(--ffRounded);
 		--about-font-primary: var(--ffCrimson);
 		
@@ -156,8 +175,8 @@
 		box-sizing: border-box;
 		background-color: var(--about-background-primary);
 		z-index: 1;
-		padding-top: calc(2 * var(--about-margin));
-		padding-bottom: calc(2 * var(--about-margin));
+		padding-top: var(--about-margin);
+		padding-bottom: var(--about-margin);
 		padding-left: 30px;
 		padding-right: 30px;
 		overflow: hidden;
@@ -189,16 +208,16 @@
 		}
 	}
 
-	/* tablet viewport - 1/2 and 1/2 ratio for better readability at 16px font */
+	/* tablet viewport - 3/7 and 4/7 ratio for better readability at 16px font */
 	@media (max-height: 750px) {
 		.leftColumn {
-			width: calc((var(--about-total-width) - var(--about-column-gap)) * 1 / 2);
-			max-width: calc((100% - var(--about-column-gap)) * 1 / 2);
+			width: calc((var(--about-total-width) - var(--about-column-gap)) * 3 / 7);
+			max-width: calc((100% - var(--about-column-gap)) * 3 / 7);
 		}
 
 		.rightColumn {
-			width: calc((var(--about-total-width) - var(--about-column-gap)) * 1 / 2);
-			max-width: calc((100% - var(--about-column-gap)) * 1 / 2);
+			width: calc((var(--about-total-width) - var(--about-column-gap)) * 4 / 7);
+			max-width: calc((100% - var(--about-column-gap)) * 4 / 7);
 		}
 	}
 
@@ -232,7 +251,7 @@
 	@media (max-height: 750px) {
 		.profileSection {
 			flex-direction: row;
-			align-items: flex-start;
+			align-items: center;
 			gap: 0.75em;
 		}
 	}
@@ -241,14 +260,28 @@
 	@media (max-height: 500px) {
 		.profileSection {
 			flex-direction: row;
-			align-items: flex-start;
+			align-items: center;
 			gap: 0.5em;
 			justify-content: center;
 		}
 
 		.leftColumn {
 			gap: 0.75em;
-			align-items: center;
+			align-items: flex-start;
+		}
+
+		.profileAvailability {
+			text-align: left;
+		}
+
+		:global(.contactBlocks.vertical) {
+			width: 100%;
+			margin-top: 0.5em;
+			--icon-circle-size: 24px;
+			--contact-icon-size: 12px;
+			--contact-label-size: 10px;
+			--contact-email-size: 9px;
+			--contact-group-gap: 0.5em;
 		}
 	}
 
@@ -288,7 +321,7 @@
 	@media (max-height: 500px) {
 		.profileAvailability {
 			font-size: 10px;
-			text-align: center;
+			text-align: left;
 		}
 	}
 

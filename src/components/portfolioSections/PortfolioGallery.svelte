@@ -97,7 +97,7 @@
 		z-index: 1;
 		width: 100%;
 		height: 80vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		object-fit: cover;
 		flex: 1;
 		display: block;
@@ -109,7 +109,7 @@
 		z-index: 1;
 		width: 100%;
 		height: 80vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		object-fit: cover;
 		flex: 1;
 		display: block;
@@ -318,7 +318,7 @@
 		margin-left: 2px;
 		margin-right: 2px;
 		height: 80vh !important;
-		max-height: calc(100vh - 4 * var(--safeMargin)) !important;
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin))) !important;
 		overflow: hidden;
 		display: flex;
 		align-items: stretch;
@@ -329,7 +329,7 @@
 	:global(#animFolio1 .gallery .slick-slide),
 	:global(#modeFolio1 .gallery .slick-slide) {
 		height: 100% !important;
-		max-height: calc(100vh - 4 * var(--safeMargin)) !important;
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin))) !important;
 	}
 
 	/* Non-current slides - reduced opacity and original sizing */
@@ -338,7 +338,7 @@
 		transition: opacity 0.1s linear;
 		width: 100%;
 		height: 80vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		object-fit: cover;
 		display: block;
 		border-radius: var(--gallery-radius);
@@ -349,7 +349,7 @@
 		transition: opacity 0.1s linear;
 		width: 100%;
 		height: 80vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		object-fit: cover;
 		display: block;
 		border-radius: var(--gallery-radius);

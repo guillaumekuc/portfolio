@@ -141,8 +141,8 @@
 		--header-accent-color: var(--color-accent);
 		--header-text-secondary: var(--color-gray-medium);
 
-		/* Responsive values (height inherits from global --safeMargin) */
-		--header-height: var(--safeMargin);
+		/* Responsive values (height inherits from global --header-footer-height) */
+		--header-height: var(--header-footer-height);
 		--header-monogram-size: 55px;
 		--header-title-font-size: 27px;
 		--header-title-gap: 12px;

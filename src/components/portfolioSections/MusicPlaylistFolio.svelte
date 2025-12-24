@@ -197,7 +197,7 @@
 		display: inline-block;
 		width: calc(2 * 100vw / 3);
 		height: 66.66vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		background-color: var(--music-playlist-background-secondary);
 		border-radius: 0 var(--music-playlist-radius) var(--music-playlist-radius) 0;
 		position: relative;
@@ -209,7 +209,7 @@
 		flex-shrink: 1;
 		width: 100%;
 		height: 66.66vh;
-		max-height: calc(100vh - 4 * var(--safeMargin));
+		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
 		margin-left: var(--safeMargin);
 		margin-right: var(--safeMargin);
 	}

@@ -1,22 +1,38 @@
 <div bind:this={navElement} class="splashNav">
 	{#each navItems as item, index}
-		{#if item.type === 'external'}
+	{#if item.type === 'external'}
+		{#if item.id === 'contact'}
 			<a
 				bind:this={navLinkElements[index]}
 				id="{item.id}Btn"
 				class="external"
 				class:cta={item.cta}
 				class:focus={$selectedMenuItemStore === index}
-				href={item.id === 'contact' ? '#' : item.url}
-				target={item.id === 'contact' ? undefined : (item.openInNewTab ? '_blank' : undefined)}
-				rel={item.id === 'contact' ? undefined : (item.openInNewTab ? 'noopener noreferrer' : undefined)}
-				on:click|preventDefault={item.id === 'contact' ? () => handleContactClick() : undefined}
+				href="#"
+				on:click|preventDefault={() => handleContactClick()}
 			>
 				{#if item.icon}
 					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
 				{/if}
 				<span class="navLabel">{item.label}</span>
 			</a>
+		{:else}
+			<a
+				bind:this={navLinkElements[index]}
+				id="{item.id}Btn"
+				class="external"
+				class:cta={item.cta}
+				class:focus={$selectedMenuItemStore === index}
+				href={item.url}
+				target={item.openInNewTab ? '_blank' : undefined}
+				rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
+			>
+				{#if item.icon}
+					<NavIcon iconPath={item.icon.src} alt={item.icon.alt} />
+				{/if}
+				<span class="navLabel">{item.label}</span>
+			</a>
+		{/if}
 		{:else}
 			<a
 				bind:this={navLinkElements[index]}
