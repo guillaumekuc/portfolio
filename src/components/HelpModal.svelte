@@ -1,5 +1,6 @@
-<Modal modalId="helpModal" title="Keyboard Shortcuts">
+<Modal modalId="helpModal">
 	<div class="help-modal-shortcuts">
+		<h2 class="help-modal-title">Keyboard Shortcuts</h2>
 		{#each shortcutList as shortcut}
 			<div class="help-modal-shortcut-item">
 				<span class="help-modal-key" class:help-modal-key-space={shortcut.key === ' '}>{formatKey(shortcut.key)}</span>
@@ -110,9 +111,35 @@
 
 <style>
 	.help-modal-shortcuts {
+		/* Font interface variables - map global variables to local scope */
+		--help-modal-font-rounded: var(--ffRounded);
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+	}
+
+	.help-modal-title {
+		color: var(--modal-text-color);
+		font-family: var(--help-modal-font-rounded);
+		font-size: 24px;
+		font-weight: 400;
+		margin: 0 0 12px 0;
+		text-align: center;
+	}
+
+	/* Responsive adjustments */
+	@media (max-height: 750px) {
+		.help-modal-title {
+			font-size: 20px;
+			margin-bottom: 16px;
+		}
+	}
+
+	@media (max-height: 500px) {
+		.help-modal-title {
+			font-size: 18px;
+			margin-bottom: 12px;
+		}
 	}
 
 	.help-modal-shortcut-item {
@@ -124,7 +151,7 @@
 
 	.help-modal-key {
 		color: var(--modal-text-color);
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--help-modal-font-rounded);
 		font-size: 16px;
 		font-weight: 500;
 		padding: 0;
@@ -147,7 +174,7 @@
 
 	.help-modal-description {
 		color: var(--modal-text-color);
-		font-family: 'M PLUS Rounded 1c';
+		font-family: var(--help-modal-font-rounded);
 		font-size: 16px;
 		font-weight: 300;
 		text-align: left;

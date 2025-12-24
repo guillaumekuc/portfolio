@@ -1,4 +1,4 @@
-<Modal modalId="contactModal" title="Contact" maxWidth="600px">
+<Modal modalId="contactModal" maxWidth="600px">
 	<div class="contact-modal-body">
 		<div class="contact-modal-profile">
 			<ProfileAvatar />

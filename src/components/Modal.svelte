@@ -14,9 +14,6 @@
 			on:keydown|stopPropagation
 			role="presentation"
 		>
-			{#if title}
-				<h2 class="modal-title">{title}</h2>
-			{/if}
 			<slot />
 		</div>
 	</div>
@@ -28,7 +25,6 @@
 	import { shortcuts } from '../utils/shortcuts.js';
 
 	export let modalId;
-	export let title = null;
 	export let maxWidth = '550px';
 
 	function handleBackdropClick() {
@@ -60,6 +56,10 @@
 </script>
 
 <style>
+	.modal {
+		/* Font interface variables - map global variables to local scope */
+		--modal-font-rounded: var(--ffRounded);
+	}
 	.modal {
 		/* Interface variables - map global variables to local scope */
 		--modal-background-color: var(--color-background-primary);
@@ -97,35 +97,16 @@
 		cursor: default;
 	}
 
-	.modal-title {
-		color: var(--modal-text-color);
-		font-family: 'M PLUS Rounded 1c';
-		font-size: 24px;
-		font-weight: 400;
-		margin: 0 0 12px 0;
-		text-align: center;
-	}
-
 	/* Responsive adjustments */
 	@media (max-height: 750px) {
 		.modal-content {
 			padding: 16px;
-		}
-
-		.modal-title {
-			font-size: 20px;
-			margin-bottom: 16px;
 		}
 	}
 
 	@media (max-height: 500px) {
 		.modal-content {
 			padding: 12px;
-		}
-
-		.modal-title {
-			font-size: 18px;
-			margin-bottom: 12px;
 		}
 	}
 </style>
