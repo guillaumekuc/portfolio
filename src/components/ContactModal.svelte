@@ -4,21 +4,58 @@
 			<ProfileAvatar />
 			<ProfileInfo />
 		</div>
-		<ContactSection />
+		<ContactBlocks bind:this={contactBlocksRef} layout="vertical" showBlog={true} selectedIndex={selectedContactButton} />
 	</div>
 </Modal>
 
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import Modal from './Modal.svelte';
 	import ProfileAvatar from './ProfileAvatar.svelte';
 	import ProfileInfo from './ProfileInfo.svelte';
-	import ContactSection from './ContactSection.svelte';
+	import ContactBlocks from './ContactBlocks.svelte';
+	import { shortcuts } from '../utils/shortcuts.js';
+
+	let contactBlocksRef;
+	let selectedContactButton = 0; // Local state for selected button index
+
+	function selectPreviousButton() {
+		const totalButtons = contactBlocksRef ? contactBlocksRef.getButtonCount() : 3;
+		selectedContactButton = selectedContactButton <= 0 ? totalButtons - 1 : selectedContactButton - 1;
+	}
+
+	function selectNextButton() {
+		const totalButtons = contactBlocksRef ? contactBlocksRef.getButtonCount() : 3;
+		selectedContactButton = selectedContactButton >= totalButtons - 1 ? 0 : selectedContactButton + 1;
+	}
+
+	function triggerSelectedButton() {
+		if (contactBlocksRef) {
+			contactBlocksRef.triggerButton(selectedContactButton);
+		}
+	}
+
+	onMount(() => {
+		// Reset selection when modal opens
+		selectedContactButton = 0;
+		
+		// Register modal shortcuts
+		shortcuts.addModalShortcut('contactModal', 'ArrowLeft', selectPreviousButton);
+		shortcuts.addModalShortcut('contactModal', 'ArrowRight', selectNextButton);
+		shortcuts.addModalShortcut('contactModal', 'Enter', triggerSelectedButton);
+	});
+
+	onDestroy(() => {
+		// Clean up shortcuts
+		shortcuts.removeModalShortcuts('contactModal');
+	});
 </script>
 
 <style>
 	.contact-modal-body {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 20px;
 	}
 
