@@ -21,10 +21,8 @@
 		<div class="feedContent">
 			{#if loading}
 				<div class="loadingMessage">Loading...</div>
-			{:else if error}
-				<div class="errorMessage">Unable to load posts</div>
 			{:else}
-				<!-- Pinned posts -->
+				<!-- Pinned posts - always show if available, even on error -->
 				{#if pinnedPosts.length > 0}
 					{#each pinnedPosts as post}
 						<a href={post.url} target="_blank" rel="noopener noreferrer" class="postItem pinnedItem">
@@ -48,13 +46,20 @@
 						</a>
 					{/each}
 				{/if}
+				
+				<!-- Error message - only show if feed failed AND no posts are available -->
+				{#if error && posts.length === 0 && pinnedPosts.length === 0}
+					<div class="errorMessage">Unable to load posts</div>
+				{:else if error && posts.length === 0}
+					<div class="errorMessage">Unable to load latest posts</div>
+				{/if}
 			{/if}
 		</div>
 	{/if}
 </div>
 
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { debugLog } from '../utils/debuglog.js';
 	import pinnedPostsConfig from '../config/pinnedPosts.json';
 
@@ -63,6 +68,7 @@
 	let error = false;
 	let isCollapsed = false;
 	let pinnedPosts = pinnedPostsConfig.pinnedPosts || [];
+	let abortController = null;
 
 	/**
 	 * Decode HTML entities using the browser's built-in decoder
@@ -97,78 +103,166 @@
 		isCollapsed = !isCollapsed;
 	}
 
-	async function fetchBlogFeed() {
+	/**
+	 * Fetch with timeout
+	 * @param {string} url - URL to fetch
+	 * @param {number} timeoutMs - Timeout in milliseconds
+	 * @param {AbortSignal} signal - Abort signal for cancellation
+	 * @returns {Promise<Response>}
+	 */
+	async function fetchWithTimeout(url, timeoutMs = 10000, signal = null) {
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+		
+		// Combine abort signals if provided
+		if (signal) {
+			signal.addEventListener('abort', () => {
+				controller.abort();
+				clearTimeout(timeoutId);
+			});
+		}
+
 		try {
-			debugLog('Fetching blog feed...');
-			const response = await fetch('https://guillaumekuc.github.io/blog/feed.xml');
-			
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			
-			const text = await response.text();
-			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(text, 'text/xml');
-			
-			// Check for parsing errors
-			const parserError = xmlDoc.querySelector('parsererror');
-			if (parserError) {
-				throw new Error('XML parsing error');
-			}
-			
-			// Parse Atom feed entries
-			const entries = xmlDoc.querySelectorAll('entry');
-			
-			// Get pinned post URLs for filtering and date lookup
-			const pinnedUrls = pinnedPosts.map(p => p.url);
-			
-			// Create a map of all posts for date lookup
-			const allPosts = Array.from(entries).map(entry => {
-				const titleEl = entry.querySelector('title');
-				const linkEl = entry.querySelector('link[rel="alternate"]');
-				const publishedEl = entry.querySelector('published');
-				
-				// Get the raw title and decode HTML entities
-				const rawTitle = titleEl ? titleEl.textContent : 'Untitled';
-				const decodedTitle = decodeHTML(rawTitle);
-				
-				// Get and format the published date
-				const rawDate = publishedEl ? publishedEl.textContent : '';
-				const formattedDate = rawDate ? formatDate(rawDate) : '';
-				
-				return {
-					title: decodedTitle,
-					link: linkEl ? linkEl.getAttribute('href') : '#',
-					date: formattedDate
-				};
+			const response = await fetch(url, {
+				signal: controller.signal,
+				// Add cache control to allow browser caching
+				cache: 'default'
 			});
-			
-			// Add dates to pinned posts
-			pinnedPosts = pinnedPosts.map(pinned => {
-				const foundPost = allPosts.find(post => post.link === pinned.url);
-				return {
-					...pinned,
-					date: foundPost?.date || ''
-				};
-			});
-			
-			// Filter out pinned posts from latest and take only 3
-			const latestPosts = allPosts
-				.filter(post => !pinnedUrls.includes(post.link))
-				.slice(0, 3);
-			
-			posts = latestPosts;
-			loading = false;
-			debugLog('Blog feed loaded successfully', posts);
+			clearTimeout(timeoutId);
+			return response;
 		} catch (err) {
-			debugLog('Error fetching blog feed:', err);
-			error = true;
-			loading = false;
+			clearTimeout(timeoutId);
+			if (err.name === 'AbortError') {
+				throw new Error('Request timeout or cancelled');
+			}
+			throw err;
+		}
+	}
+
+	/**
+	 * Fetch blog feed with retry logic
+	 * @param {number} maxRetries - Maximum number of retry attempts
+	 * @param {number} retryDelay - Initial delay between retries in ms
+	 * @returns {Promise<void>}
+	 */
+	async function fetchBlogFeed(maxRetries = 3, retryDelay = 1000) {
+		// Create new abort controller for this fetch attempt
+		abortController = new AbortController();
+		
+		for (let attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				if (attempt > 0) {
+					// Exponential backoff: 1s, 2s, 4s
+					const delay = retryDelay * Math.pow(2, attempt - 1);
+					debugLog(`Retrying blog feed fetch (attempt ${attempt + 1}/${maxRetries + 1}) after ${delay}ms...`);
+					await new Promise(resolve => setTimeout(resolve, delay));
+				} else {
+					debugLog('Fetching blog feed...');
+				}
+
+				const response = await fetchWithTimeout(
+					'https://guillaumekuc.github.io/blog/feed.xml',
+					10000, // 10 second timeout
+					abortController.signal
+				);
+				
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				
+				const text = await response.text();
+				
+				// Check if response is empty
+				if (!text || text.trim().length === 0) {
+					throw new Error('Empty response from feed');
+				}
+				
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(text, 'text/xml');
+				
+				// Check for parsing errors
+				const parserError = xmlDoc.querySelector('parsererror');
+				if (parserError) {
+					throw new Error('XML parsing error');
+				}
+				
+				// Parse Atom feed entries
+				const entries = xmlDoc.querySelectorAll('entry');
+				
+				// Get pinned post URLs for filtering and date lookup
+				const pinnedUrls = pinnedPosts.map(p => p.url);
+				
+				// Create a map of all posts for date lookup
+				const allPosts = Array.from(entries).map(entry => {
+					const titleEl = entry.querySelector('title');
+					const linkEl = entry.querySelector('link[rel="alternate"]');
+					const publishedEl = entry.querySelector('published');
+					
+					// Get the raw title and decode HTML entities
+					const rawTitle = titleEl ? titleEl.textContent : 'Untitled';
+					const decodedTitle = decodeHTML(rawTitle);
+					
+					// Get and format the published date
+					const rawDate = publishedEl ? publishedEl.textContent : '';
+					const formattedDate = rawDate ? formatDate(rawDate) : '';
+					
+					return {
+						title: decodedTitle,
+						link: linkEl ? linkEl.getAttribute('href') : '#',
+						date: formattedDate
+					};
+				});
+				
+				// Add dates to pinned posts
+				pinnedPosts = pinnedPosts.map(pinned => {
+					const foundPost = allPosts.find(post => post.link === pinned.url);
+					return {
+						...pinned,
+						date: foundPost?.date || ''
+					};
+				});
+				
+				// Filter out pinned posts from latest and take only 3
+				const latestPosts = allPosts
+					.filter(post => !pinnedUrls.includes(post.link))
+					.slice(0, 3);
+				
+				posts = latestPosts;
+				loading = false;
+				error = false;
+				debugLog('Blog feed loaded successfully', posts);
+				return; // Success - exit retry loop
+			} catch (err) {
+				// Check if request was aborted (component unmounted or timeout)
+				if (err.name === 'AbortError' || err.message.includes('cancelled')) {
+					debugLog('Blog feed fetch cancelled');
+					return; // Don't retry if cancelled
+				}
+				
+				debugLog(`Error fetching blog feed (attempt ${attempt + 1}/${maxRetries + 1}):`, err);
+				
+				// If this was the last attempt, show error but still allow pinned posts
+				if (attempt === maxRetries) {
+					debugLog('All retry attempts failed. Showing error but keeping pinned posts visible.');
+					error = true;
+					loading = false;
+					// Don't clear posts array - if we had previous successful load, keep it
+					// Pinned posts are always available from config
+					return;
+				}
+			}
 		}
 	}
 
 	onMount(() => {
 		fetchBlogFeed();
+	});
+
+	onDestroy(() => {
+		// Cancel any ongoing fetch when component unmounts
+		if (abortController) {
+			abortController.abort();
+		}
 	});
 </script>
 
