@@ -1,0 +1,63 @@
+{
+	"photoshop": {
+		"icon": "/img/tools/photoshop.png",
+		"label": "Adobe Photoshop"
+	},
+	"graphic-tablet": {
+		"icon": "/img/tools/graphic-tablet.png",
+		"label": "Graphic Tablet"
+	},
+	"3dsmax": {
+		"icon": "/img/tools/3dsmax.png",
+		"label": "3ds Max"
+	},
+	"blender": {
+		"icon": "/img/tools/blender.png",
+		"label": "Blender"
+	},
+	"gridz": {
+		"icon": null,
+		"label": "Gridz"
+	},
+	"google-maps": {
+		"icon": null,
+		"label": "Google Maps"
+	},
+	"maya": {
+		"icon": "/img/tools/maya.png",
+		"label": "Autodesk Maya"
+	},
+	"reaper": {
+		"icon": "/img/tools/reaper.png",
+		"label": "REAPER"
+	},
+	"css": {
+		"icon": "/img/tools/css.png",
+		"label": "CSS"
+	},
+	"html": {
+		"icon": "/img/tools/html.png",
+		"label": "HTML"
+	},
+	"javascript": {
+		"icon": "/img/tools/javascript.png",
+		"label": "JavaScript"
+	},
+	"php": {
+		"icon": "/img/tools/php.png",
+		"label": "PHP"
+	},
+	"cursor": {
+		"icon": "/img/tools/cursor.svg",
+		"label": "Cursor"
+	},
+	"svelte": {
+		"icon": "/img/tools/svelte.svg",
+		"label": "Svelte"
+	},
+	"vue": {
+		"icon": "/img/tools/vue-color.svg",
+		"label": "Vue.js"
+	}
+}
+
