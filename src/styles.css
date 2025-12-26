@@ -55,6 +55,7 @@ html {
 	
 	/* Accent and special colors */
 	--color-accent: #60BF60;
+	--color-accent-gradient: linear-gradient(180deg, #60BF60 0%, #58926E 100%);
 	--color-border: var(--color-gray-dark);
 	--color-overlay: rgba(0, 0, 0, 0.5);
 	
@@ -653,7 +654,7 @@ body {
 	pointer-events: none;
 	position: absolute;
 	content: '';
-	background: no-repeat center / contain url('img/.old/icons/play.svg');
+	background: no-repeat center / contain url('img/audio-player/play.svg');
 	display: block;
 	top: 50%;
 	left: 50%;
@@ -680,7 +681,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic {
-	background: no-repeat url('img/.old/icons/volume.svg');
+	background: no-repeat url('img/audio-player/volume.svg');
 	background-size: 80%;
 	background-position: center;
 }
@@ -690,7 +691,7 @@ input[type='range']::-moz-range-progress {
 }
 
 .muteBgMusic.isMuted {
-	background: no-repeat url('img/.old/icons/mute.svg') !important;
+	background: no-repeat url('img/audio-player/mute.svg') !important;
 	background-size: 80% !important;
 	background-position: center !important ;
 }
@@ -707,6 +708,7 @@ input[type='range']::-moz-range-progress {
 	font-family: var(--ffRounded);
 	color: var(--color-white);
 	width: max-content;
+	max-width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: var(--safeMargin);

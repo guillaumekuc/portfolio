@@ -1,17 +1,23 @@
 <div bind:this={startScreenElement} id="startScreen" class="startScreen">
-	<h1>🙂</h1>
+	<div class="monogramContainer">
+		<MonogramSvg />
+	</div>
 
-	<h1><span class="nameBadge">Guillaume Kuc <span class="suffix">.art</span></span> is all set.</h1>
-	<button bind:this={enterBtn} id="enterBtn" on:click={handleEnter}>Enter</button>
+	<h1><span class="nameBadge">guillaumekuc.art</span> is all set.</h1>
 	
 	<button 
-		class="volumeToggle" 
+		class="volumeGroup" 
 		on:click={handleVolumeToggle} 
 		title={$isMuted ? 'Unmute' : 'Mute'}
 		style="--icon-mask: url('{$isMuted ? '/img/audio-player/mute.svg' : '/img/audio-player/volume.svg'}')"
 	>
-		<div class="volumeIcon"></div>
+		<div class="volumeToggle">
+			<div class="volumeIcon"></div>
+		</div>
+		<span class="soundStatus">{$isMuted ? 'SOUND OFF' : 'SOUND ON'}</span>
 	</button>
+	
+	<button bind:this={enterBtn} id="enterBtn" on:click={handleEnter}>Enter</button>
 </div>
 <!--#startScreen-->
 
@@ -24,6 +30,7 @@
 	import { shortcuts } from '../utils/shortcuts.js';
 	import { debugLog } from '../utils/debuglog.js';
 	import { Storage, STORAGE_KEYS } from '../utils/storage.js';
+	import MonogramSvg from './MonogramSvg.svelte';
 
 	let startScreenElement;
 	let enterBtn;
@@ -151,17 +158,42 @@
 		z-index: 100;
 		width: 100%;
 		height: 100%;
-		background-color: var(--startscreen-background-primary);
+		background-color: var(--color-background-primary);
 		color: var(--startscreen-text-primary);
 		font-size: var(--fs1);
 		font-family: var(--startscreen-font-primary);
 		padding: 20%;
 	}
 
+	.monogramContainer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 1em;
+		--monogram-color: var(--startscreen-accent-color);
+		--monogram-outline-color: var(--startscreen-text-primary);
+	}
+
+	.monogramContainer :global(svg) {
+		width: 80px;
+		height: auto;
+	}
+
+	.monogramContainer :global(svg path) {
+		stroke: var(--monogram-outline-color) !important;
+		stroke-width: 4px !important;
+		fill: var(--monogram-color) !important;
+	}
+
 	.startScreen h1 {
 		font-size: var(--fs1);
 		padding: auto;
 		text-align: center;
+		margin: 0;
+	}
+
+	.startScreen h1:last-of-type {
+		margin-bottom: 1.5em;
 	}
 
 	#enterBtn {
@@ -174,6 +206,7 @@
 		text-transform: uppercase;
 		font-family: var(--startscreen-font-rounded);
 		font-weight: 600;
+		margin-top: 1.5em;
 	}
 
 	#enterBtn:hover {
@@ -190,68 +223,169 @@
 		padding: 2px 10px;
 		background-color: var(--startscreen-background-secondary);
 		border-radius: 5px;
-		font-variant: small-caps;
+		text-transform: lowercase;
 	}
 
-	.suffix {
-		font-variant: normal;
-	}
-
-	/* Volume toggle button */
-	.volumeToggle {
-		--volume-icon-size: 32px;
-		margin-top: 20px;
-		width: var(--volume-icon-size);
-		height: var(--volume-icon-size);
-		padding: 0 !important;
-		border: none !important;
-		outline: none !important;
-		background: none !important;
-		box-shadow: none !important;
-		cursor: pointer;
+	/* Volume group container - now a button */
+	.volumeGroup {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		text-transform: none !important;
+		gap: 12px;
+		margin: 0;
+		padding: 8px 16px;
+		border: none;
+		outline: none;
+		background: none;
+		cursor: pointer;
+		border-radius: 5px;
+		transition: background-color 0.2s ease;
+	}
+
+	.volumeGroup:hover {
+		background-color: var(--startscreen-accent-color);
+	}
+
+	.volumeGroup:hover .soundStatus {
+		color: var(--color-white);
+	}
+
+	.volumeGroup:hover .volumeIcon {
+		background-color: var(--color-white);
+	}
+
+	/* Volume toggle icon container */
+	.volumeToggle {
+		--volume-icon-size: 32px;
+		width: var(--volume-icon-size);
+		height: var(--volume-icon-size);
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.soundStatus {
+		font-family: var(--startscreen-font-rounded);
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--startscreen-text-primary);
+		white-space: nowrap;
+		transition: color 0.2s ease;
 	}
 
 	/* small desktop viewport */
 	@media (max-height: 950px) {
+		.startScreen {
+			padding: 15%;
+		}
+		
+		.monogramContainer {
+			margin-bottom: 0.9em;
+		}
+
+		.monogramContainer :global(svg) {
+			width: 70px;
+		}
+
+		.startScreen h1:last-of-type {
+			margin-bottom: 1.3em;
+		}
+
+		#enterBtn {
+			margin-top: 1.3em;
+		}
+		
 		.volumeToggle {
 			--volume-icon-size: 28px;
+		}
+
+		.soundStatus {
+			font-size: 13px;
 		}
 	}
 
 	/* tablet viewport */
 	@media (max-height: 750px) {
+		.startScreen {
+			padding: 10%;
+		}
+		
+		.monogramContainer {
+			margin-bottom: 0.8em;
+		}
+
+		.monogramContainer :global(svg) {
+			width: 60px;
+		}
+
+		.startScreen h1:last-of-type {
+			margin-bottom: 1.2em;
+		}
+
+		#enterBtn {
+			margin-top: 1.2em;
+		}
+		
 		.volumeToggle {
 			--volume-icon-size: 24px;
+		}
+
+		.soundStatus {
+			font-size: 12px;
+		}
+
+		.volumeGroup {
+			gap: 10px;
 		}
 	}
 
 	/* mobile viewport */
 	@media (max-height: 500px) {
+		.startScreen {
+			padding: 5%;
+		}
+		
+		.monogramContainer {
+			margin-bottom: 0.7em;
+		}
+
+		.monogramContainer :global(svg) {
+			width: 50px;
+		}
+
+		.startScreen h1:last-of-type {
+			margin-bottom: 1em;
+		}
+
+		#enterBtn {
+			margin-top: 1em;
+		}
+		
 		.volumeToggle {
 			--volume-icon-size: 20px;
 		}
+
+		.soundStatus {
+			font-size: 11px;
+		}
+
+		.volumeGroup {
+			gap: 8px;
+		}
 	}
 
-	.volumeToggle:focus {
-		outline: none !important;
-		border: none !important;
-		box-shadow: none !important;
-	}
-
-	.volumeToggle:hover {
-		border: none !important;
-		background: none !important;
-		box-shadow: none !important;
+	.volumeGroup:focus {
+		outline: 2px solid var(--startscreen-accent-color);
+		outline-offset: 2px;
 	}
 
 	.volumeIcon {
 		width: 100%;
 		height: 100%;
-		transition: background-color 0.3s ease;
+		transition: background-color 0.2s ease;
 		-webkit-mask-size: contain;
 		mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
@@ -261,10 +395,6 @@
 		background-color: var(--startscreen-text-primary);
 		-webkit-mask-image: var(--icon-mask);
 		mask-image: var(--icon-mask);
-	}
-
-	.volumeToggle:hover .volumeIcon {
-		background-color: var(--startscreen-accent-color);
 	}
 </style>
 

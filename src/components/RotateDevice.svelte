@@ -12,10 +12,7 @@
 		{/if}
 
 		<h1>
-			<span
-				style="padding : 2px 10px; background-color : var(--rotate-background-secondary); border-radius : 5px ; font-variant:small-caps;"
-				>Guillaume Kuc <span style="font-variant : normal	;">.art</span></span
-			> is best displayed horizontally.
+			<span class="nameBadge">guillaumekuc.art</span> is best displayed horizontally.
 		</h1>
 	</div>
 	<!--#rotatePleaseContent-->
@@ -77,6 +74,14 @@
 		padding-right: 10%;
 		padding-left: 10%;
 		height: content;
+		font-family: var(--ffCrimson);
+	}
+
+	.nameBadge {
+		padding: 2px 10px;
+		background-color: var(--rotate-background-secondary);
+		border-radius: 5px;
+		text-transform: lowercase;
 	}
 
 	.rotateIcon {
@@ -98,6 +103,10 @@
 		/* Explicitly show #rotatePlease with higher specificity */
 		:global(#app > #rotatePlease),
 		.rotatePlease {
+			/* Font interface variables */
+			--rotate-font-primary: var(--ffCrimson);
+			--rotate-font-rounded: var(--ffRounded);
+			
 			/* Color interface variables */
 			--rotate-background-primary: var(--color-background-primary);
 			--rotate-background-secondary: var(--color-background-secondary);
@@ -106,8 +115,9 @@
 			display: flex !important;
 			align-items: center;
 			justify-content: center;
-			background-color: var(--rotate-background-primary);
+			background-color: var(--color-background-primary);
 			color: var(--rotate-text-primary);
+			font-family: var(--rotate-font-primary);
 			position: fixed !important;
 			z-index: 9999 !important;
 		}

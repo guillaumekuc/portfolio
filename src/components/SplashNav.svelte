@@ -364,6 +364,7 @@
 
 		/* Responsive values */
 		--splashscreen-nav-width: 1220px;
+		--splashscreen-nav-gap: 40px;
 		--splashscreen-nav-radius: 16px;
 		--splashscreen-nav-bottom: 16px;
 		--splashscreen-nav-padding: 10px;
@@ -375,12 +376,14 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
+		gap: var(--splashscreen-nav-gap);
 
 		position: absolute;
-		width: var(--splashscreen-nav-width);
+		width: min(var(--splashscreen-nav-width), calc(100vw - 32px));
+		max-width: 100%;
 		height: auto;
-		left: auto;
-		right: auto;
+		left: 50%;
+		transform: translateX(-50%);
 		padding: var(--splashscreen-nav-padding);
 
 		bottom: var(--splashscreen-nav-bottom);
@@ -470,7 +473,7 @@
 		text-transform: capitalize;
 		font-weight: 700;
 		letter-spacing: 0.05em;
-		background-color: var(--splashscreen-nav-accent-color);
+		background-image: var(--color-accent-gradient);
 		opacity: 20%;
 		border: 1px solid transparent;
 	}
@@ -527,6 +530,7 @@
 	@media (max-height: 950px) {
 		.splashNav {
 			--splashscreen-nav-width: 1000px;
+			--splashscreen-nav-gap: 32px;
 			--splashscreen-nav-radius: 14px;
 			--splashscreen-nav-bottom: 14px;
 			--splashscreen-nav-padding: 8px;
@@ -540,6 +544,7 @@
 	@media (max-height: 750px) {
 		.splashNav {
 			--splashscreen-nav-width: 800px;
+			--splashscreen-nav-gap: 24px;
 			--splashscreen-nav-radius: 12px;
 			--splashscreen-nav-bottom: 12px;
 			--splashscreen-nav-padding: 6px;
@@ -557,6 +562,7 @@
 	@media (max-height: 500px) {
 		.splashNav {
 			--splashscreen-nav-width: 600px;
+			--splashscreen-nav-gap: 12px;
 			--splashscreen-nav-radius: 10px;
 			--splashscreen-nav-bottom: 8px;
 			--splashscreen-nav-padding: 4px;
@@ -567,6 +573,37 @@
 
 		.splashNav :global(.nav-icon) {
 			display: none;
+		}
+	}
+
+	/* Horizontal width constraints - reduce gaps when screen is narrow */
+	@media (max-width: 1400px) {
+		.splashNav {
+			--splashscreen-nav-gap: 32px;
+		}
+	}
+
+	@media (max-width: 1200px) {
+		.splashNav {
+			--splashscreen-nav-gap: 24px;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.splashNav {
+			--splashscreen-nav-gap: 16px;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.splashNav {
+			--splashscreen-nav-gap: 12px;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.splashNav {
+			--splashscreen-nav-gap: 8px;
 		}
 	}
 
