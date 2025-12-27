@@ -51,3 +51,9 @@ local/
 dev/
 *.local.php
 
+# Heavy assets (hosted externally on OVH)
+public/sound/*.mp3
+public/vid/**/*.mp4
+public/img/portfolio/*.jpg
+public/img/guillaumekuc_*.jpg
+src/source-assets/*.psd

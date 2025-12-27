@@ -1,6 +1,6 @@
 # Bonjour !
 
-I'm a technical artist working at the intersection of digital creation and software development. My practice spans 2D and **3D digital arts**, music composition, and tools development, with each discipline feeding into the others as part of a unified, mutually reinforcing system.
+I'm a technical artist working at the intersection of digital creation and software development. My practice spans **2D** and **3D digital arts**, **music composition**, and **tools development**, with each discipline feeding into the others as part of a unified, mutually reinforcing system.
 
 > **Technical Artist**: A hybrid role combining artistic fluency with programming skills to create tools, workflows, and technical solutions that support creative production.
 

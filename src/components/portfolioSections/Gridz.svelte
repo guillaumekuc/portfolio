@@ -1,30 +1,25 @@
 <div class="portfolioSectionWrapper gridzWrapper">
 	<div class="shortLeftThirds scrollable">
-		<span class="title gridzTitle">Gridz — <small>Perspective plugin for Photoshop</small></span>
-		<blockquote>
-			Drawing objects in perspective in any orientations is not an easy task. Static grids feel
-			restrictive. Objects typically aren't neatly aligned with an imaginary set of guide-lines.
-			Instead they face all sorts of directions all the time. This plugin will create a perspective
-			grid. But more importantly, it will then allow the user to rotate the grid as needed so that he
-			or she can draw all the objects they need in their proper orientations. There is no guess-work
-			involved. There is no need for a cumbersome 3D software either. Yet, the rotations will be as
-			mathematically accurate as can be.
-		</blockquote>
-		<a class="focus extLinkBtn" href="https://app.gumroad.com/guillaumekuc" target="_blank"
-			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>Check on gumroad</span></a
+		<span class="title gridzTitle">{title} — <small>{subtitle}</small></span>
+		<ToolsDisplay {tools} />
+		<div class="content">
+			{@html parsedMarkdown}
+		</div>
+		<a class="focus extLinkBtn" href={linkUrl} target="_blank"
+			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
 		>
 	</div>
-	<div bind:this={videoContainer} class="wideRightThirds">
+		<div bind:this={videoContainer} class="wideRightThirds">
 		<video
 			bind:this={videoElement}
 			class="largeVideo"
 			preload="none"
 			muted
 			loop
-			poster="/vid/guillaumekuc_gridzDemoCover.jpg"
+			poster={resolvedCoverImage}
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/guillaumekuc_gridzDemo.mp4" type="video/mp4" />
+			<source src={videoUrl} type="video/mp4" />
 		</video>
 		<button
 			type="button"
@@ -39,8 +34,40 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
+	import { marked } from 'marked';
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
+	import ToolsDisplay from '../ToolsDisplay.svelte';
+
+	export let sectionConfig = {};
+
+	// Configure marked to allow HTML
+	marked.setOptions({
+		breaks: false,
+		gfm: true
+	});
+
+	// Dynamically load all markdown files
+	const contentModules = import.meta.glob('../../content/*.md', { 
+		eager: true, 
+		as: 'raw'
+	});
+
+	// Get content from config, fallback to defaults
+	const title = sectionConfig?.title || '';
+	const subtitle = sectionConfig?.subtitle || '';
+	const linkUrl = sectionConfig?.linkUrl || '';
+	const linkText = sectionConfig?.linkText || '';
+	const coverImage = sectionConfig?.coverImage || '';
+	const contentPath = sectionConfig?.contentPath || '';
+	const tools = sectionConfig?.tools || [];
+	const rawMarkdown = contentPath ? (contentModules[`../../content/${contentPath}`] || '').trim() : '';
+	const parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+
+	// Resolve asset URLs
+	const resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
+	const videoUrl = getAssetUrl('/vid/guillaumekuc_gridzDemo.mp4');
 
 	let videoElement;
 	let playBtn;
@@ -128,5 +155,14 @@
 
 	.gridzTitle {
 		font-family: var(--gridz-font-rounded);
+	}
+
+	.content {
+		font-style: normal;
+	}
+
+	:global(.tools-display) {
+		margin-top: 12px;
+		margin-bottom: 16px;
 	}
 </style>

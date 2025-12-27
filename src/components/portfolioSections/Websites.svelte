@@ -34,19 +34,20 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
 
 	// Website data
 	const websites = [
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
-			screenshot: '/img/portfolio/guillaumekuc_gkartscreenshot.jpg',
+			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkartscreenshot.jpg'),
 			screenshotAlt: 'GK Art Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.art'
 		},
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.blog',
-			screenshot: '/img/portfolio/guillaumekuc_gkblogscreenshot.jpg',
+			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkblogscreenshot.jpg'),
 			screenshotAlt: 'GK Blog Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.blog'

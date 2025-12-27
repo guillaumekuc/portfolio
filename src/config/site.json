@@ -1,0 +1,13 @@
+{
+	"title": "Guillaume Kuc — Digital Arts & Tools",
+	"description": "Portfolio of Guillaume Kuc showcasing 2D & 3D digital arts, music, and tools.",
+	"favicon": "/img/monogram-white.svg",
+	"faviconType": "image/svg+xml",
+	"preloadImages": [
+		"/img/guillaumekuc_oldbg.jpg"
+	],
+	"lang": "en"
+}
+
+
+

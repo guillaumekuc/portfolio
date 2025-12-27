@@ -1,30 +1,52 @@
-<div class="portfolioSectionWrapper">
+<div class="portfolioSectionWrapper p4bookWrapper">
 	<div class="halfColumn">
-		<img loading="lazy" src="/img/portfolio/guillaumekuc_P4cover.jpg" alt="P4 Cover" />
+		<img loading="lazy" src={resolvedCoverImage} alt="Cover" />
 	</div>
 	<div class="halfColumn P4bookQuote scrollable">
-		<span class="title">All fourths tuning — <small>Improvisation</small></span>
-		<blockquote>
-			All fourths tuning is in many ways more of a standard tuning than Standard tuning is. Getting rid
-			of the inconsistency between the G and B string makes the whole fretboard more logical. Using a
-			regular tuning means that any chord, scale, or shape, can now be displaced along AND across
-			strings while still retaining its sound. A same fingering will always produce the same interval.
-			As a result, intuition develops faster on P4 tuning, and the mind-fingers connection happens
-			quicker. P4 tuning is especially useful for improvisation. It opens up the fretboard both for
-			single lines and chord improvisation. This book is my contribution to the internet knowledge
-			library since resources are still few regarding the tuning.
-		</blockquote>
+		<span class="title p4bookTitle">{title} — <small>{subtitle}</small></span>
+		<div class="content">
+			{@html parsedMarkdown}
+		</div>
 		<a
 			class="focus extLinkBtn"
-			href="https://www.amazon.fr/All-fourths-tuning-Improvisation-English-ebook/dp/B07F89CW6V"
-			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>More on Kindle</span></a
+			href={linkUrl}
+			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
 		>
 	</div>
 </div>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
+	import { marked } from 'marked';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
+
+	export let sectionConfig = {};
+
+	// Configure marked to allow HTML
+	marked.setOptions({
+		breaks: false,
+		gfm: true
+	});
+
+	// Dynamically load all markdown files
+	const contentModules = import.meta.glob('../../content/*.md', { 
+		eager: true, 
+		as: 'raw'
+	});
+
+	// Get content from config, fallback to defaults
+	const title = sectionConfig?.title || '';
+	const subtitle = sectionConfig?.subtitle || '';
+	const linkUrl = sectionConfig?.linkUrl || '';
+	const linkText = sectionConfig?.linkText || '';
+	const coverImage = sectionConfig?.coverImage || '';
+	const contentPath = sectionConfig?.contentPath || '';
+	const rawMarkdown = contentPath ? (contentModules[`../../content/${contentPath}`] || '').trim() : '';
+	const parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+	
+	// Resolve asset URL
+	const resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
 
 	function openP4bookLink() {
 		const link = document.querySelector('#P4book .extLinkBtn');
@@ -43,6 +65,11 @@
 </script>
 
 <style>
+	.p4bookWrapper {
+		/* Font interface variables - map global variables to local scope */
+		--p4book-font-rounded: var(--ffRounded);
+	}
+
 	.halfColumn {
 		width: 50%;
 		height: 80vh;
@@ -82,10 +109,15 @@
 		background-color: rgba(170, 170, 170, 0.5);
 	}
 
-	.P4bookQuote blockquote {
+	.P4bookQuote .content {
 		display: block;
 		text-align: justify;
 		text-align-last: left;
 		font-size: 116.66%;
+		font-style: normal;
+	}
+
+	.p4bookTitle {
+		font-family: var(--p4book-font-rounded);
 	}
 </style>

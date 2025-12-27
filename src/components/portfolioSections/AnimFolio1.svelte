@@ -9,10 +9,10 @@
 			class="largeVideo"
 			preload="none"
 			loop
-			poster="/vid/anim/guillaumekuc_animReelPoster.png"
+			poster={posterUrl}
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/anim/guillaumekuc_animReel.mp4" type="video/mp4" />
+			<source src={videoUrl} type="video/mp4" />
 			<track kind="captions" />
 		</video>
 		<button
@@ -37,6 +37,10 @@
 	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
+
+	const posterUrl = getAssetUrl('/vid/anim/guillaumekuc_animReelPoster.png');
+	const videoUrl = getAssetUrl('/vid/anim/guillaumekuc_animReel.mp4');
 
 	let videoElement;
 	let playBtn;

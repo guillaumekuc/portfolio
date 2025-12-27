@@ -43,6 +43,22 @@
 		"icon": "/img/tools/javascript.png",
 		"label": "JavaScript"
 	},
+	"js": {
+		"icon": "/img/tools/javascript.png",
+		"label": "JavaScript"
+	},
+	"jsx": {
+		"icon": null,
+		"label": "JSX"
+	},
+	"CSInterface": {
+		"icon": null,
+		"label": "CSInterface"
+	},
+	"cep": {
+		"icon": "/img/tools/adobe.png",
+		"label": "Adobe CEP"
+	},
 	"php": {
 		"icon": "/img/tools/php.png",
 		"label": "PHP"

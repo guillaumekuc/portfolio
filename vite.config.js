@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { htmlConfig } from './vite-plugin-html-config.js';
 
 export default defineConfig({
   root: '.',
   publicDir: 'public',
-  plugins: [svelte()],
+  plugins: [svelte(), htmlConfig()],
   build: {
     outDir: 'dist',
     rollupOptions: {

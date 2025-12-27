@@ -5,7 +5,7 @@
 
 	<div id="splashArtArea" class="splashArtArea">
 		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn">
-			<audio bind:this={bgMusicElement} id="bgMusic" src="/sound/bgmusic.mp3" loop type="audio/mpeg" preload="none"
+			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop type="audio/mpeg" preload="none"
 			></audio>
 
 			<div id="splashArtShader" class="splashArtShader"></div>
@@ -22,9 +22,13 @@
 	import { initAudio, initNavigation, initAPI } from '../scripts.js';
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
+	import { getAssetUrl } from '../utils/assets.js';
 	import SplashscreenSound from './SplashscreenSound.svelte';
 	import SplashNav from './SplashNav.svelte';
 	import SplashscreenHero from './SplashscreenHero.svelte';
+
+	const bgMusicUrl = getAssetUrl('/sound/bgmusic.mp3');
+	const backgroundImageUrl = getAssetUrl('/img/guillaumekuc_oldbg.jpg');
 
 	let bgMusicElement;
 	let artElement;
@@ -130,7 +134,7 @@
 		padding: auto;
 		width: 100%;
 		height: 100%;
-		background: center no-repeat url('img/guillaumekuc_oldbg.jpg');
+		background: center no-repeat url('{backgroundImageUrl}');
 		background-size: cover;
 		transform: scale(1.1);
 		transition: transform 3s ease-out;

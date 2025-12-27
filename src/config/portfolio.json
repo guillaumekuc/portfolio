@@ -103,7 +103,14 @@
 		{
 			"id": "gridzFolio",
 			"component": "Gridz",
-			"categories": "portfolio-web portfolio-all"
+			"categories": "portfolio-web portfolio-all",
+			"title": "Gridz",
+			"subtitle": "Perspective plugin for Photoshop",
+			"linkUrl": "https://app.gumroad.com/guillaumekuc",
+			"linkText": "Check on gumroad",
+			"contentPath": "gridz.md",
+			"coverImage": "/vid/guillaumekuc_gridzDemoCover.jpg",
+			"tools": ["cep", "jsx", "js", "html", "css"]
 		},
 		{
 			"id": "drawingFolio1",
@@ -434,7 +441,13 @@
 		{
 			"id": "P4book",
 			"component": "P4bookFolio",
-			"categories": "portfolio-music portfolio-all"
+			"categories": "portfolio-music portfolio-all",
+			"title": "All fourths tuning",
+			"subtitle": "Improvisation",
+			"linkUrl": "https://www.amazon.fr/All-fourths-tuning-Improvisation-English-ebook/dp/B07F89CW6V",
+			"linkText": "More on Kindle",
+			"contentPath": "all-fourths-tuning.md",
+			"coverImage": "/img/portfolio/guillaumekuc_P4cover.jpg"
 		},
 		{
 			"id": "websitesFolio",

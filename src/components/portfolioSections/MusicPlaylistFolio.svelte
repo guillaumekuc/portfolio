@@ -30,6 +30,7 @@
 	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
 
 	const currentIndexStore = stores.music.currentIndex;
 	$: currentIndex = $currentIndexStore;
@@ -64,7 +65,11 @@
 		{ sound: "/sound/Chris'Journey.mp3", image: '/img/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
 		{ sound: '/sound/StunnedChickens.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Stunned Chickens' },
 		{ sound: '/sound/Meanwhile.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Meanwhile' }
-	];
+	].map(track => ({
+		...track,
+		sound: getAssetUrl(track.sound),
+		image: getAssetUrl(track.image)
+	}));
 
 	// Store tracks in store for music.js to access
 	stores.music.tracks.set(tracks);

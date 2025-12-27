@@ -6,7 +6,7 @@
 			class:hidden={!sectionVisibility.get(section.id)}
 			data-categories={section.categories}
 		>
-			<svelte:component this={section.component} />
+			<svelte:component this={section.component} sectionConfig={section.config} />
 		</div>
 	{/if}
 {/each}
@@ -50,7 +50,8 @@
 	const portfolioSections = portfolioConfig.portfolioSections.map((section) => ({
 		id: section.id,
 		component: componentMap[section.component],
-		categories: section.categories
+		categories: section.categories,
+		config: section
 	}));
 
 	// Reactive portfolio section visibility from store

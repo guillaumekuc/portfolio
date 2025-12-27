@@ -30,16 +30,7 @@
 					{/if}
 					{#if item.tools && item.tools.length > 0}
 						<div class="metadata-tools">
-							{#each item.tools as tool}
-								{#if toolIcons[tool] && toolIcons[tool].icon}
-									<img 
-										src={toolIcons[tool].icon} 
-										alt={toolIcons[tool].label || tool} 
-										class="tool-icon"
-										title={toolIcons[tool].label || tool}
-									/>
-								{/if}
-							{/each}
+							<ToolsDisplay tools={item.tools} iconsOnly={true} align="right" />
 						</div>
 					{/if}
 				</div>
@@ -50,12 +41,17 @@
 <!--gallery-->
 
 <script>
-	import toolsConfig from '../../config/tools.json';
+	import ToolsDisplay from '../ToolsDisplay.svelte';
+	import { getAssetUrl } from '../../utils/assets.js';
 	
 	export let sectionConfig;
 	
-	$: items = sectionConfig?.items || [];
-	$: toolIcons = toolsConfig || {};
+	$: items = (sectionConfig?.items || []).map(item => ({
+		...item,
+		url: item.url ? getAssetUrl(item.url) : item.url,
+		video: item.video ? getAssetUrl(item.video) : item.video,
+		poster: item.poster ? getAssetUrl(item.poster) : item.poster
+	}));
 	
 	function handleVideoClick(event) {
 		event.currentTarget.play();
@@ -198,22 +194,8 @@
 	}
 
 	.metadata-tools {
-		display: flex;
-		gap: 6px;
 		justify-content: flex-end;
 		margin-top: 10px;
-		flex-wrap: wrap;
-		pointer-events: auto;
-	}
-
-	.tool-icon {
-		width: 22px;
-		height: 22px;
-		object-fit: contain;
-		opacity: 0.9;
-		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-		border-radius: 0;
-		overflow: visible;
 		pointer-events: auto;
 	}
 
@@ -239,7 +221,7 @@
 			gap: 5px;
 			margin-top: 8px;
 		}
-		.tool-icon {
+		.metadata-tools :global(.tool-icon) {
 			width: 20px;
 			height: 20px;
 		}
@@ -270,7 +252,7 @@
 			gap: 4px;
 			margin-top: 6px;
 		}
-		.tool-icon {
+		.metadata-tools :global(.tool-icon) {
 			width: 18px;
 			height: 18px;
 		}
@@ -301,7 +283,7 @@
 			gap: 3px;
 			margin-top: 5px;
 		}
-		.tool-icon {
+		.metadata-tools :global(.tool-icon) {
 			width: 16px;
 			height: 16px;
 		}

@@ -154,13 +154,13 @@
 		-webkit-mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: center;
-		color: var(--profile-text-primary);
+		color: var(--profile-text-secondary);
 		transition: transform 0.15s ease-in, color 0.15s ease-in;
 	}
 
 	.socialLink:hover {
 		transform: scale(1.1);
-		color: var(--profile-accent-color);
+		color: var(--profile-text-primary);
 	}
 
 </style>

@@ -9,11 +9,11 @@
 			bind:this={videoElement}
 			class="largeVideo"
 			preload="none"
-			poster="/vid/guillaumekuc_Demoguitar.png"
+			poster={posterUrl}
 			style="border-radius : var(--radius-large); max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));"
 			on:click={handleVideoClick}
 		>
-			<source src="/vid/guillaumekuc_Demoguitar.mp4" type="video/mp4" />
+			<source src={videoUrl} type="video/mp4" />
 			<track kind="captions" />
 		</video>
 		<button bind:this={playBtn} class="videoPlayBtn" class:hidden={!showPlayBtn}></button>
@@ -25,6 +25,10 @@
 	import { get } from 'svelte/store';
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
+	import { getAssetUrl } from '../../utils/assets.js';
+
+	const posterUrl = getAssetUrl('/vid/guillaumekuc_Demoguitar.png');
+	const videoUrl = getAssetUrl('/vid/guillaumekuc_Demoguitar.mp4');
 
 	let videoElement;
 	let playBtn;

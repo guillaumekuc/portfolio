@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { Storage, STORAGE_KEYS } from './utils/storage.js';
+import { getAssetUrl } from './utils/assets.js';
 
 // Load saved audio preferences from localStorage
 const savedVolume = Storage.get(STORAGE_KEYS.MUSIC_VOLUME, 0);
@@ -18,7 +19,7 @@ export const stores = {
 		currentTime: writable(0),
 		duration: writable(0),
 		playlistLength: writable(0),
-		trackImage: writable('/img/guillaumekuc_bgMusic.jpg'),
+		trackImage: writable(getAssetUrl('/img/guillaumekuc_bgMusic.jpg')),
 		tracks: writable([]),
 		// Music player instance
 		musicPlayer: writable(null),
