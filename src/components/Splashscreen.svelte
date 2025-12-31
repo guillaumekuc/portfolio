@@ -26,9 +26,10 @@
 	import SplashscreenSound from './SplashscreenSound.svelte';
 	import SplashNav from './SplashNav.svelte';
 	import SplashscreenHero from './SplashscreenHero.svelte';
+	import siteConfig from '../config/site.json';
 
 	const bgMusicUrl = getAssetUrl('/sound/bgmusic.mp3');
-	const backgroundImageUrl = getAssetUrl('/img/guillaumekuc_oldbg.jpg');
+	const backgroundImageUrl = getAssetUrl(siteConfig.splashBackgroundImage);
 
 	let bgMusicElement;
 	let artElement;
