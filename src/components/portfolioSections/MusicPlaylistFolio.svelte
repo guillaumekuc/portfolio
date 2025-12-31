@@ -378,6 +378,15 @@
 	}
 
 	.musicPlaylist li.focus .playIcon {
-		background: url('img/audio-player/pause.svg') center center no-repeat;
+		background: none;
+		background-color: var(--music-playlist-text-primary);
+		-webkit-mask-image: url('img/audio-player/pause2.svg');
+		mask-image: url('img/audio-player/pause2.svg');
+		-webkit-mask-size: 100%;
+		mask-size: 100%;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
 	}
 </style>
