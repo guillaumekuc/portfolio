@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{js,svelte,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,svelte,css}\"",
-    "optimize:images": "node optimize-images.js"
+    "optimize:images": "node optimize-images.js",
+    "deploy": "node deploy.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.0",

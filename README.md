@@ -207,6 +207,24 @@ Tools are automatically displayed in portfolio galleries.
 - **Unified gallery**: Common component for all portfolio sections (images/videos)
 - **Global breakpoints**: Consistent responsive design system across components
 
+## Deployment
+
+Deploy your site to OVH web hosting via SFTP with a single command:
+
+```bash
+npm run deploy
+```
+
+**Setup:**
+1. Install dependencies: `npm install --save-dev node-ssh dotenv`
+2. Create a `.env` file in the project root with your SFTP credentials
+3. Run `npm run deploy`
+
+See **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** for:
+- Complete setup instructions
+- Where to put your connection info
+- Troubleshooting guide
+
 ## Development Notes
 
 - Originally converted from PHP to modern Svelte + Vite stack
