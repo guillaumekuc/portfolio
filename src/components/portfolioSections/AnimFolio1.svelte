@@ -39,6 +39,8 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 
+	export let sectionConfig;
+
 	const posterUrl = getAssetUrl('/vid/anim/guillaumekuc_animReelPoster.png');
 	const videoUrl = getAssetUrl('/vid/anim/guillaumekuc_animReel.mp4');
 

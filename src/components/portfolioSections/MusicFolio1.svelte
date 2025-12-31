@@ -27,6 +27,8 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 
+	export let sectionConfig;
+
 	const posterUrl = getAssetUrl('/vid/guillaumekuc_Demoguitar.png');
 	const videoUrl = getAssetUrl('/vid/guillaumekuc_Demoguitar.mp4');
 

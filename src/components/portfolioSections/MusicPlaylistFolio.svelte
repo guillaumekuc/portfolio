@@ -32,6 +32,8 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 
+	export let sectionConfig;
+
 	const currentIndexStore = stores.music.currentIndex;
 	$: currentIndex = $currentIndexStore;
 

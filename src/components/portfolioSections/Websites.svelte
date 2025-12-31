@@ -36,6 +36,8 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 
+	export let sectionConfig;
+
 	// Website data
 	const websites = [
 		{

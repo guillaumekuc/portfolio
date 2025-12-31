@@ -19,27 +19,18 @@
 	
 	import portfolioConfig from '../config/portfolio.json';
 
+	import PortfolioGallery from './portfolioSections/PortfolioGallery.svelte';
 	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
-	import IllustrationFolio1 from './portfolioSections/IllustrationFolio1.svelte';
-	import IllustrationFolio2 from './portfolioSections/IllustrationFolio2.svelte';
 	import Gridz from './portfolioSections/Gridz.svelte';
-	import DrawingFolio1 from './portfolioSections/DrawingFolio1.svelte';
-	import DrawingFolio2 from './portfolioSections/DrawingFolio2.svelte';
-	import ModeFolio1 from './portfolioSections/ModeFolio1.svelte';
 	import MusicFolio1 from './portfolioSections/MusicFolio1.svelte';
 	import AnimFolio1 from './portfolioSections/AnimFolio1.svelte';
 	import P4bookFolio from './portfolioSections/P4bookFolio.svelte';
 	import Websites from './portfolioSections/Websites.svelte';
 
-	// Component mapping
+	// Component mapping for custom components (not using PortfolioGallery)
 	const componentMap = {
 		MusicPlaylistFolio,
-		IllustrationFolio1,
-		IllustrationFolio2,
 		Gridz,
-		DrawingFolio1,
-		DrawingFolio2,
-		ModeFolio1,
 		MusicFolio1,
 		AnimFolio1,
 		P4bookFolio,
@@ -47,12 +38,22 @@
 	};
 
 	// Map JSON config to components
-	const portfolioSections = portfolioConfig.portfolioSections.map((section) => ({
-		id: section.id,
-		component: componentMap[section.component],
-		categories: section.categories,
-		config: section
-	}));
+	// Sections with 'items' array automatically use PortfolioGallery
+	// Otherwise, use the component map
+	const portfolioSections = portfolioConfig.portfolioSections.map((section) => {
+		// If section has items, use PortfolioGallery directly
+		// Otherwise, use the component from the map
+		const component = section.items 
+			? PortfolioGallery 
+			: componentMap[section.component];
+		
+		return {
+			id: section.id,
+			component,
+			categories: section.categories,
+			config: section
+		};
+	});
 
 	// Reactive portfolio section visibility from store
 	const portfolioSectionVisibilityStore = stores.navigation.portfolioSectionVisibility;
