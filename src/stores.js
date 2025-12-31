@@ -43,6 +43,6 @@ export const stores = {
 
 	// Configuration settings
 	config: {
-		debug: writable(true)
+		debug: writable(false)
 	}
 };
