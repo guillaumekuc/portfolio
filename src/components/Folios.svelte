@@ -82,58 +82,92 @@
 
 	// Store jQuery reference at top level to avoid linter issues
 	const jQuery = typeof window !== 'undefined' ? window.$ : null;
-
-	// Document-level keyboard handler for gallery navigation
-	// This ensures ArrowLeft/ArrowRight work even after dragging when focus might be lost
-	// We only handle if the event target is not the gallery list (to avoid double-handling with Slick's handler)
-	function handleGalleryKeyboard(e) {
-		// Only handle ArrowLeft, ArrowRight, and Enter
-		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Enter') {
-			return;
-		}
-		
-		// Don't interfere if user is typing in a form field
-		const targetTag = e.target?.tagName;
-		if (targetTag && targetTag.match(/INPUT|TEXTAREA|SELECT/)) {
-			return;
-		}
-		
-		// Check if we're on a portfolio section with a gallery
-		// Find the currently visible portfolio section by checking intersection
-		// This avoids store access inside the handler
-		const visibleSections = document.querySelectorAll('.portfolioSection:not(.hidden)');
-		let currentSection = null;
-		
-		// Find the section that's most visible (has highest intersection ratio)
-		let maxRatio = 0;
-		visibleSections.forEach((section) => {
-			const rect = section.getBoundingClientRect();
-			const viewportHeight = window.innerHeight;
-			const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-			const ratio = visibleHeight / viewportHeight;
-			if (ratio > maxRatio && ratio > 0.4) {
-				maxRatio = ratio;
-				currentSection = section;
+	
+	// Import shortcuts system
+	import { shortcuts } from '../utils/shortcuts.js';
+	
+	// Gallery navigation handlers - registered as screen shortcuts for each section with a gallery
+	function createGalleryHandlers(sectionId) {
+		// Handler for ArrowLeft - navigate to previous slide
+		function handleGalleryPrev(e) {
+			// Don't interfere if user is typing in a form field
+			const targetTag = e.target?.tagName;
+			if (targetTag && targetTag.match(/INPUT|TEXTAREA|SELECT/)) {
+				return;
 			}
-		});
+			
+			const section = document.getElementById(sectionId);
+			if (!section) return;
+			
+			const gallery = section.querySelector('.gallery');
+			if (!gallery) return;
+			
+			// Check if gallery is initialized with Slick
+			if (!jQuery || !jQuery.fn.slick) return;
+			const galleryElement = jQuery(gallery);
+			if (!galleryElement.hasClass('slick-initialized')) return;
+			
+			// Only handle if the event target is NOT the gallery list element
+			// (Slick's handler will handle it if focus is on the gallery)
+			if (e.target === gallery || gallery.contains(e.target)) {
+				return; // Let Slick's handler take care of it
+			}
+			
+			// Trigger Slick's navigation (focus is elsewhere, so Slick's handler won't fire)
+			galleryElement.slick('slickPrev');
+			e.preventDefault();
+		}
 		
-		if (!currentSection) return;
+		// Handler for ArrowRight - navigate to next slide
+		function handleGalleryNext(e) {
+			// Don't interfere if user is typing in a form field
+			const targetTag = e.target?.tagName;
+			if (targetTag && targetTag.match(/INPUT|TEXTAREA|SELECT/)) {
+				return;
+			}
+			
+			const section = document.getElementById(sectionId);
+			if (!section) return;
+			
+			const gallery = section.querySelector('.gallery');
+			if (!gallery) return;
+			
+			// Check if gallery is initialized with Slick
+			if (!jQuery || !jQuery.fn.slick) return;
+			const galleryElement = jQuery(gallery);
+			if (!galleryElement.hasClass('slick-initialized')) return;
+			
+			// Only handle if the event target is NOT the gallery list element
+			// (Slick's handler will handle it if focus is on the gallery)
+			if (e.target === gallery || gallery.contains(e.target)) {
+				return; // Let Slick's handler take care of it
+			}
+			
+			// Trigger Slick's navigation (focus is elsewhere, so Slick's handler won't fire)
+			galleryElement.slick('slickNext');
+			e.preventDefault();
+		}
 		
-		// Find the gallery in the current section
-		const gallery = currentSection.querySelector('.gallery');
-		if (!gallery) return;
-		
-		// Check if gallery is initialized with Slick
-		if (!jQuery || !jQuery.fn.slick) return;
-		const galleryElement = jQuery(gallery);
-		if (!galleryElement.hasClass('slick-initialized')) return;
-		const slickInstance = galleryElement.slick('getSlick');
-		if (!slickInstance || !slickInstance.options.accessibility) return;
-		
-		// Handle Enter key for video play/pause
-		if (e.key === 'Enter') {
-			// Use Slick's API to get the current slide - more reliable than querySelector
-			const currentSlideIndex = slickInstance.currentSlide;
+		// Handler for Enter - play/pause video in current slide
+		function handleGalleryEnter(e) {
+			// Don't interfere if user is typing in a form field
+			const targetTag = e.target?.tagName;
+			if (targetTag && targetTag.match(/INPUT|TEXTAREA|SELECT/)) {
+				return;
+			}
+			
+			const section = document.getElementById(sectionId);
+			if (!section) return;
+			
+			const gallery = section.querySelector('.gallery');
+			if (!gallery) return;
+			
+			// Check if gallery is initialized with Slick
+			if (!jQuery || !jQuery.fn.slick) return;
+			const galleryElement = jQuery(gallery);
+			if (!galleryElement.hasClass('slick-initialized')) return;
+			const slickInstance = galleryElement.slick('getSlick');
+			if (!slickInstance || !slickInstance.options.accessibility) return;
 			
 			// Get all slides (including clones in infinite mode)
 			const allSlides = gallery.querySelectorAll('.slick-slide');
@@ -150,9 +184,7 @@
 			}
 			
 			// Strategy 3: Use currentSlideIndex from Slick API (but skip clones)
-			if (!currentSlide && currentSlideIndex !== undefined) {
-				// In infinite mode, we need to find the actual slide, not the clone
-				// Slick's currentSlide might point to a clone, so we need to find the original
+			if (!currentSlide) {
 				for (let i = 0; i < allSlides.length; i++) {
 					const slide = allSlides[i];
 					if (!slide.classList.contains('slick-cloned') && 
@@ -191,29 +223,37 @@
 						video.pause();
 					}
 					e.preventDefault();
-					return;
 				}
 			}
-			// If no video found, do nothing (don't prevent default to allow other handlers)
-			return;
 		}
 		
-		// Only handle if the event target is NOT the gallery list element
-		// (Slick's handler will handle it if focus is on the gallery)
-		// This prevents double navigation
-		if (e.target === gallery || gallery.contains(e.target)) {
-			// Let Slick's handler take care of it
-			return;
-		}
-		
-		// Trigger Slick's navigation (focus is elsewhere, so Slick's handler won't fire)
-		if (e.key === 'ArrowLeft') {
-			galleryElement.slick('slickPrev');
-			e.preventDefault();
-		} else if (e.key === 'ArrowRight') {
-			galleryElement.slick('slickNext');
-			e.preventDefault();
-		}
+		return {
+			prev: handleGalleryPrev,
+			next: handleGalleryNext,
+			enter: handleGalleryEnter
+		};
+	}
+	
+	// Register gallery shortcuts for sections that have galleries (use PortfolioGallery component)
+	function registerGalleryShortcuts() {
+		portfolioSections.forEach((section) => {
+			// Only register for sections that use PortfolioGallery (have items array)
+			if (section.config.items && section.config.items.length > 0) {
+				const handlers = createGalleryHandlers(section.id);
+				shortcuts.addScreenShortcut(section.id, 'ArrowLeft', handlers.prev, true);
+				shortcuts.addScreenShortcut(section.id, 'ArrowRight', handlers.next, true);
+				shortcuts.addScreenShortcut(section.id, 'Enter', handlers.enter, true);
+			}
+		});
+	}
+	
+	// Clean up gallery shortcuts
+	function unregisterGalleryShortcuts() {
+		portfolioSections.forEach((section) => {
+			if (section.config.items && section.config.items.length > 0) {
+				shortcuts.removeScreenShortcuts(section.id);
+			}
+		});
 	}
 
 	onMount(() => {
@@ -270,10 +310,12 @@
 			}
 		}, 300);
 		
-		document.addEventListener('keydown', handleGalleryKeyboard);
+		// Register gallery shortcuts as screen shortcuts for each section
+		// This ensures they respect modal blocking and follow the shortcuts system architecture
+		registerGalleryShortcuts();
 		
 		return () => {
-			document.removeEventListener('keydown', handleGalleryKeyboard);
+			unregisterGalleryShortcuts();
 		};
 	});
 </script>

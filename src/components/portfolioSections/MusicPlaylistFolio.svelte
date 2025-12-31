@@ -326,7 +326,7 @@
 
 	.playIcon {
 		display: inline-block;
-		background: url('img/audio-player/play_alt.png') center center no-repeat;
+		background: url('/img/audio-player/play_alt.png') center center no-repeat;
 		background-size: 80%;
 		vertical-align: middle;
 		width: 1em;
@@ -380,8 +380,8 @@
 	.musicPlaylist li.focus .playIcon {
 		background: none;
 		background-color: var(--music-playlist-text-primary);
-		-webkit-mask-image: url('img/audio-player/pause2.svg');
-		mask-image: url('img/audio-player/pause2.svg');
+		-webkit-mask-image: url('/img/audio-player/pause2.svg');
+		mask-image: url('/img/audio-player/pause2.svg');
 		-webkit-mask-size: 100%;
 		mask-size: 100%;
 		-webkit-mask-repeat: no-repeat;

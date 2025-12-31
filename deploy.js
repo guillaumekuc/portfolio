@@ -116,10 +116,16 @@ async function deploy() {
   
   try {
     console.log('🔐 Connecting to OVH server...');
+    console.log(`   Host: ${config.host}`);
+    console.log(`   Port: ${config.port}`);
+    console.log(`   Username: ${config.username}`);
+    
     const connectionOptions = {
       host: config.host,
       port: config.port,
       username: config.username,
+      readyTimeout: 20000, // 20 second timeout
+      keepaliveInterval: 10000, // Keep connection alive
     };
     
     if (config.privateKey) {

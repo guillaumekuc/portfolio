@@ -381,6 +381,13 @@ export class Navigation {
 		// General page navigation (ArrowUp/Down for most screens)
 		shortcuts.addGlobalShortcut('ArrowUp', handleNavUp, 'nav-up');
 		shortcuts.addGlobalShortcut('ArrowDown', handleNavDown, 'nav-down');
+		
+		// Help modal shortcut
+		function handleHelp() {
+			stores.navigation.currentModal.set('helpModal');
+		}
+		shortcuts.addGlobalShortcut('h', handleHelp, 'help-modal');
+		shortcuts.addGlobalShortcut('H', handleHelp, 'help-modal-upper');
 	}
 
 	setupMouseNavigation() {

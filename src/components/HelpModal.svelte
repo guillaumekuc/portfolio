@@ -32,7 +32,8 @@
 		'nav-up': { description: 'Navigate up', category: 'navigation', order: 1 },
 		'nav-down': { description: 'Navigate down', category: 'navigation', order: 2 },
 		'nav-left': { description: 'Navigate left', category: 'navigation', order: 3, contextual: true },
-		'nav-right': { description: 'Navigate right', category: 'navigation', order: 4, contextual: true }
+		'nav-right': { description: 'Navigate right', category: 'navigation', order: 4, contextual: true },
+		'help-modal': { description: 'Open help', category: 'navigation', order: 5 }
 	};
 
 	// Category display order

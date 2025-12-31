@@ -83,6 +83,9 @@ class Shortcuts {
 				}
 			}
 			// Modal is active but no shortcut matched - block all other shortcuts
+			// Prevent default to stop other event listeners from handling the key
+			e.preventDefault();
+			e.stopPropagation();
 			return;
 		}
 
