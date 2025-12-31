@@ -87,8 +87,8 @@
 	// This ensures ArrowLeft/ArrowRight work even after dragging when focus might be lost
 	// We only handle if the event target is not the gallery list (to avoid double-handling with Slick's handler)
 	function handleGalleryKeyboard(e) {
-		// Only handle ArrowLeft and ArrowRight
-		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+		// Only handle ArrowLeft, ArrowRight, and Enter
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Enter') {
 			return;
 		}
 		
@@ -129,6 +129,74 @@
 		if (!galleryElement.hasClass('slick-initialized')) return;
 		const slickInstance = galleryElement.slick('getSlick');
 		if (!slickInstance || !slickInstance.options.accessibility) return;
+		
+		// Handle Enter key for video play/pause
+		if (e.key === 'Enter') {
+			// Use Slick's API to get the current slide - more reliable than querySelector
+			const currentSlideIndex = slickInstance.currentSlide;
+			
+			// Get all slides (including clones in infinite mode)
+			const allSlides = gallery.querySelectorAll('.slick-slide');
+			
+			// Try to find the center slide using multiple strategies
+			let currentSlide = null;
+			
+			// Strategy 1: Use .slick-center class (most reliable for centerMode)
+			currentSlide = gallery.querySelector('.slick-slide.slick-center:not(.slick-cloned)');
+			
+			// Strategy 2: If no center found, try slick-current
+			if (!currentSlide) {
+				currentSlide = gallery.querySelector('.slick-slide.slick-current:not(.slick-cloned)');
+			}
+			
+			// Strategy 3: Use currentSlideIndex from Slick API (but skip clones)
+			if (!currentSlide && currentSlideIndex !== undefined) {
+				// In infinite mode, we need to find the actual slide, not the clone
+				// Slick's currentSlide might point to a clone, so we need to find the original
+				for (let i = 0; i < allSlides.length; i++) {
+					const slide = allSlides[i];
+					if (!slide.classList.contains('slick-cloned') && 
+					    slide.classList.contains('slick-active') &&
+					    (slide.classList.contains('slick-center') || slide.classList.contains('slick-current'))) {
+						currentSlide = slide;
+						break;
+					}
+				}
+			}
+			
+			// Strategy 4: Last resort - find any active non-cloned slide with video
+			if (!currentSlide) {
+				for (let i = 0; i < allSlides.length; i++) {
+					const slide = allSlides[i];
+					if (!slide.classList.contains('slick-cloned') && 
+					    slide.classList.contains('slick-active') &&
+					    slide.querySelector('video')) {
+						currentSlide = slide;
+						break;
+					}
+				}
+			}
+			
+			if (currentSlide) {
+				// Video might be directly in slide or inside .gallery-item
+				const video = currentSlide.querySelector('video');
+				if (video) {
+					// Toggle play/pause on the video
+					if (video.paused) {
+						video.play().catch(err => {
+							// Handle play() promise rejection (e.g., autoplay policy)
+							console.warn('Video play failed:', err);
+						});
+					} else {
+						video.pause();
+					}
+					e.preventDefault();
+					return;
+				}
+			}
+			// If no video found, do nothing (don't prevent default to allow other handlers)
+			return;
+		}
 		
 		// Only handle if the event target is NOT the gallery list element
 		// (Slick's handler will handle it if focus is on the gallery)

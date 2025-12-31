@@ -54,7 +54,12 @@
 	}));
 	
 	function handleVideoClick(event) {
-		event.currentTarget.play();
+		const video = event.currentTarget;
+		if (video.paused) {
+			video.play();
+		} else {
+			video.pause();
+		}
 	}
 </script>
 
