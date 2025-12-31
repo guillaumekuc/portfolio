@@ -19,14 +19,16 @@
 </div>
 
 <script>
+	import siteConfig from '../config/site.json';
+
 	export let selected = false;
 
 	function handleBlogClick(event) {
-		window.open('https://guillaumekuc.github.io/blog', '_blank');
+		window.open(siteConfig.blog.url, '_blank');
 	}
 
 	export function trigger() {
-		window.open('https://guillaumekuc.github.io/blog', '_blank');
+		window.open(siteConfig.blog.url, '_blank');
 	}
 </script>
 

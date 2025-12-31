@@ -6,7 +6,11 @@
 	"preloadImages": [
 		"/img/guillaumekuc_oldbg.jpg"
 	],
-	"lang": "en"
+	"lang": "en",
+	"blog": {
+		"url": "https://guillaumekuc.github.io/blog/",
+		"feedUrl": "https://guillaumekuc.github.io/blog/feed.xml"
+	}
 }
 
 

@@ -65,7 +65,7 @@
 			"id": "blog",
 			"label": "Blog",
 			"type": "external",
-			"url": "http://guillaumekuc.blog",
+			"url": "{{BLOG_URL}}",
 			"openInNewTab": true,
 			"icon": {
 				"src": "/img/nav/blog.svg",

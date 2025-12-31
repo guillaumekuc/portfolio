@@ -61,6 +61,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { debugLog } from '../utils/debuglog.js';
+	import siteConfig from '../config/site.json';
 	import pinnedPostsConfig from '../config/pinnedPosts.json';
 
 	let posts = [];
@@ -161,7 +162,7 @@
 				}
 
 				const response = await fetchWithTimeout(
-					'https://guillaumekuc.github.io/blog/feed.xml',
+					siteConfig.blog.feedUrl,
 					10000, // 10 second timeout
 					abortController.signal
 				);

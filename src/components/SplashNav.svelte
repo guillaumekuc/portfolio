@@ -68,6 +68,7 @@
 	import { debugLog } from '../utils/debuglog.js';
 	import { getMailtoUrl } from '../utils/email.js';
 	import navConfig from '../config/nav.json';
+	import siteConfig from '../config/site.json';
 	import portfolioConfig from '../config/portfolio.json';
 	import NavIcon from './NavIcon.svelte';
 	import { get } from 'svelte/store';
@@ -75,10 +76,13 @@
 	let navElement;
 	let navLinkElements = [];
 	
-	// Get navigation items from config and replace email placeholder
+	// Get navigation items from config and replace placeholders
 	const navItems = navConfig.navigation.map(item => {
 		if (item.url === '{{EMAIL}}') {
 			return { ...item, url: getMailtoUrl() };
+		}
+		if (item.url === '{{BLOG_URL}}') {
+			return { ...item, url: siteConfig.blog.url };
 		}
 		return item;
 	});
