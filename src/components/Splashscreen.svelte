@@ -4,7 +4,7 @@
 	<SplashscreenHero />
 
 	<div id="splashArtArea" class="splashArtArea">
-		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn">
+		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn" style="background-image: url('{backgroundImageUrl}')">
 			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop type="audio/mpeg" preload="none"
 			></audio>
 
@@ -134,7 +134,8 @@
 		padding: auto;
 		width: 100%;
 		height: 100%;
-		background: center no-repeat url('{backgroundImageUrl}');
+		background-position: center;
+		background-repeat: no-repeat;
 		background-size: cover;
 		transform: scale(1.1);
 		transition: transform 3s ease-out;

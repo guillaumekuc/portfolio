@@ -18,6 +18,28 @@ An interactive portfolio website showcasing creative work across 2D/3D art, musi
   - Global music controls: Space (play/pause), Q/D (prev/next), Z/S (vol up/down), M (mute), L (loop)
   - Navigation: Arrow keys for scrolling between sections
   - Context-aware shortcuts per screen
+  - Help modal (H key) displays all available shortcuts
+- **Modal system** - Reusable modal component with:
+  - Help modal for keyboard shortcuts reference
+  - Contact modal with profile info and contact actions
+  - Escape key and click-outside-to-close support
+  - Backdrop blur effects
+- **Animated background system** - Grid-based animated background with:
+  - Canvas-based character layer with interactive mouse tracking
+  - Character propagation effects
+  - Configurable layer system (ready for future layers)
+- **Tools display component** - Visual tool icons/labels for portfolio items:
+  - Config-driven tool definitions (`tools.json`)
+  - Icon-only or label display modes
+- **Unified gallery component** - Common `PortfolioGallery` component:
+  - Supports both images and videos
+  - Displays metadata (title, category, client, role, tools)
+  - Reduces code duplication across portfolio sections
+- **Componentized About page** - Modular components:
+  - `ProfileAvatar` - Profile picture with hover effects
+  - `ProfileInfo` - Name, headline, and social links
+  - `ContactBlocks` - Reusable contact buttons
+  - `BlogFeed` - RSS blog feed integration
 - **Config-driven architecture** - easily modify content without touching code
 - **Markdown content** - edit about page using Markdown
 - **Profile page** with avatar (hover effects), social links, and blog feed
@@ -25,7 +47,11 @@ An interactive portfolio website showcasing creative work across 2D/3D art, musi
 - **Integrated music player** with playlist support and persistent volume/mute settings
 - **Blog feed integration** via RSS
 - **Vertical navigation arrows** - hover-based up/down navigation
-- **Responsive design** with optimized breakpoints for all devices
+- **Responsive design** with global breakpoint system:
+  - Small desktop: `max-height: 950px`
+  - Tablet: `max-height: 750px`
+  - Mobile: `max-height: 500px`
+  - Adaptive layouts, font sizes, and component sizing across all breakpoints
 - **Landscape orientation constraint** - Portrait mode displays rotate-device overlay (best viewed horizontally)
 - **Performance optimized** with lazy loading and deferred content loading
 - **Email obfuscation** for bot protection
@@ -89,14 +115,28 @@ portfolio/
 ├── src/
 │   ├── components/          # Svelte components
 │   │   ├── portfolioSections/  # Portfolio content sections
+│   │   │   └── PortfolioGallery.svelte  # Unified gallery component
 │   │   ├── About.svelte
 │   │   ├── Header.svelte
+│   │   ├── Modal.svelte    # Base modal component
+│   │   ├── HelpModal.svelte
+│   │   ├── ContactModal.svelte
+│   │   ├── ToolsDisplay.svelte  # Tool icons/labels display
+│   │   ├── ProfileAvatar.svelte
+│   │   ├── ProfileInfo.svelte
+│   │   ├── ContactBlocks.svelte
+│   │   ├── BlogFeed.svelte
+│   │   ├── AnimatedBackground.svelte
+│   │   └── AnimatedBackgroundCharacterLayer.svelte
 │   │   └── ...
 │   ├── config/              # Configuration files (JSON)
 │   │   ├── nav.json         # Navigation items
 │   │   ├── portfolio.json   # Portfolio sections
 │   │   ├── profile.json     # Site profile
-│   │   └── socials.json     # Social media links
+│   │   ├── socials.json     # Social media links
+│   │   ├── tools.json       # Tool definitions (icons/labels)
+│   │   ├── site.json        # Site metadata and preload config
+│   │   └── assets.json      # Asset URL configuration
 │   ├── content/             # Markdown content
 │   │   └── about.md
 │   ├── utils/               # Utility modules
@@ -141,6 +181,21 @@ Edit `src/config/profile.json` for name, headline, location, etc.
 
 Edit `src/config/socials.json` to configure social media links.
 
+### Tools Configuration
+
+Edit `src/config/tools.json` to define tool icons and labels used in portfolio items:
+
+```json
+{
+  "graphic-tablet": {
+    "icon": "/img/tools/graphic-tablet.png",
+    "label": "Graphic Tablet"
+  }
+}
+```
+
+Tools are automatically displayed in portfolio galleries.
+
 ## Architecture
 
 - **Component-based**: Svelte components with scoped styles and reactive state
@@ -148,6 +203,9 @@ Edit `src/config/socials.json` to configure social media links.
 - **Modular utilities**: Reusable functions for navigation, animation, storage, etc.
 - **IntersectionObserver**: Efficient scroll tracking and visibility detection
 - **localStorage**: Persistent user preferences across sessions
+- **Modal system**: Reusable modal component with shortcut integration
+- **Unified gallery**: Common component for all portfolio sections (images/videos)
+- **Global breakpoints**: Consistent responsive design system across components
 
 ## Development Notes
 
@@ -156,5 +214,8 @@ Edit `src/config/socials.json` to configure social media links.
 - Keyboard shortcuts available for navigation (arrow keys, Enter, etc.)
 - Music player with playlist support and persistent settings
 - Email addresses are obfuscated to prevent bot scraping
+- Modal system supports three-tier shortcut priority (modal → screen → global)
+- Animated background system is implemented but currently commented out in About page
+- Global breakpoint system ensures consistent responsive behavior across all components
 
 ---

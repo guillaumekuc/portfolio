@@ -1,11 +1,11 @@
 {
-	"photoshop": {
-		"icon": "/img/tools/photoshop.png",
-		"label": "Adobe Photoshop"
-	},
 	"graphic-tablet": {
 		"icon": "/img/tools/graphic-tablet.png",
 		"label": "Graphic Tablet"
+	},
+	"photoshop": {
+		"icon": "/img/tools/photoshop.png",
+		"label": "Adobe Photoshop"
 	},
 	"3dsmax": {
 		"icon": "/img/tools/3dsmax.png",
@@ -16,8 +16,8 @@
 		"label": "Blender"
 	},
 	"gridz": {
-		"icon": null,
-		"label": "Gridz"
+		"icon": "/img/tools/gridz3.png",
+		"label": "Gridz (Internal Tool)"
 	},
 	"google-maps": {
 		"icon": null,

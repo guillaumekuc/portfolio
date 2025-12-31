@@ -80,7 +80,7 @@ export function htmlConfig() {
 					const preloadLinks = siteConfig.preloadImages
 						.map(image => {
 							const resolvedUrl = getAssetUrl(image);
-							return `\t<link rel="preload" as="image" href="${escapeHtml(resolvedUrl)}">`;
+							return `\t<link rel="preload" as="image" href="${escapeHtml(resolvedUrl)}" fetchpriority="high">`;
 						})
 						.join('\n');
 
