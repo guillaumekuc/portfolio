@@ -1,28 +1,21 @@
-<div class="musicPlaylistWrapper">
-	<div id="musicPlaylistCover" class="musicPlaylistCover" style={coverStyle}>
-		<div
-			style="position : absolute; top : auto; left : var(--safeMargin); bottom : var(--safeMargin);"
-		>
-			<div><i class="musicIcon">SPACE</i> : play/pause</div>
-			<div><i class="musicIcon">Q</i>, <i class="musicIcon">D</i> : previous/next track</div>
-			<div><i class="musicIcon">S</i>, <i class="musicIcon">Z</i> : volume down/up</div>
-			<div><i class="musicIcon">M</i> : mute, <i class="musicIcon">L</i> : loop</div>
-		</div>
-	</div>
-	<div class="musicPlaylistRPanel">
-		<div class="musicPlaylistTitle">Playlist</div>
-		<!--title-->
+<div class="musicPlaylistPanel">
+	{#if collectionImage}
+		<img src={collectionImage} alt="Vinyl disc" class="vinylDisc" bind:this={vinylDiscElement} style="transform: rotate({currentRotation}deg);" />
+	{/if}
+	<div class="musicPlaylistTitle">{collectionName}</div>
+	<!--title-->
 		<ul id="musicPlaylist" class="musicPlaylist" aria-label="Fragments">
 			{#each tracks as track, index}
 				<li class:focus={currentIndex === index}>
 					<button type="button" class="musicPlaylistButton" on:click={() => handleTrackClick(index)}>
-						<i class="playIcon"></i><span>{track.title}</span>
+						<span class="trackNumber">{index + 1} · </span>
+						<span class="trackTitle">{track.title}</span>
+						<i class="playIcon"></i>
 					</button>
 				</li>
 			{/each}
 		</ul>
-		<!--list-->
-	</div>
+	<!--list-->
 </div>
 
 <script>
@@ -45,36 +38,25 @@
 
 	let musicPlayer;
 	let bgMusicElement;
+	let vinylDiscElement;
+	let currentRotation = 0;
+	let animationFrameId = null;
+	let lastTimestamp = null;
+	const ROTATION_SPEED = 360 / 3; // degrees per second (3 seconds per full rotation)
 
-	const tracks = [
-		{ sound: '/sound/bgmusic.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Background music #1' },
-		{ sound: '/sound/bgmusic2.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Background music #2' },
-		{ sound: '/sound/MallowHazard.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Mallow Hazard' },
-		{ sound: "/sound/Chris'Journey.mp3", image: '/img/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
-		{ sound: '/sound/ChillingVastitude.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Chilling Vastitude' },
-		{ sound: '/sound/ChaoticIntruders.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Chaotic Intruders' },
-		{ sound: '/sound/DistractingScent.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Distracting Scent' },
-		{ sound: '/sound/FerventHorizon.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Fervent Horizon' },
-		{ sound: '/sound/GalvanizingQuest.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Galvanizing Quest' },
-		{ sound: '/sound/InvigoratingFarm.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Invigorating Farm' },
-		{
-			sound: '/sound/RecalcitrantWaterflow.mp3',
-			image: '/img/guillaumekuc_bgMusic.jpg',
-			title: 'Recalcitrant Waterflow'
-		},
-		{ sound: '/sound/SpicyGallant.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Spicy Gallant' },
-		{ sound: '/sound/UntroubledMorning.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Untroubled Morning' },
-		{ sound: "/sound/Chris'Journey.mp3", image: '/img/guillaumekuc_bgMusic.jpg', title: "Chris' Journey" },
-		{ sound: '/sound/StunnedChickens.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Stunned Chickens' },
-		{ sound: '/sound/Meanwhile.mp3', image: '/img/guillaumekuc_bgMusic.jpg', title: 'Meanwhile' }
-	].map(track => ({
+	// Get the first collection (for now we only have one)
+	$: currentCollection = sectionConfig?.collections?.[0] || null;
+	$: collectionName = currentCollection?.name || 'Unnamed Collection';
+	$: collectionImage = currentCollection?.image ? getAssetUrl(currentCollection.image) : null;
+
+	// Get tracks from current collection and process asset URLs
+	$: tracks = (currentCollection?.tracks || []).map(track => ({
 		...track,
-		sound: getAssetUrl(track.sound),
-		image: getAssetUrl(track.image)
+		sound: getAssetUrl(track.sound)
 	}));
 
-	// Store tracks in store for music.js to access
-	stores.music.tracks.set(tracks);
+	// Store tracks in store for music.js to access (reactive)
+	$: stores.music.tracks.set(tracks);
 
 	function handleTrackClick(index) {
 		const player = get(stores.music.musicPlayer);
@@ -83,7 +65,10 @@
 			const track = tracks[index];
 			bgMusic.setAttribute('src', track.sound);
 			stores.music.currentIndex.set(index);
-			stores.music.trackImage.set(track.image);
+			// Use collection image instead of track image
+			if (collectionImage) {
+				stores.music.trackImage.set(collectionImage);
+			}
 			player.play();
 		}
 	}
@@ -120,6 +105,38 @@
 		}
 	}
 
+	function animateRotation(timestamp) {
+		if (!lastTimestamp) {
+			lastTimestamp = timestamp;
+		}
+		
+		const deltaTime = (timestamp - lastTimestamp) / 1000; // Convert to seconds
+		lastTimestamp = timestamp;
+		
+		if (isPlaying) {
+			currentRotation += ROTATION_SPEED * deltaTime;
+			// Keep rotation in 0-360 range for cleaner values
+			if (currentRotation >= 360) {
+				currentRotation -= 360;
+			}
+			animationFrameId = requestAnimationFrame(animateRotation);
+		}
+	}
+
+	// Watch isPlaying to start/stop animation
+	$: if (isPlaying && vinylDiscElement) {
+		if (!animationFrameId) {
+			lastTimestamp = null;
+			animationFrameId = requestAnimationFrame(animateRotation);
+		}
+	} else {
+		if (animationFrameId) {
+			cancelAnimationFrame(animationFrameId);
+			animationFrameId = null;
+			lastTimestamp = null;
+		}
+	}
+
 	onMount(() => {
 		const player = get(stores.music.musicPlayer);
 		if (player) {
@@ -128,9 +145,9 @@
 		}
 		stores.music.playlistLength.set(tracks.length);
 
-		// Initialize track image
-		if (tracks[currentIndex]) {
-			stores.music.trackImage.set(tracks[currentIndex].image);
+		// Initialize track image from collection
+		if (collectionImage) {
+			stores.music.trackImage.set(collectionImage);
 		}
 
 		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowRight', playNextTrack);
@@ -138,87 +155,41 @@
 	});
 
 	onDestroy(() => {
+		if (animationFrameId) {
+			cancelAnimationFrame(animationFrameId);
+		}
 		shortcuts.removeScreenShortcuts('musicPlaylistFolio');
 	});
-
-	$: coverStyle = `background: no-repeat center / cover url(${trackImage})`;
 </script>
 
 <!--musicPlaylistWrapper-->
 
 <style>
-	.musicPlaylistWrapper {
+	.musicPlaylistPanel {
 		/* Font interface variables - map global variables to local scope */
 		--music-playlist-font-rounded: var(--ffRounded);
 		/* Border radius interface variable - map global variable to local scope */
 		--music-playlist-radius: var(--radius-large);
-	}
-	i.musicIcon {
-		font-style: normal;
-		display: inline-block;
-		height: 1.5em;
-		font-size: 1em;
-		box-sizing: border-box;
-		padding-left: 0.4em;
-		padding-right: 0.4em;
-		border: 1px solid var(--music-playlist-text-primary);
-		border-radius: var(--radius-medium);
-		font-family: var(--music-playlist-font-rounded);
-		text-transform: uppercase;
-		vertical-align: middle;
-		-webkit-filter: drop-shadow(1px 1px 0 var(--music-playlist-overlay))
-			drop-shadow(-1px 1px 0 var(--music-playlist-overlay)) drop-shadow(1px -1px 0 var(--music-playlist-overlay))
-			drop-shadow(-1px -1px 0 var(--music-playlist-overlay));
-		filter: drop-shadow(1px 1px 0 var(--music-playlist-overlay))
-			drop-shadow(-1px 1px 0 var(--music-playlist-overlay)) drop-shadow(1px -1px 0 var(--music-playlist-overlay))
-			drop-shadow(-1px -1px 0 var(--music-playlist-overlay));
-	}
-
-	.musicPlaylistWrapper {
+		
 		/* Color interface variables */
 		--music-playlist-accent-color: var(--color-accent);
 		--music-playlist-text-primary: var(--color-white);
 		--music-playlist-background-secondary: var(--color-background-secondary);
 		--music-playlist-overlay: var(--color-overlay);
 		
-		font-size: var(--fs2o3);
-	}
-	@media (max-height: 648px) {
-		.musicPlaylistWrapper {
-			font-size: var(--fs1o2);
-		}
-	}
-
-	.musicPlaylistWrapper {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: start;
-		width: 100%;
-		padding: 0;
-		margin: 0;
-	}
-
-	.musicPlaylistCover {
-		flex-shrink: 0;
-		display: inline-block;
-		width: calc(2 * 100vw / 3);
-		height: 66.66vh;
-		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
-		background-color: var(--music-playlist-background-secondary);
-		border-radius: 0 var(--music-playlist-radius) var(--music-playlist-radius) 0;
-		position: relative;
-	}
-
-	.musicPlaylistRPanel {
+		/* Margin calculation - same as About page */
+		--music-playlist-margin: calc(var(--header-footer-height) + var(--safeMargin));
+		
+		/* Layout - parent .portfolioSection already centers with flexbox */
 		display: flex;
 		flex-direction: column;
-		flex-shrink: 1;
 		width: 100%;
-		height: 66.66vh;
-		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin)));
-		margin-left: var(--safeMargin);
-		margin-right: var(--safeMargin);
+		max-width: 600px;
+		max-height: calc(100vh - 2 * var(--music-playlist-margin));
+		padding-left: var(--safeMargin);
+		padding-right: var(--safeMargin);
+		box-sizing: border-box;
+		overflow: hidden;
 	}
 
 	.musicPlaylist {
@@ -233,6 +204,10 @@
 
 	/* Responsive breakpoints for smaller screens */
 	@media (max-height: 950px) {
+		.vinylDisc {
+			width: 100px;
+			height: 100px;
+		}
 		.musicPlaylist {
 			margin-top: 12px;
 		}
@@ -247,9 +222,16 @@
 			padding-top: 0.4em;
 			padding-bottom: 0.4em;
 		}
+		.trackNumber {
+			font-size: 0.88em;
+		}
 	}
 
 	@media (max-height: 750px) {
+		.vinylDisc {
+			width: 80px;
+			height: 80px;
+		}
 		.musicPlaylist {
 			margin-top: 10px;
 		}
@@ -265,6 +247,9 @@
 			padding-bottom: 0.35em;
 			padding-left: calc(var(--safeMargin) / 3);
 		}
+		.trackNumber {
+			font-size: 0.86em;
+		}
 		.playIcon {
 			width: 0.9em;
 			height: 0.9em;
@@ -272,6 +257,11 @@
 	}
 
 	@media (max-height: 500px) {
+		.vinylDisc {
+			width: 60px;
+			height: 60px;
+			margin-bottom: 0.5em;
+		}
 		.musicPlaylist {
 			margin-top: 5px;
 			font-size: 85%;
@@ -290,10 +280,12 @@
 			padding-left: calc(var(--safeMargin) / 5);
 			line-height: 1.1;
 		}
+		.trackNumber {
+			font-size: 0.84em;
+		}
 		.playIcon {
 			width: 0.7em;
 			height: 0.7em;
-			margin-right: calc(var(--safeMargin) / 4);
 		}
 	}
 
@@ -315,6 +307,14 @@
 		background-color: rgba(170, 170, 170, 0.5);
 	}
 
+	.vinylDisc {
+		width: 120px;
+		height: 120px;
+		margin: 0 auto 1em auto;
+		display: block;
+		transition: none;
+	}
+
 	.musicPlaylistTitle {
 		display: block;
 		font-size: 150%;
@@ -325,13 +325,14 @@
 	}
 
 	.playIcon {
+		flex-shrink: 0;
 		display: inline-block;
 		background: url('/img/audio-player/play_alt.png') center center no-repeat;
 		background-size: 80%;
 		vertical-align: middle;
 		width: 1em;
 		height: 1em;
-		margin-right: calc(var(--safeMargin) / 2);
+		margin-left: auto;
 	}
 
 	.musicPlaylist li {
@@ -343,7 +344,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		justify-content: left;
+		justify-content: space-between;
 		cursor: pointer;
 		text-align: left;
 		line-height: 1;
@@ -352,21 +353,35 @@
 		padding-top: 0.5em;
 		padding-bottom: 0.5em;
 		padding-left: calc(var(--safeMargin) / 2);
+		padding-right: calc(var(--safeMargin) / 2);
 		width: 100%;
 		border: none;
 		background: transparent;
 		color: inherit;
 		font: inherit;
+		gap: 0.5em;
 	}
 
-	.musicPlaylist li span {
+	.trackNumber {
+		flex-shrink: 0;
+		color: var(--color-gray-light);
+		font-size: 0.9em;
+	}
+
+	.trackTitle {
+		flex: 1;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		min-width: 0;
 	}
 
 	.musicPlaylistButton:hover {
 		background-color: var(--music-playlist-accent-color);
+	}
+
+	.musicPlaylistButton:hover .trackNumber {
+		color: var(--music-playlist-text-primary);
 	}
 
 	.musicPlaylist li.focus .musicPlaylistButton {
@@ -375,6 +390,10 @@
 
 	.musicPlaylist li.focus .musicPlaylistButton:hover {
 		background-color: var(--music-playlist-accent-color);
+	}
+
+	.musicPlaylist li.focus .musicPlaylistButton:hover .trackNumber {
+		color: var(--music-playlist-text-primary);
 	}
 
 	.musicPlaylist li.focus .playIcon {

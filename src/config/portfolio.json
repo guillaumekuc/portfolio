@@ -3,7 +3,30 @@
 		{
 			"id": "musicPlaylistFolio",
 			"component": "MusicPlaylistFolio",
-			"categories": "portfolio-music portfolio-all"
+			"categories": "portfolio-music portfolio-all",
+			"collections": [
+				{
+					"name": "Collection #1",
+					"image": "/img/vinyl-disc.png",
+					"tracks": [
+						{ "sound": "/sound/SoloRecitalAtTheSunkenTemple.mp3", "title": "Solo Recital at the Sunken Temple" },
+						{ "sound": "/sound/bgmusic2.mp3", "title": "Background music #2" },
+						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" },
+						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
+						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },
+						{ "sound": "/sound/ChaoticIntruders.mp3", "title": "Chaotic Intruders" },
+						{ "sound": "/sound/DistractingScent.mp3", "title": "Distracting Scent" },
+						{ "sound": "/sound/FerventHorizon.mp3", "title": "Fervent Horizon" },
+						{ "sound": "/sound/GalvanizingQuest.mp3", "title": "Galvanizing Quest" },
+						{ "sound": "/sound/InvigoratingFarm.mp3", "title": "Invigorating Farm" },
+						{ "sound": "/sound/RecalcitrantWaterflow.mp3", "title": "Recalcitrant Waterflow" },
+						{ "sound": "/sound/SpicyGallant.mp3", "title": "Spicy Gallant" },
+						{ "sound": "/sound/UntroubledMorning.mp3", "title": "Untroubled Morning" },
+						{ "sound": "/sound/StunnedChickens.mp3", "title": "Stunned Chickens" },
+						{ "sound": "/sound/Meanwhile.mp3", "title": "Meanwhile" }
+					]
+				}
+			]
 		},
 		{
 			"id": "illustrationFolio1",
