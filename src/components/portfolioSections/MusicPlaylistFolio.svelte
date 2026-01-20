@@ -3,6 +3,9 @@
 		<img src={collectionImage} alt="Vinyl disc" class="vinylDisc" bind:this={vinylDiscElement} style="transform: rotate({currentRotation}deg);" />
 	{/if}
 	<div class="musicPlaylistTitle">{collectionName}</div>
+	{#if collectionSubtitle}
+		<div class="musicPlaylistSubtitle">{collectionSubtitle}</div>
+	{/if}
 	<!--title-->
 		<ul id="musicPlaylist" class="musicPlaylist" aria-label="Fragments">
 			{#each tracks as track, index}
@@ -47,6 +50,7 @@
 	// Get the first collection (for now we only have one)
 	$: currentCollection = sectionConfig?.collections?.[0] || null;
 	$: collectionName = currentCollection?.name || 'Unnamed Collection';
+	$: collectionSubtitle = currentCollection?.subtitle || null;
 	$: collectionImage = currentCollection?.image ? getAssetUrl(currentCollection.image) : null;
 
 	// Get tracks from current collection and process asset URLs
@@ -214,6 +218,9 @@
 		.musicPlaylistTitle {
 			font-size: 135%;
 		}
+		.musicPlaylistSubtitle {
+			font-size: 85%;
+		}
 		.musicPlaylist li {
 			margin-top: 0.2em;
 			margin-bottom: 0.2em;
@@ -237,6 +244,9 @@
 		}
 		.musicPlaylistTitle {
 			font-size: 120%;
+		}
+		.musicPlaylistSubtitle {
+			font-size: 80%;
 		}
 		.musicPlaylist li {
 			margin-top: 0.15em;
@@ -269,6 +279,11 @@
 		.musicPlaylistTitle {
 			font-size: 100%;
 			margin-bottom: 3px;
+		}
+		.musicPlaylistSubtitle {
+			font-size: 75%;
+			margin-top: 0.2em;
+			margin-bottom: 0.3em;
 		}
 		.musicPlaylist li {
 			margin-top: 0.05em;
@@ -321,6 +336,16 @@
 		font-weight: bold;
 		font-variant: small-caps;
 		height: max-content;
+		font-family: var(--music-playlist-font-rounded);
+	}
+
+	.musicPlaylistSubtitle {
+		display: block;
+		font-size: 90%;
+		font-weight: normal;
+		color: var(--color-gray-light);
+		margin-top: 0.3em;
+		margin-bottom: 0.5em;
 		font-family: var(--music-playlist-font-rounded);
 	}
 

@@ -7,6 +7,7 @@
 			"collections": [
 				{
 					"name": "Collection #1",
+					"subtitle": "Miscellaneous",
 					"image": "/img/vinyl-disc.png",
 					"tracks": [
 						{ "sound": "/sound/SoloRecitalAtTheSunkenTemple.mp3", "title": "Solo Recital at the Sunken Temple" },
@@ -24,6 +25,16 @@
 						{ "sound": "/sound/UntroubledMorning.mp3", "title": "Untroubled Morning" },
 						{ "sound": "/sound/StunnedChickens.mp3", "title": "Stunned Chickens" },
 						{ "sound": "/sound/Meanwhile.mp3", "title": "Meanwhile" }
+					]
+				},
+				{
+					"name": "Collection #2",
+					"subtitle": "Miscellaneous",
+					"image": "/img/vinyl-disc.png",
+					"tracks": [
+						{ "sound": "/sound/SoloRecitalAtTheSunkenTemple.mp3", "title": "Solo Recital at the Sunken Temple" },
+						{ "sound": "/sound/bgmusic2.mp3", "title": "Background music #2" },
+						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" }
 					]
 				}
 			]
