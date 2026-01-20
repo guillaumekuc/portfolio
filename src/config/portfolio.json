@@ -36,6 +36,16 @@
 						{ "sound": "/sound/bgmusic2.mp3", "title": "Background music #2" },
 						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" }
 					]
+				},
+				{
+					"name": "Collection #3",
+					"subtitle": "Miscellaneous",
+					"image": "/img/vinyl-disc.png",
+					"tracks": [
+						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
+						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },
+						{ "sound": "/sound/ChaoticIntruders.mp3", "title": "Chaotic Intruders" }
+					]
 				}
 			]
 		},

@@ -1,24 +1,28 @@
-<div class="musicPlaylistPanel">
-	{#if collectionImage}
-		<img src={collectionImage} alt="Vinyl disc" class="vinylDisc" bind:this={vinylDiscElement} style="transform: rotate({currentRotation}deg);" />
-	{/if}
-	<div class="musicPlaylistTitle">{collectionName}</div>
-	{#if collectionSubtitle}
-		<div class="musicPlaylistSubtitle">{collectionSubtitle}</div>
-	{/if}
-	<!--title-->
-		<ul id="musicPlaylist" class="musicPlaylist" aria-label="Fragments">
-			{#each tracks as track, index}
-				<li class:focus={currentIndex === index}>
-					<button type="button" class="musicPlaylistButton" on:click={() => handleTrackClick(index)}>
-						<span class="trackNumber">{index + 1} · </span>
-						<span class="trackTitle">{track.title}</span>
-						<i class="playIcon"></i>
-					</button>
-				</li>
-			{/each}
-		</ul>
-	<!--list-->
+<div class="musicCollectionsGallery">
+	{#each collections as collection, collectionIndex}
+		<div class="musicPlaylistPanel" data-collection-index={collectionIndex}>
+			<div class="musicPlaylistHeader">
+				{#if collection.image}
+					<img src={collection.image} alt="Vinyl disc" class="vinylDisc" bind:this={vinylDiscElements[collectionIndex]} style="transform: rotate({collectionRotations[collectionIndex] || 0}deg);" />
+				{/if}
+				<div class="musicPlaylistTitle">{collection.name}</div>
+				{#if collection.subtitle}
+					<div class="musicPlaylistSubtitle">{collection.subtitle}</div>
+				{/if}
+			</div>
+			<ul class="musicPlaylist" aria-label="Fragments" data-collection-index={collectionIndex}>
+				{#each collection.tracks as track, trackIndex}
+					<li class:focus={currentCollectionIndex === collectionIndex && currentTrackIndex === trackIndex}>
+						<button type="button" class="musicPlaylistButton" on:click={() => handleTrackClick(collectionIndex, trackIndex)}>
+							<span class="trackNumber">{trackIndex + 1} · </span>
+							<span class="trackTitle">{track.title}</span>
+							<i class="playIcon"></i>
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/each}
 </div>
 
 <script>
@@ -30,297 +34,306 @@
 
 	export let sectionConfig;
 
-	const currentIndexStore = stores.music.currentIndex;
-	$: currentIndex = $currentIndexStore;
+	const currentCollectionIndexStore = stores.music.currentCollectionIndex;
+	$: currentCollectionIndex = $currentCollectionIndexStore;
 
-	const trackImageStore = stores.music.trackImage;
-	$: trackImage = $trackImageStore;
+	const currentTrackIndexStore = stores.music.currentTrackIndex;
+	$: currentTrackIndex = $currentTrackIndexStore;
 
 	const isPlayingStore = stores.music.isPlaying;
 	$: isPlaying = $isPlayingStore;
 
 	let musicPlayer;
 	let bgMusicElement;
-	let vinylDiscElement;
-	let currentRotation = 0;
-	let animationFrameId = null;
-	let lastTimestamp = null;
-	const ROTATION_SPEED = 360 / 3; // degrees per second (3 seconds per full rotation)
+	let galleryElement = null;
+	let vinylDiscElements = [];
+	let collectionRotations = [];
+	let animationFrameIds = [];
+	let lastTimestamps = [];
+	let slickInitialized = false;
+	let isUpdatingFromSlick = false;
+	
+	const ROTATION_SPEED = 360 / 3;
 
-	// Get the first collection (for now we only have one)
-	$: currentCollection = sectionConfig?.collections?.[0] || null;
-	$: collectionName = currentCollection?.name || 'Unnamed Collection';
-	$: collectionSubtitle = currentCollection?.subtitle || null;
-	$: collectionImage = currentCollection?.image ? getAssetUrl(currentCollection.image) : null;
-
-	// Get tracks from current collection and process asset URLs
-	$: tracks = (currentCollection?.tracks || []).map(track => ({
-		...track,
-		sound: getAssetUrl(track.sound)
+	$: collections = sectionConfig.collections.map(collection => ({
+		...collection,
+		image: getAssetUrl(collection.image),
+		tracks: collection.tracks.map(track => ({
+			...track,
+			sound: getAssetUrl(track.sound)
+		}))
 	}));
 
-	// Store tracks in store for music.js to access (reactive)
-	$: stores.music.tracks.set(tracks);
+	$: if (collections.length > 0) {
+		collectionRotations = Array(collections.length).fill(0);
+		lastTimestamps = Array(collections.length).fill(null);
+		animationFrameIds = Array(collections.length).fill(null);
+		vinylDiscElements = Array(collections.length).fill(null);
+	}
 
-	function handleTrackClick(index) {
-		const player = get(stores.music.musicPlayer);
-		const bgMusic = player?.bgMusicElement;
-		if (player && bgMusic) {
-			const track = tracks[index];
-			bgMusic.setAttribute('src', track.sound);
-			stores.music.currentIndex.set(index);
-			// Use collection image instead of track image
-			if (collectionImage) {
-				stores.music.trackImage.set(collectionImage);
-			}
-			player.play();
+	$: stores.music.collections.set(collections);
+	$: stores.music.tracks.set(collections.flatMap((col, idx) => 
+		col.tracks.map(track => ({ ...track, image: col.image, collectionIndex: idx }))
+	));
+	$: stores.music.currentIndex.set(collections.reduce((acc, col, idx) => 
+		idx < currentCollectionIndex ? acc + col.tracks.length : 
+		idx === currentCollectionIndex ? acc + currentTrackIndex : acc, 0
+	));
+
+	function playTrack(collectionIdx, trackIdx) {
+		const track = collections[collectionIdx].tracks[trackIdx];
+		stores.music.currentCollectionIndex.set(collectionIdx);
+		stores.music.currentTrackIndex.set(trackIdx);
+		stores.music.trackImage.set(collections[collectionIdx].image);
+		
+		bgMusicElement.pause();
+		bgMusicElement.setAttribute('src', track.sound);
+		bgMusicElement.load();
+		
+		const playWhenReady = () => {
+			bgMusicElement.removeEventListener('canplay', playWhenReady);
+			musicPlayer.play();
+		};
+		bgMusicElement.addEventListener('canplay', playWhenReady);
+		if (bgMusicElement.readyState >= 3) {
+			playWhenReady();
 		}
 	}
 
-	function scrollToTrack(element) {
-		element.scrollIntoView({
-			behavior: 'smooth',
-			block: 'nearest',
-			inline: 'start'
-		});
+	function syncSlick(collectionIdx) {
+		if (isUpdatingFromSlick) return;
+		const $gallery = window.$(galleryElement);
+		if ($gallery.slick('slickCurrentSlide') !== collectionIdx) {
+			$gallery.slick('slickGoTo', collectionIdx, true);
+		}
+	}
+
+	function handleTrackClick(collectionIdx, trackIdx) {
+		playTrack(collectionIdx, trackIdx);
+		syncSlick(collectionIdx);
+	}
+
+	function scrollToTrack(collectionIdx, trackIdx) {
+		const playlist = document.querySelector(`.musicPlaylist[data-collection-index="${collectionIdx}"]`);
+		playlist.querySelectorAll('li')[trackIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 	}
 
 	function playNextTrack() {
-		const player = get(stores.music.musicPlayer);
-		if (player) {
-			player.nextTrackHandler();
-			setTimeout(() => {
-				const currentIndex = get(stores.music.currentIndex);
-				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
-				if (track) scrollToTrack(track);
-			}, 10);
+		const currentCollection = collections[currentCollectionIndex];
+		if (currentTrackIndex + 1 < currentCollection.tracks.length) {
+			playTrack(currentCollectionIndex, currentTrackIndex + 1);
+			scrollToTrack(currentCollectionIndex, currentTrackIndex + 1);
+		} else if (currentCollectionIndex + 1 < collections.length) {
+			playTrack(currentCollectionIndex + 1, 0);
+			scrollToTrack(currentCollectionIndex + 1, 0);
 		}
 	}
 
 	function playPreviousTrack() {
-		const player = get(stores.music.musicPlayer);
-		if (player) {
-			player.previousTrackHandler();
-			setTimeout(() => {
-				const currentIndex = get(stores.music.currentIndex);
-				const track = document.querySelectorAll('.musicPlaylist li')[currentIndex];
-				if (track) scrollToTrack(track);
-			}, 10);
+		if (currentTrackIndex > 0) {
+			playTrack(currentCollectionIndex, currentTrackIndex - 1);
+			scrollToTrack(currentCollectionIndex, currentTrackIndex - 1);
+		} else if (currentCollectionIndex > 0) {
+			const prevIdx = currentCollectionIndex - 1;
+			playTrack(prevIdx, collections[prevIdx].tracks.length - 1);
+			scrollToTrack(prevIdx, collections[prevIdx].tracks.length - 1);
 		}
 	}
 
-	function animateRotation(timestamp) {
-		if (!lastTimestamp) {
-			lastTimestamp = timestamp;
+	function animateRotation(collectionIdx, timestamp) {
+		if (!lastTimestamps[collectionIdx]) {
+			lastTimestamps[collectionIdx] = timestamp;
 		}
 		
-		const deltaTime = (timestamp - lastTimestamp) / 1000; // Convert to seconds
-		lastTimestamp = timestamp;
+		const deltaTime = (timestamp - lastTimestamps[collectionIdx]) / 1000;
+		lastTimestamps[collectionIdx] = timestamp;
 		
-		if (isPlaying) {
-			currentRotation += ROTATION_SPEED * deltaTime;
-			// Keep rotation in 0-360 range for cleaner values
-			if (currentRotation >= 360) {
-				currentRotation -= 360;
+		const playing = get(stores.music.isPlaying);
+		const currentIdx = get(stores.music.currentCollectionIndex);
+		
+		if (playing && currentIdx === collectionIdx) {
+			collectionRotations[collectionIdx] += ROTATION_SPEED * deltaTime;
+			if (collectionRotations[collectionIdx] >= 360) {
+				collectionRotations[collectionIdx] -= 360;
 			}
-			animationFrameId = requestAnimationFrame(animateRotation);
+			collectionRotations = collectionRotations;
+			animationFrameIds[collectionIdx] = requestAnimationFrame((ts) => animateRotation(collectionIdx, ts));
+		} else if (animationFrameIds[collectionIdx]) {
+			cancelAnimationFrame(animationFrameIds[collectionIdx]);
+			animationFrameIds[collectionIdx] = null;
+			lastTimestamps[collectionIdx] = null;
 		}
 	}
 
-	// Watch isPlaying to start/stop animation
-	$: if (isPlaying && vinylDiscElement) {
-		if (!animationFrameId) {
-			lastTimestamp = null;
-			animationFrameId = requestAnimationFrame(animateRotation);
+	$: if (isPlaying && currentCollectionIndex >= 0 && vinylDiscElements[currentCollectionIndex] && !animationFrameIds[currentCollectionIndex]) {
+		lastTimestamps[currentCollectionIndex] = null;
+		animationFrameIds[currentCollectionIndex] = requestAnimationFrame((ts) => animateRotation(currentCollectionIndex, ts));
+	}
+	
+	$: if (!isPlaying || currentCollectionIndex < 0) {
+		animationFrameIds.forEach((id, idx) => {
+			if (id) {
+				cancelAnimationFrame(id);
+				animationFrameIds[idx] = null;
+				lastTimestamps[idx] = null;
+			}
+		});
+	}
+	
+	$: animationFrameIds.forEach((id, idx) => {
+		if (idx !== currentCollectionIndex && id) {
+			cancelAnimationFrame(id);
+			animationFrameIds[idx] = null;
+			lastTimestamps[idx] = null;
 		}
-	} else {
-		if (animationFrameId) {
-			cancelAnimationFrame(animationFrameId);
-			animationFrameId = null;
-			lastTimestamp = null;
-		}
+	});
+
+	$: if (galleryElement && !isUpdatingFromSlick && slickInitialized) {
+		syncSlick(currentCollectionIndex);
 	}
 
 	onMount(() => {
-		const player = get(stores.music.musicPlayer);
-		if (player) {
-			bgMusicElement = player.bgMusicElement;
-			musicPlayer = player;
-		}
-		stores.music.playlistLength.set(tracks.length);
+		musicPlayer = get(stores.music.musicPlayer);
+		bgMusicElement = musicPlayer.bgMusicElement;
 
-		// Initialize track image from collection
-		if (collectionImage) {
-			stores.music.trackImage.set(collectionImage);
-		}
+		setTimeout(() => {
+			galleryElement = document.querySelector('.musicCollectionsGallery');
+			window.$(galleryElement).slick({
+				dots: false,
+				infinite: false,
+				speed: 300,
+				slidesToShow: 1,
+				centerMode: true,
+				variableWidth: true,
+				arrows: false,
+				centerPadding: '60px',
+				draggable: true,
+				swipe: true,
+				accessibility: false,
+				cssEase: 'ease',
+				useCSS: true
+			});
+			slickInitialized = true;
 
-		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowRight', playNextTrack);
-		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowLeft', playPreviousTrack);
+			window.$(galleryElement).on('afterChange', (event, slick, currentSlide) => {
+				if (currentSlide !== currentCollectionIndex) {
+					isUpdatingFromSlick = true;
+					stores.music.currentCollectionIndex.set(currentSlide);
+					stores.music.currentTrackIndex.set(0);
+					if (isPlaying) {
+						const newCollection = collections[currentSlide];
+						bgMusicElement.pause();
+						bgMusicElement.setAttribute('src', newCollection.tracks[0].sound);
+						stores.music.trackImage.set(newCollection.image);
+						bgMusicElement.load();
+						const playWhenReady = () => {
+							bgMusicElement.removeEventListener('canplay', playWhenReady);
+							musicPlayer.play();
+						};
+						bgMusicElement.addEventListener('canplay', playWhenReady);
+						if (bgMusicElement.readyState >= 3) {
+							playWhenReady();
+						}
+					}
+					setTimeout(() => { isUpdatingFromSlick = false; }, 100);
+				}
+			});
+		}, 300);
+
+		stores.music.playlistLength.set(collections.reduce((sum, col) => sum + col.tracks.length, 0));
+		stores.music.trackImage.set(collections[0].image);
+
+		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowRight', playNextTrack, true);
+		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowLeft', playPreviousTrack, true);
 	});
 
 	onDestroy(() => {
-		if (animationFrameId) {
-			cancelAnimationFrame(animationFrameId);
-		}
+		animationFrameIds.forEach(id => cancelAnimationFrame(id));
+		window.$(galleryElement).slick('unslick');
 		shortcuts.removeScreenShortcuts('musicPlaylistFolio');
 	});
 </script>
 
-<!--musicPlaylistWrapper-->
-
 <style>
+	.musicCollectionsGallery {
+		width: 100%;
+	}
+
 	.musicPlaylistPanel {
-		/* Font interface variables - map global variables to local scope */
 		--music-playlist-font-rounded: var(--ffRounded);
-		/* Border radius interface variable - map global variable to local scope */
 		--music-playlist-radius: var(--radius-large);
-		
-		/* Color interface variables */
 		--music-playlist-accent-color: var(--color-accent);
 		--music-playlist-text-primary: var(--color-white);
 		--music-playlist-background-secondary: var(--color-background-secondary);
 		--music-playlist-overlay: var(--color-overlay);
-		
-		/* Margin calculation - same as About page */
 		--music-playlist-margin: calc(var(--header-footer-height) + var(--safeMargin));
 		
-		/* Layout - parent .portfolioSection already centers with flexbox */
-		display: flex;
+		display: flex !important;
 		flex-direction: column;
 		width: 100%;
-		max-width: 600px;
-		max-height: calc(100vh - 2 * var(--music-playlist-margin));
-		padding-left: var(--safeMargin);
-		padding-right: var(--safeMargin);
+		height: 100%;
+		padding: 0 var(--safeMargin);
 		box-sizing: border-box;
 		overflow: hidden;
+		margin: 0 auto;
+	}
+
+	.musicPlaylistHeader {
+		flex-shrink: 0;
 	}
 
 	.musicPlaylist {
 		font-size: 100%;
-		display: block;
 		list-style-type: none;
 		margin-top: 15px;
-		overflow: auto;
+		flex: 1 1 0;
+		min-height: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
 		scrollbar-width: thin;
 		scrollbar-color: rgba(170, 170, 170, 0.3) transparent;
 	}
 
-	/* Responsive breakpoints for smaller screens */
 	@media (max-height: 950px) {
-		.vinylDisc {
-			width: 100px;
-			height: 100px;
-		}
-		.musicPlaylist {
-			margin-top: 12px;
-		}
-		.musicPlaylistTitle {
-			font-size: 135%;
-		}
-		.musicPlaylistSubtitle {
-			font-size: 85%;
-		}
-		.musicPlaylist li {
-			margin-top: 0.2em;
-			margin-bottom: 0.2em;
-		}
-		.musicPlaylistButton {
-			padding-top: 0.4em;
-			padding-bottom: 0.4em;
-		}
-		.trackNumber {
-			font-size: 0.88em;
-		}
+		.vinylDisc { width: 100px; height: 100px; }
+		.musicPlaylist { margin-top: 12px; }
+		.musicPlaylistTitle { font-size: 135%; }
+		.musicPlaylistSubtitle { font-size: 85%; }
+		.musicPlaylist li { margin-top: 0.2em; margin-bottom: 0.2em; }
+		.musicPlaylistButton { padding-top: 0.4em; padding-bottom: 0.4em; }
+		.trackNumber { font-size: 0.88em; }
 	}
 
 	@media (max-height: 750px) {
-		.vinylDisc {
-			width: 80px;
-			height: 80px;
-		}
-		.musicPlaylist {
-			margin-top: 10px;
-		}
-		.musicPlaylistTitle {
-			font-size: 120%;
-		}
-		.musicPlaylistSubtitle {
-			font-size: 80%;
-		}
-		.musicPlaylist li {
-			margin-top: 0.15em;
-			margin-bottom: 0.15em;
-		}
-		.musicPlaylistButton {
-			padding-top: 0.35em;
-			padding-bottom: 0.35em;
-			padding-left: calc(var(--safeMargin) / 3);
-		}
-		.trackNumber {
-			font-size: 0.86em;
-		}
-		.playIcon {
-			width: 0.9em;
-			height: 0.9em;
-		}
+		.vinylDisc { width: 80px; height: 80px; }
+		.musicPlaylist { margin-top: 10px; }
+		.musicPlaylistTitle { font-size: 120%; }
+		.musicPlaylistSubtitle { font-size: 80%; }
+		.musicPlaylist li { margin-top: 0.15em; margin-bottom: 0.15em; }
+		.musicPlaylistButton { padding-top: 0.35em; padding-bottom: 0.35em; padding-left: calc(var(--safeMargin) / 3); }
+		.trackNumber { font-size: 0.86em; }
+		.playIcon { width: 0.9em; height: 0.9em; }
 	}
 
 	@media (max-height: 500px) {
-		.vinylDisc {
-			width: 60px;
-			height: 60px;
-			margin-bottom: 0.5em;
-		}
-		.musicPlaylist {
-			margin-top: 5px;
-			font-size: 85%;
-		}
-		.musicPlaylistTitle {
-			font-size: 100%;
-			margin-bottom: 3px;
-		}
-		.musicPlaylistSubtitle {
-			font-size: 75%;
-			margin-top: 0.2em;
-			margin-bottom: 0.3em;
-		}
-		.musicPlaylist li {
-			margin-top: 0.05em;
-			margin-bottom: 0.05em;
-		}
-		.musicPlaylistButton {
-			padding-top: 0.2em;
-			padding-bottom: 0.2em;
-			padding-left: calc(var(--safeMargin) / 5);
-			line-height: 1.1;
-		}
-		.trackNumber {
-			font-size: 0.84em;
-		}
-		.playIcon {
-			width: 0.7em;
-			height: 0.7em;
-		}
+		.vinylDisc { width: 60px; height: 60px; margin-bottom: 0.5em; }
+		.musicPlaylist { margin-top: 5px; font-size: 85%; }
+		.musicPlaylistTitle { font-size: 100%; margin-bottom: 3px; }
+		.musicPlaylistSubtitle { font-size: 75%; margin-top: 0.2em; margin-bottom: 0.3em; }
+		.musicPlaylist li { margin-top: 0.05em; margin-bottom: 0.05em; }
+		.musicPlaylistButton { padding-top: 0.2em; padding-bottom: 0.2em; padding-left: calc(var(--safeMargin) / 5); line-height: 1.1; }
+		.trackNumber { font-size: 0.84em; }
+		.playIcon { width: 0.7em; height: 0.7em; }
 	}
 
-	.musicPlaylist::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.musicPlaylist::-webkit-scrollbar-track {
-		background: transparent;
-	}
-
+	.musicPlaylist::-webkit-scrollbar { width: 6px; }
+	.musicPlaylist::-webkit-scrollbar-track { background: transparent; }
 	.musicPlaylist::-webkit-scrollbar-thumb {
 		background-color: rgba(170, 170, 170, 0.3);
 		border-radius: var(--radius-small);
 		transition: background-color 0.2s ease;
 	}
-
-	.musicPlaylist::-webkit-scrollbar-thumb:hover {
-		background-color: rgba(170, 170, 170, 0.5);
-	}
+	.musicPlaylist::-webkit-scrollbar-thumb:hover { background-color: rgba(170, 170, 170, 0.5); }
 
 	.vinylDisc {
 		width: 120px;
@@ -404,23 +417,18 @@
 	.musicPlaylistButton:hover {
 		background-color: var(--music-playlist-accent-color);
 	}
-
 	.musicPlaylistButton:hover .trackNumber {
 		color: var(--music-playlist-text-primary);
 	}
-
 	.musicPlaylist li.focus .musicPlaylistButton {
 		background-color: var(--music-playlist-background-secondary);
 	}
-
 	.musicPlaylist li.focus .musicPlaylistButton:hover {
 		background-color: var(--music-playlist-accent-color);
 	}
-
 	.musicPlaylist li.focus .musicPlaylistButton:hover .trackNumber {
 		color: var(--music-playlist-text-primary);
 	}
-
 	.musicPlaylist li.focus .playIcon {
 		background: none;
 		background-color: var(--music-playlist-text-primary);
@@ -432,5 +440,22 @@
 		mask-repeat: no-repeat;
 		-webkit-mask-position: center;
 		mask-position: center;
+	}
+
+	:global(.musicCollectionsGallery .slick-slide) {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		height: calc(100vh - 2 * var(--header-footer-height) - 2 * var(--safeMargin)) !important;
+	}
+	
+	:global(.musicCollectionsGallery .slick-slide > div) {
+		display: flex !important;
+		width: 100%;
+		height: 100%;
+	}
+	
+	:global(.musicCollectionsGallery .slick-center) {
+		z-index: 1;
 	}
 </style>
