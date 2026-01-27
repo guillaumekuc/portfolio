@@ -102,14 +102,34 @@
 		--splashscreen-hero-socials-gap: 16px;
 		--splashscreen-hero-social-icon-size: 32px;
 
+		/* Nav bar height calculation (matching SplashNav.svelte structure) */
+		--splashscreen-nav-padding: 10px;
+		--splashscreen-nav-icon-size: 32px;
+		--splashscreen-nav-font-size: 24px;
+		--splashscreen-nav-link-padding-vertical: 5px;
+		--splashscreen-nav-bottom: 16px;
+		--splashscreen-nav-total-height: calc(
+			var(--splashscreen-nav-padding) * 2 +
+			var(--splashscreen-nav-icon-size) +
+			var(--splashscreen-nav-font-size) +
+			var(--splashscreen-nav-link-padding-vertical) * 2
+		);
+
 		position: absolute;
 		z-index: 1;
+		top: 0;
+		bottom: calc(var(--splashscreen-nav-bottom) + var(--splashscreen-nav-total-height));
+		left: 0;
+		right: 0;
 
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: var(--splashscreen-hero-gap);
+
+		animation: breathe 6s ease-in-out infinite;
+		pointer-events: none;
 	}
 
 	.splashscreen-logo {
@@ -161,6 +181,7 @@
 		opacity: 0;
 		transition: opacity 0.5s ease-out, transform 0.2s ease;
 		color: inherit;
+		pointer-events: auto;
 	}
 
 	.splashscreen-hero-socials .social-link:hover {
@@ -176,6 +197,11 @@
 			--splashscreen-hero-title-size: 270px;
 			--splashscreen-hero-title-margin: 0.4rem;
 			--splashscreen-hero-social-icon-size: 28px;
+			--splashscreen-nav-padding: 8px;
+			--splashscreen-nav-icon-size: 28px;
+			--splashscreen-nav-font-size: 20px;
+			--splashscreen-nav-link-padding-vertical: 4px;
+			--splashscreen-nav-bottom: 14px;
 		}
 	}
 
@@ -189,6 +215,11 @@
 			--splashscreen-hero-title-margin: 0.25rem;
 			--splashscreen-hero-socials-gap: 12px;
 			--splashscreen-hero-social-icon-size: 26px;
+			--splashscreen-nav-padding: 6px;
+			--splashscreen-nav-icon-size: 0px;
+			--splashscreen-nav-font-size: 16px;
+			--splashscreen-nav-link-padding-vertical: 4px;
+			--splashscreen-nav-bottom: 12px;
 		}
 	}
 
@@ -202,6 +233,20 @@
 			--splashscreen-hero-title-margin: 0.15rem;
 			--splashscreen-hero-socials-gap: 10px;
 			--splashscreen-hero-social-icon-size: 22px;
+			--splashscreen-nav-padding: 4px;
+			--splashscreen-nav-icon-size: 0px;
+			--splashscreen-nav-font-size: 12px;
+			--splashscreen-nav-link-padding-vertical: 3px;
+			--splashscreen-nav-bottom: 8px;
+		}
+	}
+
+	@keyframes breathe {
+		0%, 100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.05);
 		}
 	}
 

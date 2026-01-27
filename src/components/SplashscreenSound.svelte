@@ -45,6 +45,12 @@
 	}
 
 	onMount(() => {
+		// Preload both mute/volume images to prevent flicker on toggle
+		const volumeImg = new Image();
+		volumeImg.src = '/img/audio-player/volume.svg';
+		
+		const muteImg = new Image();
+		muteImg.src = '/img/audio-player/mute.svg';
 
 		if (splashscreenVolumeSlider) {
 			splashscreenVolumeSlider.value = displayVolume;
@@ -65,7 +71,7 @@
 		--splashscreen-sound-blur: 4px;
 		--splashscreen-sound-size: 44px;
 
-		z-index: 1;
+		z-index: 2;
 		position: absolute;
 		display: flex;
 		align-items: center;

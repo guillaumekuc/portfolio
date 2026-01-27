@@ -207,6 +207,7 @@
 		font-family: var(--startscreen-font-rounded);
 		font-weight: 600;
 		margin-top: 1.5em;
+		transition: border 0.2s ease, background-color 0.2s ease;
 	}
 
 	#enterBtn:hover {
