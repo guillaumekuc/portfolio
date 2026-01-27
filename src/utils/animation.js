@@ -4,11 +4,22 @@ export class Animation {
 	static programmaticHover(target) {
 		if (!target) return;
 
-		target.style.transition = 'none';
+		// Store original transition to restore it later
+		const originalTransition = target.style.transition;
+		
+		// Add the hover class with transition enabled for visual effect
 		target.classList.add('programmaticHover');
+		
+		// Keep the class visible long enough to see the transition
 		setTimeout(() => {
 			target.classList.remove('programmaticHover');
-		}, 100);
+			// Restore original transition if it was set
+			if (originalTransition) {
+				target.style.transition = originalTransition;
+			} else {
+				target.style.transition = '';
+			}
+		}, 300);
 	}
 
 	// Coordinates opening sequence animations by dispatching events to components

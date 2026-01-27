@@ -4,10 +4,11 @@
 	<SplashscreenHero />
 
 	<div id="splashArtArea" class="splashArtArea">
-		<div bind:this={artElement} id="splashArt" class="splashArt zoomIn" style="background-image: url('{backgroundImageUrl}')">
+		<div bind:this={artElement} id="splashArt" class="splashArt" class:initialScale={isInitialScale} class:introComplete={isIntroComplete} class:idleZoom={isIdleZoom} style="background-image: url('{backgroundImageUrl}')">
 			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop type="audio/mpeg" preload="none"
 			></audio>
 
+			<div bind:this={noiseOverlay} class="noiseOverlay"></div>
 			<div id="splashArtShader" class="splashArtShader"></div>
 		</div>
 	</div>
@@ -31,14 +32,43 @@
 	const bgMusicUrl = getAssetUrl('/sound/bgmusic.mp3');
 	const backgroundImageUrl = getAssetUrl(siteConfig.splashBackgroundImage);
 
+	// Animation timing constants
+	const INTRO_ANIMATION_DURATION_MS = 3000;
+	const PARALLAX_FACTOR = 0.3;
+	const MUSIC_START_DELAY_MS = 1000;
+
 	let bgMusicElement;
 	let artElement;
+	let noiseOverlay;
 	let rafId = null;
+	let grainRafId = null;
+	let isAudioInitialized = false;
+	
+	// Animation state
+	let isInitialScale = true;
+	let isIntroComplete = false;
+	let isIdleZoom = false;
+
+	// Initialize audio when bgMusicElement becomes available
+	$: if (bgMusicElement && !isAudioInitialized) {
+		const musicPlayer = initAudio(bgMusicElement);
+		if (musicPlayer) {
+			initNavigation();
+			initAPI();
+			isAudioInitialized = true;
+		}
+	}
 
 	function handleArtAnimate() {
-		if (artElement) {
-			artElement.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
-		}
+		// Start intro animation: transition from scale(1.1) to scale(1)
+		isIntroComplete = true;
+		
+		// After intro completes, transition to idle animation
+		setTimeout(() => {
+			isInitialScale = false;
+			isIntroComplete = false;
+			isIdleZoom = true;
+		}, INTRO_ANIMATION_DURATION_MS);
 	}
 
 	function handleParallax() {
@@ -48,50 +78,59 @@
 		rafId = requestAnimationFrame(() => {
 			if (artElement) {
 				const scrollY = window.scrollY || window.pageYOffset;
-				// Subtle parallax effect: background moves at 30% of scroll speed
-				const parallaxOffset = scrollY * 0.3;
+				const parallaxOffset = scrollY * PARALLAX_FACTOR;
 				artElement.style.backgroundPosition = `center calc(50% + ${parallaxOffset}px)`;
 			}
 			rafId = null;
 		});
 	}
 
+	function animateFilmicGrain() {
+		if (noiseOverlay) {
+			// Random position each frame for flickering grain effect
+			const x = Math.random() * 200;
+			const y = Math.random() * 200;
+			noiseOverlay.style.backgroundPosition = `${x}px ${y}px`;
+		}
+		grainRafId = requestAnimationFrame(animateFilmicGrain);
+	}
+
 	function startBackgroundMusic() {
-		// Wait a bit for the animation to start before playing music
 		setTimeout(() => {
 			const musicPlayer = get(stores.music.musicPlayer);
 			const isMuted = get(stores.music.isMuted);
 			
 			if (musicPlayer) {
-				// Only play if not muted
 				if (!isMuted) {
-					musicPlayer.play();
+					musicPlayer.play().catch((error) => {
+						console.warn('Failed to play background music:', error);
+					});
 				}
-				// Mark that we've attempted to start music (user has entered the site with music enabled)
-				stores.music.hasEnteredWithMusic.set(true);
+			} else {
+				// Music player not ready yet, retry after a short delay
+				console.warn('Music player not initialized, retrying...');
+				setTimeout(() => {
+					const retryPlayer = get(stores.music.musicPlayer);
+					const retryMuted = get(stores.music.isMuted);
+					if (retryPlayer && !retryMuted) {
+						retryPlayer.play().catch((error) => {
+							console.warn('Failed to play background music on retry:', error);
+						});
+					}
+				}, 500);
 			}
-		}, 1000);
+			// Mark that we've attempted to start music
+			stores.music.hasEnteredWithMusic.set(true);
+		}, MUSIC_START_DELAY_MS);
 	}
 
 	onMount(() => {
-		// Initialize scripts with audio element once it's available
-		if (bgMusicElement) {
-			const musicPlayer = initAudio(bgMusicElement);
-			if (musicPlayer) {
-				initNavigation();
-				initAPI();
-			}
-		}
-
-		// Listen for enter button press to start music
 		window.addEventListener('enterPressed', startBackgroundMusic);
-
-		// Listen for art animation trigger
 		window.addEventListener('artAnimate', handleArtAnimate);
-
-		// Set up parallax effect
-		handleParallax(); // Initial position
 		window.addEventListener('scroll', handleParallax, { passive: true });
+		
+		handleParallax(); // Set initial parallax position
+		animateFilmicGrain(); // Start random grain flickering
 	});
 
 	onDestroy(() => {
@@ -99,6 +138,9 @@
 		window.removeEventListener('scroll', handleParallax);
 		if (rafId) {
 			cancelAnimationFrame(rafId);
+		}
+		if (grainRafId) {
+			cancelAnimationFrame(grainRafId);
 		}
 	});
 </script>
@@ -138,10 +180,48 @@
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
-		transform: scale(1.1);
+		transform-origin: 34% 37%; /* Image-dependent focal point. Update if background image changes */
 		transition: transform 3s ease-out;
-		will-change: background-position;
 	}
+
+	.noiseOverlay {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background-image: url('/img/noise2.png');
+		background-repeat: repeat;
+		opacity: 1;
+		mix-blend-mode: overlay;
+		z-index: 1;
+	}
+
+	/* Intro animation states */
+	.splashArt.initialScale {
+		transform: scale(1.1);
+	}
+
+	.splashArt.introComplete {
+		transform: scale(1);
+	}
+
+	/* Idle animation - starts after intro completes */
+	.splashArt.idleZoom {
+		transition: none;
+		animation: idleZoom 24s ease-in-out infinite;
+	}
+
+	@keyframes idleZoom {
+		0%, 10% {
+			transform: scale(1);
+		}
+		70%, 80% {
+			transform: scale(1.05);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
 
 	.splashArtShader {
 		position: absolute;

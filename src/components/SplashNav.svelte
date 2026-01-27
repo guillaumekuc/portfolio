@@ -137,17 +137,6 @@
 			link.style.transition = `opacity ${transitionDurationSeconds}s ease-out ${delay}s`;
 			link.style.opacity = '100%';
 		});
-		
-		// Calculate total animation time and enable pointer events
-		const totalAnimationTime = ANIMATION_BASE_DELAY_MS + 
-			(navLinkElements.length * ANIMATION_DELAY_INCREMENT_MS) + 
-			ANIMATION_TRANSITION_DURATION_MS;
-		
-		setTimeout(() => {
-			navLinkElements.forEach((link) => {
-				if (link) link.style.pointerEvents = 'auto';
-			});
-		}, totalAnimationTime);
 	}
 
 	function goToPortfolioSections() {
@@ -423,7 +412,7 @@
 		font-size: var(--splashscreen-nav-font-size);
 
 		opacity: 20%;
-		pointer-events: none;
+		pointer-events: auto;
 		user-select: none;
 		
 		/* Transition will be set dynamically in handleNavAnimate */
