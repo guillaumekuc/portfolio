@@ -1,42 +1,18 @@
 <div class="splashscreen-sound">
-	<input
-		bind:this={splashscreenVolumeSlider}
-		class="volume-slider"
-		type="range"
-		value={displayVolume}
-		on:input={handleVolumeInput}
-	/>
+	<VolumeSlider className="volume-slider" />
 	<button class="mute-button" class:isMuted on:click={handleMuteClick}></button>
 </div>
 
 <script>
 	import { onMount } from 'svelte';
 	import { stores } from '../stores.js';
-
-	const volumeStore = stores.music.volume;
-	$: volume = $volumeStore;
+	import VolumeSlider from './VolumeSlider.svelte';
 
 	const isMutedStore = stores.music.isMuted;
 	$: isMuted = $isMutedStore;
 
-	$: displayVolume = isMuted ? 0 : volume;
-
-	let splashscreenVolumeSlider;
-
 	const musicPlayerStore = stores.music.musicPlayer;
 	$: musicPlayer = $musicPlayerStore;
-
-	$: {
-		if (musicPlayer && splashscreenVolumeSlider) {
-			splashscreenVolumeSlider.value = displayVolume;
-		}
-	}
-
-	function handleVolumeInput(e) {
-		if (musicPlayer) {
-			musicPlayer.volumeHandler(e.target);
-		}
-	}
 
 	function handleMuteClick() {
 		if (musicPlayer) {
@@ -51,10 +27,6 @@
 		
 		const muteImg = new Image();
 		muteImg.src = '/img/audio-player/mute.svg';
-
-		if (splashscreenVolumeSlider) {
-			splashscreenVolumeSlider.value = displayVolume;
-		}
 	});
 </script>
 
@@ -86,17 +58,17 @@
 		min-width: var(--splashscreen-sound-size);
 	}
 
-	.splashscreen-sound .volume-slider {
+	.splashscreen-sound :global(.volume-slider) {
 		width: 0;
 		max-width: var(--splashscreen-sound-slider-width);
 		height: calc(var(--splashscreen-sound-size) / 2);
-		background: rgba(255, 255, 255, 0.5);
+		background: transparent;
 		overflow: hidden;
 		transition: width 0.3s ease, margin-right 0.3s ease;
 		margin-right: 0;
 	}
 
-	.splashscreen-sound:hover .volume-slider {
+	.splashscreen-sound:hover :global(.volume-slider) {
 		width: var(--splashscreen-sound-slider-width);
 		margin-right: calc(var(--splashscreen-sound-margins) / 2);
 		margin-left: calc(var(--splashscreen-sound-margins) / 2);

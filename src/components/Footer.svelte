@@ -22,14 +22,7 @@
 		></button>
 		<div class="volumeGroup">
 			<button id="footerMuteBtn" class="muteBgMusic" class:isMuted on:click={handleMuteClick}></button>
-			<input
-				bind:this={footerVolumeSlider}
-				id="footerVolumeSlider"
-				class="footerVolumeSlider"
-				type="range"
-				value={displayVolume}
-				on:input={handleVolumeInput}
-			/>
+			<VolumeSlider id="footerVolumeSlider" className="footerVolumeSlider" />
 		</div>
 	</div>
 </div>
@@ -40,6 +33,7 @@
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { get } from 'svelte/store';
+	import VolumeSlider from './VolumeSlider.svelte';
 
 	// Visibility state for footer
 	let isVisible = false;
@@ -69,18 +63,9 @@
 	// Only grey out next button if we're at the last track AND playlist is initialized
 	$: isLastTrack = playlistLength > 0 && currentIndex + 1 >= playlistLength;
 
-	let footerVolumeSlider;
-
 	// Get music player from store
 	const musicPlayerStore = stores.music.musicPlayer;
 	$: musicPlayer = $musicPlayerStore;
-
-	// Update volume slider when display volume changes
-	$: {
-		if (footerVolumeSlider) {
-			footerVolumeSlider.value = displayVolume;
-		}
-	}
 
 	function handlePlayClick() {
 		if (musicPlayer) {
@@ -112,17 +97,7 @@
 		}
 	}
 
-	function handleVolumeInput(e) {
-		if (musicPlayer) {
-			musicPlayer.volumeHandler(e.target);
-		}
-	}
-
 	onMount(() => {
-		// Sync volume slider with store
-		if (footerVolumeSlider) {
-			footerVolumeSlider.value = displayVolume;
-		}
 
 		const cleanupSplashscreenObserver = DOM.setupSplashscreenVisibilityObserver((visible) => {
 			isVisible = visible;
