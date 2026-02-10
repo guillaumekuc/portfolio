@@ -1,35 +1,33 @@
-<div class="portfolioSectionWrapper">
-	<div
-		bind:this={videoContainer}
-		class="wideLeftThirds"
-		style="position : relative;background-color : #5a5d5a; overflow:hidden; "
-	>
-		<video
-			bind:this={videoElement}
-			class="largeVideo"
-			preload="none"
-			loop
-			poster={posterUrl}
-			on:click={handleVideoClick}
-		>
-			<source src={videoUrl} type="video/mp4" />
-			<track kind="captions" />
-		</video>
-		<button
-			type="button"
-			bind:this={playBtn}
-			class="videoPlayBtn"
-			class:hidden={!showPlayBtn}
-			aria-label="Play video"
-		></button>
-	</div>
-	<div class="shortRightThirds">
-		<span class="title">Animation Demoreel<small></small></span>
-		<blockquote>
-			RIGS "Jin & Joe" courtesy of OnOne Animation School.<br />
-			RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
-		</blockquote>
-	</div>
+<div class="animFolio1">
+	<ProjectLayout layout="left" bind:mediaContainer={videoContainer}>
+		<div slot="media">
+			<video
+				bind:this={videoElement}
+				class="largeVideo"
+				preload="none"
+				loop
+				poster={posterUrl}
+				on:click={handleVideoClick}
+			>
+				<source src={videoUrl} type="video/mp4" />
+				<track kind="captions" />
+			</video>
+			<button
+				type="button"
+				bind:this={playBtn}
+				class="videoPlayBtn"
+				class:hidden={!showPlayBtn}
+				aria-label="Play video"
+			></button>
+		</div>
+		<div slot="content">
+			<span class="title">Animation Demoreel<small></small></span>
+			<blockquote>
+				RIGS "Jin & Joe" courtesy of OnOne Animation School.<br />
+				RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
+			</blockquote>
+		</div>
+	</ProjectLayout>
 </div>
 
 <script>
@@ -38,6 +36,7 @@
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import ProjectLayout from './ProjectLayout.svelte';
 
 	export let sectionConfig;
 
@@ -121,3 +120,9 @@
 		shortcuts.removeScreenShortcuts('animFolio1');
 	});
 </script>
+
+<style>
+	:global(.animFolio1 .mediaContainer) {
+		background-color: #5a5d5a;
+	}
+</style>

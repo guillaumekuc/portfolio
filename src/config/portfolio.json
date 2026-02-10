@@ -157,6 +157,18 @@
 			"tools": ["cep", "jsx", "js", "html", "css"]
 		},
 		{
+			"id": "chordex",
+			"component": "Chordex",
+			"categories": "portfolio-web portfolio-all",
+			"title": "Chordex",
+			"subtitle": "Chord Relationships Taxonomy",
+			"linkUrl": "https://guillaumekuc.github.io/chordex/",
+			"linkText": "Check on Github",
+			"contentPath": "chordex.md",
+			"coverImage": "/img/guillaumekuc_oldbg.jpg",
+			"tools": ["vue", "js", "html", "css"]
+		},
+		{
 			"id": "drawingFolio1",
 			"component": "DrawingFolio1",
 			"categories": "portfolio-2d portfolio-all",

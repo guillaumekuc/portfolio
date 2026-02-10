@@ -22,6 +22,7 @@
 	import PortfolioGallery from './portfolioSections/PortfolioGallery.svelte';
 	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
 	import Gridz from './portfolioSections/Gridz.svelte';
+	import Chordex from './portfolioSections/Chordex.svelte';
 	import MusicFolio1 from './portfolioSections/MusicFolio1.svelte';
 	import AnimFolio1 from './portfolioSections/AnimFolio1.svelte';
 	import P4bookFolio from './portfolioSections/P4bookFolio.svelte';
@@ -31,6 +32,7 @@
 	const componentMap = {
 		MusicPlaylistFolio,
 		Gridz,
+		Chordex,
 		MusicFolio1,
 		AnimFolio1,
 		P4bookFolio,

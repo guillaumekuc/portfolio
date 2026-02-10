@@ -84,8 +84,8 @@
 	}
 
 	.tools-display.icons-only .tool-icon {
-		width: 22px;
-		height: 22px;
+		width: 18px;
+		height: 18px;
 		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 		border-radius: 0;
 		overflow: visible;

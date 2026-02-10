@@ -1,35 +1,35 @@
-<div class="portfolioSectionWrapper gridzWrapper">
-	<div class="shortLeftThirds scrollable">
-		<span class="title gridzTitle">{title} — <small>{subtitle}</small></span>
-		<ToolsDisplay {tools} />
-		<div class="content">
-			{@html parsedMarkdown}
+<ProjectLayout layout="right" bind:mediaContainer={videoContainer}>
+		<div slot="content">
+			<ToolsDisplay {tools} align="left" iconsOnly={true} />
+			<span class="title gridzTitle">{title} — <small>{subtitle}</small></span>
+			<div class="content">
+				{@html parsedMarkdown}
+			</div>
+			<a class="focus extLinkBtn" href={linkUrl} target="_blank"
+				><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
+			>
 		</div>
-		<a class="focus extLinkBtn" href={linkUrl} target="_blank"
-			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
-		>
-	</div>
-		<div bind:this={videoContainer} class="wideRightThirds">
-		<video
-			bind:this={videoElement}
-			class="largeVideo"
-			preload="none"
-			muted
-			loop
-			poster={resolvedCoverImage}
-			on:click={handleVideoClick}
-		>
-			<source src={videoUrl} type="video/mp4" />
-		</video>
-		<button
-			type="button"
-			bind:this={playBtn}
-			class="videoPlayBtn"
-			class:hidden={!showPlayBtn}
-			aria-label="Play video"
-		></button>
-	</div>
-</div>
+		<div slot="media">
+			<video
+				bind:this={videoElement}
+				class="largeVideo"
+				preload="none"
+				muted
+				loop
+				poster={resolvedCoverImage}
+				on:click={handleVideoClick}
+			>
+				<source src={videoUrl} type="video/mp4" />
+			</video>
+			<button
+				type="button"
+				bind:this={playBtn}
+				class="videoPlayBtn"
+				class:hidden={!showPlayBtn}
+				aria-label="Play video"
+			></button>
+		</div>
+	</ProjectLayout>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
@@ -39,6 +39,7 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 	import ToolsDisplay from '../ToolsDisplay.svelte';
+	import ProjectLayout from './ProjectLayout.svelte';
 
 	export let sectionConfig = {};
 
@@ -148,21 +149,24 @@
 </script>
 
 <style>
-	.gridzWrapper {
-		/* Font interface variables - map global variables to local scope */
-		--gridz-font-rounded: var(--ffRounded);
+	.gridzTitle {
+		display: block;
+		margin-bottom: calc(var(--safeMargin) / 2);
+		font-size: 125%;
+		font-variant: small-caps;
+		font-family: var(--project-font-rounded);
 	}
 
-	.gridzTitle {
-		font-family: var(--gridz-font-rounded);
+	.gridzTitle :global(small) {
+		font-size: 0.7em;
 	}
 
 	.content {
 		font-style: normal;
+		text-align: justify;
 	}
 
 	:global(.tools-display) {
-		margin-top: 12px;
-		margin-bottom: 16px;
+		margin-bottom: 6px;
 	}
 </style>
