@@ -139,7 +139,7 @@
 		--header-border-color: var(--color-gray-dark);
 		--header-primary-color: var(--color-white);
 		--header-accent-color: var(--color-accent);
-		--header-text-secondary: var(--color-gray-medium);
+		--header-text-secondary: #555555;
 
 		/* Responsive values (height inherits from global --header-footer-height) */
 		--header-height: var(--header-footer-height);
@@ -204,8 +204,6 @@
 		width: var(--header-monogram-size);
 	}
 
-	.header-monogram-button:hover {
-	}
 
 	.header-monogram {
 		color: var(--header-accent-color);
@@ -237,11 +235,15 @@
 		padding: 0;
 		cursor: pointer;
 		display: inline-block;
-		transition: color 0.2s ease;
+		outline: none;
+		-webkit-text-stroke: 0 transparent;
+		transition: color 0.2s ease, -webkit-text-stroke 0.2s ease;
 	}
 
 	.header-title-button:hover {
 		color: var(--header-accent-color);
+		/* Green text outline using webkit-text-stroke - creates outline around text shape */
+		-webkit-text-stroke: 0.25px var(--header-primary-color);
 	}
 
 	.header-nav {
