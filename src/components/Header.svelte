@@ -5,7 +5,13 @@
 				<MonogramSvg />
 			</span>
 		</button>
-		<button type="button" class="header-title-button" on:click={handleTitleClick}>{profile.siteName}</button>
+		<button type="button" class="header-title-button" on:click={handleTitleClick}>
+			{#if siteTitleParts.suffix}
+				{siteTitleParts.primary}<small class="header-site-suffix">{siteTitleParts.suffix}</small>
+			{:else}
+				{profile.siteName}
+			{/if}
+		</button>
 	</div>
 	<div class="header-nav">
 		{#each headerNavItems as item, index}
@@ -16,7 +22,7 @@
 				class:focus={currentNavTarget === item.target}
 				on:click={() => handleHeaderNavClick(item.target)}
 			>
-				{item.label}
+				<span class="header-nav-label">{item.label}</span>
 			</button>
 		{/each}
 	</div>
@@ -39,6 +45,23 @@
 
 	// Get profile info from config
 	const profile = profileConfig;
+
+	/** Suffix = substring from the first "." onward (e.g. guillaumekuc + .art, foo + .bar.baz). */
+	function splitSiteTitle(siteName) {
+		if (typeof siteName !== 'string') {
+			return { primary: '', suffix: '' };
+		}
+		const i = siteName.indexOf('.');
+		if (i === -1) {
+			return { primary: siteName, suffix: '' };
+		}
+		return {
+			primary: siteName.slice(0, i),
+			suffix: siteName.slice(i)
+		};
+	}
+
+	const siteTitleParts = splitSiteTitle(profile.siteName);
 
 	// Visibility state for header
 	let isVisible = false;
@@ -148,9 +171,7 @@
 		--header-title-gap: 12px;
 		--header-title-padding: 38px;
 		--header-nav-font-size: 24px;
-		--header-nav-gap: 10px;
-		--header-nav-padding: 5px 20px;
-		--header-nav-radius: 16px;
+		--header-nav-padding: 5px 25px;
 
 		box-sizing: border-box;
 		display: flex;
@@ -210,11 +231,6 @@
 		display: inline-block;
 		height: 100%;
 		width: 100%;
-		transition: color 0.2s ease;
-	}
-
-	.header-monogram-button:hover .header-monogram {
-		color: var(--header-primary-color);
 	}
 
 	.header-monogram :global(svg) {
@@ -235,46 +251,91 @@
 		padding: 0;
 		cursor: pointer;
 		display: inline-block;
-		outline: none;
-		-webkit-text-stroke: 0 transparent;
-		transition: color 0.2s ease, -webkit-text-stroke 0.2s ease;
+		transition: color 0.2s ease;
 	}
 
-	.header-title-button:hover {
+	.header-title:hover .header-title-button,
+	.header-title:focus-within .header-title-button {
 		color: var(--header-accent-color);
-		/* Green text outline using webkit-text-stroke - creates outline around text shape */
-		-webkit-text-stroke: 0.25px var(--header-primary-color);
+	}
+
+	.header-title-button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: 3px;
+	}
+
+	.header-site-suffix {
+		font-size: 0.68em;
+		font-weight: 300;
+		letter-spacing: inherit;
+	}
+
+	.header-monogram-button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: 2px;
+		border-radius: 4px;
 	}
 
 	.header-nav {
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: stretch;
 		justify-content: left;
 		color: var(--header-text-secondary);
-		gap: var(--header-nav-gap);
 		height: 100%;
-		padding-left: var(--header-nav-gap);
 	}
 
 	.header-nav button {
+		position: relative;
 		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		text-transform: lowercase;
 		color: var(--header-text-secondary);
 		padding: var(--header-nav-padding);
-		border-radius: var(--header-nav-radius);
-		border: 1px solid transparent;
+		border: none;
+		background: none;
+		cursor: pointer;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: color 0.28s ease;
 	}
 
-	.header-nav button:hover {
-		color: var(--header-primary-color);
-		border: 1px solid var(--header-primary-color);
+	/* Accent bar: full padded “cell” width (padding box), not glyph width */
+	.header-nav button::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 2px;
+		height: 3px;
+		background-color: var(--header-accent-color);
+		opacity: 0;
+		transition: opacity 0.28s ease;
+		pointer-events: none;
 	}
 
+	.header-nav-label {
+		display: inline-block;
+		position: relative;
+		z-index: 1;
+	}
+
+	.header-nav button:hover,
 	.header-nav button.focus {
 		color: var(--header-primary-color);
+	}
+
+	.header-nav button:hover::after,
+	.header-nav button.focus::after {
+		opacity: 1;
+	}
+
+	.header-nav button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: -2px;
 	}
 
 	.header-help-button {
@@ -320,9 +381,7 @@
 			--header-title-gap: 10px;
 			--header-title-padding: 30px;
 			--header-nav-font-size: 20px;
-			--header-nav-gap: 8px;
-			--header-nav-padding: 4px 16px;
-			--header-nav-radius: 14px;
+			--header-nav-padding: 4px 20px;
 		}
 	}
 
@@ -334,9 +393,7 @@
 			--header-title-gap: 8px;
 			--header-title-padding: 24px;
 			--header-nav-font-size: 16px;
-			--header-nav-gap: 6px;
-			--header-nav-padding: 4px 12px;
-			--header-nav-radius: 12px;
+			--header-nav-padding: 4px 15px;
 		}
 	}
 
@@ -348,9 +405,7 @@
 			--header-title-gap: 6px;
 			--header-title-padding: 16px;
 			--header-nav-font-size: 12px;
-			--header-nav-gap: 4px;
-			--header-nav-padding: 3px 8px;
-			--header-nav-radius: 10px;
+			--header-nav-padding: 3px 10px;
 		}
 	}
 </style>
