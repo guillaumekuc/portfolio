@@ -26,9 +26,12 @@
 			</button>
 		{/each}
 	</div>
-	<button type="button" class="header-help-button" on:click={handleHelpClick}>
-		<img src="/img/nav/help.svg" alt="Help" />
-	</button>
+	<div class="header-actions">
+		<LanguageSelector />
+		<button type="button" class="header-help-button" on:click={handleHelpClick}>
+			<img src="/img/nav/help.svg" alt="Help" />
+		</button>
+	</div>
 </div>
 <!--#header-->
 
@@ -36,6 +39,7 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import MonogramSvg from './MonogramSvg.svelte';
+	import LanguageSelector from './LanguageSelector.svelte';
 	import { stores } from '../stores.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
@@ -162,13 +166,13 @@
 		--header-border-color: var(--color-gray-dark);
 		--header-primary-color: var(--color-white);
 		--header-accent-color: var(--color-accent);
-		--header-text-secondary: #555555;
+		--header-text-secondary: #6e6e6e;
 
 		/* Responsive values (height inherits from global --header-footer-height) */
 		--header-height: var(--header-footer-height);
 		--header-monogram-size: 55px;
 		--header-title-font-size: 27px;
-		--header-title-gap: 12px;
+		--header-title-gap: 4px;
 		--header-title-padding: 38px;
 		--header-nav-font-size: 24px;
 		--header-nav-padding: 5px 25px;
@@ -223,6 +227,7 @@
 		display: inline-block;
 		height: var(--header-monogram-size);
 		width: var(--header-monogram-size);
+		transform: translateY(3px);
 	}
 
 
@@ -300,7 +305,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: color 0.28s ease;
+		transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	/* Accent bar: full padded “cell” width (padding box), not glyph width */
@@ -313,7 +318,7 @@
 		height: 3px;
 		background-color: var(--header-accent-color);
 		opacity: 0;
-		transition: opacity 0.28s ease;
+		transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 		pointer-events: none;
 	}
 
@@ -338,8 +343,16 @@
 		outline-offset: -2px;
 	}
 
-	.header-help-button {
+	.header-actions {
 		margin-left: auto;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 22px;
+		margin-right: var(--header-title-padding);
+	}
+
+	.header-help-button {
 		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
@@ -349,7 +362,7 @@
 		padding: 0;
 		cursor: pointer;
 		transition: color 0.2s ease;
-		margin-right: var(--header-title-padding);
+		flex-shrink: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -378,7 +391,7 @@
 		.header {
 			--header-monogram-size: 46px;
 			--header-title-font-size: 24px;
-			--header-title-gap: 10px;
+			--header-title-gap: 3px;
 			--header-title-padding: 30px;
 			--header-nav-font-size: 20px;
 			--header-nav-padding: 4px 20px;
@@ -390,7 +403,7 @@
 		.header {
 			--header-monogram-size: 36px;
 			--header-title-font-size: 20px;
-			--header-title-gap: 8px;
+			--header-title-gap: 2px;
 			--header-title-padding: 24px;
 			--header-nav-font-size: 16px;
 			--header-nav-padding: 4px 15px;
@@ -402,7 +415,7 @@
 		.header {
 			--header-monogram-size: 24px;
 			--header-title-font-size: 16px;
-			--header-title-gap: 6px;
+			--header-title-gap: 2px;
 			--header-title-padding: 16px;
 			--header-nav-font-size: 12px;
 			--header-nav-padding: 3px 10px;
