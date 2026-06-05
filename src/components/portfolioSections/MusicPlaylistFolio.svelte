@@ -1,3 +1,4 @@
+<div class="musicFolioBackground" use:parallax></div>
 <div class="musicList" bind:this={listElement}>
 	<ul class="musicPlaylist" aria-label="Playlist">
 		{#each collections as collection, collectionIndex}
@@ -29,7 +30,8 @@
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
-	import { collectionDisplayName, miscellaneousSubtitle } from '../../utils/localized.js';
+	import { collectionDisplayName, L } from '../../utils/localized.js';
+	import { parallax } from '../../utils/parallax.js';
 
 	export let sectionConfig;
 
@@ -48,7 +50,7 @@
 	$: collections = sectionConfig.collections.map(collection => ({
 		...collection,
 		name: collectionDisplayName($localeStore, collection.name),
-		subtitle: miscellaneousSubtitle($localeStore, collection.subtitle),
+		subtitle: L(collection.subtitle, $localeStore),
 		image: getAssetUrl(collection.image),
 		tracks: collection.tracks.map(track => ({
 			...track,
@@ -130,6 +132,7 @@
 
 		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowRight', playNextTrack, true);
 		shortcuts.addScreenShortcut('musicPlaylistFolio', 'ArrowLeft', playPreviousTrack, true);
+
 	});
 
 	onDestroy(() => {
@@ -139,12 +142,20 @@
 
 <style>
 	.musicList {
+		position: relative;
+		z-index: 1;
 		width: 100%;
-		max-width: 680px;
+		max-width: 450px;
 		margin: 0 auto;
 		height: calc(100vh - 2 * (var(--header-footer-height) + var(--safeMargin)));
-		padding: 0 var(--safeMargin);
+		padding: 0;
 		box-sizing: border-box;
+		background-color: oklch(18% 0 0 / 0.67);
+		background-blend-mode: luminosity;
+		backdrop-filter: blur(2px);
+		-webkit-backdrop-filter: blur(2px);
+		padding: 0 calc(var(--safeMargin) / 2);
+		border-radius: var(--radius-large);
 		overflow-y: auto;
 		overflow-x: hidden;
 		scrollbar-width: thin;
@@ -159,6 +170,19 @@
 		transition: background-color 0.2s ease;
 	}
 	.musicList::-webkit-scrollbar-thumb:hover { background-color: rgba(170, 170, 170, 0.5); }
+
+	:global(#musicPlaylistFolio) {
+		position: relative;
+	}
+
+	.musicFolioBackground {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		background-image: url('/img/portfolio/guillaumekuc_artTemple_M.jpg');
+		background-size: cover;
+		background-position: center;
+	}
 
 	.musicPlaylist {
 		list-style-type: none;

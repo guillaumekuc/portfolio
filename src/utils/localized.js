@@ -19,49 +19,13 @@ export function resolveLocalizedMarkdownPath(path, locale) {
 	return path.replace(/\.md$/i, `.${locale}.md`);
 }
 
-const CATEGORY_SLUG = {
-	'Card Design': 'cardDesign',
-	'Character Design': 'characterDesign',
-	'Character Lineup': 'characterLineup',
-	'Character Model': 'characterModel',
-	'Character Model & Rig': 'characterModelRig',
-	'Character Portrait': 'characterPortrait',
-	'Character Sheet': 'characterSheet',
-	'Color Study': 'colorStudy',
-	'Cover Art': 'coverArt',
-	'Creature Sheet': 'creatureSheet',
-	'Expression Sheet': 'expressionSheet',
-	'Form & Value Study': 'formValueStudy',
-	'Graduation Short Film': 'graduationShortFilm',
-	'Hard-surface Model': 'hardSurfaceModel',
-	'Interior Model': 'interiorModel',
-	'Keyframe Illustration': 'keyframeIllustration',
-	'Keyframe Line Art': 'keyframeLineArt',
-	'Landscape Illustration': 'landscapeIllustration',
-	'Perspective Study': 'perspectiveStudy'
-};
 
-export function categoryLabel(locale, englishCategory) {
-	if (!englishCategory) return '';
-	if (locale === 'en') return englishCategory;
-	const slug = CATEGORY_SLUG[englishCategory];
-	if (!slug) return englishCategory;
-	const key = `portfolio.category.${slug}`;
-	const translated = t(locale, key);
-	return translated !== key ? translated : englishCategory;
-}
-
-/** "Collection #1" → translated; leaves other names unchanged */
+/** "Collection #1" → translated; object {en, fr} → localized; plain string → as-is */
 export function collectionDisplayName(locale, name) {
 	if (!name) return '';
+	if (typeof name === 'object') return L(name, locale);
 	const m = name.match(/^Collection #(\d+)$/);
 	if (!m) return name;
 	return t(locale, 'music.collectionN', { n: m[1] });
 }
 
-export function miscellaneousSubtitle(locale, subtitle) {
-	if (subtitle === 'Miscellaneous') {
-		return t(locale, 'music.miscellaneous');
-	}
-	return subtitle;
-}

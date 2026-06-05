@@ -44,7 +44,7 @@
 	import ToolsDisplay from '../ToolsDisplay.svelte';
 	import { getAssetUrl } from '../../utils/assets.js';
 	import { stores } from '../../stores.js';
-	import { L, categoryLabel } from '../../utils/localized.js';
+	import { L } from '../../utils/localized.js';
 	import { t } from '../../utils/i18n.js';
 
 	export let sectionConfig;
@@ -56,7 +56,7 @@
 	}
 
 	function displayCategory(item) {
-		return categoryLabel($localeStore, item.category);
+		return L(item.category, $localeStore);
 	}
 
 	$: clientPrefix = `${t($localeStore, 'portfolio.meta.client')} `;
