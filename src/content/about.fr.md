@@ -14,7 +14,7 @@ Mon dernier poste, à [Visioglobe](https://visioglobe.com/) a cristallisé cette
 
 ## Orientation actuelle
 
-Après une courte saison à explorer différentes techniques telles la modélisation procédurale, les moteurs de jeu modernes ou les outils IAs, un projet de jeu titré Vilja dont je suis désormais porteur a emergé. Sa prémice narrative: "Mélodurgie - le contrôle mental par la musique". Il est à ce jour au stade de pré-production. 
+Après une courte saison à explorer différentes techniques telles la modélisation procédurale, les moteurs de jeu modernes, les outils IA et autres, un projet de jeu titré Vilja dont je suis désormais porteur a emergé. Sa prémice narrative: "Mélodurgie - le contrôle mental par la musique". Il est à ce jour au stade de pré-production. 
 
 Sur un plan plus philosophique, j’expérimente une approche _wu-wei_ : répondre aux affordances et rechercher des trajectoires fluides plutôt que de forcer une destination à priori.
 
