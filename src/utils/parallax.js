@@ -8,7 +8,7 @@ export function parallax(node, factor = 0.3) {
 	function onScroll() {
 		if (rafId) cancelAnimationFrame(rafId);
 		rafId = requestAnimationFrame(() => {
-			const offset = window.scrollY * factor;
+			const offset = -node.getBoundingClientRect().top * factor;
 			node.style.backgroundPosition = `center calc(50% + ${offset}px)`;
 			rafId = null;
 		});
