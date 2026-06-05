@@ -148,10 +148,16 @@
 			"id": "gridzFolio",
 			"component": "Gridz",
 			"categories": "portfolio-web portfolio-all",
-			"title": "Gridz",
-			"subtitle": "Perspective plugin for Photoshop",
+			"title": { "en": "Gridz", "fr": "Gridz" },
+			"subtitle": {
+				"en": "Perspective plugin for Photoshop",
+				"fr": "Extension de perspective pour Photoshop"
+			},
 			"linkUrl": "https://app.gumroad.com/guillaumekuc",
-			"linkText": "Check on gumroad",
+			"linkText": {
+				"en": "Check on gumroad",
+				"fr": "Voir sur Gumroad"
+			},
 			"contentPath": "gridz.md",
 			"coverImage": "/vid/guillaumekuc_gridzDemoCover.jpg",
 			"tools": ["cep", "jsx", "js", "html", "css"]
@@ -160,10 +166,16 @@
 			"id": "chordex",
 			"component": "Chordex",
 			"categories": "portfolio-web portfolio-all",
-			"title": "Chordex",
-			"subtitle": "Chord Relationships Catalog",
+			"title": { "en": "Chordex", "fr": "Chordex" },
+			"subtitle": {
+				"en": "Chord Relationships Catalog",
+				"fr": "Catalogue des relations d’accords"
+			},
 			"linkUrl": "https://guillaumekuc.github.io/chordex/",
-			"linkText": "Check on Github",
+			"linkText": {
+				"en": "Check on Github",
+				"fr": "Voir sur GitHub"
+			},
 			"contentPath": "chordex.md",
 			"coverImage": "/img/guillaumekuc_oldbg.jpg",
 			"tools": ["vue", "js", "html", "css"]
@@ -498,10 +510,19 @@
 			"id": "P4book",
 			"component": "P4bookFolio",
 			"categories": "portfolio-music portfolio-all",
-			"title": "All fourths tuning",
-			"subtitle": "Improvisation",
+			"title": {
+				"en": "All fourths tuning",
+				"fr": "Accordage en tous quartes"
+			},
+			"subtitle": {
+				"en": "Improvisation",
+				"fr": "Improvisation"
+			},
 			"linkUrl": "https://www.amazon.fr/All-fourths-tuning-Improvisation-English-ebook/dp/B07F89CW6V",
-			"linkText": "More on Kindle",
+			"linkText": {
+				"en": "More on Kindle",
+				"fr": "Voir sur Kindle"
+			},
 			"contentPath": "all-fourths-tuning.md",
 			"coverImage": "/img/portfolio/guillaumekuc_P4cover.jpg"
 		},

@@ -20,8 +20,12 @@
 	import { marked } from 'marked';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import { stores } from '../../stores.js';
+	import { L, resolveLocalizedMarkdownPath } from '../../utils/localized.js';
 
 	export let sectionConfig = {};
+
+	const localeStore = stores.i18n.locale;
 
 	// Configure marked to allow HTML
 	marked.setOptions({
@@ -29,24 +33,32 @@
 		gfm: true
 	});
 
-	// Dynamically load all markdown files
-	const contentModules = import.meta.glob('../../content/*.md', { 
-		eager: true, 
+	const contentModules = import.meta.glob('../../content/*.md', {
+		eager: true,
 		as: 'raw'
 	});
 
-	// Get content from config, fallback to defaults
-	const title = sectionConfig?.title || '';
-	const subtitle = sectionConfig?.subtitle || '';
-	const linkUrl = sectionConfig?.linkUrl || '';
-	const linkText = sectionConfig?.linkText || '';
-	const coverImage = sectionConfig?.coverImage || '';
-	const contentPath = sectionConfig?.contentPath || '';
-	const rawMarkdown = contentPath ? (contentModules[`../../content/${contentPath}`] || '').trim() : '';
-	const parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
-	
-	// Resolve asset URL
-	const resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
+	function loadMarkdown(path, loc) {
+		if (!path) return '';
+		const localized = resolveLocalizedMarkdownPath(path, loc);
+		let raw = contentModules[`../../content/${localized}`] || '';
+		if (!String(raw).trim() && loc !== 'en') {
+			raw = contentModules[`../../content/${path}`] || '';
+		}
+		return String(raw).trim();
+	}
+
+	$: title = L(sectionConfig?.title, $localeStore);
+	$: subtitle = L(sectionConfig?.subtitle, $localeStore);
+	$: linkUrl = sectionConfig?.linkUrl || '';
+	$: linkText = L(sectionConfig?.linkText, $localeStore);
+	$: coverImage = sectionConfig?.coverImage || '';
+	$: contentPath = sectionConfig?.contentPath || '';
+
+	$: rawMarkdown = loadMarkdown(contentPath, $localeStore);
+	$: parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+
+	$: resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
 
 	function openP4bookLink() {
 		const link = document.querySelector('#P4book .extLinkBtn');

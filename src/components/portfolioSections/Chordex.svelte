@@ -51,10 +51,13 @@
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import { L, resolveLocalizedMarkdownPath } from '../../utils/localized.js';
 	import ToolsDisplay from '../ToolsDisplay.svelte';
 	import ProjectLayout from './ProjectLayout.svelte';
 
 	export let sectionConfig = {};
+
+	const localeStore = stores.i18n.locale;
 
 	// Configure marked to allow HTML
 	marked.setOptions({
@@ -62,27 +65,35 @@
 		gfm: true
 	});
 
-	// Dynamically load all markdown files
-	const contentModules = import.meta.glob('../../content/*.md', { 
-		eager: true, 
+	const contentModules = import.meta.glob('../../content/*.md', {
+		eager: true,
 		as: 'raw'
 	});
 
-	// Get content from config, fallback to defaults
-	const title = sectionConfig?.title || '';
-	const subtitle = sectionConfig?.subtitle || '';
-	const linkUrl = sectionConfig?.linkUrl || sectionConfig?.link || '';
-	const linkText = sectionConfig?.linkText || sectionConfig?.cta || '';
-	const coverImage = sectionConfig?.coverImage || '';
-	const contentPath = sectionConfig?.contentPath || '';
-	const tools = sectionConfig?.tools || [];
-	const videoPath = sectionConfig?.videoPath || '';
-	const rawMarkdown = contentPath ? (contentModules[`../../content/${contentPath}`] || '').trim() : '';
-	const parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+	function loadMarkdown(path, loc) {
+		if (!path) return '';
+		const localized = resolveLocalizedMarkdownPath(path, loc);
+		let raw = contentModules[`../../content/${localized}`] || '';
+		if (!String(raw).trim() && loc !== 'en') {
+			raw = contentModules[`../../content/${path}`] || '';
+		}
+		return String(raw).trim();
+	}
 
-	// Resolve asset URLs
-	const resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
-	const videoUrl = videoPath ? getAssetUrl(videoPath) : '';
+	$: title = L(sectionConfig?.title, $localeStore);
+	$: subtitle = L(sectionConfig?.subtitle, $localeStore);
+	$: linkUrl = sectionConfig?.linkUrl || sectionConfig?.link || '';
+	$: linkText = L(sectionConfig?.linkText || sectionConfig?.cta, $localeStore);
+	$: coverImage = sectionConfig?.coverImage || '';
+	$: contentPath = sectionConfig?.contentPath || '';
+	$: tools = sectionConfig?.tools || [];
+	$: videoPath = sectionConfig?.videoPath || '';
+
+	$: rawMarkdown = loadMarkdown(contentPath, $localeStore);
+	$: parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+
+	$: resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
+	$: videoUrl = videoPath ? getAssetUrl(videoPath) : '';
 
 	let videoElement;
 	let playBtn;

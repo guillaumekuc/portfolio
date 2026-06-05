@@ -3,7 +3,7 @@
 		<div class="contactIcon" style="--icon-url: url('/img/nav/contact.svg')"></div>
 	</div>
 	<div class="contactInfo">
-		<div class="contactLabel">Email</div>
+		<div class="contactLabel">{emailLabel}</div>
 		<div class="emailRow">
 			<a
 				bind:this={emailElement}
@@ -25,7 +25,7 @@
 					<path d="m8 8v11.3333333c0 2.5057364 1.97487565 4.5502158 4.4530532 4.6618646l.2136135.0048021h11.3333333v4c0 2.209139-1.790861 4-4 4h-16c-2.209139 0-4-1.790861-4-4v-16c0-2.209139 1.790861-4 4-4zm21-8c1.6568542 0 3 1.34314575 3 3v16c0 1.6568542-1.3431458 3-3 3h-16c-1.6568542 0-3-1.3431458-3-3v-16c0-1.65685425 1.3431458-3 3-3z" fill="currentColor"/>
 				</svg>
 				{#if showCopiedTooltip}
-					<div class="copiedTooltip">Copied!</div>
+					<div class="copiedTooltip">{copiedLabel}</div>
 				{/if}
 			</div>
 		</div>
@@ -35,8 +35,14 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { getEmail, getMailtoUrl, openEmail } from '../utils/email.js';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 
 	export let selected = false;
+
+	const localeStore = stores.i18n.locale;
+	$: emailLabel = t($localeStore, 'contact.email');
+	$: copiedLabel = t($localeStore, 'contact.copied');
 
 	let emailAddress = '';
 	let emailElement;

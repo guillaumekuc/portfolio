@@ -3,7 +3,7 @@
 		<div class="contactIcon" style="--icon-url: url('/img/nav/resume.svg')"></div>
 	</div>
 	<div class="contactInfo">
-		<div class="contactLabel">Resume</div>
+		<div class="contactLabel">{resumeLabel}</div>
 		<div class="resumeRow">
 			<div 
 				class="resumeIcon" 
@@ -12,7 +12,7 @@
 				role="button" 
 				tabindex="0"
 				style="--icon-url: url('/img/nav/ext-link.svg')"
-				title="View"
+				title={viewTitle}
 			></div>
 			<div 
 				class="resumeIcon" 
@@ -29,8 +29,15 @@
 
 <script>
 	import profile from '../config/profile.json';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 
 	export let selected = false;
+
+	const localeStore = stores.i18n.locale;
+	$: resumeLabel = t($localeStore, 'contact.resume');
+	$: viewTitle = t($localeStore, 'contact.view');
+	$: downloadTitle = t($localeStore, 'contact.download');
 
 	function handleResumeClick(event) {
 		window.open(profile.resumeUrl, '_blank');

@@ -4,7 +4,7 @@
 		class="lang-select-trigger"
 		aria-haspopup="listbox"
 		aria-expanded={menuOpen}
-		aria-label={`Language: ${selectedLabel}`}
+		aria-label={triggerAriaLabel}
 		on:click={() => (menuOpen = !menuOpen)}
 	>
 		<span class="lang-select-row" aria-hidden="true">
@@ -21,7 +21,7 @@
 		</span>
 	</button>
 	{#if menuOpen}
-		<ul class="lang-select-menu" role="listbox" aria-label="Languages">
+		<ul class="lang-select-menu" role="listbox" aria-label={menuAriaLabel}>
 			{#each langConfig.options as opt (opt.id)}
 				<li role="none">
 					<button
@@ -43,22 +43,24 @@
 <script>
 	import { onMount } from 'svelte';
 	import langConfig from '../config/languages.json';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
+
+	const localeStore = stores.i18n.locale;
 
 	let rootEl;
 	let menuOpen = false;
-	const initial =
-		langConfig.options.find((o) => o.id === langConfig.defaultLocale)?.id ??
-		langConfig.options[0]?.id ??
-		'en';
-	let selectedId = initial;
 
+	$: selectedId = $localeStore;
 	$: selectedOption = langConfig.options.find((o) => o.id === selectedId);
 	$: selectedShort =
 		selectedOption?.shortLabel ?? selectedId.replace(/-.*$/, '').slice(0, 2).toUpperCase();
 	$: selectedLabel = selectedOption?.label ?? selectedId;
+	$: triggerAriaLabel = t($localeStore, 'language.triggerAria', { label: selectedLabel });
+	$: menuAriaLabel = t($localeStore, 'language.menuAria');
 
 	function selectOption(id) {
-		selectedId = id;
+		localeStore.set(id);
 		menuOpen = false;
 	}
 

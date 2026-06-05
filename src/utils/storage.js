@@ -71,6 +71,7 @@ export class Storage {
 export const STORAGE_KEYS = {
 	MUSIC_VOLUME: 'music.volume',
 	MUSIC_MUTED: 'music.isMuted',
+	LOCALE: 'i18n.locale'
 };
 
 

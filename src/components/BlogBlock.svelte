@@ -3,7 +3,7 @@
 		<div class="contactIcon" style="--icon-url: url('/img/nav/blog.svg')"></div>
 	</div>
 	<div class="contactInfo">
-		<div class="contactLabel">Blog</div>
+		<div class="contactLabel">{blogLabel}</div>
 		<div class="blogRow">
 			<div 
 				class="blogIcon" 
@@ -12,7 +12,7 @@
 				role="button" 
 				tabindex="0"
 				style="--icon-url: url('/img/nav/ext-link.svg')"
-				title="Visit Blog"
+				title={visitBlogTitle}
 			></div>
 		</div>
 	</div>
@@ -20,8 +20,14 @@
 
 <script>
 	import siteConfig from '../config/site.json';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 
 	export let selected = false;
+
+	const localeStore = stores.i18n.locale;
+	$: blogLabel = t($localeStore, 'contact.blog');
+	$: visitBlogTitle = t($localeStore, 'contact.visitBlog');
 
 	function handleBlogClick(event) {
 		window.open(siteConfig.blog.url, '_blank');

@@ -3,21 +3,21 @@
 		<MonogramSvg />
 	</div>
 
-	<h1><span class="nameBadge">guillaumekuc.art</span> is all set.</h1>
+	<h1><span class="nameBadge">{profile.siteName}</span> {allSetPhrase}</h1>
 	
 	<button 
 		class="volumeGroup" 
 		on:click={handleVolumeToggle} 
-		title={$isMuted ? 'Unmute' : 'Mute'}
+		title={volumeTitle}
 		style="--icon-mask: url('{$isMuted ? '/img/audio-player/mute.svg' : '/img/audio-player/volume.svg'}')"
 	>
 		<div class="volumeToggle">
 			<div class="volumeIcon"></div>
 		</div>
-		<span class="soundStatus">{$isMuted ? 'SOUND OFF' : 'SOUND ON'}</span>
+		<span class="soundStatus">{soundStatusLabel}</span>
 	</button>
 	
-	<button bind:this={enterBtn} id="enterBtn" on:click={handleEnter}>Enter</button>
+	<button bind:this={enterBtn} id="enterBtn" on:click={handleEnter}>{enterLabel}</button>
 </div>
 <!--#startScreen-->
 
@@ -31,13 +31,22 @@
 	import { debugLog } from '../utils/debuglog.js';
 	import { Storage, STORAGE_KEYS } from '../utils/storage.js';
 	import MonogramSvg from './MonogramSvg.svelte';
+	import profile from '../config/profile.json';
+	import { t } from '../utils/i18n.js';
 
 	let startScreenElement;
 	let enterBtn;
 
+	const localeStore = stores.i18n.locale;
+
 	// Subscribe to mute state for reactive icon
 	const isMuted = stores.music.isMuted;
 	const volume = stores.music.volume;
+
+	$: allSetPhrase = t($localeStore, 'start.allSet');
+	$: volumeTitle = t($localeStore, $isMuted ? 'start.unmute' : 'start.mute');
+	$: soundStatusLabel = t($localeStore, $isMuted ? 'start.soundOff' : 'start.soundOn');
+	$: enterLabel = t($localeStore, 'start.enter');
 
 	function handleStartScreenAnimate() {
 		if (startScreenElement) {

@@ -12,21 +12,21 @@
 					<source src={item.video} type="video/mp4" />
 				</video>
 			{:else if item.url}
-				<img loading="lazy" src={item.url} alt={item.title} />
+				<img loading="lazy" src={item.url} alt={displayTitle(item)} />
 			{/if}
 			<div class="gallery-overlay">
 				<div class="gallery-metadata">
 					{#if item.title}
-						<div class="metadata-title">{item.title}</div>
+						<div class="metadata-title">{displayTitle(item)}</div>
 					{/if}
 					{#if item.category}
-						<div class="metadata-category">{item.category}</div>
+						<div class="metadata-category">{displayCategory(item)}</div>
 					{/if}
 					{#if item.client}
-						<div class="metadata-client">Client: {item.client}</div>
+						<div class="metadata-client">{clientPrefix}{item.client}</div>
 					{/if}
 					{#if item.role}
-						<div class="metadata-role">Role: {item.role}</div>
+						<div class="metadata-role">{rolePrefix}{item.role}</div>
 					{/if}
 					{#if item.tools && item.tools.length > 0}
 						<div class="metadata-tools">
@@ -43,9 +43,25 @@
 <script>
 	import ToolsDisplay from '../ToolsDisplay.svelte';
 	import { getAssetUrl } from '../../utils/assets.js';
-	
+	import { stores } from '../../stores.js';
+	import { L, categoryLabel } from '../../utils/localized.js';
+	import { t } from '../../utils/i18n.js';
+
 	export let sectionConfig;
-	
+
+	const localeStore = stores.i18n.locale;
+
+	function displayTitle(item) {
+		return L(item.title, $localeStore);
+	}
+
+	function displayCategory(item) {
+		return categoryLabel($localeStore, item.category);
+	}
+
+	$: clientPrefix = `${t($localeStore, 'portfolio.meta.client')} `;
+	$: rolePrefix = `${t($localeStore, 'portfolio.meta.role')} `;
+
 	$: items = (sectionConfig?.items || []).map(item => ({
 		...item,
 		url: item.url ? getAssetUrl(item.url) : item.url,

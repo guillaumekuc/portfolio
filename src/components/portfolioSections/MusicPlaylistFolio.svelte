@@ -31,8 +31,11 @@
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import { collectionDisplayName, miscellaneousSubtitle } from '../../utils/localized.js';
 
 	export let sectionConfig;
+
+	const localeStore = stores.i18n.locale;
 
 	const currentCollectionIndexStore = stores.music.currentCollectionIndex;
 	$: currentCollectionIndex = $currentCollectionIndexStore;
@@ -57,6 +60,8 @@
 
 	$: collections = sectionConfig.collections.map(collection => ({
 		...collection,
+		name: collectionDisplayName($localeStore, collection.name),
+		subtitle: miscellaneousSubtitle($localeStore, collection.subtitle),
 		image: getAssetUrl(collection.image),
 		tracks: collection.tracks.map(track => ({
 			...track,

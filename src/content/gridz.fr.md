@@ -1,0 +1,4 @@
+
+Dessiner une perspective multi-points convaincante dans l’esprit de Kim Jung Gi est notoirement difficile. Elle résiste à l’intuition, et les grilles statiques habituelles sont intrinsèquement limitantes. Dans le monde réel, les objets s’alignent rarement sur un seul jeu de lignes de fuite. Pour qu’une scène paraisse vécue, chaque objet pivoté exige ses propres points de fuite.
+
+Ce plug-in permet de créer une grille de perspective puis de la faire pivoter à la volée, pour que chaque objet soit tracé correctement dans son orientation propre. Vous évitez l’approximation visuelle tout en gardant la précision mathématique d’un logiciel 3D sans l’alourdissement du workflow. Vous construisez des scènes d’une complexité organique qui restent structurellement solides.

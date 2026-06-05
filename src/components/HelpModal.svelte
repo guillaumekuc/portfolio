@@ -1,13 +1,13 @@
 <Modal modalId="helpModal">
 	<div class="help-modal-shortcuts">
-		<h2 class="help-modal-title">Keyboard Shortcuts</h2>
+		<h2 class="help-modal-title">{helpTitle}</h2>
 		{#each shortcutList as shortcut}
 			<div class="help-modal-shortcut-item">
 				<span class="help-modal-key" class:help-modal-key-space={shortcut.key === ' '}>{formatKey(shortcut.key)}</span>
 				<span class="help-modal-description">
 					{shortcut.description}
 					{#if shortcut.contextual}
-						<span class="help-modal-contextual"> (contextual)</span>
+						<span class="help-modal-contextual"> {contextualSuffix}</span>
 					{/if}
 				</span>
 			</div>
@@ -16,47 +16,52 @@
 </Modal>
 
 <script>
-	import { onMount } from 'svelte';
 	import Modal from './Modal.svelte';
 	import { shortcuts } from '../utils/shortcuts.js';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 
-	// Map of shortcut IDs to metadata (description and category)
+	const localeStore = stores.i18n.locale;
+
 	const shortcutMetadata = {
-		'music-prev': { description: 'Previous track', category: 'track', order: 1 },
-		'music-next': { description: 'Next track', category: 'track', order: 2 },
-		'music-play-pause': { description: 'Play / Pause', category: 'playback', order: 1 },
-		'music-mute': { description: 'Mute / Unmute', category: 'playback', order: 2 },
-		'music-loop': { description: 'Toggle loop', category: 'playback', order: 3 },
-		'music-vol-up': { description: 'Volume up', category: 'volume', order: 1 },
-		'music-vol-down': { description: 'Volume down', category: 'volume', order: 2 },
-		'nav-up': { description: 'Navigate up', category: 'navigation', order: 1 },
-		'nav-down': { description: 'Navigate down', category: 'navigation', order: 2 },
-		'nav-left': { description: 'Navigate left', category: 'navigation', order: 3, contextual: true },
-		'nav-right': { description: 'Navigate right', category: 'navigation', order: 4, contextual: true },
-		'help-modal': { description: 'Open help', category: 'navigation', order: 5 }
+		'music-prev': { category: 'track', order: 1 },
+		'music-next': { category: 'track', order: 2 },
+		'music-play-pause': { category: 'playback', order: 1 },
+		'music-mute': { category: 'playback', order: 2 },
+		'music-loop': { category: 'playback', order: 3 },
+		'music-vol-up': { category: 'volume', order: 1 },
+		'music-vol-down': { category: 'volume', order: 2 },
+		'nav-up': { category: 'navigation', order: 1 },
+		'nav-down': { category: 'navigation', order: 2 },
+		'nav-left': { category: 'navigation', order: 3, contextual: true },
+		'nav-right': { category: 'navigation', order: 4, contextual: true },
+		'help-modal': { category: 'navigation', order: 5 }
 	};
 
-	// Category display order
 	const categoryOrder = ['navigation', 'playback', 'volume', 'track'];
 
-	// Get global shortcuts and map to display format
-	let shortcutList = [];
-	
-	function buildShortcutList() {
-		shortcutList = [];
-		// Add global shortcuts
+	function shortcutT(loc, id) {
+		const key = `shortcut.${id.replace(/-/g, '_')}`;
+		return t(loc, key);
+	}
+
+	$: helpTitle = t($localeStore, 'help.title');
+	$: contextualSuffix = t($localeStore, 'help.contextual');
+
+	$: shortcutList = (() => {
+		const loc = $localeStore;
+		const list = [];
 		for (const [id, shortcut] of shortcuts.global) {
-			const metadata = shortcutMetadata[id] || { description: id, category: 'other', order: 999 };
-			shortcutList.push({
+			const metadata = shortcutMetadata[id] || { category: 'other', order: 999 };
+			list.push({
 				key: shortcut.key,
-				description: metadata.description,
+				description: shortcutT(loc, id),
 				category: metadata.category,
 				order: metadata.order,
 				contextual: metadata.contextual || false,
-				id: id
+				id
 			});
 		}
-		// Add contextual shortcuts (not in global shortcuts)
 		const contextualShortcuts = [
 			{ id: 'nav-left', key: 'ArrowLeft' },
 			{ id: 'nav-right', key: 'ArrowRight' }
@@ -64,9 +69,9 @@
 		for (const contextual of contextualShortcuts) {
 			const metadata = shortcutMetadata[contextual.id];
 			if (metadata) {
-				shortcutList.push({
+				list.push({
 					key: contextual.key,
-					description: metadata.description,
+					description: shortcutT(loc, contextual.id),
 					category: metadata.category,
 					order: metadata.order,
 					contextual: true,
@@ -74,8 +79,7 @@
 				});
 			}
 		}
-		// Sort by category order, then by order within category
-		shortcutList.sort((a, b) => {
+		list.sort((a, b) => {
 			const aCategoryIndex = categoryOrder.indexOf(a.category);
 			const bCategoryIndex = categoryOrder.indexOf(b.category);
 			if (aCategoryIndex !== bCategoryIndex) {
@@ -83,7 +87,8 @@
 			}
 			return a.order - b.order;
 		});
-	}
+		return list;
+	})();
 
 	function formatKey(key) {
 		if (key === ' ') {
@@ -104,10 +109,6 @@
 		return key.toUpperCase();
 	}
 
-	onMount(() => {
-		// Build shortcut list
-		buildShortcutList();
-	});
 </script>
 
 <style>

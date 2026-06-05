@@ -29,7 +29,7 @@
 	<div class="header-actions">
 		<LanguageSelector />
 		<button type="button" class="header-help-button" on:click={handleHelpClick}>
-			<img src="/img/nav/help.svg" alt="Help" />
+			<img src="/img/nav/help.svg" alt={helpAlt} />
 		</button>
 	</div>
 </div>
@@ -41,6 +41,7 @@
 	import MonogramSvg from './MonogramSvg.svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
 	import navConfig from '../config/nav.json';
@@ -70,25 +71,27 @@
 	// Visibility state for header
 	let isVisible = false;
 
+	const localeStore = stores.i18n.locale;
+
 	// Filter navigation items to only include internal items
 	// Sort so CTA items come first, then map to the format needed for the header
-	const headerNavItems = navConfig.navigation
+	$: headerNavItems = navConfig.navigation
 		.filter(item => item.type === 'internal' && item.target)
 		.sort((a, b) => {
-			// CTA items come first
 			if (a.cta && !b.cta) return -1;
 			if (!a.cta && b.cta) return 1;
-			return 0; // Maintain original order for non-CTA items
+			return 0;
 		})
 		.map(item => ({
 			id: `headerNavButton-${item.id}`,
 			target: item.target,
-			label: item.label
+			label: t($localeStore, `nav.${item.id}`)
 		}));
 
 	// Extract the store for reactive access
 	const currentNavTargetStore = stores.navigation.currentNavTarget;
 	$: currentNavTarget = $currentNavTargetStore;
+	$: helpAlt = t($localeStore, 'common.help');
 
 	function handleHeaderNavClick(target) {
 		// Step 1: Show overlay curtain

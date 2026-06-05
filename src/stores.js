@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { Storage, STORAGE_KEYS } from './utils/storage.js';
 import { getAssetUrl } from './utils/assets.js';
+import { locale as i18nLocale } from './utils/i18n.js';
 
 // Load saved audio preferences from localStorage
 const savedVolume = Storage.get(STORAGE_KEYS.MUSIC_VOLUME, 0);
@@ -47,5 +48,10 @@ export const stores = {
 	// Configuration settings
 	config: {
 		debug: writable(true)
+	},
+
+	// UI locale (see utils/i18n.js)
+	i18n: {
+		locale: i18nLocale
 	}
 };
