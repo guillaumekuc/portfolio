@@ -1,4 +1,3 @@
-
 Drawing convincing multi-point perspective reminiscent of Kim Jung Gi is notoriously difficult. It resists intuition, and the go-to static grids solutions are inherently restrictive. In the real world, objects rarely conveniently align with a single set of guidelines. To make a scene read as lived-in, every rotated object requires its own set of vanishing points.
 
 This plugin allows you to create a perspective grid and then rotate it on the fly, so that every object is drawn accurately in its own orientation. It eliminates the need for "eye-balling" or "guesstimating", providing the mathematical accuracy of 3D software without the workflow overhead. Build scenes that achieve organic complexity yet remain structurally sound.

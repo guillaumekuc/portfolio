@@ -12,7 +12,7 @@ Ce chemin m’a conduit à l’édition indépendante : un ebook de théorie mus
 
 Mon dernier poste, à [Visioglobe](https://visioglobe.com/) a cristallisé cette double compétence. Au sein de l’équipe de production, j'ai livré des cartes intéractives d'intérieurs en 3D pour de grands comptes — Orange, L’Oréal, Ikea, SG, Unibail-Rodamco-Westfield. En parallèle, j’y ai conçu des plug-ins et scripts par dessus notre base de code propriétaire pour aller chercher des gains d'efficacité supplémentaires dans nos worflows. Cette expérience a confirmé que mon parcours s’est naturellement ancré à l’interface entre production artistique et infrastructure technique.
 
-## Orientation actuelle
+## Cap
 
 Après une courte saison à explorer différentes techniques telles la modélisation procédurale, les moteurs de jeu modernes, les outils IA et autres, un projet de jeu titré Vilja dont je suis désormais porteur a emergé. Sa prémice narrative: "Mélodurgie - le contrôle mental par la musique". Il est à ce jour au stade de pré-production. 
 
@@ -22,4 +22,4 @@ Sur un plan plus philosophique, j’expérimente une approche _wu-wei_ : répond
 
 ## Contact
 
-De fait, je reste ouvert et disponible pour de nouveaux projets et équipes, et souhaite contribuer là où mes compétences sont les plus utiles. Ne pas hésiter à me contacter.
+De fait, je reste ouvert et disponible pour de nouveaux projets et équipes, et souhaite contribuer là où mes appétences et compétences sont les plus alignées. Ne pas hésiter à me contacter.
