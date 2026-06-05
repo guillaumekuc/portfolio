@@ -5,7 +5,7 @@
 
 	<div id="splashArtArea" class="splashArtArea">
 		<div bind:this={artElement} use:parallax id="splashArt" class="splashArt" class:initialScale={isInitialScale} class:introComplete={isIntroComplete} class:idleZoom={isIdleZoom} style="background-image: url('{backgroundImageUrl}')">
-			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop type="audio/mpeg" preload="none"
+			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop preload="none"
 			></audio>
 
 			<div bind:this={noiseOverlay} class="noiseOverlay"></div>
@@ -29,8 +29,10 @@
 	import SplashNav from './SplashNav.svelte';
 	import SplashscreenHero from './SplashscreenHero.svelte';
 	import siteConfig from '../config/site.json';
+	import portfolioConfig from '../config/portfolio.json';
 
-	const bgMusicUrl = getAssetUrl('/sound/bgmusic.mp3');
+	const musicSection = portfolioConfig.portfolioSections.find(s => s.id === 'musicPlaylistFolio');
+	const bgMusicUrl = getAssetUrl(musicSection?.collections?.[0]?.tracks?.[0]?.sound ?? '');
 	const backgroundImageUrl = getAssetUrl(siteConfig.splashBackgroundImage);
 
 	// Animation timing constants

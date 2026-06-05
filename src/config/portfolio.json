@@ -10,8 +10,8 @@
 					"subtitle": { "en": "Miscellaneous", "fr": "Divers" },
 					"image": "/img/vinyl-disc.png",
 					"tracks": [
-						{ "sound": "/sound/SoloRecitalAtTheSunkenTemple.mp3", "title": "Solo Recital at the Sunken Temple" },
-						{ "sound": "/sound/bgmusic2.mp3", "title": "Background music #2" },
+						{ "sound": "/sound/20250920-AttritionPressure.wav", "title": "Attrition Pressure" },
+						{ "sound": "/sound/FrostRemainder.mp3", "title": "Frost Remainder" },
 						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" },
 						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
 						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },

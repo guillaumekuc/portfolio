@@ -15,7 +15,6 @@ export function parallax(node, factor = 0.3) {
 	}
 
 	window.addEventListener('scroll', onScroll, { passive: true });
-	onScroll();
 
 	return {
 		destroy() {
