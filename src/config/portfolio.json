@@ -157,7 +157,8 @@
 				"fr": "Voir sur GitHub"
 			},
 			"contentPath": "chordex.md",
-			"coverImage": "/img/guillaumekuc_oldbg.jpg",
+			"coverImage": "/vid/chordex-cover.png",
+			"videoPath": "/vid/chordex.mp4",
 			"tools": ["vue", "js", "html", "css"]
 		},
 		{
@@ -383,7 +384,7 @@
 					"year": ""
 				},
 				{
-					"url": "/img/portfolio/guillaumekuc_pecheuroriental_M.jpg",
+					"url": "/img/portfolio/guillaumekuc_pecheuroriental_2.jpg",
 					"title": "Fisherman, Quiet Waters & Ornamented Arches",
 					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
