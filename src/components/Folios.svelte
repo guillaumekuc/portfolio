@@ -5,6 +5,7 @@
 			class="fullPage portfolioSection"
 			class:hidden={!sectionVisibility.get(section.id)}
 			data-categories={section.categories}
+			use:sectionLoader
 		>
 			<svelte:component this={section.component} sectionConfig={section.config} />
 		</div>
@@ -19,6 +20,7 @@
 	
 	import portfolioConfig from '../config/portfolio.json';
 
+	import { sectionLoader } from '../utils/sectionLoader.js';
 	import PortfolioGallery from './portfolioSections/PortfolioGallery.svelte';
 	import MusicPlaylistFolio from './portfolioSections/MusicPlaylistFolio.svelte';
 	import Gridz from './portfolioSections/Gridz.svelte';

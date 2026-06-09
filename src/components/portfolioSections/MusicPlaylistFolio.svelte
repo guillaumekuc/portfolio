@@ -1,4 +1,5 @@
 <div class="musicFolioBackground" use:parallax></div>
+<img class="preload-hidden" src="/img/portfolio/guillaumekuc_artTemple_M.jpg" aria-hidden="true" alt="" />
 <div class="musicList" bind:this={listElement}>
 	<ul class="musicPlaylist" aria-label="Playlist">
 		{#each collections as collection, collectionIndex}
@@ -173,6 +174,14 @@
 
 	:global(#musicPlaylistFolio) {
 		position: relative;
+	}
+
+	.preload-hidden {
+		position: absolute;
+		width: 0;
+		height: 0;
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.musicFolioBackground {
