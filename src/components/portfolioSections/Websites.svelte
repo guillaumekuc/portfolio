@@ -42,7 +42,7 @@
 	const websites = [
 		{
 			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
-			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkartscreenshot.jpg'),
+			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkartscreenshot_v2.jpg'),
 			screenshotAlt: 'GK Art Screenshot',
 			label: 'Guillaume Kuc',
 			suffix: '.art'

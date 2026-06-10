@@ -13,6 +13,7 @@
 						{ "sound": "/sound/20250920-AttritionPressure.wav", "title": "Attrition Pressure" },
 						{ "sound": "/sound/FrostRemainder.mp3", "title": "Frost Remainder" },
 						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" },
+						{ "sound": "/sound/guillaumekuc_dancing-wound-chiptune.mp3", "title": "Dancing Wound (chiptune)" },
 						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
 						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },
 						{ "sound": "/sound/ChaoticIntruders.mp3", "title": "Chaotic Intruders" },
@@ -191,6 +192,14 @@
 					"year": ""
 				},
 				{
+					"url": "/img/portfolio/guillaumekuc_funk-you-cable-car-madakos_M.jpg",
+					"title": "Funk You",
+					"category": {"en": "Vignette Illustration", "fr": "Illustration vignette"},
+					"client": "Internal",
+					"tools": ["graphic-tablet", "photoshop", "gridz"],
+					"year": "2025"
+				},
+				{
 					"url": "/img/portfolio/guillaumekuc_perspDrawing2_M.jpg",
 					"title": "Gravity-free Creative Gear #2",
 					"category": {"en": "Perspective Study", "fr": "Étude de perspective"},
@@ -256,7 +265,16 @@
 					"category": {"en": "Interior Model", "fr": "Modèle d'intérieur"},
 					"client": "Internal",
 					"tools": ["3dsmax"],
-					"year": ""					
+					"year": ""
+				},
+				{
+					"video": "/vid/guillaumekuc_platform-bed-previs.mp4",
+					"poster": "/vid/guillaumekuc_platform-bed-previs_cover.png",
+					"title": "Platform Bed",
+					"category": {"en": "Previsualization", "fr": "Prévizualisation"},
+					"client": "Internal",
+					"tools": ["3dsmax"],
+					"year": ""
 				},
 				{
 					"video": "/vid/mode/guillaumekuc_Danturn_XLQ.mp4",
