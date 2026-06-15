@@ -1,5 +1,5 @@
 {#if tools && tools.length > 0}
-	<div class="tools-display" class:icons-only={iconsOnly} class:align-right={align === 'right'}>
+	<div class="tools-display" class:icons-only={iconsOnly} class:align-right={align === 'right'} class:align-center={align === 'center'}>
 		{#each tools as tool}
 			{@const toolInfo = getToolInfo(tool)}
 			{@const toolIcon = getToolIcon(tool)}
@@ -61,6 +61,10 @@
 		justify-content: flex-end;
 	}
 
+	.tools-display.align-center {
+		justify-content: center;
+	}
+
 	.tool-icon {
 		width: 24px;
 		height: 24px;
@@ -84,8 +88,8 @@
 	}
 
 	.tools-display.icons-only .tool-icon {
-		width: 22px;
-		height: 22px;
+		width: 18px;
+		height: 18px;
 		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 		border-radius: 0;
 		overflow: visible;

@@ -8,7 +8,7 @@
 					<ProfileInfo />
 				</div>
 				{#if profile.availableForHire}
-					<div class="profileAvailability">Open to new opportunities <span class="separator">•</span> <span class="profileLocationInline">{profile.location}</span></div>
+					<div class="profileAvailability">{openToLabel} <span class="separator">•</span> <span class="profileLocationInline">{profile.location}</span></div>
 				{/if}
 				{#if isMobile}
 					<ContactBlocks layout="vertical" showBlog={true} align="left" />
@@ -35,7 +35,8 @@
 	import { marked } from 'marked';
 	import { shortcuts } from '../utils/shortcuts.js';
 	import { Navigation } from '../utils/navigation.js';
-	import aboutMarkdown from '../content/about.md?raw';
+	import aboutMarkdownEn from '../content/about.md?raw';
+	import aboutMarkdownFr from '../content/about.fr.md?raw';
 	import { debugLog } from '../utils/debuglog.js';
 	import ProfileAvatar from './ProfileAvatar.svelte';
 	import ProfileInfo from './ProfileInfo.svelte';
@@ -43,6 +44,11 @@
 	import ContactBlocks from './ContactBlocks.svelte';
 	import AnimatedBackground from './AnimatedBackground.svelte';
 	import profile from '../config/profile.json';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
+
+	const localeStore = stores.i18n.locale;
+	$: openToLabel = t($localeStore, 'about.openToOpportunities');
 
 	// Configure marked to allow HTML
 	marked.setOptions({
@@ -50,7 +56,8 @@
 		gfm: true
 	});
 
-	let parsedMarkdown = marked.parse(aboutMarkdown);
+	$: aboutRaw = $localeStore === 'fr' ? aboutMarkdownFr : aboutMarkdownEn;
+	$: parsedMarkdown = marked.parse(aboutRaw);
 	let scrollableElement;
 	let isMobile = false;
 

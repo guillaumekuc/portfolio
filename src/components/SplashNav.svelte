@@ -72,12 +72,15 @@
 	import portfolioConfig from '../config/portfolio.json';
 	import NavIcon from './NavIcon.svelte';
 	import { get } from 'svelte/store';
+	import { t } from '../utils/i18n.js';
 
 	let navElement;
 	let navLinkElements = [];
-	
-	// Get navigation items from config and replace placeholders
-	const navItems = navConfig.navigation.map(item => {
+
+	const localeStore = stores.i18n.locale;
+
+	// Resolve URLs from config; labels/icons react to locale
+	const navItemsBase = navConfig.navigation.map(item => {
 		if (item.url === '{{EMAIL}}') {
 			return { ...item, url: getMailtoUrl() };
 		}
@@ -85,6 +88,15 @@
 			return { ...item, url: siteConfig.blog.url };
 		}
 		return item;
+	});
+
+	$: navItems = navItemsBase.map(item => {
+		const label = t($localeStore, `nav.${item.id}`);
+		return {
+			...item,
+			label,
+			icon: item.icon ? { ...item.icon, alt: label } : undefined
+		};
 	});
 	
 	// Extract the store for reactive access

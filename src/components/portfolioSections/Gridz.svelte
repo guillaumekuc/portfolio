@@ -1,35 +1,35 @@
-<div class="portfolioSectionWrapper gridzWrapper">
-	<div class="shortLeftThirds scrollable">
-		<span class="title gridzTitle">{title} — <small>{subtitle}</small></span>
-		<ToolsDisplay {tools} />
-		<div class="content">
-			{@html parsedMarkdown}
+<ProjectLayout layout="right" bind:mediaContainer={videoContainer}>
+		<div slot="content">
+			<ToolsDisplay {tools} align="left" iconsOnly={true} />
+			<span class="title gridzTitle">{title} — <small>{subtitle}</small></span>
+			<div class="content">
+				{@html parsedMarkdown}
+			</div>
+			<a class="focus extLinkBtn" href={linkUrl} target="_blank"
+				><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
+			>
 		</div>
-		<a class="focus extLinkBtn" href={linkUrl} target="_blank"
-			><img loading="lazy" src="/img/nav/gotoURL.png" alt="Go to URL" /><span>{linkText}</span></a
-		>
-	</div>
-		<div bind:this={videoContainer} class="wideRightThirds">
-		<video
-			bind:this={videoElement}
-			class="largeVideo"
-			preload="none"
-			muted
-			loop
-			poster={resolvedCoverImage}
-			on:click={handleVideoClick}
-		>
-			<source src={videoUrl} type="video/mp4" />
-		</video>
-		<button
-			type="button"
-			bind:this={playBtn}
-			class="videoPlayBtn"
-			class:hidden={!showPlayBtn}
-			aria-label="Play video"
-		></button>
-	</div>
-</div>
+		<div slot="media">
+			<video
+				bind:this={videoElement}
+				class="largeVideo"
+				preload="none"
+				muted
+				loop
+				poster={resolvedCoverImage}
+				on:click={handleVideoClick}
+			>
+				<source src={videoUrl} type="video/mp4" />
+			</video>
+			<button
+				type="button"
+				bind:this={playBtn}
+				class="videoPlayBtn"
+				class:hidden={!showPlayBtn}
+				aria-label="Play video"
+			></button>
+		</div>
+	</ProjectLayout>
 
 <script>
 	import { onMount, onDestroy } from 'svelte';
@@ -38,9 +38,13 @@
 	import { stores } from '../../stores.js';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import { L, resolveLocalizedMarkdownPath } from '../../utils/localized.js';
 	import ToolsDisplay from '../ToolsDisplay.svelte';
+	import ProjectLayout from './ProjectLayout.svelte';
 
 	export let sectionConfig = {};
+
+	const localeStore = stores.i18n.locale;
 
 	// Configure marked to allow HTML
 	marked.setOptions({
@@ -48,25 +52,33 @@
 		gfm: true
 	});
 
-	// Dynamically load all markdown files
-	const contentModules = import.meta.glob('../../content/*.md', { 
-		eager: true, 
+	const contentModules = import.meta.glob('../../content/*.md', {
+		eager: true,
 		as: 'raw'
 	});
 
-	// Get content from config, fallback to defaults
-	const title = sectionConfig?.title || '';
-	const subtitle = sectionConfig?.subtitle || '';
-	const linkUrl = sectionConfig?.linkUrl || '';
-	const linkText = sectionConfig?.linkText || '';
-	const coverImage = sectionConfig?.coverImage || '';
-	const contentPath = sectionConfig?.contentPath || '';
-	const tools = sectionConfig?.tools || [];
-	const rawMarkdown = contentPath ? (contentModules[`../../content/${contentPath}`] || '').trim() : '';
-	const parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+	function loadMarkdown(path, loc) {
+		if (!path) return '';
+		const localized = resolveLocalizedMarkdownPath(path, loc);
+		let raw = contentModules[`../../content/${localized}`] || '';
+		if (!String(raw).trim() && loc !== 'en') {
+			raw = contentModules[`../../content/${path}`] || '';
+		}
+		return String(raw).trim();
+	}
 
-	// Resolve asset URLs
-	const resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
+	$: title = L(sectionConfig?.title, $localeStore);
+	$: subtitle = L(sectionConfig?.subtitle, $localeStore);
+	$: linkUrl = sectionConfig?.linkUrl || '';
+	$: linkText = L(sectionConfig?.linkText, $localeStore);
+	$: coverImage = sectionConfig?.coverImage || '';
+	$: contentPath = sectionConfig?.contentPath || '';
+	$: tools = sectionConfig?.tools || [];
+
+	$: rawMarkdown = loadMarkdown(contentPath, $localeStore);
+	$: parsedMarkdown = rawMarkdown ? marked.parse(rawMarkdown) : '';
+
+	$: resolvedCoverImage = coverImage ? getAssetUrl(coverImage) : '';
 	const videoUrl = getAssetUrl('/vid/guillaumekuc_gridzDemo.mp4');
 
 	let videoElement;
@@ -148,21 +160,24 @@
 </script>
 
 <style>
-	.gridzWrapper {
-		/* Font interface variables - map global variables to local scope */
-		--gridz-font-rounded: var(--ffRounded);
+	.gridzTitle {
+		display: block;
+		margin-bottom: calc(var(--safeMargin) / 2);
+		font-size: 125%;
+		font-variant: small-caps;
+		font-family: var(--project-font-rounded);
 	}
 
-	.gridzTitle {
-		font-family: var(--gridz-font-rounded);
+	.gridzTitle :global(small) {
+		font-size: 0.7em;
 	}
 
 	.content {
 		font-style: normal;
+		text-align: justify;
 	}
 
 	:global(.tools-display) {
-		margin-top: 12px;
-		margin-bottom: 16px;
+		margin-bottom: 6px;
 	}
 </style>

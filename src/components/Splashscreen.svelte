@@ -4,8 +4,8 @@
 	<SplashscreenHero />
 
 	<div id="splashArtArea" class="splashArtArea">
-		<div bind:this={artElement} id="splashArt" class="splashArt" class:initialScale={isInitialScale} class:introComplete={isIntroComplete} class:idleZoom={isIdleZoom} style="background-image: url('{backgroundImageUrl}')">
-			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop type="audio/mpeg" preload="none"
+		<div bind:this={artElement} use:parallax id="splashArt" class="splashArt" class:initialScale={isInitialScale} class:introComplete={isIntroComplete} class:idleZoom={isIdleZoom} style="background-image: url('{backgroundImageUrl}')">
+			<audio bind:this={bgMusicElement} id="bgMusic" src={bgMusicUrl} loop preload="none"
 			></audio>
 
 			<div bind:this={noiseOverlay} class="noiseOverlay"></div>
@@ -24,23 +24,24 @@
 	import { stores } from '../stores.js';
 	import { get } from 'svelte/store';
 	import { getAssetUrl } from '../utils/assets.js';
+	import { parallax } from '../utils/parallax.js';
 	import SplashscreenSound from './SplashscreenSound.svelte';
 	import SplashNav from './SplashNav.svelte';
 	import SplashscreenHero from './SplashscreenHero.svelte';
 	import siteConfig from '../config/site.json';
+	import portfolioConfig from '../config/portfolio.json';
 
-	const bgMusicUrl = getAssetUrl('/sound/bgmusic.mp3');
+	const musicSection = portfolioConfig.portfolioSections.find(s => s.id === 'musicPlaylistFolio');
+	const bgMusicUrl = getAssetUrl(musicSection?.collections?.[0]?.tracks?.[0]?.sound ?? '');
 	const backgroundImageUrl = getAssetUrl(siteConfig.splashBackgroundImage);
 
 	// Animation timing constants
 	const INTRO_ANIMATION_DURATION_MS = 3000;
-	const PARALLAX_FACTOR = 0.3;
 	const MUSIC_START_DELAY_MS = 1000;
 
 	let bgMusicElement;
 	let artElement;
 	let noiseOverlay;
-	let rafId = null;
 	let grainRafId = null;
 	let isAudioInitialized = false;
 	
@@ -69,20 +70,6 @@
 			isIntroComplete = false;
 			isIdleZoom = true;
 		}, INTRO_ANIMATION_DURATION_MS);
-	}
-
-	function handleParallax() {
-		if (rafId) {
-			cancelAnimationFrame(rafId);
-		}
-		rafId = requestAnimationFrame(() => {
-			if (artElement) {
-				const scrollY = window.scrollY || window.pageYOffset;
-				const parallaxOffset = scrollY * PARALLAX_FACTOR;
-				artElement.style.backgroundPosition = `center calc(50% + ${parallaxOffset}px)`;
-			}
-			rafId = null;
-		});
 	}
 
 	function animateFilmicGrain() {
@@ -127,18 +114,11 @@
 	onMount(() => {
 		window.addEventListener('enterPressed', startBackgroundMusic);
 		window.addEventListener('artAnimate', handleArtAnimate);
-		window.addEventListener('scroll', handleParallax, { passive: true });
-		
-		handleParallax(); // Set initial parallax position
 		animateFilmicGrain(); // Start random grain flickering
 	});
 
 	onDestroy(() => {
 		window.removeEventListener('artAnimate', handleArtAnimate);
-		window.removeEventListener('scroll', handleParallax);
-		if (rafId) {
-			cancelAnimationFrame(rafId);
-		}
 		if (grainRafId) {
 			cancelAnimationFrame(grainRafId);
 		}

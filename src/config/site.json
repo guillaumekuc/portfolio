@@ -4,6 +4,7 @@
 	"favicon": "/img/monogram-white.svg",
 	"faviconType": "image/svg+xml",
 	"splashBackgroundImage": "/img/portfolio/guillaumekuc_pecheuroriental_2.jpg",
+	"splashAmbientSound": "/sound/riverambient.mp3",
 	"preloadImages": [
 		"/img/portfolio/guillaumekuc_pecheuroriental_2.jpg"
 	],

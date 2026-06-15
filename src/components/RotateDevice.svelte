@@ -12,7 +12,7 @@
 		{/if}
 
 		<h1>
-			<span class="nameBadge">guillaumekuc.art</span> is best displayed horizontally.
+			<span class="nameBadge">{profile.siteName}</span> {horizontalPhrase}
 		</h1>
 	</div>
 	<!--#rotatePleaseContent-->
@@ -21,6 +21,12 @@
 
 <script>
 	import { onMount } from 'svelte';
+	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
+	import profile from '../config/profile.json';
+
+	const localeStore = stores.i18n.locale;
+	$: horizontalPhrase = t($localeStore, 'rotate.horizontal');
 
 	let isPortrait = false;
 

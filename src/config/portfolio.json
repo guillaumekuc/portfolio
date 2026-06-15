@@ -3,7 +3,32 @@
 		{
 			"id": "musicPlaylistFolio",
 			"component": "MusicPlaylistFolio",
-			"categories": "portfolio-music portfolio-all"
+			"categories": "portfolio-music portfolio-all",
+			"collections": [
+				{
+					"name": { "en": "Music Playlist", "fr": "Playlist musicale" },
+					"subtitle": { "en": "Miscellaneous", "fr": "Divers" },
+					"image": "/img/vinyl-disc.png",
+					"tracks": [
+						{ "sound": "/sound/20250920-AttritionPressure.wav", "title": "Attrition Pressure" },
+						{ "sound": "/sound/FrostRemainder.mp3", "title": "Frost Remainder" },
+						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" },
+						{ "sound": "/sound/guillaumekuc_dancing-wound-chiptune.mp3", "title": "Dancing Wound (chiptune)" },
+						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
+						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },
+						{ "sound": "/sound/ChaoticIntruders.mp3", "title": "Chaotic Intruders" },
+						{ "sound": "/sound/DistractingScent.mp3", "title": "Distracting Scent" },
+						{ "sound": "/sound/FerventHorizon.mp3", "title": "Fervent Horizon" },
+						{ "sound": "/sound/GalvanizingQuest.mp3", "title": "Galvanizing Quest" },
+						{ "sound": "/sound/InvigoratingFarm.mp3", "title": "Invigorating Farm" },
+						{ "sound": "/sound/RecalcitrantWaterflow.mp3", "title": "Recalcitrant Waterflow" },
+						{ "sound": "/sound/SpicyGallant.mp3", "title": "Spicy Gallant" },
+						{ "sound": "/sound/UntroubledMorning.mp3", "title": "Untroubled Morning" },
+						{ "sound": "/sound/StunnedChickens.mp3", "title": "Stunned Chickens" },
+						{ "sound": "/sound/Meanwhile.mp3", "title": "Meanwhile" }
+					]
+				}
+			]
 		},
 		{
 			"id": "illustrationFolio1",
@@ -13,7 +38,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Astur_M.jpg",
 					"title": "Astur",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "La Plume de Cyrano",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -21,7 +46,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_EmpireKeshe_M.jpg",
 					"title": "Empire Keshe",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "La Plume De Cyrano",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -29,7 +54,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Aegyptius_M.jpg",
 					"title": "Aegyptius",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "Éditions Orygins",
 					"tools": ["graphic-tablet", "photoshop", "3dsmax"],
 					"year": ""
@@ -37,7 +62,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_templesouterrain.jpg",
 					"title": "Temple souterrain",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "La Plume de Cyrano",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -45,7 +70,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_DernierAnneau_M.jpg",
 					"title": "Le Dernier Anneau",
-					"category": "Cover Art",
+					"category": {"en": "Cover Art", "fr": "Couverture"},
 					"client": "500 Nuances de Geek",
 					"tools": ["graphic-tablet", "photoshop", "google-maps"],
 					"year": ""
@@ -53,7 +78,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_LapinDesTénèbres_M.jpg",
 					"title": "Lapin des Ténèbres",
-					"category": "Character Portrait",
+					"category": {"en": "Character Portrait", "fr": "Portrait de personnage"},
 					"client": "Independent Drummer",
 					"tools": ["graphic-tablet", "photoshop", "blender"],
 					"year": ""
@@ -61,7 +86,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_feuxorion_M.jpg",
 					"title": "Feux d'Orion",
-					"category": "Cover Art",
+					"category": {"en": "Cover Art", "fr": "Couverture"},
 					"client": "Independent Novelist",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -69,7 +94,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_atlantes.jpg",
 					"title": "Atlantes",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "La Plume de Cyrano",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -77,7 +102,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_templeNerven.jpg",
 					"title": "Temple Nerven",
-					"category": "Landscape Illustration",
+					"category": {"en": "Landscape Illustration", "fr": "Illustration de paysage"},
 					"client": "La Plume de Cyrano",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -85,7 +110,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_artTemple_M.jpg",
 					"title": "Solo Recital at the Sunken Temple",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
@@ -93,7 +118,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_yellowcastle_M.jpg",
 					"title": "Shoreline Session by the Castle",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
@@ -104,13 +129,38 @@
 			"id": "gridzFolio",
 			"component": "Gridz",
 			"categories": "portfolio-web portfolio-all",
-			"title": "Gridz",
-			"subtitle": "Perspective plugin for Photoshop",
+			"title": { "en": "Gridz", "fr": "Gridz" },
+			"subtitle": {
+				"en": "Perspective plugin for Photoshop",
+				"fr": "Extension de perspective pour Photoshop"
+			},
 			"linkUrl": "https://app.gumroad.com/guillaumekuc",
-			"linkText": "Check on gumroad",
+			"linkText": {
+				"en": "Check on gumroad",
+				"fr": "Voir sur Gumroad"
+			},
 			"contentPath": "gridz.md",
 			"coverImage": "/vid/guillaumekuc_gridzDemoCover.jpg",
 			"tools": ["cep", "jsx", "js", "html", "css"]
+		},
+		{
+			"id": "chordex",
+			"component": "Chordex",
+			"categories": "portfolio-web portfolio-all",
+			"title": { "en": "Chordex", "fr": "Chordex" },
+			"subtitle": {
+				"en": "Chord Relationships Catalog",
+				"fr": "Catalogue des relations d’accords"
+			},
+			"linkUrl": "https://guillaumekuc.github.io/chordex/",
+			"linkText": {
+				"en": "Check on Github",
+				"fr": "Voir sur GitHub"
+			},
+			"contentPath": "chordex.md",
+			"coverImage": "/vid/chordex-cover.png",
+			"videoPath": "/vid/chordex.mp4",
+			"tools": ["vue", "js", "html", "css"]
 		},
 		{
 			"id": "drawingFolio1",
@@ -120,7 +170,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_cardTheo.jpg",
 					"title": "Karmic Memory",
-					"category": "Card Design",
+					"category": {"en": "Card Design", "fr": "Design de carte"},
 					"client": "Independent Game Designer",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -128,7 +178,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_thefundrawing_M.jpg",
 					"title": "The Child, the Warrior and the Fish",
-					"category": "Keyframe Line Art",
+					"category": {"en": "Keyframe Line Art", "fr": "Linéarité keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
@@ -136,15 +186,23 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_perspDrawing1_M.jpg",
 					"title": "Gravity-free Creative Gear #1",
-					"category": "Perspective Study",
+					"category": {"en": "Perspective Study", "fr": "Étude de perspective"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
 				},
 				{
+					"url": "/img/portfolio/guillaumekuc_funk-you-cable-car-madakos_M.jpg",
+					"title": "Funk You",
+					"category": {"en": "Vignette Illustration", "fr": "Illustration vignette"},
+					"client": "Internal",
+					"tools": ["graphic-tablet", "photoshop", "gridz"],
+					"year": "2025"
+				},
+				{
 					"url": "/img/portfolio/guillaumekuc_perspDrawing2_M.jpg",
 					"title": "Gravity-free Creative Gear #2",
-					"category": "Perspective Study",
+					"category": {"en": "Perspective Study", "fr": "Étude de perspective"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
@@ -152,7 +210,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_UnifhinishedFlood_M.jpg",
 					"title": "Homecoming to Windward Harbour",
-					"category": "Keyframe Line Art",
+					"category": {"en": "Keyframe Line Art", "fr": "Linéarité keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "gridz"],
 					"year": ""
@@ -168,7 +226,7 @@
 					"video": "/vid/anim/guillaumekuc_encyclo2_XLQ.mp4",
 					"poster": "/vid/anim/guillaumekuc_encyclo2cover.jpg",
 					"title": "The Encyclopedist",
-					"category": "Graduation Short Film",
+					"category": {"en": "Graduation Short Film", "fr": "Court-métrage de fin d'études"},
 					"client": "École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -177,7 +235,7 @@
 					"video": "/vid/anim/guillaumekuc_encyclo5_XLQ.mp4",
 					"poster": "/vid/anim/guillaumekuc_encyclo5cover.jpg",
 					"title": "The Encyclopedist",
-					"category": "Graduation Short Film",
+					"category": {"en": "Graduation Short Film", "fr": "Court-métrage de fin d'études"},
 					"client": "École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -186,7 +244,7 @@
 					"video": "/vid/anim/guillaumekuc_encyclo1_XLQ.mp4",
 					"poster": "/vid/anim/guillaumekuc_encyclo1cover.jpg",
 					"title": "The Encyclopedist",
-					"category": "Graduation Short Film",
+					"category": {"en": "Graduation Short Film", "fr": "Court-métrage de fin d'études"},
 					"client": "École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -195,7 +253,7 @@
 					"video": "/vid/mode/guillaumekuc_guitar2_XLQ.mp4",
 					"poster": "/vid/mode/guillaumekuc_guitar2Cover.jpg",
 					"title": "Electric Guitar",
-					"category": "Hard-surface Model",
+					"category": {"en": "Hard-surface Model", "fr": "Modèle hard-surface"},
 					"client": "Internal",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -204,16 +262,25 @@
 					"video": "/vid/mode/guillaumekuc_musicroom_XLQ.mp4",
 					"poster": "/vid/mode/guillaumekuc_musicroomCover.jpg",
 					"title": "Music Room",
-					"category": "Interior Model",
+					"category": {"en": "Interior Model", "fr": "Modèle d'intérieur"},
 					"client": "Internal",
 					"tools": ["3dsmax"],
-					"year": ""					
+					"year": ""
+				},
+				{
+					"video": "/vid/guillaumekuc_platform-bed-previs.mp4",
+					"poster": "/vid/guillaumekuc_platform-bed-previs_cover.png",
+					"title": "Platform Bed",
+					"category": {"en": "Previsualization", "fr": "Prévizualisation"},
+					"client": "Internal",
+					"tools": ["3dsmax"],
+					"year": ""
 				},
 				{
 					"video": "/vid/mode/guillaumekuc_Danturn_XLQ.mp4",
 					"poster": "/vid/mode/guillaumekuc_DanturnCover.jpg",
 					"title": "Dan Character",
-					"category": "Character Model",
+					"category": {"en": "Character Model", "fr": "Modèle de personnage"},
 					"client": "Private Application Project",
 					"tools": ["3dsmax"],
 					"year": ""		
@@ -223,7 +290,7 @@
 					"poster": "/vid/mode/guillaumekuc_robotCover.jpg",
 					"title": "Skull Robot",
 					"project": "Trashbusters",
-					"category": "Character Model & Rig",
+					"category": {"en": "Character Model & Rig", "fr": "Modèle et rig de personnage"},
 					"client": "Canal J via École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""		
@@ -233,7 +300,7 @@
 					"poster": "/vid/mode/guillaumekuc_cubeCover.jpg",
 					"title": "Walking Cube Character",
 					"project": "The Encyclopedist",
-					"category": "Character Model & Rig",
+					"category": {"en": "Character Model & Rig", "fr": "Modèle et rig de personnage"},
 					"client": "École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -242,7 +309,7 @@
 					"video": "/vid/anim/guillaumekuc_encyclo4_XLQ.mp4",
 					"poster": "/vid/anim/guillaumekuc_encyclo4cover.jpg",
 					"title": "The Encyclopedist",
-					"category": "Graduation Short Film",
+					"category": {"en": "Graduation Short Film", "fr": "Court-métrage de fin d'études"},
 					"client": "École Estienne",
 					"tools": ["3dsmax"],
 					"year": ""
@@ -257,7 +324,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_pourManon_M.jpg",
 					"title": "Books, Brews and In-betweens",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Independent Animators",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -265,7 +332,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_femmesabre_M.jpg",
 					"title": "Sword Dancer",
-					"category": "Color Study",
+					"category": {"en": "Color Study", "fr": "Étude de couleur"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -273,7 +340,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_cherryblossomtrees_M.jpg",
 					"title": "General & Army of the Blossom Tree",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -281,7 +348,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_magicien_M.jpg",
 					"title": "Magician",
-					"category": "Character Design",
+					"category": {"en": "Character Design", "fr": "Design de personnage"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -289,7 +356,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_b&wHEAD2_M.jpg",
 					"title": "Woman Head #1",
-					"category": "Form & Value Study",
+					"category": {"en": "Form & Value Study", "fr": "Étude de formes et valeurs"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -297,7 +364,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_b&wHEAD3_M.jpg",
 					"title": "Woman Head #2",
-					"category": "Form & Value Study",
+					"category": {"en": "Form & Value Study", "fr": "Étude de formes et valeurs"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -305,7 +372,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_b&wHEAD4_M.jpg",
 					"title": "Woman Head #3",
-					"category": "Form & Value Study",
+					"category": {"en": "Form & Value Study", "fr": "Étude de formes et valeurs"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -313,7 +380,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_citédor.jpg",
 					"title": "Cité d'Or",
-					"category": "Cover Art",
+					"category": {"en": "Cover Art", "fr": "Couverture"},
 					"client": "La Plume De Cyrano",
 					"tools": ["graphic-tablet", "photoshop", "blender"],
 					"year": ""
@@ -321,7 +388,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_cascadesuite_M.jpg",
 					"title": "Knights Respite at the Falls",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -329,15 +396,15 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_arbre_M.jpg",
 					"title": "Goodbye Again",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
 				},
 				{
-					"url": "/img/portfolio/guillaumekuc_pecheuroriental_M.jpg",
+					"url": "/img/portfolio/guillaumekuc_pecheuroriental_2.jpg",
 					"title": "Fisherman, Quiet Waters & Ornamented Arches",
-					"category": "Keyframe Illustration",
+					"category": {"en": "Keyframe Illustration", "fr": "Illustration keyframe"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -345,7 +412,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_soldat_M.jpg",
 					"title": "Soldier with Pipe",
-					"category": "Color Study",
+					"category": {"en": "Color Study", "fr": "Étude de couleur"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -360,7 +427,9 @@
 		{
 			"id": "animFolio1",
 			"component": "AnimFolio1",
-			"categories": "portfolio-3d portfolio-all"
+			"categories": "portfolio-3d portfolio-all",
+			"title": "Character Animation",
+			"tools": ["maya"]
 		},
 		{
 			"id": "drawingFolio2",
@@ -370,7 +439,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Occitane_colored_M.jpg",
 					"title": "Escouade de l'Occitane",
-					"category": "Character Lineup",
+					"category": {"en": "Character Lineup", "fr": "Galerie de personnages"},
 					"client": "Project-based Creative Collective",
 					"role": "Digital Artist & Initiator",
 					"tools": ["graphic-tablet", "photoshop"],
@@ -379,7 +448,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Cheb_pleinpied_colored_M.jpg",
 					"title": "Cheb",
-					"category": "Character Sheet",
+					"category": {"en": "Character Sheet", "fr": "Fiche de personnage"},
 					"client": "Project-based Creative Collective",
 					"role": "Digital Artist & Initiator",
 					"tools": ["graphic-tablet", "photoshop"],
@@ -388,7 +457,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_ChebFace_colored_M.jpg",
 					"title": "Cheb",
-					"category": "Expression Sheet",
+					"category": {"en": "Expression Sheet", "fr": "Feuille d'expressions"},
 					"client": "Project-based Creative Collective",
 					"role": "Digital Artist & Initiator",
 					"tools": ["graphic-tablet", "photoshop"],
@@ -397,7 +466,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Fan_face_colored_M.jpg",
 					"title": "Fan",
-					"category": "Expression Sheet",
+					"category": {"en": "Expression Sheet", "fr": "Feuille d'expressions"},
 					"client": "Project-based Creative Collective",
 					"role": "Digital Artist & Initiator",
 					"tools": ["graphic-tablet", "photoshop"],
@@ -406,7 +475,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_woman_M.jpg",
 					"title": "Action woman",
-					"category": "Character Sheet",
+					"category": {"en": "Character Sheet", "fr": "Fiche de personnage"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop", "blender"],
 					"year": ""
@@ -414,7 +483,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_pig_M.jpg",
 					"title": "Mounted Giant Pig",
-					"category": "Creature Sheet",
+					"category": {"en": "Creature Sheet", "fr": "Fiche de créature"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -422,7 +491,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Band_M.jpg",
 					"title": "Animal Band",
-					"category": "Character Lineup",
+					"category": {"en": "Character Lineup", "fr": "Galerie de personnages"},
 					"client": "Internal",
 					"tools": ["graphic-tablet", "photoshop"],
 					"year": ""
@@ -430,7 +499,7 @@
 				{
 					"url": "/img/portfolio/guillaumekuc_Fan_pleinpied_color_M.jpg",
 					"title": "Fan",
-					"category": "Character Sheet",
+					"category": {"en": "Character Sheet", "fr": "Fiche de personnage"},
 					"client": "Project-based Creative Collective",
 					"role": "Digital Artist & Initiator",
 					"tools": ["graphic-tablet", "photoshop"],
@@ -443,9 +512,15 @@
 			"component": "P4bookFolio",
 			"categories": "portfolio-music portfolio-all",
 			"title": "All fourths tuning",
-			"subtitle": "Improvisation",
+			"subtitle": {
+				"en": "Improvisation",
+				"fr": "Improvisation"
+			},
 			"linkUrl": "https://www.amazon.fr/All-fourths-tuning-Improvisation-English-ebook/dp/B07F89CW6V",
-			"linkText": "More on Kindle",
+			"linkText": {
+				"en": "More on Kindle",
+				"fr": "Voir sur Kindle"
+			},
 			"contentPath": "all-fourths-tuning.md",
 			"coverImage": "/img/portfolio/guillaumekuc_P4cover.jpg"
 		},

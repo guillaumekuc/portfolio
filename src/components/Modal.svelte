@@ -5,7 +5,7 @@
 		on:keydown={(e) => e.key === 'Escape' && handleBackdropClick()}
 		role="button"
 		tabindex="0"
-		aria-label="Close modal"
+		aria-label={closeAriaLabel}
 	>
 		<div 
 			class="modal-content" 
@@ -23,9 +23,13 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { stores } from '../stores.js';
 	import { shortcuts } from '../utils/shortcuts.js';
+	import { t } from '../utils/i18n.js';
 
 	export let modalId;
 	export let maxWidth = '550px';
+
+	const localeStore = stores.i18n.locale;
+	$: closeAriaLabel = t($localeStore, 'modal.close');
 
 	function handleBackdropClick() {
 		closeModal();

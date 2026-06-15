@@ -68,7 +68,7 @@
 		"label": "Cursor"
 	},
 	"svelte": {
-		"icon": "/img/tools/svelte.svg",
+		"icon": "/img/tools/svelte.png",
 		"label": "Svelte"
 	},
 	"vue": {

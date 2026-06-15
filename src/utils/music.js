@@ -18,6 +18,17 @@ export class Music {
 
 		// Setup time update listener to update stores
 		if (this.bgMusicElement) {
+			// Sync isPlaying store with actual audio element state
+			this.bgMusicElement.addEventListener('play', () => {
+				stores.music.isPlaying.set(true);
+				debugLog('Audio element playing - syncing store');
+			});
+
+			this.bgMusicElement.addEventListener('pause', () => {
+				stores.music.isPlaying.set(false);
+				debugLog('Audio element paused - syncing store');
+			});
+
 			this.bgMusicElement.addEventListener('timeupdate', () => {
 				if (this.bgMusicElement) {
 					stores.music.currentTime.set(this.bgMusicElement.currentTime);
@@ -31,9 +42,27 @@ export class Music {
 			this.bgMusicElement.addEventListener('ended', () => {
 				const isLooping = get(stores.music.isLooping);
 				if (!isLooping) {
-					const currentIndex = get(stores.music.currentIndex);
-					const tracks = get(stores.music.tracks);
-					if (currentIndex + 1 < tracks.length) {
+					const collections = get(stores.music.collections);
+					const currentCollectionIndex = get(stores.music.currentCollectionIndex);
+					const currentTrackIndex = get(stores.music.currentTrackIndex);
+					
+					// Check if there's a next track (either in current collection or next collection)
+					let hasNext = false;
+					if (collections && collections.length > 0) {
+						const currentCollection = collections[currentCollectionIndex];
+						if (currentCollection && currentTrackIndex + 1 < currentCollection.tracks.length) {
+							hasNext = true;
+						} else if (currentCollectionIndex + 1 < collections.length) {
+							hasNext = true;
+						}
+					} else {
+						// Fallback to old system
+						const currentIndex = get(stores.music.currentIndex);
+						const tracks = get(stores.music.tracks);
+						hasNext = currentIndex + 1 < tracks.length;
+					}
+					
+					if (hasNext) {
 						this.nextTrackHandler();
 					} else {
 						this.pause();
@@ -198,31 +227,120 @@ export class Music {
 	}
 
 	nextTrackHandler() {
-		const currentIndex = get(stores.music.currentIndex);
-		const tracks = get(stores.music.tracks);
-		if (currentIndex + 1 < tracks.length) {
-			const newIndex = currentIndex + 1;
-			stores.music.currentIndex.set(newIndex);
-			if (this.bgMusicElement && tracks[newIndex]) {
-				this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
-				stores.music.trackImage.set(tracks[newIndex].image);
+		const collections = get(stores.music.collections);
+		const currentCollectionIndex = get(stores.music.currentCollectionIndex);
+		const currentTrackIndex = get(stores.music.currentTrackIndex);
+		
+		if (!collections || collections.length === 0) {
+			// Fallback to old system if no collections
+			const currentIndex = get(stores.music.currentIndex);
+			const tracks = get(stores.music.tracks);
+			if (currentIndex + 1 < tracks.length) {
+				const newIndex = currentIndex + 1;
+				stores.music.currentIndex.set(newIndex);
+				if (this.bgMusicElement && tracks[newIndex]) {
+					this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
+					stores.music.trackImage.set(tracks[newIndex].image);
+				}
+				debugLog('Next track:', newIndex);
+				this.play();
 			}
-			debugLog('Next track:', newIndex);
+			return;
+		}
+		
+		const currentCollection = collections[currentCollectionIndex];
+		if (!currentCollection) return;
+		
+		// Check if we can move to next track in current collection
+		if (currentTrackIndex + 1 < currentCollection.tracks.length) {
+			// Next track in same collection
+			const newTrackIndex = currentTrackIndex + 1;
+			stores.music.currentTrackIndex.set(newTrackIndex);
+			
+			const track = currentCollection.tracks[newTrackIndex];
+			if (this.bgMusicElement) {
+				this.bgMusicElement.setAttribute('src', track.sound);
+			}
+			if (currentCollection.image) {
+				stores.music.trackImage.set(currentCollection.image);
+			}
+			debugLog('Next track:', currentCollectionIndex, newTrackIndex);
+			this.play();
+		} else if (currentCollectionIndex + 1 < collections.length) {
+			// Move to next collection, first track
+			const newCollectionIndex = currentCollectionIndex + 1;
+			const newCollection = collections[newCollectionIndex];
+			
+			stores.music.currentCollectionIndex.set(newCollectionIndex);
+			stores.music.currentTrackIndex.set(0);
+			
+			const track = newCollection.tracks[0];
+			if (this.bgMusicElement) {
+				this.bgMusicElement.setAttribute('src', track.sound);
+			}
+			if (newCollection.image) {
+				stores.music.trackImage.set(newCollection.image);
+			}
+			debugLog('Next collection:', newCollectionIndex, 0);
 			this.play();
 		}
 	}
 
 	previousTrackHandler() {
-		const currentIndex = get(stores.music.currentIndex);
-		const tracks = get(stores.music.tracks);
-		if (currentIndex > 0) {
-			const newIndex = currentIndex - 1;
-			stores.music.currentIndex.set(newIndex);
-			if (this.bgMusicElement && tracks[newIndex]) {
-				this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
-				stores.music.trackImage.set(tracks[newIndex].image);
+		const collections = get(stores.music.collections);
+		const currentCollectionIndex = get(stores.music.currentCollectionIndex);
+		const currentTrackIndex = get(stores.music.currentTrackIndex);
+		
+		if (!collections || collections.length === 0) {
+			// Fallback to old system if no collections
+			const currentIndex = get(stores.music.currentIndex);
+			const tracks = get(stores.music.tracks);
+			if (currentIndex > 0) {
+				const newIndex = currentIndex - 1;
+				stores.music.currentIndex.set(newIndex);
+				if (this.bgMusicElement && tracks[newIndex]) {
+					this.bgMusicElement.setAttribute('src', tracks[newIndex].sound);
+					stores.music.trackImage.set(tracks[newIndex].image);
+				}
+				debugLog('Previous track:', newIndex);
+				this.play();
 			}
-			debugLog('Previous track:', newIndex);
+			return;
+		}
+		
+		// Check if we can move to previous track in current collection
+		if (currentTrackIndex > 0) {
+			// Previous track in same collection
+			const newTrackIndex = currentTrackIndex - 1;
+			stores.music.currentTrackIndex.set(newTrackIndex);
+			
+			const currentCollection = collections[currentCollectionIndex];
+			const track = currentCollection.tracks[newTrackIndex];
+			if (this.bgMusicElement) {
+				this.bgMusicElement.setAttribute('src', track.sound);
+			}
+			if (currentCollection.image) {
+				stores.music.trackImage.set(currentCollection.image);
+			}
+			debugLog('Previous track:', currentCollectionIndex, newTrackIndex);
+			this.play();
+		} else if (currentCollectionIndex > 0) {
+			// Move to previous collection, last track
+			const newCollectionIndex = currentCollectionIndex - 1;
+			const newCollection = collections[newCollectionIndex];
+			const lastTrackIndex = newCollection.tracks.length - 1;
+			
+			stores.music.currentCollectionIndex.set(newCollectionIndex);
+			stores.music.currentTrackIndex.set(lastTrackIndex);
+			
+			const track = newCollection.tracks[lastTrackIndex];
+			if (this.bgMusicElement) {
+				this.bgMusicElement.setAttribute('src', track.sound);
+			}
+			if (newCollection.image) {
+				stores.music.trackImage.set(newCollection.image);
+			}
+			debugLog('Previous collection:', newCollectionIndex, lastTrackIndex);
 			this.play();
 		}
 	}

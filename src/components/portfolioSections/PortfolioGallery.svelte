@@ -1,32 +1,35 @@
 <div class="gallery">
-	{#each items as item}
+	{#each items as item, i}
 		<div class="gallery-item">
 			{#if item.video}
-				<video 
-					preload="none" 
-					loop 
-					muted 
-					on:click={handleVideoClick} 
+				<video
+					preload="none"
+					loop
+					muted
+					on:click={handleVideoClick}
+					on:play={() => playingStates[i] = true}
+					on:pause={() => playingStates[i] = false}
 					poster={item.poster}
 				>
 					<source src={item.video} type="video/mp4" />
 				</video>
+				<div class="play-icon" class:playing={playingStates[i]}></div>
 			{:else if item.url}
-				<img loading="lazy" src={item.url} alt={item.title} />
+				<img loading="lazy" src={item.url} alt={displayTitle(item)} />
 			{/if}
 			<div class="gallery-overlay">
 				<div class="gallery-metadata">
 					{#if item.title}
-						<div class="metadata-title">{item.title}</div>
+						<div class="metadata-title">{displayTitle(item)}</div>
 					{/if}
 					{#if item.category}
-						<div class="metadata-category">{item.category}</div>
+						<div class="metadata-category">{displayCategory(item)}</div>
 					{/if}
 					{#if item.client}
-						<div class="metadata-client">Client: {item.client}</div>
+						<div class="metadata-client">{clientPrefix}{item.client}</div>
 					{/if}
 					{#if item.role}
-						<div class="metadata-role">Role: {item.role}</div>
+						<div class="metadata-role">{rolePrefix}{item.role}</div>
 					{/if}
 					{#if item.tools && item.tools.length > 0}
 						<div class="metadata-tools">
@@ -43,9 +46,25 @@
 <script>
 	import ToolsDisplay from '../ToolsDisplay.svelte';
 	import { getAssetUrl } from '../../utils/assets.js';
-	
+	import { stores } from '../../stores.js';
+	import { L } from '../../utils/localized.js';
+	import { t } from '../../utils/i18n.js';
+
 	export let sectionConfig;
-	
+
+	const localeStore = stores.i18n.locale;
+
+	function displayTitle(item) {
+		return L(item.title, $localeStore);
+	}
+
+	function displayCategory(item) {
+		return L(item.category, $localeStore);
+	}
+
+	$: clientPrefix = `${t($localeStore, 'portfolio.meta.client')} `;
+	$: rolePrefix = `${t($localeStore, 'portfolio.meta.role')} `;
+
 	$: items = (sectionConfig?.items || []).map(item => ({
 		...item,
 		url: item.url ? getAssetUrl(item.url) : item.url,
@@ -53,6 +72,8 @@
 		poster: item.poster ? getAssetUrl(item.poster) : item.poster
 	}));
 	
+	let playingStates = {};
+
 	function handleVideoClick(event) {
 		const video = event.currentTarget;
 		if (video.paused) {
@@ -115,6 +136,24 @@
 		flex: 1;
 		display: block;
 		border-radius: var(--gallery-radius);
+	}
+
+	.play-icon {
+		pointer-events: none;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 3;
+		width: 15%;
+		height: 15%;
+		background: no-repeat center / contain url('/img/audio-player/play.svg');
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	:global(.gallery .slick-current) .play-icon:not(.playing) {
+		opacity: 1;
 	}
 
 	.gallery-overlay {

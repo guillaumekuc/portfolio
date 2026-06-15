@@ -445,6 +445,7 @@ body {
 	scroll-snap-align: start;
 	color: var(--shadeWhite);
 	text-align: center;
+	position: relative;
 }
 
 .fullPage:after {
@@ -477,6 +478,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	isolation: isolate;
 }
 
 .twoPanes {
@@ -774,3 +776,36 @@ input[type='range']::-webkit-slider-runnable-track {
 	position: relative;
 }
 
+/* Section loading overlay (sectionLoader action) */
+.section-loader-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #000;
+	opacity: 1;
+	pointer-events: auto;
+	transition: opacity 0.4s ease;
+}
+
+.section-loader-overlay.loaded {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.section-loader-spinner {
+	width: 36px;
+	height: 36px;
+	border: 3px solid rgba(255, 255, 255, 0.15);
+	border-top-color: rgba(255, 255, 255, 0.8);
+	border-radius: 50%;
+	animation: section-spin 0.75s linear infinite;
+}
+
+@keyframes section-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

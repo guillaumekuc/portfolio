@@ -5,7 +5,13 @@
 				<MonogramSvg />
 			</span>
 		</button>
-		<button type="button" class="header-title-button" on:click={handleTitleClick}>{profile.siteName}</button>
+		<button type="button" class="header-title-button" on:click={handleTitleClick}>
+			{#if siteTitleParts.suffix}
+				{siteTitleParts.primary}<small class="header-site-suffix">{siteTitleParts.suffix}</small>
+			{:else}
+				{profile.siteName}
+			{/if}
+		</button>
 	</div>
 	<div class="header-nav">
 		{#each headerNavItems as item, index}
@@ -16,13 +22,16 @@
 				class:focus={currentNavTarget === item.target}
 				on:click={() => handleHeaderNavClick(item.target)}
 			>
-				{item.label}
+				<span class="header-nav-label">{item.label}</span>
 			</button>
 		{/each}
 	</div>
-	<button type="button" class="header-help-button" on:click={handleHelpClick}>
-		<img src="/img/nav/help.svg" alt="Help" />
-	</button>
+	<div class="header-actions">
+		<LanguageSelector />
+		<button type="button" class="header-help-button" on:click={handleHelpClick}>
+			<img src="/img/nav/help.svg" alt={helpAlt} />
+		</button>
+	</div>
 </div>
 <!--#header-->
 
@@ -30,7 +39,9 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import MonogramSvg from './MonogramSvg.svelte';
+	import LanguageSelector from './LanguageSelector.svelte';
 	import { stores } from '../stores.js';
+	import { t } from '../utils/i18n.js';
 	import { DOM } from '../utils/dom.js';
 	import { Navigation } from '../utils/navigation.js';
 	import navConfig from '../config/nav.json';
@@ -40,28 +51,47 @@
 	// Get profile info from config
 	const profile = profileConfig;
 
+	/** Suffix = substring from the first "." onward (e.g. guillaumekuc + .art, foo + .bar.baz). */
+	function splitSiteTitle(siteName) {
+		if (typeof siteName !== 'string') {
+			return { primary: '', suffix: '' };
+		}
+		const i = siteName.indexOf('.');
+		if (i === -1) {
+			return { primary: siteName, suffix: '' };
+		}
+		return {
+			primary: siteName.slice(0, i),
+			suffix: siteName.slice(i)
+		};
+	}
+
+	const siteTitleParts = splitSiteTitle(profile.siteName);
+
 	// Visibility state for header
 	let isVisible = false;
 
+	const localeStore = stores.i18n.locale;
+
 	// Filter navigation items to only include internal items
 	// Sort so CTA items come first, then map to the format needed for the header
-	const headerNavItems = navConfig.navigation
+	$: headerNavItems = navConfig.navigation
 		.filter(item => item.type === 'internal' && item.target)
 		.sort((a, b) => {
-			// CTA items come first
 			if (a.cta && !b.cta) return -1;
 			if (!a.cta && b.cta) return 1;
-			return 0; // Maintain original order for non-CTA items
+			return 0;
 		})
 		.map(item => ({
 			id: `headerNavButton-${item.id}`,
 			target: item.target,
-			label: item.label
+			label: t($localeStore, `nav.${item.id}`)
 		}));
 
 	// Extract the store for reactive access
 	const currentNavTargetStore = stores.navigation.currentNavTarget;
 	$: currentNavTarget = $currentNavTargetStore;
+	$: helpAlt = t($localeStore, 'common.help');
 
 	function handleHeaderNavClick(target) {
 		// Step 1: Show overlay curtain
@@ -139,18 +169,16 @@
 		--header-border-color: var(--color-gray-dark);
 		--header-primary-color: var(--color-white);
 		--header-accent-color: var(--color-accent);
-		--header-text-secondary: var(--color-gray-medium);
+		--header-text-secondary: #6e6e6e;
 
 		/* Responsive values (height inherits from global --header-footer-height) */
 		--header-height: var(--header-footer-height);
 		--header-monogram-size: 55px;
 		--header-title-font-size: 27px;
-		--header-title-gap: 12px;
+		--header-title-gap: 4px;
 		--header-title-padding: 38px;
 		--header-nav-font-size: 24px;
-		--header-nav-gap: 10px;
-		--header-nav-padding: 5px 20px;
-		--header-nav-radius: 16px;
+		--header-nav-padding: 5px 25px;
 
 		box-sizing: border-box;
 		display: flex;
@@ -202,21 +230,15 @@
 		display: inline-block;
 		height: var(--header-monogram-size);
 		width: var(--header-monogram-size);
+		transform: translateY(3px);
 	}
 
-	.header-monogram-button:hover {
-	}
 
 	.header-monogram {
 		color: var(--header-accent-color);
 		display: inline-block;
 		height: 100%;
 		width: 100%;
-		transition: color 0.2s ease;
-	}
-
-	.header-monogram-button:hover .header-monogram {
-		color: var(--header-primary-color);
 	}
 
 	.header-monogram :global(svg) {
@@ -240,43 +262,100 @@
 		transition: color 0.2s ease;
 	}
 
-	.header-title-button:hover {
+	.header-title:hover .header-title-button,
+	.header-title:focus-within .header-title-button {
 		color: var(--header-accent-color);
+	}
+
+	.header-title-button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: 3px;
+	}
+
+	.header-site-suffix {
+		font-size: 0.68em;
+		font-weight: 300;
+		letter-spacing: inherit;
+	}
+
+	.header-monogram-button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: 2px;
+		border-radius: 4px;
 	}
 
 	.header-nav {
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: stretch;
 		justify-content: left;
 		color: var(--header-text-secondary);
-		gap: var(--header-nav-gap);
 		height: 100%;
-		padding-left: var(--header-nav-gap);
 	}
 
 	.header-nav button {
+		position: relative;
 		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
 		text-transform: lowercase;
 		color: var(--header-text-secondary);
 		padding: var(--header-nav-padding);
-		border-radius: var(--header-nav-radius);
-		border: 1px solid transparent;
+		border: none;
+		background: none;
+		cursor: pointer;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
-	.header-nav button:hover {
-		color: var(--header-primary-color);
-		border: 1px solid var(--header-primary-color);
+	/* Accent bar: full padded “cell” width (padding box), not glyph width */
+	.header-nav button::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 2px;
+		height: 3px;
+		background-color: var(--header-accent-color);
+		opacity: 0;
+		transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+		pointer-events: none;
 	}
 
+	.header-nav-label {
+		display: inline-block;
+		position: relative;
+		z-index: 1;
+	}
+
+	.header-nav button:hover,
 	.header-nav button.focus {
 		color: var(--header-primary-color);
 	}
 
-	.header-help-button {
+	.header-nav button:hover::after,
+	.header-nav button.focus::after {
+		opacity: 1;
+	}
+
+	.header-nav button:focus-visible {
+		outline: 2px solid var(--header-accent-color);
+		outline-offset: -2px;
+	}
+
+	.header-actions {
 		margin-left: auto;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 22px;
+		margin-right: var(--header-title-padding);
+	}
+
+	.header-help-button {
 		font-family: var(--header-font-rounded);
 		font-size: var(--header-nav-font-size);
 		font-weight: 300;
@@ -286,7 +365,7 @@
 		padding: 0;
 		cursor: pointer;
 		transition: color 0.2s ease;
-		margin-right: var(--header-title-padding);
+		flex-shrink: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -315,12 +394,10 @@
 		.header {
 			--header-monogram-size: 46px;
 			--header-title-font-size: 24px;
-			--header-title-gap: 10px;
+			--header-title-gap: 3px;
 			--header-title-padding: 30px;
 			--header-nav-font-size: 20px;
-			--header-nav-gap: 8px;
-			--header-nav-padding: 4px 16px;
-			--header-nav-radius: 14px;
+			--header-nav-padding: 4px 20px;
 		}
 	}
 
@@ -329,12 +406,10 @@
 		.header {
 			--header-monogram-size: 36px;
 			--header-title-font-size: 20px;
-			--header-title-gap: 8px;
+			--header-title-gap: 2px;
 			--header-title-padding: 24px;
 			--header-nav-font-size: 16px;
-			--header-nav-gap: 6px;
-			--header-nav-padding: 4px 12px;
-			--header-nav-radius: 12px;
+			--header-nav-padding: 4px 15px;
 		}
 	}
 
@@ -343,12 +418,10 @@
 		.header {
 			--header-monogram-size: 24px;
 			--header-title-font-size: 16px;
-			--header-title-gap: 6px;
+			--header-title-gap: 2px;
 			--header-title-padding: 16px;
 			--header-nav-font-size: 12px;
-			--header-nav-gap: 4px;
-			--header-nav-padding: 3px 8px;
-			--header-nav-radius: 10px;
+			--header-nav-padding: 3px 10px;
 		}
 	}
 </style>

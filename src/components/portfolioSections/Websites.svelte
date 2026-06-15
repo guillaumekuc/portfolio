@@ -7,6 +7,7 @@
 			target="_blank"
 			on:mousemove={() => handleMouseMove(0)}
 		>
+			<ToolsDisplay tools={websites[0].tools} align="left" />
 			<img loading="lazy" class="screenshot" src={websites[0].screenshot} alt={websites[0].screenshotAlt} />
 			<img loading="lazy" src="/img/nav/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[0].label}</span><span>
@@ -22,6 +23,7 @@
 			target="_blank"
 			on:mousemove={() => handleMouseMove(1)}
 		>
+			<ToolsDisplay tools={websites[1].tools} align="left" />
 			<img loading="lazy" class="screenshot" src={websites[1].screenshot} alt={websites[1].screenshotAlt} />
 			<img loading="lazy" src="/img/nav/gotoURL.png" class="redirection" alt="Go to URL" />
 			<span style="font-variant : small-caps;">{websites[1].label}</span><span>
@@ -35,24 +37,27 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
+	import ToolsDisplay from '../ToolsDisplay.svelte';
 
 	export let sectionConfig;
 
 	// Website data
 	const websites = [
 		{
-			href: 'http://localhost/guillaumekuc/guillaumekuc.art',
-			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkartscreenshot.jpg'),
+			href: 'https://www.guillaumekuc.art/',
+			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkartscreenshot_v2.jpg'),
 			screenshotAlt: 'GK Art Screenshot',
 			label: 'Guillaume Kuc',
-			suffix: '.art'
+			suffix: '.art',
+			tools: ['svelte', 'js', 'html', 'css']
 		},
 		{
-			href: 'http://localhost/guillaumekuc/guillaumekuc.blog',
+			href: 'https://guillaumekuc.github.io/blog/',
 			screenshot: getAssetUrl('/img/portfolio/guillaumekuc_gkblogscreenshot.jpg'),
 			screenshotAlt: 'GK Blog Screenshot',
 			label: 'Guillaume Kuc',
-			suffix: '.blog'
+			suffix: '.blog',
+			tools: ['js', 'html', 'css']
 		}
 	];
 

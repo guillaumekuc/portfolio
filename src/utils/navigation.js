@@ -224,8 +224,12 @@ export class Navigation {
 						const gallery = document.querySelector('#' + element.id + ' .gallery');
 						if (gallery) {
 							gallery.firstChild.focus();
-							const video = document.querySelector('.slick-current video');
-							if (video) video.play();
+							const slide = gallery.querySelector('.slick-slide.slick-center:not(.slick-cloned)') ||
+							              gallery.querySelector('.slick-slide.slick-current:not(.slick-cloned)');
+							if (slide) {
+								const video = slide.querySelector('video');
+								if (video) video.play();
+							}
 						}
 
 						if (element.id === 'splashscreen' || element.id === 'startScreen') {
