@@ -1,16 +1,19 @@
 <div class="gallery">
-	{#each items as item}
+	{#each items as item, i}
 		<div class="gallery-item">
 			{#if item.video}
-				<video 
-					preload="none" 
-					loop 
-					muted 
-					on:click={handleVideoClick} 
+				<video
+					preload="none"
+					loop
+					muted
+					on:click={handleVideoClick}
+					on:play={() => playingStates[i] = true}
+					on:pause={() => playingStates[i] = false}
 					poster={item.poster}
 				>
 					<source src={item.video} type="video/mp4" />
 				</video>
+				<div class="play-icon" class:playing={playingStates[i]}></div>
 			{:else if item.url}
 				<img loading="lazy" src={item.url} alt={displayTitle(item)} />
 			{/if}
@@ -69,6 +72,8 @@
 		poster: item.poster ? getAssetUrl(item.poster) : item.poster
 	}));
 	
+	let playingStates = {};
+
 	function handleVideoClick(event) {
 		const video = event.currentTarget;
 		if (video.paused) {
@@ -131,6 +136,24 @@
 		flex: 1;
 		display: block;
 		border-radius: var(--gallery-radius);
+	}
+
+	.play-icon {
+		pointer-events: none;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 3;
+		width: 15%;
+		height: 15%;
+		background: no-repeat center / contain url('/img/audio-player/play.svg');
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	:global(.gallery .slick-current) .play-icon:not(.playing) {
+		opacity: 1;
 	}
 
 	.gallery-overlay {

@@ -155,6 +155,15 @@
 					});
 					
 					$gallery.on('afterChange', function() {
+						this.querySelectorAll('video').forEach(v => v.pause());
+
+						const slide = this.querySelector('.slick-slide.slick-center:not(.slick-cloned)') ||
+						              this.querySelector('.slick-slide.slick-current:not(.slick-cloned)');
+						if (slide) {
+							const video = slide.querySelector('video');
+							if (video) video.play();
+						}
+
 						setTimeout(() => {
 							if (document.activeElement.tagName && !document.activeElement.tagName.match(/INPUT|TEXTAREA|SELECT/)) {
 								this.focus();
