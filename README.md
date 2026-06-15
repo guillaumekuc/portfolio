@@ -11,7 +11,7 @@ An interactive portfolio website showcasing creative work across 2D/3D art, musi
   - Smooth transitions with overlay curtain effect
   - Sections dynamically show/hide based on selected category
 - **Interactive portfolio sections** with multiple content types:
-  - Video galleries with auto-pause on scroll away
+  - Video galleries with autoplay on slide focus — centered video plays automatically, others pause; play/pause icon overlay
   - Image carousels (Slick)
   - Music playlists with dedicated keyboard shortcuts
 - **Comprehensive keyboard shortcuts system** with three-tier priority (modal → screen → global)
@@ -40,11 +40,11 @@ An interactive portfolio website showcasing creative work across 2D/3D art, musi
   - `ProfileInfo` - Name, headline, and social links
   - `ContactBlocks` - Reusable contact buttons
   - `BlogFeed` - RSS blog feed integration
-- **Config-driven architecture** - easily modify content without touching code
+- **Config-driven architecture** - easily modify content without touching code; portfolio section titles and tools are now config-driven (e.g. Character Animation section)
 - **Markdown content** - edit about page using Markdown
 - **Profile page** with avatar (hover effects), social links, and blog feed
 - **Contact features** - Email with copy-to-clipboard, resume view/download
-- **Integrated music player** with playlist support and persistent volume/mute settings
+- **Integrated music player** with multi-collection playlist support and persistent volume/mute settings
 - **Blog feed integration** via RSS
 - **Vertical navigation arrows** - hover-based up/down navigation
 - **Responsive design** with global breakpoint system:
@@ -53,7 +53,10 @@ An interactive portfolio website showcasing creative work across 2D/3D art, musi
   - Mobile: `max-height: 500px`
   - Adaptive layouts, font sizes, and component sizing across all breakpoints
 - **Landscape orientation constraint** - Portrait mode displays rotate-device overlay (best viewed horizontally)
-- **Performance optimized** with lazy loading and deferred content loading
+- **Language selector** - EN/FR bilingual support with locale-aware content rendering across all portfolio sections
+- **Splashscreen ambient sound** - Optional ambient audio layer on the splashscreen, independent of the main music player
+- **Splashscreen visual enhancements** - Filmic grain overlay, subtle zoom-in animation, breathing idle animation on the hero card
+- **Performance optimized** with batch lazy loading — sections load fully before becoming visible
 - **Email obfuscation** for bot protection
 
 ## Quick Start
@@ -204,7 +207,8 @@ Tools are automatically displayed in portfolio galleries.
 - **IntersectionObserver**: Efficient scroll tracking and visibility detection
 - **localStorage**: Persistent user preferences across sessions
 - **Modal system**: Reusable modal component with shortcut integration
-- **Unified gallery**: Common component for all portfolio sections (images/videos)
+- **Unified gallery**: Common component for all portfolio sections (images/videos), with slide-change autoplay logic
+- **i18n**: Lightweight localization utility supporting EN/FR content in JSON config and components
 - **Global breakpoints**: Consistent responsive design system across components
 
 ## Deployment
@@ -234,6 +238,9 @@ See **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** for:
 - Email addresses are obfuscated to prevent bot scraping
 - Modal system supports three-tier shortcut priority (modal → screen → global)
 - Animated background system is implemented but currently commented out in About page
+- Language selector added to header; locale is stored in-session and drives all localized config fields
+- Gallery videos autoplay on section entry and on slide center change; non-centered videos are paused automatically
+- Splashscreen ambient sound is separate from the main music player and does not interfere with playlist controls
 - Global breakpoint system ensures consistent responsive behavior across all components
 
 ---
