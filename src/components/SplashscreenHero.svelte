@@ -157,7 +157,7 @@
 		font-family: var(--splashscreen-hero-text-font-family);
 		font-size: var(--splashscreen-hero-text-font-size);
 		font-weight: 700;
-		letter-spacing: 0.1em;
+		letter-spacing: 0.05em;
 		color: var(--splashscreen-hero-text-primary);
 		margin-bottom: 0px;
 	}
