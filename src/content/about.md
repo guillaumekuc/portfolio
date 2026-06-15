@@ -12,13 +12,13 @@ This path led to independent publishing: an educational e-book on applied music 
 
 My most recent position at [Visioglobe](https://visioglobe.com/) crystallized this dual identity. The production team and I built interactive 3D indoor maps for large enterprise clients including Orange, L'Oréal, Ikea, SG, Unibail-Rodamco-Westfield. In parallel, I took on the initiative of developing workflow plugins and scripts over our proprietary codebase to improve process efficiency, confirming that my trajectory has organically settled at the interface between artistic production and technical infrastructure.
 
-## Current Focus
+## Direction
 
-I am currently investing a season into deepening my technical art direction and probing game and real-time pipelines: procedural modeling in Houdini, game engine workflows and shader development. This exploration aims to open new ways for me to contribute to the French creative ecosystem.
-
-> **Wu-wei (無為)**: The Taoist principle of "effortless action"—accomplishing through alignment with natural flow rather than against it.
+After a short season exploring procedural modeling, modern game engines, AI tools and more, a game project called Vilja has emerged — one I am now driving. Its narrative premise: *"Melodurgy — mind control through music."* It is currently in pre-production.
 
 On a philosophical note, I am experimenting with a _wu-wei_ approach to life and work: seeking optimal paths and leverage rather than forcefully striving towards a specific target.
+
+> **Wu-wei (無為)**: The Taoist principle of "effortless action"—accomplishing through alignment with natural flow rather than against it.
 
 ## Contact
 
