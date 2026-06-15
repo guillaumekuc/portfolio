@@ -427,7 +427,9 @@
 		{
 			"id": "animFolio1",
 			"component": "AnimFolio1",
-			"categories": "portfolio-3d portfolio-all"
+			"categories": "portfolio-3d portfolio-all",
+			"title": "Character Animation",
+			"tools": ["maya"]
 		},
 		{
 			"id": "drawingFolio2",

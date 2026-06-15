@@ -21,7 +21,10 @@
 			></button>
 		</div>
 		<div slot="content">
-			<span class="title">Animation Demoreel<small></small></span>
+			{#if sectionConfig?.tools?.length}
+				<ToolsDisplay tools={sectionConfig.tools} align="right" />
+			{/if}
+			<span class="title">{sectionConfig?.title ?? 'Character Animation'}<small></small></span>
 			<blockquote>
 				RIGS "Jin & Joe" courtesy of OnOne Animation School.<br />
 				RIGS "Body mechanics Rigs" courtesy of Joe Daniels.
@@ -37,6 +40,7 @@
 	import { shortcuts } from '../../utils/shortcuts.js';
 	import { getAssetUrl } from '../../utils/assets.js';
 	import ProjectLayout from './ProjectLayout.svelte';
+	import ToolsDisplay from '../ToolsDisplay.svelte';
 
 	export let sectionConfig;
 
@@ -122,6 +126,10 @@
 </script>
 
 <style>
+	.animFolio1 {
+		width: 100%;
+	}
+
 	:global(.animFolio1 .mediaContainer) {
 		background-color: #5a5d5a;
 	}
