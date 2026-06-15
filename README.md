@@ -221,13 +221,10 @@ npm run deploy
 
 **Setup:**
 1. Install dependencies: `npm install --save-dev node-ssh dotenv`
-2. Create a `.env` file in the project root with your SFTP credentials
+2. Create a `.env` file in the project root with your SFTP credentials (`OVH_SFTP_HOST`, `OVH_SFTP_USERNAME`, `OVH_SFTP_PASSWORD`, `OVH_SFTP_PORT`, `OVH_SFTP_REMOTE_DIR`)
 3. Run `npm run deploy`
 
-See **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** for:
-- Complete setup instructions
-- Where to put your connection info
-- Troubleshooting guide
+The script builds `dist/` automatically if it doesn't exist, then uploads all files via SFTP and sets correct file permissions.
 
 ## Development Notes
 
