@@ -1,5 +1,5 @@
 {#if tools && tools.length > 0}
-	<div class="tools-display" class:icons-only={iconsOnly} class:align-right={align === 'right'}>
+	<div class="tools-display" class:icons-only={iconsOnly} class:align-right={align === 'right'} class:align-center={align === 'center'}>
 		{#each tools as tool}
 			{@const toolInfo = getToolInfo(tool)}
 			{@const toolIcon = getToolIcon(tool)}
@@ -59,6 +59,10 @@
 
 	.tools-display.align-right {
 		justify-content: flex-end;
+	}
+
+	.tools-display.align-center {
+		justify-content: center;
 	}
 
 	.tool-icon {
