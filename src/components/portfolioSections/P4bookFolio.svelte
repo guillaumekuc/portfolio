@@ -125,7 +125,6 @@
 		display: block;
 		text-align: justify;
 		text-align-last: left;
-		font-size: 116.66%;
 		font-style: normal;
 	}
 

@@ -353,7 +353,8 @@
 
 	/* Anim and Mode portfolio sections - 100% height */
 	:global(#animFolio1 .gallery .slick-slide),
-	:global(#modeFolio1 .gallery .slick-slide) {
+	:global(#modeFolio1 .gallery .slick-slide),
+	:global(#visioglobeFolio .gallery .slick-slide) {
 		height: 100% !important;
 		max-height: calc(100vh - (2 * var(--header-footer-height) + 2 * var(--safeMargin))) !important;
 	}

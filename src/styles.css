@@ -608,8 +608,12 @@ body {
 .halfColumn .title {
 	display: block;
 	margin-bottom: calc(var(--safeMargin) / 2);
-	font-size: 150%;
+	font-size: 125%;
 	font-variant: small-caps;
+}
+
+.halfColumn .title small {
+	font-size: 0.7em;
 }
 
 .shortRightThirds:first-child {

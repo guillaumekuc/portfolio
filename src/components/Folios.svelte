@@ -28,6 +28,7 @@
 	import MusicFolio1 from './portfolioSections/MusicFolio1.svelte';
 	import AnimFolio1 from './portfolioSections/AnimFolio1.svelte';
 	import P4bookFolio from './portfolioSections/P4bookFolio.svelte';
+	import ViljaFolio from './portfolioSections/ViljaFolio.svelte';
 	import Websites from './portfolioSections/Websites.svelte';
 
 	// Component mapping for custom components (not using PortfolioGallery)
@@ -38,6 +39,7 @@
 		MusicFolio1,
 		AnimFolio1,
 		P4bookFolio,
+		ViljaFolio,
 		Websites
 	};
 

@@ -11,9 +11,10 @@
 					"image": "/img/vinyl-disc.png",
 					"tracks": [
 						{ "sound": "/sound/20250920-AttritionPressure.wav", "title": "Attrition Pressure" },
-						{ "sound": "/sound/FrostRemainder.mp3", "title": "Frost Remainder" },
+						{ "sound": "/sound/vilja-explorationTrack.mp3", "title": "Vilja (Exploration Track)" },
 						{ "sound": "/sound/MallowHazard.mp3", "title": "Mallow Hazard" },
 						{ "sound": "/sound/guillaumekuc_dancing-wound-chiptune.mp3", "title": "Dancing Wound (chiptune)" },
+						{ "sound": "/sound/FrostRemainder.mp3", "title": "Frost Remainder" },
 						{ "sound": "/sound/Chris'Journey.mp3", "title": "Chris' Journey" },
 						{ "sound": "/sound/ChillingVastitude.mp3", "title": "Chilling Vastitude" },
 						{ "sound": "/sound/ChaoticIntruders.mp3", "title": "Chaotic Intruders" },
@@ -142,6 +143,69 @@
 			"contentPath": "gridz.md",
 			"coverImage": "/vid/guillaumekuc_gridzDemoCover.jpg",
 			"tools": ["cep", "jsx", "js", "html", "css"]
+		},
+		{
+			"id": "visioglobeFolio",
+			"component": "VisioglobeFolio",
+			"categories": "portfolio-all portfolio-3d",
+			"items": [
+				{
+					"url": "/img/portfolio/visioglobe/HUMC_01_M.jpg",
+					"title": "HUMC",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/WillisTower_Chicago.png",
+					"title": "Willis Tower, Chicago",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/HEGP.png",
+					"title": "HEGP",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/Biogaran_PortesDeLaDefense.png",
+					"title": "Biogaran, Portes de la Défense",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/HUMC_02_M.jpg",
+					"title": "HUMC",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/NotreDameDeBonSecours.png",
+					"title": "Notre-Dame de Bon Secours",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				},
+				{
+					"url": "/img/portfolio/visioglobe/OBS_Chennai.png",
+					"title": "OBS Chennai",
+					"category": {"en": "3D Venue Model", "fr": "Modèle 3D de site"},
+					"client": "Visioglobe",
+					"tools": [],
+					"year": ""
+				}
+			]
 		},
 		{
 			"id": "chordex",
@@ -528,6 +592,23 @@
 			"id": "websitesFolio",
 			"component": "Websites",
 			"categories": "portfolio-web portfolio-all"
+		},
+		{
+			"id": "viljaFolio",
+			"component": "ViljaFolio",
+			"categories": "portfolio-2d portfolio-3d portfolio-music portfolio-web portfolio-all",
+			"title": "Vilja",
+			"subtitle": {
+				"en": "Musical & narrative arena shooter",
+				"fr": "Arena shooter musical & narratif"
+			},
+			"linkUrl": "/pdf/vilja_dossierArtistique.pdf",
+			"linkText": {
+				"en": "Read the art dossier (PDF, FR)",
+				"fr": "Lire le dossier artistique (PDF)"
+			},
+			"contentPath": "vilja.md",
+			"coverImage": "/img/portfolio/vilja/vilja_coverArt_M.jpg"
 		},
 		{
 			"id": "about",
